@@ -201,7 +201,7 @@ puppetboard:
 ##
 hiera:
   name: hiera
-  hieradataurl: "git@github.com:scottcressi/hieradata.git"   # git@github.com:$SOMEUSER/hieradata.git
+  hieradataurl: ""   # git@github.com:$SOMEUSER/hieradata.git
   ## If "hiera.config" is set, the pre-filled value of ":eyaml::datadir:",
   ## ":eyaml::pkcs7_private_key:" and ":eyaml::pkcs7_public_key:"
   ## must be kept unchanged.
