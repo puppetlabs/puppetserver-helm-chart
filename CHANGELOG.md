@@ -5,15 +5,21 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v0.3.1](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v0.3.1) (2019-10-24)
+## [v0.3.2](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v0.3.2) (2019-10-24)
 - Add optional extra Pod Annotations.
 - Add optional Pod Priority Scheduling.
-- Add optional "nodeSelector", "affinity" and "tolerations" for Pod Deployments.
-- Improve Values comments.
 - Add LICENSE.
 - Add CHANGELOG.
 - Update README.
 - Fixes.
+
+[Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v0.3.1...v0.3.2)
+
+## [v0.3.1](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v0.3.1) (2019-10-24)
+- Add optional "nodeSelector", "affinity" and "tolerations" for Pod Deployments.
+- Improve Values Comments.
+- Bump Component Versions.
+
 [Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v0.2.4...v0.3.1)
 
 ## [v0.2.4](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v0.2.4) (2019-10-12)
