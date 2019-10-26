@@ -12,6 +12,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - Improve Values comments.
 - Add LICENSE.
 - Add CHANGELOG.
+- Update README.
 - Fixes.
 [Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v0.2.4...v0.3.1)
 
