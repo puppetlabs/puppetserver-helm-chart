@@ -5,7 +5,14 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v0.3.2](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v0.3.2) (2019-10-24)
+## [v0.3.3](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v0.3.3) (2019-10-28)
+- Add Optional Static Data Volumes.
+- Add Configurable PVC's Size.
+- Add Optional PVC's Annotations.
+
+[Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v0.3.2...v0.3.3)
+
+## [v0.3.2](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v0.3.2) (2019-10-26)
 - Add optional extra Pod Annotations.
 - Add optional Pod Priority Scheduling.
 - Add LICENSE.
