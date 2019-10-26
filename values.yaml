@@ -233,16 +233,3 @@ tolerations: []
 
 # Extra Pod annotations
 podAnnotations: {}
-
-persistence:
-  enabled: true
-  ## jenkins data Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  storageClass: ""
-  annotations: {}
-  size: "8Gi"
