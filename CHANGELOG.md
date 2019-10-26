@@ -1,5 +1,8 @@
 # Change Log
 
+This file documents all notable changes to Puppet Server Helm Chart. The release
+numbering uses [semantic versioning](http://semver.org).
+
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
 ## [v0.3.1](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v0.3.1) (2019-10-24)
