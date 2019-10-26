@@ -133,6 +133,14 @@ Parameter | Description | Default
 `hiera.config`| hieradata yaml config |``
 `hiera.eyaml.private_key`| hiera eyaml private key |``
 `hiera.eyaml.public_key`| hiera eyaml public key |``
+`nodeSelector`| Node labels for pod assignment |``
+`affinity`| Affinity for pod assignment |``
+`tolerations`| Tolerations for pod assignment |``
+`priorityClass`| Leverage a priorityClass to ensure your pods survive resource shortages |``
+`podAnnotations`| Extra Pod annotations |``
+`storage.storageClass`| Storage Class |``
+`storage.annotations`| Storage annotations |``
+`storage.size`| PVCs Storage Size |``
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

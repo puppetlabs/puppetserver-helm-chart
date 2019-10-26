@@ -215,25 +215,28 @@ hiera:
     public_key:  # |
       #  PUB_KEY CONTENTS
 
-## Node labels for pod assignment
+## Pod Configuration
 ##
+## Node labels for pod assignment
 nodeSelector: {}
 
-# Affinity for pod assignment
-# Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}
 
-# Tolerations for pod assignment
-# Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
 
-# Leverage a priorityClass to ensure your pods survive resource shortages
-# ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+## Leverage a priorityClass to ensure your pods survive resource shortages
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 # priorityClass: system-cluster-critical
 
-# Extra Pod annotations
+## Extra Pod annotations
 podAnnotations: {}
 
+## Storage Configuration
+##
 storage:
   ## Puppet Server data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
