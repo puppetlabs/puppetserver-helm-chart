@@ -140,7 +140,7 @@ Parameter | Description | Default
 `podAnnotations`| Extra Pod annotations |``
 `storage.storageClass`| Storage Class |``
 `storage.annotations`| Storage annotations |``
-`storage.size`| PVCs Storage Size |``
+`storage.size`| PVCs Storage Size |`100Mi`
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
