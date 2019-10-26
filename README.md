@@ -147,3 +147,9 @@ helm install --namespace puppetserver --name puppetserver stable/puppetserver -f
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+## Chart's Dev Team
+
+- Lead Developer: Miroslav Hadzhiev (miroslav.hadzhiev@gmail.com)
+- Developer: Scott Cressi (scottcressi@gmail.com)
+- Developer: Morgan Rhodes (morgan@puppet.com)

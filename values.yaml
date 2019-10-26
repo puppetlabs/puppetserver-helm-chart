@@ -12,7 +12,14 @@ affinity: {}
 
 # Tolerations for pod assignment
 # Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-tolerations: {}
+tolerations: []
+
+# Leverage a priorityClass to ensure your pods survive resource shortages
+# ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+# priorityClass: system-cluster-critical
+
+# Extra Pod annotations
+podAnnotations: {}
 
 ## Puppet Server Deployment Configuration
 ##
