@@ -71,6 +71,11 @@ Parameter | Description | Default
 `puppetserver.service.annotations`| puppetserver svc annotations |``
 `puppetserver.service.labels`| puppetserver additional svc labels |``
 `puppetserver.service.loadBalancerIP`| puppetserver svc loadbalancer ip |``
+`puppetserver.ingress.enabled`| puppetserver ingress creation enabled |`false`
+`puppetserver.ingress.annotations`| puppetserver ingress annotations |``
+`puppetserver.ingress.extraLabels`| puppetserver ingress extraLabels |``
+`puppetserver.ingress.hosts`| puppetserver ingress hostnames |``
+`puppetserver.ingress.tls`| puppetserver ingress tls configuration |``
 `puppetserver.puppeturl`| puppetserver control repo url |``
 `git_sync.name` | git_sync component label | `git_sync`
 `git_sync.image` | git_sync img | `k8s.gcr.io/git-sync`
