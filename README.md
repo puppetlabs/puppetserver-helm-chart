@@ -66,7 +66,7 @@ Parameter | Description | Default
 `puppetserver.tag` | puppetserver img tag | `6.6.0`
 `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`
 `puppetserver.fqdns.alternateServerNames` | puppetserver alternate fqdns |``
-`puppetserver.service.type` | puppetserver svc type | `LoadBalancer`
+`puppetserver.service.type` | puppetserver svc type | `ClusterIP`
 `puppetserver.service.port` | puppetserver svc port | `8140`
 `puppetserver.service.annotations`| puppetserver svc annotations |``
 `puppetserver.service.labels`| puppetserver additional svc labels |``
