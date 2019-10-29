@@ -276,8 +276,33 @@ storage:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  type: ""   # examples: AWSElasticBlockStore, NFS, HostPath, GCEPersistentDisk, AzureDisk, etc.
+  type: ""   # examples: awsElasticBlockStore, nfs, hostPath, gcePersistentDisk, azureDisk, etc.
+    # hostPath:
+    #   # directory location on host
+    #   path: /data
+    #   # this field is optional
+    #   type: Directory
+    ##
+    # awsElasticBlockStore:
+    #   volumeID:
+    #   fsType: ext4
+    ##
+    # gcePersistentDisk:
+    #   pdName: my-data-disk
+    #   fsType: ext4
+    ##
+    # nfs:
+    #   path: /tmp
+    #   server: 172.17.0.2
+    #   readOnly: false
   ## Node Affinity - required mainly for local PV assignment
   nodeAffinity: {}
+  # required:
+  #     nodeSelectorTerms:
+  #     - matchExpressions:
+  #       - key: kubernetes.io/hostname
+  #         operator: In
+  #         values:
+  #         - example-node
   annotations: {}
   size: 100Mi

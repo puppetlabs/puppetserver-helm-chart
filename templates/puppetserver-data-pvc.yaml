@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: puppet-serverdata-claim-pv
+  name: puppet-serverdata-pv
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
     {{- if .Values.storage.type }}
