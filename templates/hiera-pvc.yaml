@@ -1,3 +1,18 @@
+### Hiera data
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: puppet-hiera-claim-pv
+  labels:
+    {{- include "puppetserver.hiera.labels" . | nindent 4 }}
+spec:
+  capacity:
+    storage: {{ .Values.storage.size | quote }}
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+...
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -11,7 +26,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      {{- include "puppetserver.git_sync.matchLabels" . | nindent 6 }}
+      {{- include "puppetserver.hiera.matchLabels" . | nindent 6 }}
   accessModes:
     - ReadWriteOnce
   resources:
@@ -24,3 +39,4 @@ spec:
   storageClassName: "{{ .Values.storage.storageClass }}"
 {{- end }}
 {{- end }}
+...

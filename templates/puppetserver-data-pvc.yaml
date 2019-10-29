@@ -1,3 +1,18 @@
+### Puppetserver data
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: puppet-serverdata-claim-pv
+  labels:
+    {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+spec:
+  capacity:
+    storage: {{ .Values.storage.size | quote }}
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+...
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -24,3 +39,4 @@ spec:
   storageClassName: "{{ .Values.storage.storageClass }}"
 {{- end }}
 {{- end }}
+...
