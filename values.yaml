@@ -276,7 +276,5 @@ storage:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  ## Node labels for local PV assignment only
-  nodeSelector: {}
   annotations: {}
   size: 100Mi
