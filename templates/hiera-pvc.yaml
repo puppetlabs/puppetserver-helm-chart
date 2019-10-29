@@ -10,7 +10,11 @@ spec:
     storage: {{ .Values.storage.size | quote }}
   accessModes:
   - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Delete
+  persistentVolumeReclaimPolicy: Recycle
+{{- if .Values.storage.nodeAffinity }}
+  nodeAffinity:
+{{ toYaml .Values.storage.nodeAffinity | nindent 4 }}
+{{- end }}
 ...
 ---
 apiVersion: v1

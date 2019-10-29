@@ -276,5 +276,8 @@ storage:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
+  type: ""   # examples: AWSElasticBlockStore, NFS, HostPath, GCEPersistentDisk, AzureDisk, etc.
+  ## Node Affinity - required mainly for local PV assignment
+  nodeAffinity: {}
   annotations: {}
   size: 100Mi
