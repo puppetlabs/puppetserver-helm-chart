@@ -5,6 +5,9 @@ metadata:
   name: puppetdb-claim-pv
   labels:
     {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
+    {{- if .Values.storage.type }}
+    type: {{ .Values.storage.type }}
+    {{- end }}
 spec:
   capacity:
     storage: {{ .Values.storage.size | quote }}
@@ -23,6 +26,9 @@ metadata:
   name: puppetdb-claim
   labels:
     {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
+    {{- if .Values.storage.type }}
+    type: {{ .Values.storage.type }}
+    {{- end }}
 {{- if .Values.storage.annotations }}
   annotations:
 {{ toYaml .Values.storage.annotations | nindent 4 }}
