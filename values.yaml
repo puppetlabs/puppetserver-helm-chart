@@ -248,7 +248,8 @@ hiera:
 ## Pod Configuration
 ##
 ## Node labels for pod assignment
-nodeSelector: {}
+nodeSelector:
+  nodeType: devops
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -298,11 +299,11 @@ storage:
   ## Node Affinity - required mainly for local PV assignment
   nodeAffinity: {}
   # required:
-  #     nodeSelectorTerms:
-  #     - matchExpressions:
-  #       - key: kubernetes.io/hostname
-  #         operator: In
-  #         values:
-  #         - example-node
+  #   nodeSelectorTerms:
+  #   - matchExpressions:
+  #     - key: kubernetes.io/hostname
+  #       operator: In
+  #       values:
+  #       - example-node
   annotations: {}
   size: 100Mi
