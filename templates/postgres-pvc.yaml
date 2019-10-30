@@ -5,8 +5,8 @@ metadata:
   name: postgres-pv
   labels:
     {{- include "puppetserver.postgres.labels" . | nindent 4 }}
-    {{- if .Values.storage.type.label }}
-    type: {{ .Values.storage.type.label }}
+    {{- if .Values.storage.label }}
+    type: {{ .Values.storage.label }}
     {{- end }}
 spec:
   capacity:
