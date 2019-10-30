@@ -18,6 +18,9 @@ spec:
   nodeAffinity:
 {{ toYaml .Values.storage.nodeAffinity | nindent 4 }}
 {{- end }}
+{{- if .Values.storage.type }}
+{{ toYaml .Values.storage.type | nindent 2 }}
+{{- end }}
 ...
 ---
 apiVersion: v1
