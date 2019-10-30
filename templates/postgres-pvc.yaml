@@ -41,6 +41,9 @@ metadata:
 {{- end }}
   namespace: {{ .Release.Namespace }}
 spec:
+  selector:
+    matchLabels:
+      {{- include "puppetserver.postgres.matchLabels" . | nindent 6 }}
   accessModes:
     - ReadWriteOnce
   resources:
