@@ -276,7 +276,8 @@ storage:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  type: ""   # examples: awsElasticBlockStore, nfs, hostPath, gcePersistentDisk, azureDisk, etc.
+  type: ""
+    label: ""   # examples: awsElasticBlockStore, nfs, hostPath, gcePersistentDisk, azureDisk, etc.
     # hostPath:
     #   # directory location on host
     #   path: /data

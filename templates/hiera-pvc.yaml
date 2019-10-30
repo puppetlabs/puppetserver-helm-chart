@@ -5,8 +5,8 @@ metadata:
   name: puppet-hiera-pv
   labels:
     {{- include "puppetserver.hiera.labels" . | nindent 4 }}
-    {{- if .Values.storage.type }}
-    type: {{ .Values.storage.type }}
+    {{- if .Values.storage.type.label }}
+    type: {{ .Values.storage.type.label }}
     {{- end }}
 spec:
   capacity:
