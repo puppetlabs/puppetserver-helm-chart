@@ -11,6 +11,8 @@ metadata:
 spec:
   capacity:
     storage: {{ .Values.storage.size | quote }}
+  claimRef:
+    name: puppet-serverdata-claim
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
