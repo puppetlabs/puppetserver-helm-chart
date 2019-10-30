@@ -5,6 +5,11 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v0.3.5](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v0.3.5) (2019-10-31)
+- Add Optional `selector` for PVs/PVCs.
+
+[Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v0.3.4...v0.3.5)
+
 ## [v0.3.4](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v0.3.4) (2019-10-28)
 - Add Ingress.
 - Improve Tmpl Helpers.
