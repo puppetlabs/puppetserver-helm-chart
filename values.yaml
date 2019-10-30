@@ -285,7 +285,7 @@ storage:
     #   type: Directory
     ##
     # awsElasticBlockStore:
-    #   volumeID:
+    #   volumeID: aws://us-east-1a/vol-ID
     #   fsType: ext4
     ##
     # gcePersistentDisk:
