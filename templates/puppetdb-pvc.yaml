@@ -37,9 +37,9 @@ metadata:
 {{ toYaml .Values.storage.annotations | nindent 4 }}
 {{- end }}
 spec:
-  selector:
-    matchLabels:
-      {{- include "puppetserver.puppetdb.matchLabels" . | nindent 6 }}
+#  selector:
+#    matchLabels:
+#      {{- include "puppetserver.puppetdb.matchLabels" . | nindent 6 }}
   accessModes:
     - ReadWriteOnce
   resources:
