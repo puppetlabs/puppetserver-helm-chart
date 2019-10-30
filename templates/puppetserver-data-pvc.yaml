@@ -12,7 +12,7 @@ spec:
   capacity:
     storage: {{ .Values.storage.size | quote }}
   claimRef:
-    name: puppet-serverdata-claim
+    name: {{- .Release.Namespace -}}/puppet-serverdata-claim
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle

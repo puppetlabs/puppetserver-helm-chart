@@ -12,7 +12,7 @@ spec:
   capacity:
     storage: {{ .Values.storage.size | quote }}
   claimRef:
-    name: postgres-claim
+    name: {{- .Release.Namespace -}}/postgres-claim
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
