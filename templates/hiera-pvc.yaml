@@ -12,7 +12,7 @@ spec:
   capacity:
     storage: {{ .Values.storage.size | quote }}
   claimRef:
-    name: {{- .Release.Namespace -}}/puppet-hiera-claim
+    name: {{ .Release.Namespace }}/puppet-hiera-claim
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
