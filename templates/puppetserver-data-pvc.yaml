@@ -8,11 +8,12 @@ metadata:
     {{- if .Values.storage.label }}
     type: {{ .Values.storage.label }}
     {{- end }}
+  namespace: {{ .Release.Namespace }}
 spec:
   capacity:
     storage: {{ .Values.storage.size | quote }}
   claimRef:
-    name: {{ .Release.Namespace }}/puppet-serverdata-claim
+    name: puppet-serverdata-claim
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
@@ -38,6 +39,7 @@ metadata:
   annotations:
 {{ toYaml .Values.storage.annotations | nindent 4 }}
 {{- end }}
+  namespace: {{ .Release.Namespace }}
 spec:
   accessModes:
     - ReadWriteOnce
