@@ -29,8 +29,8 @@ metadata:
   name: puppetdb-claim
   labels:
     {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
-    {{- if .Values.storage.type }}
-    type: {{ .Values.storage.type }}
+    {{- if .Values.storage.label }}
+    type: {{ .Values.storage.label }}
     {{- end }}
 {{- if .Values.storage.annotations }}
   annotations:
