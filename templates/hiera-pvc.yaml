@@ -29,7 +29,7 @@ spec:
 {{- end }}
   accessModes:
   - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Delete
+  persistentVolumeReclaimPolicy: Recycle
 {{- if .Values.storage.nodeAffinity }}
   nodeAffinity:
 {{ toYaml .Values.storage.nodeAffinity | nindent 4 }}
