@@ -5,8 +5,8 @@ metadata:
   name: postgres-pv
   labels:
     {{- include "puppetserver.postgres.labels" . | nindent 4 }}
-    {{- if .Values.storage.label }}
-    typeLabel: {{ .Values.storage.typeLabel }}
+    {{- if .Values.storage.typeLabel }}
+    type: {{ .Values.storage.typeLabel }}
     {{- end }}
   {{- if .Values.storage.extraLabels }}
 {{ toYaml .Values.storage.extraLabels | nindent 4 }}
@@ -42,8 +42,8 @@ metadata:
   name: postgres-claim
   labels:
     {{- include "puppetserver.postgres.labels" . | nindent 4 }}
-    {{- if .Values.storage.label }}
-    typeLabel: {{ .Values.storage.label }}
+    {{- if .Values.storage.typeLabel }}
+    type: {{ .Values.storage.typeLabel }}
     {{- end }}
 {{- if .Values.storage.annotations }}
   annotations:
