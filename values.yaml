@@ -306,4 +306,5 @@ storage:
   #       values:
   #       - example-node
   annotations: {}
+  selector: false
   size: 100Mi
