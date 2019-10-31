@@ -9,7 +9,7 @@ metadata:
     type: {{ .Values.storage.typeLabel }}
     {{- end }}
   {{- if .Values.storage.extraLabels }}
-{{ .Values.storage.extraLabels | nindent 4 }}
+{{ toYaml .Values.storage.extraLabels | nindent 4 }}
   {{- end }}
   namespace: {{ .Release.Namespace }}
 spec:
