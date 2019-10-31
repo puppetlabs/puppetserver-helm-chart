@@ -16,6 +16,8 @@ spec:
   capacity:
     storage: {{ .Values.storage.size | quote }}
   claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
     name: puppet-hiera-claim
     namespace: {{ .Release.Namespace }}
 {{- if .Values.storage.storageClass }}
