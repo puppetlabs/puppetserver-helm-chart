@@ -278,7 +278,7 @@ storage:
   storageClass: ""
   typeLabel: ""   # examples: awsElasticBlockStore, nfs, hostPath, gcePersistentDisk, azureDisk, etc.
   extraLabels: {}
-  type: ""
+  type: {}
     # hostPath:
     #   # directory location on host
     #   path: /data
