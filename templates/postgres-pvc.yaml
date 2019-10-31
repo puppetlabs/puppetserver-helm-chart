@@ -17,6 +17,7 @@ spec:
     storage: {{ .Values.storage.size | quote }}
   claimRef:
     name: postgres-claim
+    namespace: {{ .Release.Namespace }}
 {{- if .Values.storage.storageClass }}
 {{- if (eq "-" .Values.storage.storageClass) }}
   storageClassName: ""
