@@ -40,8 +40,7 @@ spec:
             - name: POSTGRES_DB
               value: puppetdb
           ports:
-            - name: postgres
-              containerPort: 5432
+            - containerPort: 5432
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data/
