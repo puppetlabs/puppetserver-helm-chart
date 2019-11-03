@@ -159,7 +159,7 @@ spec:
           secret:
             secretName: {{ template "git_sync.secret" . }}
             defaultMode: 288  # = mode 0440
-        {{- end -}}
+        {{- end }}
     {{- if .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | nindent 10 }}

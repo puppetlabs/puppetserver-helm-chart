@@ -55,7 +55,7 @@ spec:
               secret:
                 secretName: {{ template "r10k.secret" . }}
                 defaultMode: 288 # = mode 0440
-            {{- end -}}
+            {{- end }}
         {{- if .Values.nodeSelector }}
           nodeSelector:
 {{ toYaml .Values.nodeSelector | nindent 14 }}

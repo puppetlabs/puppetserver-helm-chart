@@ -250,6 +250,8 @@ hiera:
 ## Node labels for pod assignment
 ## Note that the Puppet Server components use common storage.
 ## That common storage requirement might impose certain pod assignment scenarios.
+## For example: the "puppetserver" and "r10k" components might be required to sit
+## in a common Cloud Provider's Availability Zone.
 nodeSelector: {}
   # failure-domain.beta.kubernetes.io/zone: eu-central-1a
   # kubernetes.io/hostname: ip-10-0-6-168.eu-central-1.compute.internal
