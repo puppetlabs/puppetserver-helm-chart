@@ -248,7 +248,11 @@ hiera:
 ## Pod Configuration
 ##
 ## Node labels for pod assignment
+## Note that the Puppet Server components use common storage.
+## That common storage requirement might impose certain pod assignment scenarios.
 nodeSelector: {}
+  # failure-domain.beta.kubernetes.io/zone: eu-central-1a
+  # kubernetes.io/hostname: ip-10-0-6-168.eu-central-1.compute.internal
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity

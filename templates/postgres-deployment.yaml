@@ -39,6 +39,8 @@ spec:
                   key: username
             - name: POSTGRES_DB
               value: puppetdb
+            - name: PGDATA
+              value: /var/lib/postgresql/data/db-files/
           ports:
             - containerPort: 5432
           volumeMounts:
