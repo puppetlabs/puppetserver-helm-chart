@@ -38,24 +38,20 @@ puppetserver:
     ## If true, Puppet Server Ingress will be created
     ##
     enabled: false
-
     ## Puppet Server Ingress annotations
     ##
     annotations: {}
     #   kubernetes.io/ingress.class: nginx
     #   kubernetes.io/tls-acme: 'true'
-
     ## Puppet Server Ingress additional labels
     ##
     extraLabels: {}
-
     ## Puppet Server Ingress hostnames with optional path
     ## Must be provided if Ingress is enabled
     ##
     hosts: []
     #   - puppet.domain.com
     #   - domain.com/puppet
-
     ## Puppet Server Ingress TLS configuration
     ## Secrets must be manually created in the namespace
     ##
@@ -247,12 +243,16 @@ hiera:
 
 ## Pod Configuration
 ##
-## Node labels for pod assignment
-## Note that the Puppet Server components use common storage.
-## That common storage requirement might impose certain pod assignment scenarios.
-## For example: the "puppetserver" and "r10k" components might be required to sit
-## in a common Cloud Provider's Availability Zone.
+## Common node labels for pod assignment
 nodeSelector: {}
+
+## Node labels for pod assignment of "puppetserver" and "r10k"
+## Note that the "puppetserver" and "r10k" components of the Puppet Server
+## use common storage. That common storage requirement might impose 
+## certain pod assignment scenarios. It might be required the "puppetserver" and "r10k"
+## components to sit in a common Cloud Provider's Availability Zone.
+## For that matter separate node labels are made available for those if need be.
+commonStorageNodeSelector: {}
   # failure-domain.beta.kubernetes.io/zone: eu-central-1a
   # kubernetes.io/hostname: ip-10-0-6-168.eu-central-1.compute.internal
 
