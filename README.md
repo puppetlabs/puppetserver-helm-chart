@@ -10,7 +10,7 @@
 Depending on your deployment scenario a certain `StorageClass` object might be required.
 In a big K8s megacluster running in the cloud multiple labeled (and/or tainted) nodes in each Availability Zone (AZ) might be present. In such scenario Puppet Server components that use common storage (`puppetserver` and `r10k`) require their volumes to be created in the same AZ. That can be achieved through a custom `StorageClass`.
 
-Exemplary configuration:
+Exemplary definition:
 ```yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
