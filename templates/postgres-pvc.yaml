@@ -31,12 +31,12 @@ spec:
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
-{{- if .Values.storage.nodeAffinity }}
+{{- if .Values.storage.staticPersistentVolumes.nodeAffinity }}
   nodeAffinity:
-{{ toYaml .Values.storage.nodeAffinity | nindent 4 }}
+{{ toYaml .Values.storage.staticPersistentVolumes.nodeAffinity | nindent 4 }}
 {{- end }}
-{{- if .Values.storage.type }}
-{{ toYaml .Values.storage.type | nindent 2 }}
+{{- if .Values.storage.staticPersistentVolumes.type }}
+{{ toYaml .Values.storage.staticPersistentVolumes.type | nindent 2 }}
 {{- end }}
 {{- end }}
 ...
