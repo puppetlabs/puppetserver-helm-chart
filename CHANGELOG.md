@@ -9,6 +9,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - Differentiate "nodeSelector" for Pods with Common Storage.
 - Fix for PostgreSQL on AWS.
 - Small Syntax Fixes.
+- Improve README.
 - Improve Values Comments.
 
 [Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v0.3.5...v1.0.0)

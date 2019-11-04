@@ -284,6 +284,8 @@ storage:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
+  ## Please check the `README.md` for more information
+  ## regarding useful scenarios about "storageClass".
   storageClass: ""
   selector: false
   annotations: {}
