@@ -28,7 +28,7 @@ spec:
 {{- end }}
 {{- end }}
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
 {{- if .Values.storage.nodeAffinity }}
   nodeAffinity:
@@ -60,7 +60,7 @@ spec:
       {{- include "puppetserver.puppetserver.matchLabels" . | nindent 6 }}
   {{- end }}
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: {{ .Values.storage.size | quote }}
