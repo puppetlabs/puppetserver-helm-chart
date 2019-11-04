@@ -1,60 +1,13 @@
-### Puppetserver data
-{{- if (.Values.storage.staticPersistentVolumes.enabled) }}
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: puppet-serverdata-pv
-  labels:
-    {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
-    {{- if (.Values.storage.staticPersistentVolumes.typeLabel) }}
-    type: {{ .Values.storage.staticPersistentVolumes.typeLabel }}
-    {{- end }}
-  {{- if .Values.storage.extraLabels }}
-{{ toYaml .Values.storage.extraLabels | nindent 4 }}
-  {{- end }}
-  namespace: {{ .Release.Namespace }}
-spec:
-  capacity:
-    storage: {{ .Values.storage.size | quote }}
-  claimRef:
-    apiVersion: v1
-    kind: PersistentVolumeClaim
-    name: puppet-serverdata-claim
-    namespace: {{ .Release.Namespace }}
-{{- if .Values.storage.storageClass }}
-{{- if (eq "-" .Values.storage.storageClass) }}
-  storageClassName: ""
-{{- else }}
-  storageClassName: "{{ .Values.storage.storageClass }}"
-{{- end }}
-{{- end }}
-  accessModes:
-  - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Delete
-{{- if .Values.storage.staticPersistentVolumes.nodeAffinity }}
-  nodeAffinity:
-{{ toYaml .Values.storage.staticPersistentVolumes.nodeAffinity | nindent 4 }}
-{{- end }}
-{{- if .Values.storage.staticPersistentVolumes.type }}
-{{ toYaml .Values.storage.staticPersistentVolumes.type | nindent 2 }}
-{{- end }}
-{{- end }}
-...
----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: puppet-serverdata-claim
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
-    {{- if and (.Values.storage.staticPersistentVolumes.enabled) (.Values.storage.staticPersistentVolumes.typeLabel) }}
-    type: {{ .Values.storage.staticPersistentVolumes.typeLabel }}
-    {{- end }}
 {{- if .Values.storage.annotations }}
   annotations:
 {{ toYaml .Values.storage.annotations | nindent 4 }}
 {{- end }}
-  namespace: {{ .Release.Namespace }}
 spec:
   {{- if .Values.storage.selector }}
   selector:
@@ -73,4 +26,3 @@ spec:
   storageClassName: "{{ .Values.storage.storageClass }}"
 {{- end }}
 {{- end }}
-...
