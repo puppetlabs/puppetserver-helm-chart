@@ -29,7 +29,7 @@ spec:
 {{- end }}
 {{- end }}
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
 {{- if .Values.storage.staticPersistentVolumes.nodeAffinity }}
   nodeAffinity:
@@ -62,7 +62,7 @@ spec:
       {{- include "puppetserver.postgres.matchLabels" . | nindent 6 }}
   {{- end }}
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: {{ .Values.storage.size | quote }}
