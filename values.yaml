@@ -243,18 +243,21 @@ hiera:
 
 ## Pod Configuration
 ##
-## Common node labels for pod assignment
-nodeSelector: {}
-
-## Node labels for pod assignment of "puppetserver" and "r10k"
-## Note that the "puppetserver" and "r10k" components of the Puppet Server
-## use common storage. That common storage requirement might impose 
-## certain pod assignment scenarios. It might be required the "puppetserver" and "r10k"
-## components to sit in a common Cloud Provider's Availability Zone.
-## For that matter separate node labels are made available for those if need be.
-commonStorageNodeSelector: {}
-  # failure-domain.beta.kubernetes.io/zone: eu-central-1a
-  # kubernetes.io/hostname: ip-10-0-6-168.eu-central-1.compute.internal
+## Node labels for pod assignment
+nodeSelector:
+  ## Common node labels for pod assignment
+  allPods: {}
+    # key: value
+    #
+  ## Node labels for pod assignment of "puppetserver" and "r10k" pods
+  ## Note that the "puppetserver" and "r10k" components of the Puppet Server
+  ## use common storage. That common storage requirement might impose
+  ## certain pod assignment scenarios. It might be required the "puppetserver" and "r10k"
+  ## components to sit in a common Cloud Provider's Availability Zone.
+  ## For that matter separate node labels are made available for those if need be.
+  commonStoragePods: {}
+    # failure-domain.beta.kubernetes.io/zone: eu-central-1a
+    # kubernetes.io/hostname: ip-10-0-6-168.eu-central-1.compute.internal
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
