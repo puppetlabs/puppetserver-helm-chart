@@ -288,3 +288,35 @@ storage:
   selector: false
   annotations: {}
   size: 100Mi
+  staticPersistentVolumes:
+    enabled: false
+    typeLabel: ""   # examples: awsElasticBlockStore, nfs, hostPath, gcePersistentDisk, azureDisk, etc.
+    extraLabels: {}
+    type: {}
+      # hostPath:
+      #   # directory location on host
+      #   path: /data
+      #   # this field is optional
+      #   type: Directory
+      ##
+      # awsElasticBlockStore:
+      #   volumeID: aws://us-east-1a/vol-ID
+      #   fsType: ext4
+      ##
+      # gcePersistentDisk:
+      #   pdName: my-data-disk
+      #   fsType: ext4
+      ##
+      # nfs:
+      #   path: /tmp
+      #   server: 172.17.0.2
+      #   readOnly: false
+    ## Node Affinity - required mainly for local PV assignment
+    nodeAffinity: {}
+      # required:
+      #   nodeSelectorTerms:
+      #   - matchExpressions:
+      #     - key: kubernetes.io/hostname
+      #       operator: In
+      #       values:
+      #       - example-node
