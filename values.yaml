@@ -287,11 +287,11 @@ storage:
   storageClass: ""
   annotations: {}
   selector: false
+  extraLabels: {}
   size: 100Mi
   staticPersistentVolumes:
     enabled: false
     typeLabel: ""   # examples: awsElasticBlockStore, nfs, hostPath, gcePersistentDisk, azureDisk, etc.
-    extraLabels: {}
     type: {}
       # hostPath:
       #   # directory location on host
