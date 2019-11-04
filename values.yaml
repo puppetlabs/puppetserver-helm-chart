@@ -285,8 +285,8 @@ storage:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  selector: false
   annotations: {}
+  selector: false
   size: 100Mi
   staticPersistentVolumes:
     enabled: false

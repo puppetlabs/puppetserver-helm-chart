@@ -1,13 +1,58 @@
+### Postgres data
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-pv
+  labels:
+    {{- include "puppetserver.postgres.labels" . | nindent 4 }}
+    {{- if .Values.storage.typeLabel }}
+    type: {{ .Values.storage.typeLabel }}
+    {{- end }}
+  {{- if .Values.storage.extraLabels }}
+{{ toYaml .Values.storage.extraLabels | nindent 4 }}
+  {{- end }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  capacity:
+    storage: {{ .Values.storage.size | quote }}
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: postgres-claim
+    namespace: {{ .Release.Namespace }}
+{{- if .Values.storage.storageClass }}
+{{- if (eq "-" .Values.storage.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.storage.storageClass }}"
+{{- end }}
+{{- end }}
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+{{- if .Values.storage.nodeAffinity }}
+  nodeAffinity:
+{{ toYaml .Values.storage.nodeAffinity | nindent 4 }}
+{{- end }}
+{{- if .Values.storage.type }}
+{{ toYaml .Values.storage.type | nindent 2 }}
+{{- end }}
+...
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-claim
   labels:
     {{- include "puppetserver.postgres.labels" . | nindent 4 }}
+    {{- if .Values.storage.typeLabel }}
+    type: {{ .Values.storage.typeLabel }}
+    {{- end }}
 {{- if .Values.storage.annotations }}
   annotations:
 {{ toYaml .Values.storage.annotations | nindent 4 }}
 {{- end }}
+  namespace: {{ .Release.Namespace }}
 spec:
   {{- if .Values.storage.selector }}
   selector:
@@ -26,3 +71,4 @@ spec:
   storageClassName: "{{ .Values.storage.storageClass }}"
 {{- end }}
 {{- end }}
+...
