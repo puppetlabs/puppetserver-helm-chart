@@ -29,7 +29,7 @@ spec:
 {{- end }}
 {{- end }}
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   persistentVolumeReclaimPolicy: Delete
 {{- if .Values.storage.staticPersistentVolumes.nodeAffinity }}
   nodeAffinity:
@@ -62,7 +62,7 @@ spec:
       {{- include "puppetserver.hiera.matchLabels" . | nindent 6 }}
   {{- end }}
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: {{ .Values.storage.size | quote }}
