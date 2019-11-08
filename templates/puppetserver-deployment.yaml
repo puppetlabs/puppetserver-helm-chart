@@ -27,7 +27,7 @@ spec:
           imagePullPolicy: "{{.Values.puppetserver.pullPolicy}}"
           resources:
           {{ toYaml .Values.puppetserver.resources | nindent 12 }}
-          command: [ "sh", "-c" ]
+          command: [ "sh", "-ce" ]
           args:
             - mkdir -p /etc/puppetlabs/code/environments;
               mkdir -p /etc/puppetlabs/puppet/keys;
@@ -48,6 +48,7 @@ spec:
               chown puppet:puppet /etc/puppetlabs/puppet/keys/public_key.pkcs7.pem;
               {{- end }}
               chmod -R 0777 /tmp;
+              puppet generate types;
           securityContext:
             runAsUser: 0
             runAsNonRoot: false
@@ -74,7 +75,7 @@ spec:
             - name: eyamlpriv-volume
               mountPath: /etc/puppetlabs/puppet/configmap/private_key.pkcs7.pem
               subPath: private_key.pkcs7.pem
-            {{- end }}            
+            {{- end }}
             - name: puppet-hiera-storage
               mountPath: /tmp/
       containers:
