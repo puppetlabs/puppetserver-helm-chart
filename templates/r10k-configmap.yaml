@@ -21,4 +21,5 @@ data:
                username: '{{.Values.r10k.viaHttps.credentials.username}}'
                password: '{{.Values.r10k.viaHttps.credentials.password}}'
                {{- end }}
+             postrun: ['puppet', 'generate', 'types']
 {{- end }}

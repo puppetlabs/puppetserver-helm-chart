@@ -27,7 +27,7 @@ spec:
           imagePullPolicy: "{{.Values.puppetserver.pullPolicy}}"
           resources:
           {{ toYaml .Values.puppetserver.resources | nindent 12 }}
-          command: [ "sh", "-ce" ]
+          command: [ "sh", "-c" ]
           args:
             - mkdir -p /etc/puppetlabs/code/environments;
               mkdir -p /etc/puppetlabs/puppet/keys;
@@ -48,7 +48,6 @@ spec:
               chown puppet:puppet /etc/puppetlabs/puppet/keys/public_key.pkcs7.pem;
               {{- end }}
               chmod -R 0777 /tmp;
-              puppet generate types;
           securityContext:
             runAsUser: 0
             runAsNonRoot: false
