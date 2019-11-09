@@ -133,6 +133,7 @@ Parameter | Description | Default
 `r10k.tag` | r10k img tag | `3.3.1`
 `r10k.pullPolicy` | r10k img pull policy | `IfNotPresent`
 `r10k.cronJob.schedule` | r10k cron job schedule policy | `*/2 * * * *`
+`r10k.generate_types` | create Puppet signatures for custom types with r10k | `false`
 `r10k.viaHttps.enabled` | r10k repo cloning via https | `true`
 `r10k.viaHttps.credentials.username`| r10k https username |``
 `r10k.viaHttps.credentials.password`| r10k https password |``

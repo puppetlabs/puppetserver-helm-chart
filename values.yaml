@@ -126,7 +126,7 @@ r10k:
   #    cpu: 500m
   cronJob:
     schedule: "*/2 * * * *"
-  ## Enable environment isolation with r10k - creates Puppet signatures for
+  ## Allow for environment isolation with r10k - creates Puppet signatures for
   ## custom types circumventing the need to load their Ruby code during compilation.
   generate_types: false
   ## Cloning via HTTPS method and its creds (if a private repo)

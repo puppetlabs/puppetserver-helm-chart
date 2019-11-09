@@ -12,8 +12,10 @@ data:
                repositories:
                  remote: '{{.Values.puppetserver.puppeturl}}'
                  basedir: '/etc/puppetlabs/code/environments'
+            {{- if not .Values.r10k.generate_types }}
              git:
                provider: 'rugged' # Either 'shellgit' or 'rugged', defaults to 'shellgit'
+            {{- end }}
                {{- if and (.Values.r10k.viaSsh.enabled) (.Values.r10k.viaSsh.credentials.ssh.value) (.Values.r10k.viaSsh.credentials.known_hosts.value) }}
                private_key: '/root/.ssh/id_rsa'
                {{- end }}
@@ -21,5 +23,7 @@ data:
                username: '{{.Values.r10k.viaHttps.credentials.username}}'
                password: '{{.Values.r10k.viaHttps.credentials.password}}'
                {{- end }}
+            {{- if .Values.r10k.generate_types }}
              postrun: ["/bin/sh -c", "/usr/local/bin/generate-puppet-types.sh", "$modifiedenvs"]
+            {{- end }}
 {{- end }}
