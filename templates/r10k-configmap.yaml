@@ -12,9 +12,11 @@ data:
                repositories:
                  remote: '{{.Values.puppetserver.puppeturl}}'
                  basedir: '/etc/puppetlabs/code/environments'
-            {{- if not .Values.r10k.generate_types }}
              git:
-               provider: 'rugged' # Either 'shellgit' or 'rugged', defaults to 'shellgit'
+            {{- if not .Values.r10k.generate_types }}
+               provider: 'rugged'
+            {{- else }}
+               provider: 'shellgit'
             {{- end }}
                {{- if and (.Values.r10k.viaSsh.enabled) (.Values.r10k.viaSsh.credentials.ssh.value) (.Values.r10k.viaSsh.credentials.known_hosts.value) }}
                private_key: '/root/.ssh/id_rsa'
