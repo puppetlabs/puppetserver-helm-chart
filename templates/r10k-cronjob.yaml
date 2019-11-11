@@ -32,7 +32,7 @@ spec:
               resources:
               {{ toYaml .Values.r10k.resources | nindent 16 }}
               {{- if .Values.r10k.generate_types }}
-              command: 
+              command:
               - "/bin/sh"
               - "-ec"
               - |
