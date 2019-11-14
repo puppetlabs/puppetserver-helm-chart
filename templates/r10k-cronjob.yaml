@@ -23,27 +23,15 @@ spec:
         spec:
           containers:
             - name: r10k
-              {{- if not .Values.r10k.generate_types }}
               image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
-              {{- else }}
-              image: "{{.Values.puppetserver.image}}:{{.Values.puppetserver.tag}}"
-              {{- end }}
               imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
               resources:
               {{ toYaml .Values.r10k.resources | nindent 16 }}
-              {{- if .Values.r10k.generate_types }}
-              command:
-              - "/bin/sh"
-              - "-ec"
-              - |
-                /opt/puppetlabs/puppet/bin/r10k deploy environment --config /etc/puppetlabs/puppet/r10k.yaml
-              {{- else }}
               args:
               - deploy
               - environment
               - --config
               - /etc/puppetlabs/puppet/r10k.yaml
-              {{- end }}
               volumeMounts:
                 {{- if and (.Values.r10k.viaSsh.enabled) (.Values.r10k.viaSsh.credentials.ssh.value) (.Values.r10k.viaSsh.credentials.known_hosts.value) }}
                 - name: r10k-secret
@@ -54,11 +42,6 @@ spec:
                   subPath: r10k.yaml
                 - name: puppet-code-storage
                   mountPath: /etc/puppetlabs/code/
-                {{- if .Values.r10k.generate_types }}
-                - name: r10k-generate-types-volume
-                  mountPath: /usr/local/bin/generate-puppet-types.sh
-                  subPath: generate-puppet-types.sh
-                {{- end }}
           restartPolicy: OnFailure
           volumes:
             - name: puppet-code-storage
@@ -67,11 +50,6 @@ spec:
             - name: r10k-volume
               configMap:
                 name: r10k-config
-            {{- if .Values.r10k.generate_types }}
-            - name: r10k-generate-types-volume
-              configMap:
-                name: r10k-generate-types-script
-            {{- end }}
             {{- if and (.Values.r10k.viaSsh.enabled) (.Values.r10k.viaSsh.credentials.ssh.value) (.Values.r10k.viaSsh.credentials.known_hosts.value) }}
             - name: r10k-secret
               secret:
