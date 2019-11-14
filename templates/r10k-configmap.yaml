@@ -15,7 +15,7 @@ data:
       {{- if .Values.hiera.hieradataurl }}
       hiera:
         - remote: '{{.Values.hiera.hieradataurl}}'
-          basedir: '/etc/puppet/hiera-data'
+          basedir: '/etc/puppetlabs/code/hiera-data'
       {{- end }}
     git:
       provider: 'rugged' # Either 'shellgit' or 'rugged', defaults to 'shellgit'
