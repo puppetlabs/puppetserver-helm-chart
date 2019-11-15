@@ -53,31 +53,38 @@ You can use `kubectl get` to view all of the installed components.
 
 ```console
 $ kubectl get --namespace puppetserver all -l app=puppetserver
-NAME                                READY   STATUS    RESTARTS   AGE
-pod/postgres-77cfcbf9f-md4zh        1/1     Running   0          10m
-pod/puppetboard-7677f4b747-67vbx    1/1     Running   0          10m
-pod/puppetdb-85c799d8fb-94t4h       1/1     Running   0          10m
-pod/puppetserver-6d48cb454b-5drxj   2/2     Running   0          10m
+NAME                                READY   STATUS      RESTARTS   AGE
+pod/postgres-584d75d8b-gw8n6        1/1     Running     0          31m
+pod/puppetdb-5f6fd6df7d-fqbc2       1/1     Running     0          31m
+pod/puppetserver-54f889b9c5-r7gm9   1/1     Running     0          31m
+pod/r10k-deploy-1573860480-5nnp9    0/1     Completed   0          6m6s
+pod/r10k-deploy-1573860600-qhk5j    0/1     Completed   0          4m6s
+pod/r10k-deploy-1573860720-hhkpp    0/1     Completed   0          2m6s
+pod/r10k-deploy-1573860840-tsx2n    0/1     Completed   0          6s
 
-NAME               TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)             AGE
-service/postgres   ClusterIP      10.0.39.67     <none>          5432/TCP            10m
-service/puppet     LoadBalancer   10.0.80.150    192.168.1.101   8140:31499/TCP      10m
-service/puppetdb   ClusterIP      10.0.149.173   <none>          8080/TCP,8081/TCP   10m
+NAME               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)             AGE
+service/postgres   ClusterIP   10.0.193.66   <none>        5432/TCP            31m
+service/puppet     ClusterIP   10.0.79.57    <none>        8140/TCP            31m
+service/puppetdb   ClusterIP   10.0.232.39   <none>        8080/TCP,8081/TCP   31m
 
 NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/postgres       1/1     1            1           10m
-deployment.apps/puppetboard    1/1     1            1           10m
-deployment.apps/puppetdb       1/1     1            1           10m
-deployment.apps/puppetserver   1/1     1            1           10m
+deployment.apps/postgres       1/1     1            1           31m
+deployment.apps/puppetdb       1/1     1            1           31m
+deployment.apps/puppetserver   1/1     1            1           31m
 
 NAME                                      DESIRED   CURRENT   READY   AGE
-replicaset.apps/postgres-77cfcbf9f        1         1         1       10m
-replicaset.apps/puppetboard-7677f4b747    1         1         1       10m
-replicaset.apps/puppetdb-85c799d8fb       1         1         1       10m
-replicaset.apps/puppetserver-6d48cb454b   1         1         1       10m
+replicaset.apps/postgres-584d75d8b        1         1         1       31m
+replicaset.apps/puppetdb-5f6fd6df7d       1         1         1       31m
+replicaset.apps/puppetserver-54f889b9c5   1         1         1       31m
+
+NAME                               COMPLETIONS   DURATION   AGE
+job.batch/r10k-deploy-1573860480   1/1           3s         6m6s
+job.batch/r10k-deploy-1573860600   1/1           3s         4m6s
+job.batch/r10k-deploy-1573860720   1/1           3s         2m6s
+job.batch/r10k-deploy-1573860840   1/1           3s         6s
 
 NAME                        SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
-cronjob.batch/r10k-deploy   */2 * * * *   False     0        40s             10m
+cronjob.batch/r10k-deploy   */2 * * * *   False     1        14s             31m
 ```
 
 ## Configuration
