@@ -96,6 +96,8 @@ Parameter | Description | Default
 `puppetserver.name` | puppetserver component label | `puppetserver`
 `puppetserver.image` | puppetserver image | `puppet/puppetserver`
 `puppetserver.tag` | puppetserver img tag | `6.6.0`
+`puppetserver.resources` | puppetserver resource limits | ``
+`puppetserver.extraEnv` | puppetserver additional container env vars | ``
 `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`
 `puppetserver.fqdns.alternateServerNames` | puppetserver alternate fqdns |``
 `puppetserver.service.type` | puppetserver svc type | `ClusterIP`
@@ -114,6 +116,9 @@ Parameter | Description | Default
 `r10k.tag` | r10k img tag | `3.3.1`
 `r10k.pullPolicy` | r10k img pull policy | `IfNotPresent`
 `r10k.cronJob.schedule` | r10k cron job schedule policy | `*/2 * * * *`
+`r10k.resources` | r10k resource limits | ``
+`r10k.extraArgs` | r10k additional container env args | ``
+`r10k.extraEnv` | r10k additional container env vars | ``
 `r10k.viaHttps.enabled` | r10k repo cloning via https | `true`
 `r10k.viaHttps.credentials.username`| r10k https username |``
 `r10k.viaHttps.credentials.password`| r10k https password |``
@@ -126,10 +131,14 @@ Parameter | Description | Default
 `postgres.image` | postgres img | `postgres`
 `postgres.tag` | postgres img tag | `9.6.15`
 `postgres.pullPolicy` | postgres img pull policy | `IfNotPresent`
+`postgres.resources` | postgres resource limits | ``
+`postgres.extraEnv` | postgres additional container env vars | ``
 `puppetdb.name` | puppetdb component label | `puppetdb`
 `puppetdb.image` | puppetdb img | `puppet/puppetdb`
 `puppetdb.tag` | puppetdb img tag | `6.6.0`
 `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`
+`puppetdb.resources` | puppetdb resource limits | ``
+`puppetdb.extraEnv` | puppetdb additional container env vars | ``
 `puppetdb.credentials.username`| puppetdb username |`puppetdb`
 `puppetdb.credentials.value.password`| puppetdb password |`20-char randomly generated`
 `puppetdb.credentials.password.existingSecret`| k8s secret that holds puppetdb password |``
@@ -139,6 +148,8 @@ Parameter | Description | Default
 `puppetboard.image` | puppetboard img | `puppet/puppetboard`
 `puppetboard.tag` | puppetboard img tag | `0.3.0`
 `puppetboard.pullPolicy` | puppetboard img pull policy | `IfNotPresent`
+`puppetboard.resources` | puppetboard resource limits | ``
+`puppetboard.extraEnv` | puppetboard additional container env vars | ``
 `hiera.name` | hiera component label | `hiera`
 `hiera.hieradataurl`| hieradata repo url |``
 `hiera.config`| hieradata yaml config |``
