@@ -8,6 +8,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 ## [v1.2.0](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.2.0) (2019-11-21)
 - Add optional extra container environment variables.
 - Add optional "r10k" extra container arguments.
+- Bump PupptDB to v6.7.3.
 - Small code indentation improvements.
 - README updates.
 
