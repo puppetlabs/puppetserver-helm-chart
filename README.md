@@ -95,7 +95,7 @@ Parameter | Description | Default
 --------- | ----------- | -------
 `puppetserver.name` | puppetserver component label | `puppetserver`
 `puppetserver.image` | puppetserver image | `puppet/puppetserver`
-`puppetserver.tag` | puppetserver img tag | `6.6.0`
+`puppetserver.tag` | puppetserver img tag | `6.7.1`
 `puppetserver.resources` | puppetserver resource limits | ``
 `puppetserver.extraEnv` | puppetserver additional container env vars | ``
 `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`
@@ -113,7 +113,7 @@ Parameter | Description | Default
 `puppetserver.puppeturl`| puppetserver control repo url |``
 `r10k.name` | r10k component label | `r10k`
 `r10k.image` | r10k img | `puppet/r10k`
-`r10k.tag` | r10k img tag | `3.3.1`
+`r10k.tag` | r10k img tag | `3.3.3`
 `r10k.pullPolicy` | r10k img pull policy | `IfNotPresent`
 `r10k.cronJob.schedule` | r10k cron job schedule policy | `*/2 * * * *`
 `r10k.resources` | r10k resource limits | ``
@@ -135,7 +135,7 @@ Parameter | Description | Default
 `postgres.extraEnv` | postgres additional container env vars | ``
 `puppetdb.name` | puppetdb component label | `puppetdb`
 `puppetdb.image` | puppetdb img | `puppet/puppetdb`
-`puppetdb.tag` | puppetdb img tag | `6.6.0`
+`puppetdb.tag` | puppetdb img tag | `6.7.3`
 `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`
 `puppetdb.resources` | puppetdb resource limits | ``
 `puppetdb.extraEnv` | puppetdb additional container env vars | ``
