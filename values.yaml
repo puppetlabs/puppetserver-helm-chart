@@ -87,9 +87,9 @@ r10k:
     schedule: "*/2 * * * *"
   ## Additional r10k container arguments
   extraArgs: {}
-  #  --verbose[=<value>]
-  #  --trace
-  #  --color
+  #  - --verbose=debug2
+  #  - --trace
+  #  - --color
   ## Additional puppetserver container environment variables
   extraEnv: {}
   ## Cloning via HTTPS method and its creds (if a private repo)
