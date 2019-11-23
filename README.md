@@ -123,11 +123,9 @@ Parameter | Description | Default
 `r10k.resources` | r10k resource limits |``
 `r10k.extraArgs` | r10k additional container env args |``
 `r10k.extraEnv` | r10k additional container env vars |``
-`r10k.viaHttps.enabled` | r10k repo cloning via https | `true`
 `r10k.viaHttps.credentials.username`| r10k https username |``
 `r10k.viaHttps.credentials.password`| r10k https password |``
 `r10k.viaHttps.credentials.existingSecret`| r10k https secret that holds https username and password |``
-`r10k.viaSsh.enabled` | r10k repo cloning via https | `false`
 `r10k.viaSsh.credentials.ssh.value`| r10k ssh key file |``
 `r10k.viaSsh.credentials.known_hosts.value`| r10k ssh known hosts file |``
 `r10k.viaSsh.credentials.existingSecret`| r10k ssh secret that holds ssh key and known hosts files |``

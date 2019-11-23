@@ -5,21 +5,21 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v1.3.0](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.3.0) (2019-11-28)
+## [v1.3.0](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.3.0) (2019-11-27)
 
-- Adds support for separate network protocols or just separate SSH keys which r10k uses to gather the code of the Puppet Control and the Hiera Data repos.
-- README and CHANGELOG syntax improvements.
+- Add support for separate r10k network protocols to gather the code of Puppet and Hiera repos.
+- Syntax improvements.
 
 [Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.2.2...v1.3.0)
 
-## [v1.2.2](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.2.2) (2019-11-26)
+## [v1.2.2](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.2.2) (2019-11-24)
 
-- Fixes https://github.com/puppetlabs/pupperware/issues/187 and https://github.com/puppetlabs/pupperware/issues/188.
+- Fixes <https://github.com/puppetlabs/pupperware/issues/187> and <https://github.com/puppetlabs/pupperware/issues/188.>
 - `r10k` now runs with the `puppet` username and group id - meaning all the files in `/etc/puppetlabs` are now owned by Puppet Server.
 
 [Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.2.1...v1.2.2)
 
-## [v1.2.1](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.2.1) (2019-11-24)
+## [v1.2.1](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.2.1) (2019-11-22)
 
 - Fixes for "r10k" extra container args.
 - Values file small fixes.
