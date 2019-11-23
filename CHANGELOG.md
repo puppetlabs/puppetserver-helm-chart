@@ -7,7 +7,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 ## [v1.3.0](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.3.0) (2019-11-27)
 
-- Add support for separate r10k network protocols to gather the code of Puppet and Hiera repos.
+- [Firewall Related] Add support for separate r10k network protocols to gather the code of Puppet and Hiera repos.
 - Syntax improvements.
 
 [Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.2.2...v1.3.0)

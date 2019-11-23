@@ -48,13 +48,17 @@ data:
       password: '{{.Values.r10k.viaHttps.credentials.password}}'
       {{- end }}
       {{- if and (eq (.Values.r10k.viaHttps.repo | toString) "puppet_repo") (ne (.Values.r10k.viaSsh.repo | toString) "puppet_repo") }}
+      {{- if not .Values.r10k.viaSsh.repo }}
       repositories:
+      {{- end }}
         - remote: '{{.Values.puppetserver.puppeturl}}'
           username: '{{.Values.r10k.viaHttps.credentials.username}}'
           password: '{{.Values.r10k.viaHttps.credentials.password}}'
       {{- end }}
       {{- if and (eq (.Values.r10k.viaHttps.repo | toString) "hiera_repo") (ne (.Values.r10k.viaSsh.repo | toString) "hiera_repo") }}
+      {{- if not .Values.r10k.viaSsh.repo }}
       repositories:
+      {{- end }}
         - remote: '{{.Values.hiera.hieradataurl}}'
           username: '{{.Values.r10k.viaHttps.credentials.username}}'
           password: '{{.Values.r10k.viaHttps.credentials.password}}'

@@ -95,7 +95,7 @@ r10k:
   ## Cloning via HTTPS protocol with authentication
   ##
   viaHttps:
-    ## Leave empty - if HTTPS should be used for Puppet and Hiera repos.
+    ## Leave empty - if HTTPS should be used for both - Puppet and Hiera repos.
     repo: ""   # "puppet_repo" or "hiera_repo"
     credentials:
       username: ""
@@ -107,7 +107,7 @@ r10k:
   ## Cloning via SSH protocol with authentication
   ##
   viaSsh:
-    ## Leave empty - if SSH should be used for Puppet and Hiera repos.
+    ## Leave empty - if SSH should be used for both - Puppet and Hiera repos.
     repo: ""   # "puppet_repo" or "hiera_repo"
     credentials:
       ssh:
