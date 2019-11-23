@@ -7,7 +7,7 @@
 puppetserver:
   name: puppetserver
   image: puppet/puppetserver
-  tag: 6.7.1
+  tag: 6.7.2
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
