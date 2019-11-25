@@ -1,15 +1,35 @@
+<<<<<<< HEAD
 {{- if .Values.hiera.hieradataurl }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: r10k-hiera-deploy
+=======
+{{- if .Values.puppetserver.puppeturl }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+<<<<<<< HEAD:templates/r10k-code-cronjob.yaml
+  name: r10k-code-deploy
+=======
+  name: r10k-hiera-deploy
+>>>>>>> create seperate r10k jobs/etc for code and hiera:templates/r10k-hiera-cronjob.yaml
+>>>>>>> create seperate r10k jobs/etc for code and hiera
   labels:
     {{- include "puppetserver.r10k.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
       {{- include "puppetserver.r10k.matchLabels" . | nindent 6 }}
+<<<<<<< HEAD
   schedule: "{{.Values.r10k.hiera.cronJob.schedule}}"
+=======
+<<<<<<< HEAD:templates/r10k-code-cronjob.yaml
+  schedule: "{{.Values.r10k.code.cronJob.schedule}}"
+=======
+  schedule: "{{.Values.r10k.hiera.cronJob.schedule}}"
+>>>>>>> create seperate r10k jobs/etc for code and hiera:templates/r10k-hiera-cronjob.yaml
+>>>>>>> create seperate r10k jobs/etc for code and hiera
   jobTemplate:
     spec:
       template:
@@ -22,6 +42,7 @@ spec:
           {{- end }}
         spec:
           containers:
+<<<<<<< HEAD
             - name: r10k
               image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
               imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
@@ -29,6 +50,21 @@ spec:
                 {{- toYaml .Values.r10k.hiera.resources | nindent 16 }}
               env:
                 {{- range $key, $value := .Values.r10k.hiera.extraEnv }}
+=======
+            - name: r10k-code
+              image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
+              imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
+              resources:
+<<<<<<< HEAD:templates/r10k-code-cronjob.yaml
+                {{- toYaml .Values.r10k.code.resources | nindent 16 }}
+              env:
+                {{- range $key, $value := .Values.r10k.code.extraEnv }}
+=======
+                {{- toYaml .Values.r10k.hiera.resources | nindent 16 }}
+              env:
+                {{- range $key, $value := .Values.r10k.hiera.extraEnv }}
+>>>>>>> create seperate r10k jobs/etc for code and hiera:templates/r10k-hiera-cronjob.yaml
+>>>>>>> create seperate r10k jobs/etc for code and hiera
                 - name: {{ $key }}
                   value: {{ $value }}
                 {{- end }}
@@ -38,7 +74,15 @@ spec:
                 - --config
                 - /etc/puppetlabs/puppet/r10k.yaml
                 - --puppetfile
+<<<<<<< HEAD
                 {{- range $key, $value := .Values.r10k.hiera.extraArgs }}
+=======
+<<<<<<< HEAD:templates/r10k-code-cronjob.yaml
+                {{- range $key, $value := .Values.r10k.code.extraArgs }}
+=======
+                {{- range $key, $value := .Values.r10k.hiera.extraArgs }}
+>>>>>>> create seperate r10k jobs/etc for code and hiera:templates/r10k-hiera-cronjob.yaml
+>>>>>>> create seperate r10k jobs/etc for code and hiera
                 - {{ $value }}
                 {{- end }}
               volumeMounts:
@@ -60,7 +104,15 @@ spec:
                 claimName: puppet-code-claim
             - name: r10k-volume
               configMap:
+<<<<<<< HEAD
                 name: r10k-hiera-config
+=======
+<<<<<<< HEAD:templates/r10k-code-cronjob.yaml
+                name: r10k-code-config
+=======
+                name: r10k-hiera-config
+>>>>>>> create seperate r10k jobs/etc for code and hiera:templates/r10k-hiera-cronjob.yaml
+>>>>>>> create seperate r10k jobs/etc for code and hiera
             - name: r10k-cache-storage
               persistentVolumeClaim:
                 claimName: r10k-cache-claim
