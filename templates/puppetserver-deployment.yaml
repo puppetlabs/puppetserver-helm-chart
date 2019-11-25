@@ -16,9 +16,9 @@ spec:
         {{- include "puppetserver.puppetserver.labels" . | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/hiera-configmap.yaml") . | sha256sum }}
-      {{- if .Values.podAnnotations }}
+        {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | nindent 8 }}
-      {{- end }}
+        {{- end }}
     spec:
       hostname: {{ template "puppetserver.puppetserver.serviceName" . }}
       initContainers:
@@ -132,23 +132,23 @@ spec:
           configMap:
             name: eyamlpriv-config
         {{- end }}
-    {{- if (or (.Values.nodeSelector.allPods) (.Values.nodeSelector.commonStoragePods)) }}
+      {{- if (or (.Values.nodeSelector.allPods) (.Values.nodeSelector.commonStoragePods)) }}
       nodeSelector:
-    {{- if (.Values.nodeSelector.allPods) }}
-{{ toYaml .Values.nodeSelector.allPods | nindent 10 }}
-    {{- end }}
-    {{- if (.Values.nodeSelector.commonStoragePods) }}
-{{ toYaml .Values.nodeSelector.commonStoragePods | nindent 10 }}
-    {{- end }}
-    {{- end }}
-    {{- if .Values.affinity }}
+      {{- if (.Values.nodeSelector.allPods) }}
+        {{ toYaml .Values.nodeSelector.allPods | nindent 10 }}
+      {{- end }}
+      {{- if (.Values.nodeSelector.commonStoragePods) }}
+        {{ toYaml .Values.nodeSelector.commonStoragePods | nindent 10 }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.affinity }}
       affinity:
-{{ toYaml .Values.affinity | nindent 10 }}
-    {{- end }}
-    {{- if .Values.tolerations }}
+        {{ toYaml .Values.affinity | nindent 10 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
       tolerations:
-{{ toYaml .Values.tolerations| nindent 10 }}
-    {{- end }}
-    {{- if and (.Capabilities.APIVersions.Has "scheduling.k8s.io/v1beta1") (.Values.priorityClassName) }}
+        {{ toYaml .Values.tolerations| nindent 10 }}
+      {{- end }}
+      {{- if and (.Capabilities.APIVersions.Has "scheduling.k8s.io/v1beta1") (.Values.priorityClassName) }}
       priorityClassName: {{ .Values.priorityClassName }}
-    {{- end }}
+      {{- end }}
