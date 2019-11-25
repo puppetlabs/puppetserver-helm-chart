@@ -4,12 +4,12 @@ metadata:
   name: {{ template "puppetserver.puppetserver.serviceName" . }}
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
-  {{- if .Values.puppetserver.service.labels }}
+    {{- if .Values.puppetserver.service.labels }}
     {{ toYaml .Values.puppetserver.service.labels | indent 4 }}
-  {{- end }}
+    {{- end }}
   {{- if .Values.puppetserver.service.annotations }}
   annotations:
-{{ toYaml .Values.puppetserver.service.annotations | indent 4 }}
+    {{ toYaml .Values.puppetserver.service.annotations | indent 4 }}
   {{- end }}
 spec:
   ports:

@@ -26,10 +26,10 @@ spec:
   resources:
     requests:
       storage: {{ .Values.storage.size | quote }}
-{{- if .Values.storage.storageClass }}
-{{- if (eq "-" .Values.storage.storageClass) }}
+  {{- if .Values.storage.storageClass }}
+  {{- if (eq "-" .Values.storage.storageClass) }}
   storageClassName: ""
-{{- else }}
+  {{- else }}
   storageClassName: "{{ .Values.storage.storageClass }}"
-{{- end }}
-{{- end }}
+  {{- end }}
+  {{- end }}
