@@ -3,11 +3,6 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: r10k-hiera-deploy
-{{- if .Values.hiera.hieradataurl }}
-apiVersion: batch/v1beta1
-kind: CronJob
-metadata:
-  name: r10k-hiera-deploy
   labels:
     {{- include "puppetserver.r10k.labels" . | nindent 4 }}
 spec:
