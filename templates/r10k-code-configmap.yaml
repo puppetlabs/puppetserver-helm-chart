@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: r10k-config
+  name: r10k-code-config
   labels:
     {{- include "puppetserver.r10k.labels" . | nindent 4 }}
 data:

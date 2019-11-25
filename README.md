@@ -119,10 +119,14 @@ Parameter | Description | Default
 `r10k.image` | r10k img | `puppet/r10k`
 `r10k.tag` | r10k img tag | `3.3.3`
 `r10k.pullPolicy` | r10k img pull policy | `IfNotPresent`
-`r10k.cronJob.schedule` | r10k cron job schedule policy | `*/2 * * * *`
-`r10k.resources` | r10k resource limits |``
-`r10k.extraArgs` | r10k additional container env args |``
-`r10k.extraEnv` | r10k additional container env vars |``
+`r10k.code.cronJob.schedule` | r10k code cron job schedule policy | `*/15 * * * *`
+`r10k.code.resources` | r10k code resource limits |``
+`r10k.code.extraArgs` | r10k code additional container env args |``
+`r10k.code.extraEnv` | r10k code additional container env vars |``
+`r10k.hiera.cronJob.schedule` | r10k hiera cron job schedule policy | `*/2 * * * *`
+`r10k.hiera.resources` | r10k hiera resource limits |``
+`r10k.hiera.extraArgs` | r10k hiera additional container env args |``
+`r10k.hiera.extraEnv` | r10k hiera additional container env vars |``
 `r10k.viaHttps.repo`| r10k https repo selector |``
 `r10k.viaHttps.credentials.username`| r10k https username |``
 `r10k.viaHttps.credentials.password`| r10k https password |``

@@ -2,14 +2,14 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: r10k-deploy
+  name: r10k-code-deploy
   labels:
     {{- include "puppetserver.r10k.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
       {{- include "puppetserver.r10k.matchLabels" . | nindent 6 }}
-  schedule: "{{.Values.r10k.cronJob.schedule}}"
+  schedule: "{{.Values.r10k.code.cronJob.schedule}}"
   jobTemplate:
     spec:
       template:
@@ -22,13 +22,13 @@ spec:
           {{- end }}
         spec:
           containers:
-            - name: r10k
+            - name: r10k-code
               image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
               imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
               resources:
-                {{- toYaml .Values.r10k.resources | nindent 16 }}
+                {{- toYaml .Values.r10k.code.resources | nindent 16 }}
               env:
-                {{- range $key, $value := .Values.r10k.extraEnv }}
+                {{- range $key, $value := .Values.r10k.code.extraEnv }}
                 - name: {{ $key }}
                   value: {{ $value }}
                 {{- end }}
@@ -38,7 +38,7 @@ spec:
                 - --config
                 - /etc/puppetlabs/puppet/r10k.yaml
                 - --puppetfile
-                {{- range $key, $value := .Values.r10k.extraArgs }}
+                {{- range $key, $value := .Values.r10k.code.extraArgs }}
                 - {{ $value }}
                 {{- end }}
               volumeMounts:
@@ -60,7 +60,7 @@ spec:
                 claimName: puppet-code-claim
             - name: r10k-volume
               configMap:
-                name: r10k-config
+                name: r10k-code-config
             - name: r10k-cache-storage
               persistentVolumeClaim:
                 claimName: r10k-cache-claim
