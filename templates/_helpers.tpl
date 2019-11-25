@@ -38,16 +38,6 @@ chart: {{ .Chart.Name }}-{{ .Chart.Version }}
 heritage: {{ .Release.Service }}
 {{- end -}}
 
-{{- define "puppetserver.git_sync.labels" -}}
-{{ include "puppetserver.git_sync.matchLabels" . }}
-{{ include "puppetserver.common.metaLabels" . }}
-{{- end -}}
-
-{{- define "puppetserver.git_sync.matchLabels" -}}
-component: {{ .Values.git_sync.name | quote }}
-{{ include "puppetserver.common.matchLabels" . }}
-{{- end -}}
-
 {{- define "puppetserver.hiera.labels" -}}
 {{ include "puppetserver.hiera.matchLabels" . }}
 {{ include "puppetserver.common.metaLabels" . }}
@@ -156,19 +146,6 @@ Create the name for the PostgreSQL password secret key.
   {{- .Values.postgres.credentials.existingSecretKey -}}
 {{- else -}}
   password
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create the name for the git-sync secret.
-*/}}
-{{- define "git_sync.secret" -}}
-{{- if .Values.git_sync.viaSsh.credentials.existingSecret -}}
-  {{- .Values.git_sync.viaSsh.credentials.existingSecret -}}
-{{- else if .Values.git_sync.viaHttps.credentials.existingSecret -}}
-  {{- .Values.git_sync.viaHttps.credentials.existingSecret -}}
-{{- else -}}
-  git-creds
 {{- end -}}
 {{- end -}}
 
