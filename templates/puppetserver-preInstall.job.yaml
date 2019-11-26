@@ -26,7 +26,7 @@ spec:
           command: [ "sh", "-c" ]
           args:
             - mkdir -p /etc/puppetlabs/puppet/ssl;
-              cp /puppetserver-certs/* /etc/puppetlabs/puppet/ssl;
+              cp -a /puppetserver-certs/* /etc/puppetlabs/puppet/ssl;
           volumeMounts:
           - name: puppetserver-certs
             mountPath: /puppetserver-certs
