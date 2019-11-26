@@ -47,6 +47,7 @@ spec:
               cp /etc/puppetlabs/puppet/configmap/public_key.pkcs7.pem /etc/puppetlabs/puppet/keys/public_key.pkcs7.pem;
               chown puppet:puppet /etc/puppetlabs/puppet/keys/public_key.pkcs7.pem;
               {{- end }}
+              sh -c "../init/pre-gen-certs-copy.sh"
           securityContext:
             runAsUser: 0
             runAsNonRoot: false
