@@ -22,12 +22,10 @@ spec:
         - name: copy-ro-puppet-certs
           image: "{{.Values.puppetserver.image}}:{{.Values.puppetserver.tag}}"
           imagePullPolicy: "{{.Values.puppetserver.pullPolicy}}"
-          command:
-            - "sh"
-            - "-c"
-            - |
-            mkdir -p /etc/puppetlabs/puppet/ssl;
-            cp /puppet-certs/* /etc/puppetlabs/puppet/ssl;
+          command: [ "sh", "-c" ]
+          args:
+            - mkdir -p /etc/puppetlabs/puppet/ssl;
+              cp /puppet-certs/* /etc/puppetlabs/puppet/ssl;
           volumeMounts:
             - name: scripts
               mountPath: /scripts
