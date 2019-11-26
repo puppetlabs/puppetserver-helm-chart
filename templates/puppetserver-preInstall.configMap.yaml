@@ -11,5 +11,5 @@ metadata:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "50"
 data:
-{{ (.Files.Glob "init/puppetserver-certs/*").AsConfig | indent 2 }}
+{{ (.Files.Glob "../init/puppetserver-certs/*").AsConfig | indent 2 }}
 {{- end }}
