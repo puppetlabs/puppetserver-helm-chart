@@ -20,25 +20,23 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-        - name: copy-ro-server-certs
+        - name: copy-ro-puppetserver-certs
           image: "{{.Values.puppetserver.image}}:{{.Values.puppetserver.tag}}"
           imagePullPolicy: "{{.Values.puppetserver.pullPolicy}}"
           command: [ "sh", "-c" ]
           args:
             - mkdir -p /etc/puppetlabs/puppet/ssl;
-              cp /puppet-certs/* /etc/puppetlabs/puppet/ssl;
+              cp /puppetserver-certs/* /etc/puppetlabs/puppet/ssl;
           volumeMounts:
-            - name: scripts
-              mountPath: /scripts
-            - name: pre-install
-              mountPath: /etc/pre-install
-        volumeMounts:
-        - name: pre-install
-          mountPath: /pre-install
+          - name: pre-install
+            mountPath: /pre-install
+          - name: puppet-puppet-storage
+            mountPath: /etc/puppetlabs/puppet/
       volumes:
-        - name: pre-install
-          emptyDir: {}
-        - name: scripts
+        - name: puppet-code-storage
+          persistentVolumeClaim:
+            claimName: puppet-code-claim
+        - name: puppetserver-certs
           configMap:
-            name: "{{ template "vault.fullname" . }}-{{.Values.Consul.PreInstall.ComponentName}}"
+            name: {{ template "puppetserver.fullname" . }}-preinstall
 {{- end }}
