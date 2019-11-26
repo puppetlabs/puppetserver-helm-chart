@@ -35,21 +35,31 @@ allowedTopologies:
 
 In case a Load Balancer (LB) must sit in front of Puppet Server - please keep in mind that having a Network LB (operating at OSI Layer 4) is preferable.
 
-## Migrating from a bare-metal Puppet Server - Certificates
+## Migrating from a bare-metal Puppet Server Master - Certificates
 
 ### Auto-Signing Certificate Requests
 
-In general, the easiest way to switch the Puppet Agents from using one Puppet Server to another is by enabling the auto-signing of CSRs. By default, that has been pre-enabled in the Puppet Server Docker container. It can be disabled in the Values file by passing an extra environment variable `AUTOSIGN=false` (in `.Values.puppetserver.extraEnv`).
+In general, the easiest way to switch the Puppet Agents from using one Puppet Server master to another is by enabling the auto-signing of CSRs. By default, that has been pre-enabled in the Puppet Server Docker container. It can be disabled in the Values file by passing an extra environment variable `AUTOSIGN=false` (in `.Values.puppetserver.extraEnv`).
 
-### Using Pre-Generated Puppet Server Certs
+### Using Pre-Generated Puppet Server Master Certs
 
-If you prefer not to auto-sign or manually sign the Puppet Agents' CSRs - you can use the same Puppet Server certificates which you used in your bare-metal setup. Please place your certificates in the `init/puppetserver-certs` directory and enable their usage in the Values file (`.Values.puppetserver.preGeneratedCertsJob.enabled`).
+If you prefer not to auto-sign or manually sign the Puppet Agents' CSRs - you can use the same Puppet Server master certificates which you used in your bare-metal setup. Please place your certificates in the `init/puppetserver-certs` directory and enable their usage in the Values file (`.Values.puppetserver.preGeneratedCertsJob.enabled`).
 
 The content of `./puppetserver-certs` dir should be very similar to:
 
-```shell
-...
+```console
+root@puppet:/# ll /etc/puppetlabs/puppet/ssl/
+total 36
+drwxr-x--- 4 puppet puppet 4096 Nov 26 20:21 ca/
+drwxr-xr-x 2 puppet puppet 4096 Nov 26 20:21 certificate_requests/
+drwxr-xr-x 2 puppet puppet 4096 Nov 26 20:21 certs/
+-rw-r----- 1 puppet puppet  950 Nov 26 20:21 crl.pem
+drwxr-x--- 2 puppet puppet 4096 Nov 26 20:21 private/
+drwxr-x--- 2 puppet puppet 4096 Nov 26 20:21 private_keys/
+drwxr-xr-x 2 puppet puppet 4096 Nov 26 20:21 public_keys/
 ```
+
+Essentially, that's the content of directory on your Puppet Server master: `/etc/puppetlabs/puppet/ssl/`.
 
 ## Chart Components
 
