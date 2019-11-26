@@ -1,4 +1,4 @@
-{{- if .Values.puppetserver.puppeturl }}
+{{- if .Values.hiera.hieradataurl }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
