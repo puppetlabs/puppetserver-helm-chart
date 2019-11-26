@@ -28,14 +28,14 @@ spec:
             - mkdir -p /etc/puppetlabs/puppet/ssl;
               cp /puppetserver-certs/* /etc/puppetlabs/puppet/ssl;
           volumeMounts:
-          - name: pre-install
-            mountPath: /pre-install
+          - name: puppetserver-certs
+            mountPath: /puppetserver-certs
           - name: puppet-puppet-storage
             mountPath: /etc/puppetlabs/puppet/
       volumes:
-        - name: puppet-code-storage
+        - name: puppet-puppet-storage
           persistentVolumeClaim:
-            claimName: puppet-code-claim
+            claimName: puppet-puppet-claim
         - name: puppetserver-certs
           configMap:
             name: {{ template "puppetserver.fullname" . }}-preinstall
