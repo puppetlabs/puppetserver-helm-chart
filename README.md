@@ -39,7 +39,7 @@ In case a Load Balancer (LB) must sit in front of Puppet Server - please keep in
 
 ### Auto-Signing Certificate Requests
 
-In general, the easiest way to switch the Puppet Agents from using one Puppet Server master to another is by enabling the auto-signing of CSRs. By default, that has been pre-enabled in the Puppet Server Docker container. It can be disabled in the Values file by passing an extra environment variable `AUTOSIGN=false` (in `.Values.puppetserver.extraEnv`).
+In general, the easiest way to switch the Puppet Agents from using one Puppet Server master to another is by enabling the auto-signing of CSRs. By default, that has been pre-enabled in the Puppet Server Docker container. It can be disabled in the Values file by passing an extra environment variable: `AUTOSIGN=false` (in `.Values.puppetserver.extraEnv`).
 
 ### Using Pre-Generated Puppet Server Master Certs
 
