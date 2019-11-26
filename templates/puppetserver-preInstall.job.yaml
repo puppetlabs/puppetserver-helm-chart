@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "puppetserver.fullname" . }}-preinstall
+  labels:
+    {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "100"
+spec:
+  activeDeadlineSeconds: "{{.Values.puppetserver.preGeneratedCertsJob.jobDeadline}}"
+  template:
+    metadata:
+      name: {{ template "puppetserver.fullname" . }}-preinstall
+      labels:
+        {{- include "puppetserver.puppetserver.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: copy-ro-puppet-certs
+          image: "{{.Values.puppetserver.image}}:{{.Values.puppetserver.tag}}"
+          imagePullPolicy: "{{.Values.puppetserver.pullPolicy}}"
+          command:
+            - "sh"
+            - "-c"
+            - |
+            mkdir -p /etc/puppetlabs/puppet/ssl;
+            cp /puppet-certs/* /etc/puppetlabs/puppet/ssl;
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+            - name: pre-install
+              mountPath: /etc/pre-install
+        volumeMounts:
+        - name: pre-install
+          mountPath: /pre-install
+      volumes:
+        - name: pre-install
+          emptyDir: {}
+        - name: scripts
+          configMap:
+            name: "{{ template "vault.fullname" . }}-{{.Values.Consul.PreInstall.ComponentName}}"
