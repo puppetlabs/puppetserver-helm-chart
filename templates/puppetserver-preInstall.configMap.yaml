@@ -8,8 +8,11 @@ metadata:
   annotations:
     # This is what defines this resource as a hook. Without this line, the
     # job is considered part of the release.
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "50"
-data:
-  {{- (.Files.Glob "../init/puppetserver-certs/*").AsConfig | indent 2 }}
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: 50
+binaryData:
+{{- $root := . }}
+{{- range $path, $bytes := .Files.Glob "init/puppetserver-certs/*.gz" }}
+  {{ base $path }}: {{ $root.Files.Get $path | b64enc | quote }}
+{{- end }}
 {{- end }}
