@@ -1,0 +1,15 @@
+{{- if .Values.puppetserver.preGeneratedCertsJob.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "puppetserver.fullname" . }}-preinstall
+  labels:
+    {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "50"
+data:
+{{ (.Files.Glob "init/pre-gen-server-certs/*").AsConfig | indent 2 }}
+{{- end }}

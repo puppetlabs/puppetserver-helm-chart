@@ -1,3 +1,4 @@
+{{- if .Values.puppetserver.preGeneratedCertsJob.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -19,7 +20,7 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-        - name: copy-ro-puppet-certs
+        - name: copy-ro-server-certs
           image: "{{.Values.puppetserver.image}}:{{.Values.puppetserver.tag}}"
           imagePullPolicy: "{{.Values.puppetserver.pullPolicy}}"
           command: [ "sh", "-c" ]
@@ -40,3 +41,4 @@ spec:
         - name: scripts
           configMap:
             name: "{{ template "vault.fullname" . }}-{{.Values.Consul.PreInstall.ComponentName}}"
+{{- end }}

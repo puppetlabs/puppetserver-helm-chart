@@ -41,6 +41,22 @@ In case a Load Balancer (LB) must sit in front of Puppet Server - please keep in
 * Creates three Kubernetes Services that expose: Puppet Server, PuppetDB, and PostgreSQL.
 * Creates Secrets to hold credentials for PuppetDB, PosgreSQL, and r10k.
 
+## Migrating from a bare-metal Puppet Server - Certificates
+
+### Auto-Signing Certificate Requests
+
+In general, the easiest way to switch the Puppet Agents from using one Puppet Server to another is by enabling the auto-signing of CSRs. By default, that has been pre-enabled in the Puppet Server Docker container. It can be disabled in the Values file by passing an extra environment variable `AUTOSIGN=false` (in `.Values.puppetserver.extraEnv`).
+
+### Using Pre-Generated Puppet Server Certs
+
+If you prefer not to auto-sign or manually sign the Puppet Agents' CSRs - you can use the same Puppet Server certificates which you used in your bare-metal setup. Please place your certificates in the `init/puppetserver-certs` directory and enable their usage in the Values file (`.Values.puppetserver.preGeneratedCertsJob.enabled`).
+
+The content of `./puppetserver-certs` dir should be very similar to:
+
+```shell
+...
+```
+
 ## Installing the Chart
 
 You can install the chart with the release name `puppetserver` as below.
