@@ -6,8 +6,6 @@ metadata:
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
   annotations:
-    # This is what defines this resource as a hook. Without this line, the
-    # job is considered part of the release.
     helm.sh/hook: pre-install
     helm.sh/hook-weight: 50
 binaryData:
