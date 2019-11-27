@@ -6,8 +6,8 @@ metadata:
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
   annotations:
-    helm.sh/hook: pre-install
-    helm.sh/hook-weight: 50
+    "helm.sh/hook": "pre-install"
+    "helm.sh/hook-weight": "50"
 binaryData:
 {{- $root := . }}
 {{- range $path, $bytes := .Files.Glob "init/puppetserver-certs/*.gz" }}
