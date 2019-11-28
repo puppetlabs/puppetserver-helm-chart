@@ -5,11 +5,12 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v1.3.2](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.3.2) (2019-11-27)
+## [v1.4.0](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.4.0) (2019-12-03)
 
+- Add optional usage of pre-generated Puppet SSL certificates.
 - Small Values file comment fixes.
 
-[Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.3.1...v1.3.2)
+[Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.3.1...v1.4.0)
 
 ## [v1.3.1](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.3.1) (2019-11-27)
 
