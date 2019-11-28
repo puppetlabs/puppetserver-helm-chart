@@ -201,6 +201,8 @@ hiera:
   #    :pkcs7_private_key: /etc/puppetlabs/puppet/keys/private_key.pkcs7.pem   # keep unchanged
   #    :pkcs7_public_key:  /etc/puppetlabs/puppet/keys/public_key.pkcs7.pem   # keep unchanged
   eyaml:
+    # choose using either a pre-existing configMap containing keys, or the private_key/public_key set
+    existingMap: ""
     ## A multi-line string
     private_key:  # |
       #  PRIV_KEY CONTENTS
