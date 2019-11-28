@@ -18,7 +18,8 @@ puppetserver:
   #    cpu: 750m
   ## Additional puppetserver container environment variables
   extraEnv: {}
-  ## Use pre-generated Puppet Server certs in `./puppetserver-certs`
+  ## Use pre-generated Puppet certs in `./puppet-certs`
+  ## Check README for related use cases
   preGeneratedCertsJob:
     enabled: false
     jobDeadline: 30
