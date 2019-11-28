@@ -33,6 +33,10 @@ spec:
             {{- end }}
             - name: PUPPETSERVER_HOSTNAME
               value: "puppet"
+            {{- if .Values.puppetserver.preGeneratedCertsJob.enabled }}
+            - name: USE_PUPPETSERVER
+              value: "false"
+            {{- end }}
             - name: PUPPETDB_POSTGRES_HOSTNAME
               value: "postgres"
             - name: PUPPETDB_PASSWORD
