@@ -98,6 +98,21 @@ r10k:
     #  - --color
     ## Additional puppetserver container environment variables
     extraEnv: {}
+    ## Cloning via SSH protocol with authentication
+    ##
+    viaSsh:
+      credentials:
+        ssh:
+          ## A multi-line string
+          value:  # |
+            #  PRIV_KEY CONTENTS
+        known_hosts:
+          ## A multi-line string
+          value:  # |
+            #  KNOWN_HOSTS CONTENTS
+        ## Or set the git-sync Known Hosts file and SSH Private Key
+        ## from a pre-existing K8s secret
+        existingSecret: ""
   hiera:
     resources: {}
     #  requests:
@@ -115,6 +130,21 @@ r10k:
     #  - --color
     ## Additional puppetserver container environment variables
     extraEnv: {}
+    ## Cloning via SSH protocol with authentication
+    ##
+    viaSsh:
+      credentials:
+        ssh:
+          ## A multi-line string
+          value:  # |
+            #  PRIV_KEY CONTENTS
+        known_hosts:
+          ## A multi-line string
+          value:  # |
+            #  KNOWN_HOSTS CONTENTS
+        ## Or set the git-sync Known Hosts file and SSH Private Key
+        ## from a pre-existing K8s secret
+        existingSecret: ""
 
 ## PostgreSQL Configuration for PuppetDB
 ##
