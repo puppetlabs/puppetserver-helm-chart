@@ -5,9 +5,11 @@ metadata:
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
   annotations:
+    {{- if .Values.puppetserver.preGeneratedCertsJob.enabled }}
     "helm.sh/hook": "pre-install"
     "helm.sh/hook-weight": "0"
     "helm.sh/hook-delete-policy": "before-hook-creation"
+    {{- end }}
   {{- if .Values.storage.annotations }}
     {{ toYaml .Values.storage.annotations }}
   {{- end }}
