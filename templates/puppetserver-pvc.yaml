@@ -4,10 +4,13 @@ metadata:
   name: puppet-puppet-claim
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
-{{- if .Values.storage.annotations }}
   annotations:
-{{ toYaml .Values.storage.annotations | nindent 4 }}
-{{- end }}
+    "helm.sh/hook": "pre-install"
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": "before-hook-creation"
+  {{- if .Values.storage.annotations }}
+    {{ toYaml .Values.storage.annotations }}
+  {{- end }}
 spec:
   {{- if .Values.storage.selector }}
   selector:
