@@ -35,7 +35,7 @@ allowedTopologies:
 
 In case a Load Balancer (LB) must sit in front of Puppet Server - please keep in mind that having a Network LB (operating at OSI Layer 4) is preferable.
 
-## Migrating from a bare-metal Puppet Master - Certificates
+## Migrating from a Bare-Metal Puppet Master
 
 ### Auto-Signing Certificate Requests
 
