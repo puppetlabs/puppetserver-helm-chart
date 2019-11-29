@@ -9,7 +9,15 @@ spec:
   selector:
     matchLabels:
       {{- include "puppetserver.r10k.matchLabels" . | nindent 6 }}
-  schedule: "{{.Values.r10k.hiera.cronJob.schedule}}"
+  {{- with .Values.r10k.hiera.cronJob }}
+  schedule: "{{.schedule}}"
+  {{- if .concurrencyPolicy }}
+  concurrencyPolicy: {{ .concurrencyPolicy }}
+  {{- end }}
+  {{- if .startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{ .startingDeadlineSeconds }}
+  {{- end }}
+  {{- end }}
   jobTemplate:
     spec:
       template:
@@ -55,7 +63,14 @@ spec:
                   mountPath: /etc/puppetlabs/code/
                 - name: r10k-cache-storage
                   mountPath: /var/tmp/r10k_cache/
-          restartPolicy: OnFailure
+          {{- with .Values.r10k.hiera.cronJob }}
+          {{- if .restartPolicy }}
+          restartPolicy: {{ .restartPolicy }}
+          {{- end }}
+          {{- if .activeDeadlineSeconds }}
+          activeDeadlineSeconds: {{ .activeDeadlineSeconds }}
+          {{- end }}
+          {{- end }}
           volumes:
             - name: puppet-code-storage
               persistentVolumeClaim:
