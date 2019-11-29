@@ -43,7 +43,7 @@ In general, the easiest way to switch the Puppet Agents from using one Puppet ma
 
 You will also need to remove the existing certificates in `/etc/puppetlabs/puppet/ssl` on each Puppet agent.
 
-### Using Pre-Generated Puppet Server Master Certificates
+### Using Pre-Generated Puppet Master Certificates
 
 If you prefer not to auto-sign or manually sign the Puppet Agents' CSRs - you can use the same Puppet master certificates which you used in your bare-metal setup. Please archive into a file and place your certificates in the `init/puppet-certs` directory and enable their usage in the Values file (`.Values.puppetserver.preGeneratedCertsJob.enabled`).
 
