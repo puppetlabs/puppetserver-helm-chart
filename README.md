@@ -41,13 +41,13 @@ In case a Load Balancer (LB) must sit in front of Puppet Server - please keep in
 
 In general, the easiest way to switch the Puppet Agents from using one Puppet Server master to another is by enabling the auto-signing of CSRs. By default, that has been pre-enabled in the Puppet Server Docker container. It can be disabled in the Values file by passing an extra environment variable: `AUTOSIGN=false` (in `.Values.puppetserver.extraEnv`).
 
-You will also need to remove the existing certificates in `/etc/puppetlabs/puppet/ssl` on each agent.
+You will also need to remove the existing certificates in `/etc/puppetlabs/puppet/ssl` on each Puppet agent.
 
 ### Using Pre-Generated Puppet Server Master Certificates
 
-If you prefer not to auto-sign or manually sign the Puppet Agents' CSRs - you can use the same Puppet Server master certificates which you used in your bare-metal setup. Please place your certificates in the `init/puppetserver-certs` directory and enable their usage in the Values file (`.Values.puppetserver.preGeneratedCertsJob.enabled`).
+If you prefer not to auto-sign or manually sign the Puppet Agents' CSRs - you can use the same Puppet Server master certificates which you used in your bare-metal setup. Please archive into a file and place your certificates in the `init/puppet-certs` directory and enable their usage in the Values file (`.Values.puppetserver.preGeneratedCertsJob.enabled`).
 
-The content of `./puppetserver-certs` dir should be very similar to:
+The content of the archive should be very similar to:
 
 ```console
 root@puppet:/# ll /etc/puppetlabs/puppet/ssl/
@@ -62,6 +62,19 @@ drwxr-xr-x 2 puppet puppet 4096 Nov 26 20:21 public_keys/
 ```
 
 Essentially, that's the content of directory on your Puppet Server master: `/etc/puppetlabs/puppet/ssl/`.
+
+The content of the `init/puppet-certs` dir should be similar to:
+
+```console
+/repos/xtigyro/puppetserver-helm-chart # ll init/puppet-certs/
+total 24
+drwxrws--- 2 puppet puppet 4096 Nov 28 23:47 ./
+drwxrws--- 3 puppet puppet 4096 Nov 28 23:28 ../
+-rw-rw---- 1 puppet puppet   71 Nov 28 23:41 .gitignore
+-rw-r--r-- 1 puppet puppet 9991 Nov 28 23:47 puppet-certs.gz
+```
+
+> **NOTE**: For more information please check - [README.md](init/README.md). You can also read the article - <https://puppet.com/docs/puppet/5.5/ssl_regenerate_certificates.html.>
 
 ## Chart Components
 
@@ -130,6 +143,8 @@ Parameter | Description | Default
 `puppetserver.tag` | puppetserver img tag | `6.7.1`
 `puppetserver.resources` | puppetserver resource limits | ``
 `puppetserver.extraEnv` | puppetserver additional container env vars |``
+`puppetserver.preGeneratedCertsJob.enabled` | puppetserver pre-generated certs |`false`
+`puppetserver.preGeneratedCertsJob.jobDeadline` | puppetserver pre-generated certs job deadline in seconds |`30`
 `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`
 `puppetserver.fqdns.alternateServerNames` | puppetserver alternate fqdns |``
 `puppetserver.service.type` | puppetserver svc type | `ClusterIP`
