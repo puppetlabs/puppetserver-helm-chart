@@ -61,7 +61,7 @@ drwxr-x--- 2 puppet puppet 4096 Nov 26 20:21 private_keys/
 drwxr-xr-x 2 puppet puppet 4096 Nov 26 20:21 public_keys/
 ```
 
-Essentially, that's the content of directory on your Puppet Server master: `/etc/puppetlabs/puppet/ssl/`.
+Essentially, on your Puppet Server master that's the content of the directory: `/etc/puppetlabs/puppet/ssl/`.
 
 The content of the `init/puppet-certs` dir should be similar to:
 
