@@ -61,12 +61,12 @@ drwxr-x--- 2 puppet puppet 4096 Nov 26 20:21 private_keys/
 drwxr-xr-x 2 puppet puppet 4096 Nov 26 20:21 public_keys/
 ```
 
-Essentially, on your bare-metal Puppet Server master that's the content of the directory: `/etc/puppetlabs/puppet/ssl/`.
+Essentially, on your bare-metal Puppet Server master that's the content of the directory: `/etc/puppetlabs/puppet/ssl`.
 
 The content of the `init/puppet-certs` dir should be similar to:
 
 ```console
-/repos/xtigyro/puppetserver-helm-chart # ll init/puppet-certs/
+/repos/xtigyro/puppetserver-helm-chart # ll init/puppet-certs
 total 24
 drwxrws--- 2 puppet puppet 4096 Nov 28 23:47 ./
 drwxrws--- 3 puppet puppet 4096 Nov 28 23:28 ../
