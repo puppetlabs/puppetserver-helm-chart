@@ -4,7 +4,9 @@ metadata:
   name: puppet-puppet-claim
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+  {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.storage.annotations) }}
   annotations:
+  {{- end }}
   {{- if .Values.puppetserver.preGeneratedCertsJob.enabled }}
     "helm.sh/hook": "pre-install"
     "helm.sh/hook-weight": "0"
