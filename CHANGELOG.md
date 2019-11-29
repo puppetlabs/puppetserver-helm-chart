@@ -9,7 +9,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 - Add optional usage of pre-generated Puppet SSL certificates.
 - Small Values file comment fixes.
-- Code clean-up.
+- Code clean-up and lint fixes.
 
 [Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.3.1...v1.4.0)
 
