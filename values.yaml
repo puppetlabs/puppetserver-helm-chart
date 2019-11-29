@@ -91,6 +91,10 @@ r10k:
     #    cpu: 500m
     cronJob:
       schedule: "*/15 * * * *"
+      concurrencyPolicy: Forbid
+      restartPolicy: Never
+      startingDeadlineSeconds: 500
+      activeDeadlineSeconds: 750
     ## Additional r10k container arguments
     extraArgs: {}
     #  - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
@@ -123,6 +127,10 @@ r10k:
     #    cpu: 500m
     cronJob:
       schedule: "*/2 * * * *"
+      concurrencyPolicy: Forbid
+      restartPolicy: Never
+      startingDeadlineSeconds: 60
+      activeDeadlineSeconds: 90
     ## Additional r10k container arguments
     extraArgs: {}
     #  - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
