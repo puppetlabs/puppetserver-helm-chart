@@ -74,7 +74,7 @@ drwxrws--- 3 puppet puppet 4096 Nov 28 23:28 ../
 -rw-r--r-- 1 puppet puppet 9991 Nov 28 23:47 puppet-certs.gz
 ```
 
-> **NOTE**: For more information please check - [README.md](init/README.md). You can also read the article - <https://puppet.com/docs/puppet/5.5/ssl_regenerate_certificates.html.>
+> **NOTE**: For more information please check - [README.md](init/README.md). For more general knowledge on the matter you can also read the article - <https://puppet.com/docs/puppet/5.5/ssl_regenerate_certificates.html.>
 
 ## Chart Components
 
