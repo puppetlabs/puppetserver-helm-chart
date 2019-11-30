@@ -30,7 +30,6 @@ spec:
         {{- end }}
         spec:
           containers:
-
             - name: r10k-hiera
               image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
               imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
