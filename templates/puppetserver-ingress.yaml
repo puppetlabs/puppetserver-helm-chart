@@ -5,19 +5,19 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  {{- if .Values.puppetserver.ingress.annotations }}
+{{- if .Values.puppetserver.ingress.annotations }}
   annotations:
     {{ toYaml .Values.puppetserver.ingress.annotations | indent 4 }}
-  {{- end }}
+{{- end }}
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
-    {{- range $key, $value := .Values.puppetserver.ingress.extraLabels }}
+  {{- range $key, $value := .Values.puppetserver.ingress.extraLabels }}
     {{ $key }}: {{ $value }}
-    {{- end }}
+  {{- end }}
   name: {{ template "puppetserver.fullname" . }}
 spec:
   rules:
-    {{- range .Values.puppetserver.ingress.hosts }}
+  {{- range .Values.puppetserver.ingress.hosts }}
     {{- $url := splitList "/" . }}
     - host: {{ first $url }}
       http:
@@ -26,9 +26,9 @@ spec:
             backend:
               serviceName: {{ $serviceName }}
               servicePort: {{ $servicePort }}
-    {{- end -}}
-  {{- if .Values.puppetserver.ingress.tls }}
+  {{- end -}}
+{{- if .Values.puppetserver.ingress.tls }}
   tls:
     {{ toYaml .Values.puppetserver.ingress.tls | indent 4 }}
-  {{- end -}}
+{{- end -}}
 {{- end -}}

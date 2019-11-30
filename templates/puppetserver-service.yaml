@@ -4,13 +4,13 @@ metadata:
   name: {{ template "puppetserver.puppetserver.serviceName" . }}
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
-    {{- if .Values.puppetserver.service.labels }}
+  {{- if .Values.puppetserver.service.labels }}
     {{ toYaml .Values.puppetserver.service.labels | indent 4 }}
-    {{- end }}
-  {{- if .Values.puppetserver.service.annotations }}
+  {{- end }}
+{{- if .Values.puppetserver.service.annotations }}
   annotations:
     {{ toYaml .Values.puppetserver.service.annotations | indent 4 }}
-  {{- end }}
+{{- end }}
 spec:
   ports:
     - name: "puppetserver"
@@ -18,6 +18,6 @@ spec:
   selector:
     {{- include "puppetserver.puppetserver.matchLabels" . | nindent 4 }}
   type: {{ .Values.puppetserver.service.type }}
-  {{- if .Values.puppetserver.service.loadBalancerIP }}
+{{- if .Values.puppetserver.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.puppetserver.service.loadBalancerIP }}
-  {{- end }}
+{{- end }}

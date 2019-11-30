@@ -16,9 +16,9 @@ spec:
         {{- include "puppetserver.puppetserver.labels" . | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/hiera-configmap.yaml") . | sha256sum }}
-        {{- if .Values.podAnnotations }}
+      {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | nindent 8 }}
-        {{- end }}
+      {{- end }}
     spec:
       hostname: {{ template "puppetserver.puppetserver.serviceName" . }}
       initContainers:
@@ -56,28 +56,28 @@ spec:
               mountPath: /etc/puppetlabs/code/
             - name: puppet-puppet-storage
               mountPath: /etc/puppetlabs/puppet/
-            {{- if .Values.hiera.config }}
+          {{- if .Values.hiera.config }}
             - name: hiera-volume
               mountPath: /etc/puppetlabs/puppet/configmap/hiera.yaml
               subPath: hiera.yaml
-            {{- end }}
+          {{- end }}
             - name: manifests-volume
               mountPath: /etc/puppetlabs/puppet/configmap/site.pp
               subPath: site.pp
-            {{- if .Values.hiera.eyaml.existingMap }}
+          {{- if .Values.hiera.eyaml.existingMap }}
             - name: eyaml-volume
               mountPath: /etc/puppetlabs/puppet/configmap/keys
-            {{- end }}
-            {{- if and (.Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.existingMap)}}
+          {{- end }}
+          {{- if and (.Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.existingMap)}}
             - name: eyamlpub-volume
               mountPath: /etc/puppetlabs/puppet/configmap/keys/public_key.pkcs7.pem
               subPath: public_key.pkcs7.pem
-            {{- end }}
-            {{- if and (.Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingMap)}}
+          {{- end }}
+          {{- if and (.Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingMap)}}
             - name: eyamlpriv-volume
               mountPath: /etc/puppetlabs/puppet/configmap/keys/private_key.pkcs7.pem
               subPath: private_key.pkcs7.pem
-            {{- end }}
+          {{- end }}
       containers:
         - name: {{ template "puppetserver.fullname" . }}
           image: "{{.Values.puppetserver.image}}:{{.Values.puppetserver.tag}}"
@@ -85,10 +85,10 @@ spec:
           resources:
             {{- toYaml .Values.puppetserver.resources | nindent 12 }}
           env:
-            {{- range $key, $value := .Values.puppetserver.extraEnv }}
+          {{- range $key, $value := .Values.puppetserver.extraEnv }}
             - name: {{ $key }}
               value: {{ $value }}
-            {{- end }}
+          {{- end }}
             # necessary to set certname and server in puppet.conf, required by
             # puppetserver ca cli application
             - name: PUPPETSERVER_HOSTNAME
@@ -123,30 +123,30 @@ spec:
         - name: r10k-cache-storage
           persistentVolumeClaim:
             claimName: r10k-cache-claim
-        {{- if .Values.hiera.config }}
+      {{- if .Values.hiera.config }}
         - name: hiera-volume
           configMap:
             name: hiera-config
-        {{- end }}
+      {{- end }}
         - name: manifests-volume
           configMap:
             name: manifests-config
-        {{- if .Values.hiera.eyaml.existingMap }}
+      {{- if .Values.hiera.eyaml.existingMap }}
         - name: eyaml-volume
           configMap:
             name: {{ .Values.hiera.eyaml.existingMap }}
-        {{- end }}
-        {{- if and (.Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.existingMap)}}
+      {{- end }}
+      {{- if and (.Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.existingMap)}}
         - name: eyamlpub-volume
           configMap:
             name: {{ template "puppetserver.hiera.publicMap" . }}
-        {{- end }}
-        {{- if and (.Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingMap)}}
+      {{- end }}
+      {{- if and (.Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingMap)}}
         - name: eyamlpriv-volume
           configMap:
             name: {{ template "puppetserver.hiera.privateMap" . }}
-        {{- end }}
-      {{- if (or (.Values.nodeSelector.allPods) (.Values.nodeSelector.commonStoragePods)) }}
+      {{- end }}
+    {{- if (or (.Values.nodeSelector.allPods) (.Values.nodeSelector.commonStoragePods)) }}
       nodeSelector:
       {{- if (.Values.nodeSelector.allPods) }}
         {{ toYaml .Values.nodeSelector.allPods | nindent 10 }}
@@ -154,15 +154,15 @@ spec:
       {{- if (.Values.nodeSelector.commonStoragePods) }}
         {{ toYaml .Values.nodeSelector.commonStoragePods | nindent 10 }}
       {{- end }}
-      {{- end }}
-      {{- if .Values.affinity }}
+    {{- end }}
+    {{- if .Values.affinity }}
       affinity:
         {{ toYaml .Values.affinity | nindent 10 }}
-      {{- end }}
-      {{- if .Values.tolerations }}
+    {{- end }}
+    {{- if .Values.tolerations }}
       tolerations:
         {{ toYaml .Values.tolerations| nindent 10 }}
-      {{- end }}
-      {{- if and (.Capabilities.APIVersions.Has "scheduling.k8s.io/v1beta1") (.Values.priorityClassName) }}
+    {{- end }}
+    {{- if and (.Capabilities.APIVersions.Has "scheduling.k8s.io/v1beta1") (.Values.priorityClassName) }}
       priorityClassName: {{ .Values.priorityClassName }}
-      {{- end }}
+    {{- end }}
