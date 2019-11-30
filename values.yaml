@@ -207,6 +207,7 @@ hiera:
   #  :hierarchy:
   #    - common
   #  :eyaml:
+  #    # Set branch name - e.g. "master", "%{::environment}", etc.
   #    :datadir: /etc/puppetlabs/code/hiera-data/[branch]   # set branch name. keep base path unchanged.
   #    :extension: 'yaml'
   #    :pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem   # keep unchanged
