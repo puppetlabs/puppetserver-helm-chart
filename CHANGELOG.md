@@ -8,6 +8,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 ## [v1.4.0](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.4.0) (2019-12-03)
 
 - Add optional usage of pre-generated Puppet SSL certificates.
+- Use default path for eYaml keys.
 - Small Values file comment fixes.
 - Code clean-up and lint fixes.
 
