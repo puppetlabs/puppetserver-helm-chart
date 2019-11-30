@@ -68,12 +68,12 @@ spec:
             - name: eyaml-volume
               mountPath: /etc/puppetlabs/puppet/configmap/keys
             {{- end }}
-            {{- if .Values.hiera.eyaml.public_key }}
+            {{- if and (.Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.existingMap)}}
             - name: eyamlpub-volume
               mountPath: /etc/puppetlabs/puppet/configmap/keys/public_key.pkcs7.pem
               subPath: public_key.pkcs7.pem
             {{- end }}
-            {{- if .Values.hiera.eyaml.private_key }}
+            {{- if and (.Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingMap)}}
             - name: eyamlpriv-volume
               mountPath: /etc/puppetlabs/puppet/configmap/keys/private_key.pkcs7.pem
               subPath: private_key.pkcs7.pem
@@ -136,12 +136,12 @@ spec:
           configMap:
             name: {{ .Values.hiera.eyaml.existingMap }}
         {{- end }}
-        {{- if .Values.hiera.eyaml.public_key }}
+        {{- if and (.Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.existingMap)}}
         - name: eyamlpub-volume
           configMap:
             name: {{ template "puppetserver.hiera.publicMap" . }}
         {{- end }}
-        {{- if .Values.hiera.eyaml.private_key }}
+        {{- if and (.Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingMap)}}
         - name: eyamlpriv-volume
           configMap:
             name: {{ template "puppetserver.hiera.privateMap" . }}
