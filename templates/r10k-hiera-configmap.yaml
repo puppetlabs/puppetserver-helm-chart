@@ -25,12 +25,6 @@ data:
       private_key: '/root/.ssh/id_rsa'
       {{- end }}
       {{- end }}
-      {{- with .Values.r10k.hiera.viaHttps.credentials }}
-      {{- if and (.username) (.password) }}
-      username: '{{.username}}'
-      password: '{{.password}}'
-      {{- end }}
-      {{- end }}
       repositories:
         - remote: '{{.Values.hiera.hieradataurl}}'
 {{- end }}
