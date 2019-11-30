@@ -32,6 +32,7 @@ spec:
             - mkdir -p /etc/puppetlabs/code/environments;
               mkdir -p /etc/puppetlabs/puppet/keys;
               mkdir -p /etc/puppetlabs/puppet/manifests;
+              mkdir -p /etc/puppetlabs/code/r10k_cache;
               chown -R puppet:puppet /etc/puppetlabs;
               {{- if .Values.hiera.config }}
               cp /etc/puppetlabs/puppet/configmap/hiera.yaml /etc/puppetlabs/puppet/hiera.yaml;
@@ -108,8 +109,6 @@ spec:
               mountPath: /etc/puppetlabs/puppet/
             - name: puppet-serverdata-storage
               mountPath: /opt/puppetlabs/server/data/puppetserver/
-            - name: r10k-cache-storage
-              mountPath: /var/tmp/r10k_cache/
       volumes:
         - name: puppet-code-storage
           persistentVolumeClaim:
@@ -120,9 +119,6 @@ spec:
         - name: puppet-serverdata-storage
           persistentVolumeClaim:
             claimName: puppet-serverdata-claim
-        - name: r10k-cache-storage
-          persistentVolumeClaim:
-            claimName: r10k-cache-claim
       {{- if .Values.hiera.config }}
         - name: hiera-volume
           configMap:

@@ -8,7 +8,7 @@ metadata:
 data:
   r10k.yaml: |
     # The location to use for storing cached Git repos
-    :cachedir: '/var/tmp/r10k_cache'
+    :cachedir: '/etc/puppetlabs/code/r10k_cache'
 
     # A list of git repositories to create
     :sources:

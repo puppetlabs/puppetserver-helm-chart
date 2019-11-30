@@ -61,8 +61,6 @@ spec:
                   subPath: r10k.yaml
                 - name: puppet-code-storage
                   mountPath: /etc/puppetlabs/code/
-                - name: r10k-cache-storage
-                  mountPath: /var/tmp/r10k_cache/
         {{- with .Values.r10k.code.cronJob }}
         {{- if .restartPolicy }}
           restartPolicy: {{ .restartPolicy }}
@@ -78,9 +76,6 @@ spec:
             - name: r10k-volume
               configMap:
                 name: r10k-code-config
-            - name: r10k-cache-storage
-              persistentVolumeClaim:
-                claimName: r10k-cache-claim
           {{- if or (.Values.r10k.code.viaSsh.credentials.existingSecret) (and (.Values.r10k.code.viaSsh.credentials.ssh.value) (.Values.r10k.code.viaSsh.credentials.known_hosts.value)) }}
             - name: r10k-code-secret
               secret:
