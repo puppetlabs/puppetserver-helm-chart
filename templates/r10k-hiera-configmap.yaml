@@ -20,11 +20,11 @@ data:
 
     :git:
       provider: 'rugged' # Either 'shellgit' or 'rugged', defaults to 'shellgit'
-      {{- with .Values.r10k.hiera.viaSsh.credentials }}
-      {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
+    {{- with .Values.r10k.hiera.viaSsh.credentials }}
+    {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
       private_key: '/root/.ssh/id_rsa'
-      {{- end }}
-      {{- end }}
+    {{- end }}
+    {{- end }}
       repositories:
         - remote: '{{.Values.hiera.hieradataurl}}'
 {{- end }}

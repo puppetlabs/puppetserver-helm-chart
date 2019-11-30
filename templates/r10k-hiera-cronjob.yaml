@@ -9,25 +9,25 @@ spec:
   selector:
     matchLabels:
       {{- include "puppetserver.r10k.matchLabels" . | nindent 6 }}
-  {{- with .Values.r10k.hiera.cronJob }}
+{{- with .Values.r10k.hiera.cronJob }}
   schedule: "{{.schedule}}"
-  {{- if .concurrencyPolicy }}
+{{- if .concurrencyPolicy }}
   concurrencyPolicy: {{ .concurrencyPolicy }}
-  {{- end }}
-  {{- if .startingDeadlineSeconds }}
+{{- end }}
+{{- if .startingDeadlineSeconds }}
   startingDeadlineSeconds: {{ .startingDeadlineSeconds }}
-  {{- end }}
-  {{- end }}
+{{- end }}
+{{- end }}
   jobTemplate:
     spec:
       template:
         metadata:
           labels:
             {{- include "puppetserver.r10k.labels" . | nindent 12 }}
-          {{- if .Values.podAnnotations }}
+        {{- if .Values.podAnnotations }}
           annotations:
             {{- toYaml .Values.podAnnotations | nindent 12 }}
-          {{- end }}
+        {{- end }}
         spec:
           containers:
 
@@ -37,26 +37,26 @@ spec:
               resources:
                 {{- toYaml .Values.r10k.hiera.resources | nindent 16 }}
               env:
-                {{- range $key, $value := .Values.r10k.hiera.extraEnv }}
+              {{- range $key, $value := .Values.r10k.hiera.extraEnv }}
                 - name: {{ $key }}
                   value: {{ $value }}
-                {{- end }}
+              {{- end }}
               args:
                 - deploy
                 - environment
                 - --config
                 - /etc/puppetlabs/puppet/r10k.yaml
                 - --puppetfile
-                {{- range $key, $value := .Values.r10k.hiera.extraArgs }}
+              {{- range $key, $value := .Values.r10k.hiera.extraArgs }}
                 - {{ $value }}
-                {{- end }}
+              {{- end }}
               volumeMounts:
-                {{- with .Values.r10k.hiera.viaSsh.credentials }}
-                {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
+              {{- with .Values.r10k.hiera.viaSsh.credentials }}
+              {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
                 - name: r10k-hiera-secret
                   mountPath: /root/.ssh
-                {{- end }}
-                {{- end }}
+              {{- end }}
+              {{- end }}
                 - name: r10k-volume
                   mountPath: /etc/puppetlabs/puppet/r10k.yaml
                   subPath: r10k.yaml
@@ -64,14 +64,14 @@ spec:
                   mountPath: /etc/puppetlabs/code/
                 - name: r10k-cache-storage
                   mountPath: /var/tmp/r10k_cache/
-          {{- with .Values.r10k.hiera.cronJob }}
-          {{- if .restartPolicy }}
+        {{- with .Values.r10k.hiera.cronJob }}
+        {{- if .restartPolicy }}
           restartPolicy: {{ .restartPolicy }}
-          {{- end }}
-          {{- if .activeDeadlineSeconds }}
+        {{- end }}
+        {{- if .activeDeadlineSeconds }}
           activeDeadlineSeconds: {{ .activeDeadlineSeconds }}
-          {{- end }}
-          {{- end }}
+        {{- end }}
+        {{- end }}
           volumes:
             - name: puppet-code-storage
               persistentVolumeClaim:
@@ -82,13 +82,13 @@ spec:
             - name: r10k-cache-storage
               persistentVolumeClaim:
                 claimName: r10k-cache-claim
-            {{- if or (.Values.r10k.hiera.viaSsh.credentials.existingSecret) (and (.Values.r10k.hiera.viaSsh.credentials.ssh.value) (.Values.r10k.hiera.viaSsh.credentials.known_hosts.value)) }}
+          {{- if or (.Values.r10k.hiera.viaSsh.credentials.existingSecret) (and (.Values.r10k.hiera.viaSsh.credentials.ssh.value) (.Values.r10k.hiera.viaSsh.credentials.known_hosts.value)) }}
             - name: r10k-hiera-secret
               secret:
                 secretName: {{ template "r10k.hiera.secret" . }}
                 defaultMode: 288 # = mode 0440
-            {{- end }}
-          {{- if (or (.Values.nodeSelector.allPods) (.Values.nodeSelector.commonStoragePods)) }}
+          {{- end }}
+        {{- if (or (.Values.nodeSelector.allPods) (.Values.nodeSelector.commonStoragePods)) }}
           nodeSelector:
           {{- if (.Values.nodeSelector.allPods) }}
             {{ toYaml .Values.nodeSelector.allPods | nindent 14 }}
@@ -96,16 +96,16 @@ spec:
           {{- if (.Values.nodeSelector.commonStoragePods) }}
             {{ toYaml .Values.nodeSelector.commonStoragePods | nindent 14 }}
           {{- end }}
-          {{- end }}
-          {{- if .Values.affinity }}
+        {{- end }}
+        {{- if .Values.affinity }}
           affinity:
             {{ toYaml .Values.affinity | nindent 14 }}
-          {{- end }}
-          {{- if .Values.tolerations }}
+        {{- end }}
+        {{- if .Values.tolerations }}
           tolerations:
             {{ toYaml .Values.tolerations| nindent 14 }}
-          {{- end }}
-          {{- if and (.Capabilities.APIVersions.Has "scheduling.k8s.io/v1beta1") (.Values.priorityClassName) }}
+        {{- end }}
+        {{- if and (.Capabilities.APIVersions.Has "scheduling.k8s.io/v1beta1") (.Values.priorityClassName) }}
           priorityClassName: {{ .Values.priorityClassName }}
-          {{- end }}
+        {{- end }}
 {{- end }}
