@@ -155,8 +155,6 @@ Create the name for the r10k.code secret.
 {{- define "r10k.code.secret" -}}
 {{- if .Values.r10k.code.viaSsh.credentials.existingSecret -}}
   {{- .Values.r10k.code.viaSsh.credentials.existingSecret -}}
-{{- else if .Values.r10k.code.viaHttps.credentials.existingSecret -}}
-  {{- .Values.r10k.code.viaHttps.credentials.existingSecret -}}
 {{- else -}}
   r10k-code-creds
 {{- end -}}
@@ -168,8 +166,6 @@ Create the name for the r10k.hiera secret.
 {{- define "r10k.hiera.secret" -}}
 {{- if .Values.r10k.hiera.viaSsh.credentials.existingSecret -}}
   {{- .Values.r10k.hiera.viaSsh.credentials.existingSecret -}}
-{{- else if .Values.r10k.hiera.viaHttps.credentials.existingSecret -}}
-  {{- .Values.r10k.hiera.viaHttps.credentials.existingSecret -}}
 {{- else -}}
   r10k-hiera-creds
 {{- end -}}

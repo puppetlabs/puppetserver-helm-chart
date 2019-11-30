@@ -102,19 +102,6 @@ r10k:
     #  - --color
     ## Additional puppetserver container environment variables
     extraEnv: {}
-    ## Cloning via HTTPS protocol with authentication
-    ##
-    viaHttps:
-      ## Leave empty - if HTTPS should be used for both - Puppet and Hiera repos.
-      credentials:
-        username: ""
-        ## The password might be your user-generated token
-        ## in case MFA is enabled.
-        password: ""
-        ## Or set the "username" and "password" from a pre-existing K8s secret
-        existingSecret: ""
-      ## Cloning via SSH protocol with authentication
-      ##
     viaSsh:
       credentials:
         ssh:
@@ -149,21 +136,6 @@ r10k:
     #  - --color
     ## Additional puppetserver container environment variables
     extraEnv: {}
-    ## Cloning via HTTPS protocol with authentication
-    ##
-    viaHttps:
-      ## Leave empty - if HTTPS should be used for both - Puppet and Hiera repos.
-      credentials:
-        username: ""
-        ## The password might be your user-generated token
-        ## in case MFA is enabled.
-        password: ""
-        ## Or set the "username" and "password" from a pre-existing K8s secret
-        existingSecret: ""
-      ## Cloning via SSH protocol with authentication
-      ##
-    ## Cloning via SSH protocol with authentication
-    ##
     viaSsh:
       credentials:
         ssh:
