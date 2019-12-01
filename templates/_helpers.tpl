@@ -150,14 +150,51 @@ Create the name for the PostgreSQL password secret key.
 {{- end -}}
 
 {{/*
-Create the name for the r10k secret.
+Create the name for the r10k.code secret.
 */}}
-{{- define "r10k.secret" -}}
-{{- if .Values.r10k.viaSsh.credentials.existingSecret -}}
-  {{- .Values.r10k.viaSsh.credentials.existingSecret -}}
-{{- else if .Values.r10k.viaHttps.credentials.existingSecret -}}
-  {{- .Values.r10k.viaHttps.credentials.existingSecret -}}
+{{- define "r10k.code.secret" -}}
+{{- if .Values.r10k.code.viaSsh.credentials.existingSecret -}}
+  {{- .Values.r10k.code.viaSsh.credentials.existingSecret -}}
 {{- else -}}
-  r10k-creds
+  r10k-code-creds
 {{- end -}}
+{{- end -}}
+
+{{/*
+Create the name for the r10k.hiera secret.
+*/}}
+{{- define "r10k.hiera.secret" -}}
+{{- if .Values.r10k.hiera.viaSsh.credentials.existingSecret -}}
+  {{- .Values.r10k.hiera.viaSsh.credentials.existingSecret -}}
+{{- else -}}
+  r10k-hiera-creds
+{{- end -}}
+{{- end -}}
+
+{{/* *************************************************************************************
+The following definitions were more complex and necessary during part of this development.
+Now they are essentially just stubs but left here in case they might be needed again soon.
+************************************************************************************* */}}
+
+{{/*
+Create the name for the hiera eyaml key configMap (private/public keys combined).
+*/}}
+{{- define "puppetserver.hiera.existingMap" -}}
+{{- if .Values.hiera.eyaml.existingMap -}}
+  {{- .Values.hiera.eyaml.existingMap -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name for the hiera eyaml private key configMap.
+*/}}
+{{- define "puppetserver.hiera.privateMap" -}}
+  eyamlpriv-config
+{{- end -}}
+
+{{/*
+Create the name for the hiera eyaml public cert configMap.
+*/}}
+{{- define "puppetserver.hiera.publicMap" -}}
+  eyamlpub-config
 {{- end -}}
