@@ -5,7 +5,18 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v1.4.0](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.4.0) (2019-12-03)
+## [v1.5.0](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.5.0) (2019-12-02)
+
+- Fixes and additions to setting SSH credentials from existing K8s secret.
+- Create separate r10k jobs/schedules for Control Repo and Hiera Data.
+- Place r10k cache on PVC.
+- Deprecate HTTPS authentication.
+- Indentation corrections.
+- General code clean-up.
+
+[Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.4.0...v1.5.0)
+
+## [v1.4.0](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.4.0) (2019-11-28)
 
 - Add optional usage of pre-generated Puppet SSL certificates.
 - Use default path for eYaml keys.
@@ -14,13 +25,13 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 [Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.3.1...v1.4.0)
 
-## [v1.3.1](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.3.1) (2019-11-27)
+## [v1.3.1](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.3.1) (2019-11-25)
 
 - Small Values file fix.
 
 [Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.3.0...v1.3.1)
 
-## [v1.3.0](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.3.0) (2019-11-27)
+## [v1.3.0](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.3.0) (2019-11-25)
 
 - [Firewall Related] Add support for separate r10k network protocols to gather the code of Puppet and Hiera repos.
 - Increase default r10k sync runtime interval to every 5 minutes.

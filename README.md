@@ -98,38 +98,36 @@ You can use `kubectl get` to view all of the installed components.
 
 ```console
 $ kubectl get --namespace puppetserver all -l app=puppetserver
-NAME                                READY   STATUS      RESTARTS   AGE
-pod/postgres-584d75d8b-gw8n6        1/1     Running     0          31m
-pod/puppetdb-5f6fd6df7d-fqbc2       1/1     Running     0          31m
-pod/puppetserver-54f889b9c5-r7gm9   1/1     Running     0          31m
-pod/r10k-deploy-1573860480-5nnp9    0/1     Completed   0          6m6s
-pod/r10k-deploy-1573860600-qhk5j    0/1     Completed   0          4m6s
-pod/r10k-deploy-1573860720-hhkpp    0/1     Completed   0          2m6s
-pod/r10k-deploy-1573860840-tsx2n    0/1     Completed   0          6s
+NAME                                                 READY   STATUS      RESTARTS   AGE
+pod/puppetserver-postgres-bf55d954b-qxw5h            1/1     Running     0          24m
+pod/puppetserver-puppetdb-6f949987f5-59qpj           1/1     Running     0          24m
+pod/puppetserver-puppetserver-57687cd786-jcm6v       1/1     Running     0          24m
+pod/puppetserver-r10k-code-deploy-1575237000-lqfkb   0/1     Completed   0          16m
+pod/puppetserver-r10k-code-deploy-1575237600-tnj9m   0/1     Completed   0          10m
+pod/puppetserver-r10k-code-deploy-1575238200-9rklj   0/1     Completed   0          39s
 
-NAME               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)             AGE
-service/postgres   ClusterIP   10.0.193.66   <none>        5432/TCP            31m
-service/puppet     ClusterIP   10.0.79.57    <none>        8140/TCP            31m
-service/puppetdb   ClusterIP   10.0.232.39   <none>        8080/TCP,8081/TCP   31m
+NAME               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
+service/postgres   ClusterIP   10.0.198.132   <none>        5432/TCP            24m
+service/puppet     ClusterIP   10.0.68.216    <none>        8140/TCP            24m
+service/puppetdb   ClusterIP   10.0.164.209   <none>        8080/TCP,8081/TCP   24m
 
-NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/postgres       1/1     1            1           31m
-deployment.apps/puppetdb       1/1     1            1           31m
-deployment.apps/puppetserver   1/1     1            1           31m
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/puppetserver-postgres       1/1     1            1           24m
+deployment.apps/puppetserver-puppetdb       1/1     1            1           24m
+deployment.apps/puppetserver-puppetserver   1/1     1            1           24m
 
-NAME                                      DESIRED   CURRENT   READY   AGE
-replicaset.apps/postgres-584d75d8b        1         1         1       31m
-replicaset.apps/puppetdb-5f6fd6df7d       1         1         1       31m
-replicaset.apps/puppetserver-54f889b9c5   1         1         1       31m
+NAME                                                   DESIRED   CURRENT   READY   AGE
+replicaset.apps/puppetserver-postgres-bf55d954b        1         1         1       24m
+replicaset.apps/puppetserver-puppetdb-6f949987f5       1         1         1       24m
+replicaset.apps/puppetserver-puppetserver-57687cd786   1         1         1       24m
 
-NAME                               COMPLETIONS   DURATION   AGE
-job.batch/r10k-deploy-1573860480   1/1           3s         6m6s
-job.batch/r10k-deploy-1573860600   1/1           3s         4m6s
-job.batch/r10k-deploy-1573860720   1/1           3s         2m6s
-job.batch/r10k-deploy-1573860840   1/1           3s         6s
+NAME                                                 COMPLETIONS   DURATION   AGE
+job.batch/puppetserver-r10k-code-deploy-1575237000   1/1           15s        16m
+job.batch/puppetserver-r10k-code-deploy-1575237600   1/1           2s         10m
+job.batch/puppetserver-r10k-code-deploy-1575238200   1/1           2s         39s
 
-NAME                        SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
-cronjob.batch/r10k-deploy   */2 * * * *   False     1        14s             31m
+NAME                                          SCHEDULE       SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+cronjob.batch/puppetserver-r10k-code-deploy   */10 * * * *   False     0        42s             24m
 ```
 
 ## Configuration
@@ -140,11 +138,11 @@ Parameter | Description | Default
 --------- | ----------- | -------
 `puppetserver.name` | puppetserver component label | `puppetserver`
 `puppetserver.image` | puppetserver image | `puppet/puppetserver`
-`puppetserver.tag` | puppetserver img tag | `6.7.1`
+`puppetserver.tag` | puppetserver img tag | `6.7.2`
 `puppetserver.resources` | puppetserver resource limits | ``
 `puppetserver.extraEnv` | puppetserver additional container env vars |``
 `puppetserver.preGeneratedCertsJob.enabled` | puppetserver pre-generated certs |`false`
-`puppetserver.preGeneratedCertsJob.jobDeadline` | puppetserver pre-generated certs job deadline in seconds |`30`
+`puppetserver.preGeneratedCertsJob.jobDeadline` | puppetserver pre-generated certs job deadline in seconds |`60`
 `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`
 `puppetserver.fqdns.alternateServerNames` | puppetserver alternate fqdns |``
 `puppetserver.service.type` | puppetserver svc type | `ClusterIP`
@@ -162,18 +160,28 @@ Parameter | Description | Default
 `r10k.image` | r10k img | `puppet/r10k`
 `r10k.tag` | r10k img tag | `3.3.3`
 `r10k.pullPolicy` | r10k img pull policy | `IfNotPresent`
-`r10k.cronJob.schedule` | r10k cron job schedule policy | `*/2 * * * *`
-`r10k.resources` | r10k resource limits |``
-`r10k.extraArgs` | r10k additional container env args |``
-`r10k.extraEnv` | r10k additional container env vars |``
-`r10k.viaHttps.repo`| r10k https repo selector |``
-`r10k.viaHttps.credentials.username`| r10k https username |``
-`r10k.viaHttps.credentials.password`| r10k https password |``
-`r10k.viaHttps.credentials.existingSecret`| r10k https secret that holds https username and password |``
-`r10k.viaSsh.repo`| r10k ssh repo selector |``
-`r10k.viaSsh.credentials.ssh.value`| r10k ssh key file |``
-`r10k.viaSsh.credentials.known_hosts.value`| r10k ssh known hosts file |``
-`r10k.viaSsh.credentials.existingSecret`| r10k ssh secret that holds ssh key and known hosts files |``
+`r10k.code.cronJob.schedule` | r10k control repo cron job schedule policy | `*/15 * * * *`
+`r10k.code.cronJob.concurrencyPolicy` | r10k control repo cron job concurrency policy | `Forbid`
+`r10k.code.cronJob.restartPolicy` | r10k control repo cron job restart policy | `Never`
+`r10k.code.cronJob.startingDeadlineSeconds` | r10k control repo cron job starting deadline | `500`
+`r10k.code.cronJob.activeDeadlineSeconds` | r10k control repo cron job active deadline | `750`
+`r10k.code.resources` | r10k control repo resource limits |``
+`r10k.code.extraArgs` | r10k control repo additional container env args |``
+`r10k.code.extraEnv` | r10k control repo additional container env vars |``
+`r10k.code.viaSsh.credentials.ssh.value`| r10k control repo ssh key file |``
+`r10k.code.viaSsh.credentials.known_hosts.value`| r10k control repo ssh known hosts file |``
+`r10k.code.viaSsh.credentials.existingSecret`| r10k control repo ssh secret that holds ssh key and known hosts files |``
+`r10k.hiera.cronJob.schedule` | r10k hiera data cron job schedule policy | `*/2 * * * *`
+`r10k.hiera.cronJob.concurrencyPolicy` | r10k control repo cron job concurrency policy | `Forbid`
+`r10k.hiera.cronJob.restartPolicy` | r10k control repo cron job restart policy | `Never`
+`r10k.hiera.cronJob.startingDeadlineSeconds` | r10k control repo cron job starting deadline | `500`
+`r10k.hiera.cronJob.activeDeadlineSeconds` | r10k control repo cron job active deadline | `750`
+`r10k.hiera.resources` | r10k hiera data resource limits |``
+`r10k.hiera.extraArgs` | r10k hiera data additional container env args |``
+`r10k.hiera.extraEnv` | r10k hiera data additional container env vars |``
+`r10k.hiera.viaSsh.credentials.ssh.value`| r10k hiera data ssh key file |``
+`r10k.hiera.viaSsh.credentials.known_hosts.value`| r10k hiera data ssh known hosts file |``
+`r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``
 `postgres.name` | postgres component label | `postgres`
 `postgres.image` | postgres img | `postgres`
 `postgres.tag` | postgres img tag | `9.6.15`
@@ -231,3 +239,4 @@ helm install --namespace puppetserver --name puppetserver ./ -f values.yaml
 * Lead Developer: Miroslav Hadzhiev (miroslav.hadzhiev@gmail.com)
 * Developer: Scott Cressi (scottcressi@gmail.com)
 * Developer: Morgan Rhodes (morgan@puppet.com)
+* Developer: Sean Conley (slconley@gmail.com)

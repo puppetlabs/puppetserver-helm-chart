@@ -22,7 +22,7 @@ puppetserver:
   ## Check README for related use cases
   preGeneratedCertsJob:
     enabled: false
-    jobDeadline: 30
+    jobDeadline: 60
   ## Fully qualified domain names (FQDN's) to register
   ## the Puppet Server to be internally reachable via DNS.
   ## That is necessary to configure "certname" and "server" in `puppet.conf`.
@@ -231,7 +231,7 @@ hiera:
   #    - common
   #  :eyaml:
   #    # Set branch name - e.g. "master", "%{::environment}", etc.
-  #    :datadir: /etc/puppetlabs/code/hiera-data/[branch]   # set branch name. keep base path unchanged.
+  #    :datadir: /etc/puppetlabs/code/hiera-data/[branch]   # keep base path unchanged.
   #    :extension: 'yaml'
   #    :pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem   # keep unchanged
   #    :pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem   # keep unchanged
