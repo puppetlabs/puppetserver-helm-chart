@@ -4,9 +4,9 @@ metadata:
   name: puppet-puppet-claim
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
-  {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.storage.annotations) }}
+{{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.storage.annotations) }}
   annotations:
-  {{- end }}
+{{- end }}
   {{- if .Values.puppetserver.preGeneratedCertsJob.enabled }}
     "helm.sh/hook": "pre-install"
     "helm.sh/hook-weight": "0"
@@ -16,11 +16,11 @@ metadata:
     {{ toYaml .Values.storage.annotations }}
   {{- end }}
 spec:
-  {{- if .Values.storage.selector }}
+{{- if .Values.storage.selector }}
   selector:
     matchLabels:
       {{- include "puppetserver.puppetserver.matchLabels" . | nindent 6 }}
-  {{- end }}
+{{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
