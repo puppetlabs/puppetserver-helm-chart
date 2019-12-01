@@ -179,9 +179,9 @@ Now they are essentially just stubs but left here in case they might be needed a
 {{/*
 Create the name for the hiera eyaml key configMap (private/public keys combined).
 */}}
-{{- define "puppetserver.hiera.exisitngMap" -}}
-{{- if .Values.hiera.eyaml.exisitngMap -}}
-  {{- .Values.hiera.eyaml.exisitngMap -}}
+{{- define "puppetserver.hiera.existingMap" -}}
+{{- if .Values.hiera.eyaml.existingMap -}}
+  {{- .Values.hiera.eyaml.existingMap -}}
 {{- end -}}
 {{- end -}}
 
