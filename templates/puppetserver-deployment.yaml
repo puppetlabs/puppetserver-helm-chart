@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "puppetserver.fullname" . }}
+  name: {{ template "puppetserver.name" . }}-puppetserver
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
 spec:

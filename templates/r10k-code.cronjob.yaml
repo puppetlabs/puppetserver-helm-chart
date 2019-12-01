@@ -2,7 +2,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: r10k-code-deploy
+  name: {{ template "puppetserver.name" . }}-r10k-code-deploy
   labels:
     {{- include "puppetserver.r10k.labels" . | nindent 4 }}
 spec:

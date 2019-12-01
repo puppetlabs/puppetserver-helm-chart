@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: puppetboard
+  name: {{ template "puppetserver.name" . }}-puppetboard
   labels:
     {{- include "puppetserver.puppetboard.labels" . | nindent 4 }}
 spec:

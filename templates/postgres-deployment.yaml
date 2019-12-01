@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
+  name: {{ template "puppetserver.name" . }}-postgres
   labels:
     {{- include "puppetserver.postgres.labels" . | nindent 4 }}
 spec:
