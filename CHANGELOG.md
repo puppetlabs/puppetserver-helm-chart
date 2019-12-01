@@ -13,6 +13,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - Deprecate HTTPS authentication.
 - Indentation corrections.
 - General code clean-up.
+- Updates to README.
 
 [Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.4.0...v1.5.0)
 
