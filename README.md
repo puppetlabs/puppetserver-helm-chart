@@ -79,7 +79,8 @@ drwxrws--- 3 puppet puppet 4096 Nov 28 23:28 ../
 ## Chart Components
 
 * Creates four deployments: Puppet Server, PuppetDB, PosgreSQL, and Puppetboard.
-* Creates three Kubernetes Services that expose: Puppet Server, PuppetDB, and PostgreSQL.
+* Creates three services that expose: Puppet Server, PuppetDB, and PostgreSQL.
+* Creates a cronjob per configured code repo - up to two.
 * Creates Secrets to hold credentials for PuppetDB, PosgreSQL, and r10k.
 
 ## Installing the Chart
