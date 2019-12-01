@@ -16,6 +16,6 @@ maintainers:
 - name: underscorgan
   email: morgan@puppet.com
 - name: slconley
-  email: ___
+  email: slconley@gmail.com
 engine: gotpl
 tillerVersion: ">=2.8.0"

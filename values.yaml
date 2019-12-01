@@ -22,7 +22,7 @@ puppetserver:
   ## Check README for related use cases
   preGeneratedCertsJob:
     enabled: false
-    jobDeadline: 30
+    jobDeadline: 60
   ## Fully qualified domain names (FQDN's) to register
   ## the Puppet Server to be internally reachable via DNS.
   ## That is necessary to configure "certname" and "server" in `puppet.conf`.

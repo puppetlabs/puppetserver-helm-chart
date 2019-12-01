@@ -140,11 +140,11 @@ Parameter | Description | Default
 --------- | ----------- | -------
 `puppetserver.name` | puppetserver component label | `puppetserver`
 `puppetserver.image` | puppetserver image | `puppet/puppetserver`
-`puppetserver.tag` | puppetserver img tag | `6.7.1`
+`puppetserver.tag` | puppetserver img tag | `6.7.2`
 `puppetserver.resources` | puppetserver resource limits | ``
 `puppetserver.extraEnv` | puppetserver additional container env vars |``
 `puppetserver.preGeneratedCertsJob.enabled` | puppetserver pre-generated certs |`false`
-`puppetserver.preGeneratedCertsJob.jobDeadline` | puppetserver pre-generated certs job deadline in seconds |`30`
+`puppetserver.preGeneratedCertsJob.jobDeadline` | puppetserver pre-generated certs job deadline in seconds |`60`
 `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`
 `puppetserver.fqdns.alternateServerNames` | puppetserver alternate fqdns |``
 `puppetserver.service.type` | puppetserver svc type | `ClusterIP`
@@ -162,18 +162,28 @@ Parameter | Description | Default
 `r10k.image` | r10k img | `puppet/r10k`
 `r10k.tag` | r10k img tag | `3.3.3`
 `r10k.pullPolicy` | r10k img pull policy | `IfNotPresent`
-`r10k.cronJob.schedule` | r10k cron job schedule policy | `*/2 * * * *`
-`r10k.resources` | r10k resource limits |``
-`r10k.extraArgs` | r10k additional container env args |``
-`r10k.extraEnv` | r10k additional container env vars |``
-`r10k.viaHttps.repo`| r10k https repo selector |``
-`r10k.viaHttps.credentials.username`| r10k https username |``
-`r10k.viaHttps.credentials.password`| r10k https password |``
-`r10k.viaHttps.credentials.existingSecret`| r10k https secret that holds https username and password |``
-`r10k.viaSsh.repo`| r10k ssh repo selector |``
-`r10k.viaSsh.credentials.ssh.value`| r10k ssh key file |``
-`r10k.viaSsh.credentials.known_hosts.value`| r10k ssh known hosts file |``
-`r10k.viaSsh.credentials.existingSecret`| r10k ssh secret that holds ssh key and known hosts files |``
+`r10k.code.cronJob.schedule` | r10k control repo cron job schedule policy | `*/15 * * * *`
+`r10k.code.cronJob.concurrencyPolicy` | r10k control repo cron job concurrency policy | `Forbid`
+`r10k.code.cronJob.restartPolicy` | r10k control repo cron job restart policy | `Never`
+`r10k.code.cronJob.startingDeadlineSeconds` | r10k control repo cron job starting deadline | `500`
+`r10k.code.cronJob.activeDeadlineSeconds` | r10k control repo cron job active deadline | `750`
+`r10k.code.resources` | r10k control repo resource limits |``
+`r10k.code.extraArgs` | r10k control repo additional container env args |``
+`r10k.code.extraEnv` | r10k control repo additional container env vars |``
+`r10k.code.viaSsh.credentials.ssh.value`| r10k control repo ssh key file |``
+`r10k.code.viaSsh.credentials.known_hosts.value`| r10k control repo ssh known hosts file |``
+`r10k.code.viaSsh.credentials.existingSecret`| r10k control repo ssh secret that holds ssh key and known hosts files |``
+`r10k.hiera.cronJob.schedule` | r10k hiera data cron job schedule policy | `*/2 * * * *`
+`r10k.hiera.cronJob.concurrencyPolicy` | r10k control repo cron job concurrency policy | `Forbid`
+`r10k.hiera.cronJob.restartPolicy` | r10k control repo cron job restart policy | `Never`
+`r10k.hiera.cronJob.startingDeadlineSeconds` | r10k control repo cron job starting deadline | `500`
+`r10k.hiera.cronJob.activeDeadlineSeconds` | r10k control repo cron job active deadline | `750`
+`r10k.hiera.resources` | r10k hiera data resource limits |``
+`r10k.hiera.extraArgs` | r10k hiera data additional container env args |``
+`r10k.hiera.extraEnv` | r10k hiera data additional container env vars |``
+`r10k.hiera.viaSsh.credentials.ssh.value`| r10k hiera data ssh key file |``
+`r10k.hiera.viaSsh.credentials.known_hosts.value`| r10k hiera data ssh known hosts file |``
+`r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``
 `postgres.name` | postgres component label | `postgres`
 `postgres.image` | postgres img | `postgres`
 `postgres.tag` | postgres img tag | `9.6.15`
@@ -231,3 +241,4 @@ helm install --namespace puppetserver --name puppetserver ./ -f values.yaml
 * Lead Developer: Miroslav Hadzhiev (miroslav.hadzhiev@gmail.com)
 * Developer: Scott Cressi (scottcressi@gmail.com)
 * Developer: Morgan Rhodes (morgan@puppet.com)
+* Developer: Sean Conley (slconley@gmail.com)
