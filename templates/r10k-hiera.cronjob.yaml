@@ -61,6 +61,9 @@ spec:
                   subPath: r10k.yaml
                 - name: puppet-code-storage
                   mountPath: /etc/puppetlabs/code/
+          securityContext:
+            runAsUser: 999   # "puppet" UID
+            fsGroup: 999   # "puppet" GID
         {{- with .Values.r10k.hiera.cronJob }}
         {{- if .restartPolicy }}
           restartPolicy: {{ .restartPolicy }}
@@ -80,7 +83,8 @@ spec:
             - name: r10k-hiera-secret
               secret:
                 secretName: {{ template "r10k.hiera.secret" . }}
-                defaultMode: 292 # = mode 0444
+                defaultMode: 288 # = mode 0440
+                fsGroup: 999   # "puppet" GID
           {{- end }}
         {{- if (or (.Values.nodeSelector.allPods) (.Values.nodeSelector.commonStoragePods)) }}
           nodeSelector:
