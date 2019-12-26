@@ -81,6 +81,8 @@ r10k:
   image: puppet/r10k
   tag: 3.3.3
   pullPolicy: IfNotPresent
+  affinity: {}
+
   code:
     resources: {}
     #  requests:
