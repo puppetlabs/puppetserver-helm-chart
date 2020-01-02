@@ -162,7 +162,7 @@ Parameter | Description | Default
 `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`
 `puppetserver.fqdns.alternateServerNames` | puppetserver alternate fqdns |``
 `puppetserver.service.type` | puppetserver svc type | `ClusterIP`
-`puppetserver.service.port` | puppetserver svc port | `8140`
+`puppetserver.service.ports` | puppetserver svc exposed ports | `puppetserver`
 `puppetserver.service.annotations`| puppetserver svc annotations |``
 `puppetserver.service.labels`| puppetserver additional svc labels |``
 `puppetserver.service.loadBalancerIP`| puppetserver svc loadbalancer ip |``

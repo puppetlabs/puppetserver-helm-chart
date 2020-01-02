@@ -5,6 +5,15 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v1.6.2](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.6.2) (2020-01-01)
+
+- Puppetserver Service:
+
+1. Allow for more general way of setting the network protocol.
+2. Improve the way of setting the loadBalancerIP.
+
+[Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.6.1...v1.6.2)
+
 ## [v1.6.1](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.6.1) (2019-12-31)
 
 - Add comments in Values file for Puppetserver Service.
