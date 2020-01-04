@@ -5,7 +5,7 @@ Expand the name of the chart.
 */}}
 {{- define "puppetserver.name" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains .Release.Name $name -}}
+{{- if contains $name .Release.Name -}}
 {{- printf .Release.Name | trunc 34 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 34 | trimSuffix "-" -}}
@@ -22,7 +22,7 @@ If release name contains chart name it will be used as a full name.
 {{- .Values.fullnameOverride | trunc 52 | trimSuffix "-" -}}
 {{- else -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains .Release.Name $name -}}
+{{- if contains $name .Release.Name -}}
 {{- printf .Release.Name | trunc 52 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 52 | trimSuffix "-" -}}
