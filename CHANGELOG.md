@@ -5,6 +5,12 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v1.6.4](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.6.4) (2020-01-04)
+
+- Corrections and additional info for use of Ingress resource.
+
+[Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.6.3...v1.6.4)
+
 ## [v1.6.3](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.6.3) (2020-01-03)
 
 - Allow for using the chart as a chart package.
