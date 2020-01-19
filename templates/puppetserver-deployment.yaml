@@ -5,11 +5,15 @@ metadata:
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
 spec:
+  replicas: 1
   selector:
     matchLabels:
       {{- include "puppetserver.puppetserver.matchLabels" . | nindent 6 }}
   strategy:
-    type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       labels:
@@ -87,8 +91,8 @@ spec:
             {{- toYaml .Values.puppetserver.resources | nindent 12 }}
           env:
           {{- range $key, $value := .Values.puppetserver.extraEnv }}
-            - name: {{ $key }}
-              value: {{ $value }}
+            - name: "{{ $key }}"
+              value: "{{ $value }}"
           {{- end }}
             # necessary to set certname and server in puppet.conf, required by
             # puppetserver ca cli application

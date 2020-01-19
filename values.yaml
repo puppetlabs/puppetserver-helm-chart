@@ -206,7 +206,7 @@ postgres:
 puppetdb:
   name: puppetdb
   image: puppet/puppetdb
-  tag: 6.7.3
+  tag: 6.8.0
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
