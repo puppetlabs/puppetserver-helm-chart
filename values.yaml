@@ -26,8 +26,8 @@ puppetserver:
       enabled: false
       minCompilers: 1
       maxCompilers: 5
-      targetCPUUtilizationPercentage: 50
-      targetMemoryUtilizationPercentage: 50
+      cpuUtilizationPercentage: 50
+      memoryUtilizationPercentage: 50
   resources: {}
   #  requests:
   #    memory: 512Mi
