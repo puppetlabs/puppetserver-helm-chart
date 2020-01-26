@@ -1,18 +1,30 @@
+{{- if .Values.puppetserver.multiCompilers.enabled }}
+{{- if .Values.puppetserver.multiCompilers.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "puppetserver.name" . }}-puppetserver
+  name: {{ template "puppetserver.name" . }}-autoscaler
+  labels:
+    {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ template "puppetserver.name" . }}-puppetserver
-  minReplicas: 1
-  maxReplicas: 10
+  minReplicas: {{ .Values.puppetserver.multiCompilers.autoscaling.minCompilers }}
+  maxReplicas: {{ .Values.puppetserver.multiCompilers.autoscaling.maxCompilers }}
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 60
+{{- with .Values.puppetserver.multiCompilers.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ . }}
+{{- end }}
+{{- with .Values.puppetserver.multiCompilers.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ . }}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -5,7 +5,9 @@ metadata:
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
 spec:
-  replicas: 3
+  {{- if .Values.puppetserver.multiCompilers.enabled }}
+  replicas: {{ .Values.puppetserver.multiCompilers.manualScaling.compilers }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "puppetserver.puppetserver.matchLabels" . | nindent 6 }}
@@ -70,9 +72,11 @@ spec:
               mountPath: /etc/puppetlabs/code/
             - name: puppet-puppet-storage
               mountPath: /etc/puppetlabs/puppet/
+          {{- if .Values.puppetserver.multiCompilers.enabled }}
             - name: init-compilers-volume
               mountPath: /etc/puppetlabs/puppet/configmap/check_for_compilers.sh
               subPath: check_for_compilers.sh
+          {{- end }}
           {{- if .Values.hiera.config }}
             - name: hiera-volume
               mountPath: /etc/puppetlabs/puppet/configmap/hiera.yaml

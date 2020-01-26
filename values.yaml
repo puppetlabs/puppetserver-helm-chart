@@ -9,6 +9,24 @@ puppetserver:
   image: puppet/puppetserver
   tag: 6.7.2
   pullPolicy: IfNotPresent
+  ## Horizontal Scaling
+  ## Optional deployment of multiple Puppet Server Compilers
+  multiCompilers:
+    enabled: false
+    ## Horizontal Pod Manual Scaling
+    ## Set the desired number of Puppet Server Compilers
+    manualScaling:
+      compilers: 3
+    ## Horizontal Pod Autoscaling
+    ## Automatically scales the number of pods in a replication controller,
+    ## deployment, replica set or stateful set based on observed CPU utilization
+    ## (or, with beta support, on some other, application-provided metrics).
+    autoScaling:
+      enabled: false
+      minCompilers: 1
+      maxCompilers: 5
+      targetCPUUtilizationPercentage: 50
+      targetMemoryUtilizationPercentage: 50
   resources: {}
   #  requests:
   #    memory: 512Mi
