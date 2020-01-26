@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       {{- include "puppetserver.puppetserver.matchLabels" . | nindent 6 }}
@@ -31,9 +31,18 @@ spec:
           imagePullPolicy: "{{.Values.puppetserver.pullPolicy}}"
           resources:
             {{- toYaml .Values.puppetserver.resources | nindent 12 }}
+          env:
+            - name: PUPPET_DATA_DIR
+              value: "/etc/puppetlabs/code/environments"
+            - name: PUPPET_SSL_CERT_PEM
+              value: "/etc/puppetlabs/puppet/ssl/certs/{{ template "puppetserver.puppetserver.serviceName" . }}.pem"
           command: [ "sh", "-c" ]
           args:
-            - mkdir -p /etc/puppetlabs/code/environments;
+            - cp /etc/puppetlabs/puppet/configmap/check_for_compilers.sh /etc/puppetlabs/puppet/check_for_compilers.sh;
+              chown puppet:puppet /etc/puppetlabs/puppet/check_for_compilers.sh;
+              chmod +x /etc/puppetlabs/puppet/check_for_compilers.sh;
+              bash /etc/puppetlabs/puppet/check_for_compilers.sh;
+              mkdir -p /etc/puppetlabs/code/environments;
               mkdir -p /etc/puppetlabs/puppet/eyaml;
               mkdir -p /etc/puppetlabs/puppet/manifests;
               mkdir -p /etc/puppetlabs/code/r10k_cache;
@@ -61,6 +70,9 @@ spec:
               mountPath: /etc/puppetlabs/code/
             - name: puppet-puppet-storage
               mountPath: /etc/puppetlabs/puppet/
+            - name: init-compilers-volume
+              mountPath: /etc/puppetlabs/puppet/configmap/check_for_compilers.sh
+              subPath: check_for_compilers.sh
           {{- if .Values.hiera.config }}
             - name: hiera-volume
               mountPath: /etc/puppetlabs/puppet/configmap/hiera.yaml
@@ -123,6 +135,9 @@ spec:
         - name: puppet-serverdata-storage
           persistentVolumeClaim:
             claimName: puppet-serverdata-claim
+        - name: init-compilers-volume
+          configMap:
+            name: init-compilers-config
       {{- if .Values.hiera.config }}
         - name: hiera-volume
           configMap:
