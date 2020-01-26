@@ -42,14 +42,14 @@ spec:
           {{- end }}
           command: [ "sh", "-c" ]
           args:
+            - mkdir -p /etc/puppetlabs/puppet/eyaml;
             {{- if .Values.puppetserver.multiCompilers.enabled }}
-            - cp /etc/puppetlabs/puppet/configmap/check_for_compilers.sh /etc/puppetlabs/puppet/check_for_compilers.sh;
+              cp /etc/puppetlabs/puppet/configmap/check_for_compilers.sh /etc/puppetlabs/puppet/check_for_compilers.sh;
               chown puppet:puppet /etc/puppetlabs/puppet/check_for_compilers.sh;
               chmod +x /etc/puppetlabs/puppet/check_for_compilers.sh;
               bash /etc/puppetlabs/puppet/check_for_compilers.sh;
             {{- end }}
               mkdir -p /etc/puppetlabs/code/environments;
-              mkdir -p /etc/puppetlabs/puppet/eyaml;
               mkdir -p /etc/puppetlabs/puppet/manifests;
               mkdir -p /etc/puppetlabs/code/r10k_cache;
               chown -R puppet:puppet /etc/puppetlabs;
