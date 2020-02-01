@@ -162,7 +162,7 @@ Parameter | Description | Default
 --------- | ----------- | -------
 `puppetserver.name` | puppetserver component label | `puppetserver`
 `puppetserver.image` | puppetserver image | `puppet/puppetserver`
-`puppetserver.tag` | puppetserver img tag | `6.7.2`
+`puppetserver.tag` | puppetserver img tag | `6.8.0`
 `puppetserver.resources` | puppetserver resource limits | ``
 `puppetserver.extraEnv` | puppetserver additional container env vars |``
 `puppetserver.preGeneratedCertsJob.enabled` | puppetserver pre-generated certs |`false`
@@ -216,13 +216,13 @@ Parameter | Description | Default
 `r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``
 `postgres.name` | postgres component label | `postgres`
 `postgres.image` | postgres img | `postgres`
-`postgres.tag` | postgres img tag | `9.6.15`
+`postgres.tag` | postgres img tag | `9.6.16`
 `postgres.pullPolicy` | postgres img pull policy | `IfNotPresent`
 `postgres.resources` | postgres resource limits |``
 `postgres.extraEnv` | postgres additional container env vars |``
 `puppetdb.name` | puppetdb component label | `puppetdb`
 `puppetdb.image` | puppetdb img | `puppet/puppetdb`
-`puppetdb.tag` | puppetdb img tag | `6.7.3`
+`puppetdb.tag` | puppetdb img tag | `6.8.1`
 `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`
 `puppetdb.resources` | puppetdb resource limits |``
 `puppetdb.extraEnv` | puppetdb additional container env vars |``
