@@ -18,4 +18,5 @@ maintainers:
 - name: slconley
   email: slconley@gmail.com
 engine: gotpl
-tillerVersion: ">=2.8.0"
+kubeVersion: ">=1.10.0-0"
+tillerVersion: ">=2.12.0"
