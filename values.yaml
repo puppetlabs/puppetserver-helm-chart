@@ -236,9 +236,10 @@ puppetdb:
     ## Override the 20-char random "password" in templates/puppetdb-secret.yaml
     password:
       value: ""
-      ## Or set the PuppetDB password from a pre-existing K8s secret
-      existingSecret: ""
-      existingSecretKey: ""
+    # if used, the following existing secret must contain "username" and "password" keys, already base64 encoded.
+    # using this secret supercedes all other credentials settings.
+    existingSecret: ""
+
 
 ## Puppetboard Configuration
 ##
