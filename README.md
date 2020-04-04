@@ -269,6 +269,26 @@ helm install --namespace puppetserver --name puppetserver ./ -f values.yaml
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Testing the Deployed Chart Resources
+
+```bash
+kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
+
+docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
+docker exec -it goofy_xtigyro bash
+puppet agent -t --certname ubuntu-goofy_xtigyro
+docker rm -f goofy_xtigyro
+
+docker run -dit --network host --name buggy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
+docker exec -it buggy_xtigyro bash
+puppet agent -t --certname ubuntu-buggy_xtigyro
+docker rm -f buggy_xtigyro
+
+jobs
+# [1]+  Running                 kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
+kill %[job_number_above]
+```
+
 ## Chart's Dev Team
 
 * Lead Developer: Miroslav Hadzhiev (miroslav.hadzhiev@gmail.com)
