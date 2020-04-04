@@ -284,7 +284,7 @@ docker exec -it buggy_xtigyro bash
 puppet agent -t --certname ubuntu-buggy_xtigyro
 docker rm -f buggy_xtigyro
 
-jobs
+jobs | grep puppetserver
 # [1]+  Running                 kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
 kill %[job_number_above]
 ```
