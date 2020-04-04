@@ -31,6 +31,10 @@ allowedTopologies:
     - us-east-1d
 ```
 
+### Common Storage Required for r10k and Puppet Server
+
+Right now we use K8s Cron job to sync the Puppet and Hiera code. We have plans to switch to a sidecar container when we release support for running multiple Puppet compile masters on different K8s nodes. Until then please take advantage of the examples for pod affinity constraint for r10k or the common storage node selector in [values.yaml](values.yaml).
+
 ### Load-Balancing Puppet Server
 
 In case a Load Balancer (LB) must sit in front of Puppet Server - please keep in mind that having a Network LB (operating at OSI Layer 4) is preferable.
