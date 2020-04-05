@@ -7,8 +7,9 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 ## [v3.0.0](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v3.0.0) (2020-04-05)
 
-- Helm v3 Support.
-- Improved Documentation.
+- Helm v3 support.
+- Improved documentation.
+- Improved log msgs.
 - Bump versions of Puppet Server (to v6.9.2) and PuppetDB (to v6.9.1).
 
 [Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.8.2...v3.0.0)
