@@ -13,11 +13,13 @@
 Depending on your deployment scenario a certain `StorageClass` object might be required.
 In a big K8s megacluster running in the cloud multiple labeled (and/or tainted) nodes in each Availability Zone (AZ) might be present. In such scenario Puppet Server components that use common storage (`puppetserver` and `r10k`) require their volumes to be created in the same AZ. That can be achieved through a custom `StorageClass`.
 
-Exemplary definition:
+#### Exemplary definitions
+
+* For AWS:
 
 ```yaml
-kind: StorageClass
 apiVersion: storage.k8s.io/v1
+kind: StorageClass
 metadata:
   name: puppetserver-sc
 provisioner: kubernetes.io/aws-ebs
@@ -28,7 +30,25 @@ allowedTopologies:
 - matchLabelExpressions:
   - key: failure-domain.beta.kubernetes.io/zone
     values:
-    - us-east-1d
+    - eu-central-1
+```
+
+* For GCP:
+
+```yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: puppetserver-sc
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-standard
+volumeBindingMode: WaitForFirstConsumer
+allowedTopologies:
+- matchLabelExpressions:
+  - key: failure-domain.beta.kubernetes.io/zone
+    values:
+    - europe-west3
 ```
 
 ### Common Storage Required for r10k and Puppet Server
