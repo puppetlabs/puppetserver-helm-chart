@@ -125,37 +125,43 @@ helm install --namespace puppetserver --name puppetserver ./ --set puppetserver.
 You can use `kubectl get` to view all of the installed components.
 
 ```console
-$ kubectl get --namespace puppetserver all -l app=puppetserver
-NAME                                                 READY   STATUS      RESTARTS   AGE
-pod/puppetserver-postgres-bf55d954b-qxw5h            1/1     Running     0          24m
-pod/puppetserver-puppetdb-6f949987f5-59qpj           1/1     Running     0          24m
-pod/puppetserver-puppetserver-57687cd786-jcm6v       1/1     Running     0          24m
-pod/puppetserver-r10k-code-deploy-1575237000-lqfkb   0/1     Completed   0          16m
-pod/puppetserver-r10k-code-deploy-1575237600-tnj9m   0/1     Completed   0          10m
-pod/puppetserver-r10k-code-deploy-1575238200-9rklj   0/1     Completed   0          39s
+$ kubectl get --namespace puppetserver all -l release=puppetserver
+NAME                                                                  READY   STATUS      RESTARTS   AGE
+pod/puppetserver-puppetserver-helm-cha-postgres-5479895bb9-pblfd      1/1     Running     0          10m
+pod/puppetserver-puppetserver-helm-cha-puppetdb-8698789c7f-glzdf      1/1     Running     0          10m
+pod/puppetserver-puppetserver-helm-cha-puppetserver-d99c99896-99z4h   1/1     Running     0          10m
+pod/puppetserver-puppetserver-helm-cha-puppetserver-d99c99896-fhpk4   1/1     Running     0          8m18s
+pod/puppetserver-puppetserver-helm-cha-r10k-code-deploy-158610249kr   0/1     Completed   0          6m3s
+pod/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586109f2t2   0/1     Completed   0          4m3s
+pod/puppetserver-puppetserver-helm-cha-r10k-code-deploy-158610s2568   0/1     Completed   0          3s
+pod/puppetserver-puppetserver-helm-cha-r10k-code-deploy-158610zfdrp   0/1     Completed   0          2m3s
 
-NAME               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
-service/postgres   ClusterIP   10.0.198.132   <none>        5432/TCP            24m
-service/puppet     ClusterIP   10.0.68.216    <none>        8140/TCP            24m
-service/puppetdb   ClusterIP   10.0.164.209   <none>        8080/TCP,8081/TCP   24m
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
+service/postgres   ClusterIP   10.96.197.10    <none>        5432/TCP            10m
+service/puppet     ClusterIP   10.96.128.168   <none>        8140/TCP            10m
+service/puppetdb   ClusterIP   10.96.114.113   <none>        8080/TCP,8081/TCP   10m
 
-NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/puppetserver-postgres       1/1     1            1           24m
-deployment.apps/puppetserver-puppetdb       1/1     1            1           24m
-deployment.apps/puppetserver-puppetserver   1/1     1            1           24m
+NAME                                                              READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/puppetserver-puppetserver-helm-cha-postgres       1/1     1            1           10m
+deployment.apps/puppetserver-puppetserver-helm-cha-puppetdb       1/1     1            1           10m
+deployment.apps/puppetserver-puppetserver-helm-cha-puppetserver   2/2     2            2           10m
 
-NAME                                                   DESIRED   CURRENT   READY   AGE
-replicaset.apps/puppetserver-postgres-bf55d954b        1         1         1       24m
-replicaset.apps/puppetserver-puppetdb-6f949987f5       1         1         1       24m
-replicaset.apps/puppetserver-puppetserver-57687cd786   1         1         1       24m
+NAME                                                                        DESIRED   CURRENT   READY   AGE
+replicaset.apps/puppetserver-puppetserver-helm-cha-postgres-5479895bb9      1         1         1       10m
+replicaset.apps/puppetserver-puppetserver-helm-cha-puppetdb-8698789c7f      1         1         1       10m
+replicaset.apps/puppetserver-puppetserver-helm-cha-puppetserver-d99c99896   2         2         2       10m
 
-NAME                                                 COMPLETIONS   DURATION   AGE
-job.batch/puppetserver-r10k-code-deploy-1575237000   1/1           15s        16m
-job.batch/puppetserver-r10k-code-deploy-1575237600   1/1           2s         10m
-job.batch/puppetserver-r10k-code-deploy-1575238200   1/1           2s         39s
+NAME                                                                                REFERENCE                                                    TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/puppetserver-puppetserver-helm-cha-autoscaler   Deployment/puppetserver-puppetserver-helm-cha-puppetserver   65%/80%, 0%/80%   1         5         2          10m
 
-NAME                                          SCHEDULE       SUSPEND   ACTIVE   LAST SCHEDULE   AGE
-cronjob.batch/puppetserver-r10k-code-deploy   */15 * * * *   False     0        42s             24m
+NAME                                                                       COMPLETIONS   DURATION   AGE
+job.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586100120   1/1           1s         6m3s
+job.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586100240   1/1           2s         4m3s
+job.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586100360   1/1           2s         2m3s
+job.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586100480   1/1           2s         3s
+
+NAME                                                                SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+cronjob.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy   */2 * * * *   False     1        3s              10m
 ```
 
 ## Configuration
