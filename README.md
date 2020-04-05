@@ -274,6 +274,9 @@ helm install --namespace puppetserver --name puppetserver ./ -f values.yaml
 ```bash
 kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
 
+echo '127.0.0.1 puppet' > ~/.tmp_puppet_hosts
+export HOSTALIASES=~/.tmp_puppet_hosts
+
 docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it goofy_xtigyro bash
 puppet agent -t --certname ubuntu-goofy_xtigyro
@@ -283,6 +286,9 @@ docker run -dit --network host --name buggy_xtigyro --entrypoint /bin/bash puppe
 docker exec -it buggy_xtigyro bash
 puppet agent -t --certname ubuntu-buggy_xtigyro
 docker rm -f buggy_xtigyro
+
+rm ~/.tmp_puppet_hosts
+unset HOSTALIASES
 
 jobs | grep puppetserver
 # [1]+  Running                 kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
