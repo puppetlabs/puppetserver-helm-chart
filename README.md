@@ -110,6 +110,10 @@ To scale Puppet Server for many thousands of nodes, you’ll need to enable mult
 * Creates a cronjob per configured code repo - up to two.
 * Creates secrets to hold credentials for PuppetDB, PosgreSQL, and r10k.
 
+## Support for Helm v2
+
+Those of you who would like to use the chart with Helm v2 - please switch to branch `helm-v2`.
+
 ## Installing the Chart
 
 You can install the chart with the release name `puppetserver` as below.
