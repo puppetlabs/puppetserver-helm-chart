@@ -286,11 +286,13 @@ export HOSTALIASES=~/.tmp_puppet_hosts
 docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it goofy_xtigyro bash
 puppet agent -t --certname ubuntu-goofy_xtigyro
+exit
 docker rm -f goofy_xtigyro
 
 docker run -dit --network host --name buggy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it buggy_xtigyro bash
 puppet agent -t --certname ubuntu-buggy_xtigyro
+exit
 docker rm -f buggy_xtigyro
 
 rm ~/.tmp_puppet_hosts
