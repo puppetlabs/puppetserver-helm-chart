@@ -192,7 +192,7 @@ Parameter | Description | Default
 --------- | ----------- | -------
 `puppetserver.name` | puppetserver component label | `puppetserver`
 `puppetserver.image` | puppetserver image | `puppet/puppetserver`
-`puppetserver.tag` | puppetserver img tag | `6.8.0`
+`puppetserver.tag` | puppetserver img tag | `6.9.2`
 `puppetserver.resources` | puppetserver resource limits | ``
 `puppetserver.extraEnv` | puppetserver additional container env vars |``
 `puppetserver.preGeneratedCertsJob.enabled` | puppetserver pre-generated certs |`false`
@@ -252,7 +252,7 @@ Parameter | Description | Default
 `postgres.extraEnv` | postgres additional container env vars |``
 `puppetdb.name` | puppetdb component label | `puppetdb`
 `puppetdb.image` | puppetdb img | `puppet/puppetdb`
-`puppetdb.tag` | puppetdb img tag | `6.8.1`
+`puppetdb.tag` | puppetdb img tag | `6.9.1`
 `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`
 `puppetdb.resources` | puppetdb resource limits |``
 `puppetdb.extraEnv` | puppetdb additional container env vars |``
