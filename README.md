@@ -137,7 +137,7 @@ To scale Puppet Server for many thousands of nodes, you’ll need to enable mult
 Before installing Puppet Server Helm chart, you need to add the [Puppet Server Helm repository](https://puppetlabs.github.io/puppetserver-helm-chart) to your Helm client as below.
 
 ```bash
-helm repo add puppetserver https://puppetlabs.github.io/puppetserver-helm-chart
+helm repo add puppet https://puppetlabs.github.io/puppetserver-helm-chart
 ```
 
 ### Install the Chart
