@@ -3,9 +3,9 @@ entries:
   puppetserver-helm-chart:
   - apiVersion: v2
     appVersion: 6.9.2
-    created: "2020-04-30T12:09:56.247315-07:00"
+    created: "2020-05-01T14:15:41.491968-07:00"
     description: Puppet automates the delivery and operation of software.
-    digest: 7871be7573ac68f3178005b98e7b52fd4546ade92b40e4cc319e49583a9b92b6
+    digest: 6e25cc32a56b16e8e87ea7146bf0a196bb82d15af20aeb351660c6c5a88c6912
     home: https://puppet.com/
     icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
     keywords:
@@ -19,12 +19,12 @@ entries:
     - cd
     kubeVersion: '>=1.10.0-0'
     maintainers:
-    - email: miroslav.hadzhiev@gmail.com
-      name: Xtigyro
-    - email: scottcressi@gmail.com
-      name: scottcressi
+    - email: pupperware@puppet.com
+      name: Pupperware Team
     - email: morgan@puppet.com
       name: underscorgan
+    - email: miroslav.hadzhiev@gmail.com
+      name: Xtigyro
     - email: slconley@gmail.com
       name: slconley
     name: puppetserver-helm-chart
@@ -32,13 +32,13 @@ entries:
     - https://github.com/puppetlabs/pupperware/
     type: application
     urls:
-    - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-helm-chart-3.0.0.tgz
-    version: 3.0.0
+    - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-helm-chart-3.0.2.tgz
+    version: 3.0.2
   - apiVersion: v1
     appVersion: 6.9.2
-    created: "2020-04-30T12:09:56.244842-07:00"
+    created: "2020-05-01T14:15:41.490169-07:00"
     description: Puppet automates the delivery and operation of software.
-    digest: 244441b320b371ab43ca52be389a89f9bf8909ec6c3b992f748b0f11e9a4e9ac
+    digest: 48911765317c2ca048ffae164670859834eed98a12d1b32fdc15368767e7d339
     home: https://puppet.com/
     icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
     keywords:
@@ -52,18 +52,18 @@ entries:
     - cd
     kubeVersion: '>=1.10.0-0'
     maintainers:
-    - email: miroslav.hadzhiev@gmail.com
-      name: Xtigyro
-    - email: scottcressi@gmail.com
-      name: scottcressi
+    - email: pupperware@puppet.com
+      name: Pupperware Team
     - email: morgan@puppet.com
       name: underscorgan
+    - email: miroslav.hadzhiev@gmail.com
+      name: Xtigyro
     - email: slconley@gmail.com
       name: slconley
     name: puppetserver-helm-chart
     sources:
     - https://github.com/puppetlabs/pupperware/
     urls:
-    - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-helm-chart-1.8.3.tgz
-    version: 1.8.3
-generated: "2020-04-30T12:09:56.242655-07:00"
+    - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-helm-chart-1.8.4.tgz
+    version: 1.8.4
+generated: "2020-05-01T14:15:41.487503-07:00"
