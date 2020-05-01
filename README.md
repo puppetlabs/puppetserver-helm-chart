@@ -306,7 +306,7 @@ kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
 
 TIME_NOW="$(date +"%Y%m%dT%H%M")"
 cp "/etc/hosts"{,.backup_"$TIME_NOW"}
-echo '127.0.0.1 puppet puppet-compilers' >> /etc/hosts
+echo '127.0.0.1 puppet' >> /etc/hosts
 
 docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it goofy_xtigyro bash
