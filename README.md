@@ -141,7 +141,7 @@ Those of you who would like to use the chart with Helm v2 - please switch to bra
 Before installing Puppet Server Helm chart, you need to add the [Puppet Server Helm repository](https://puppetlabs.github.io/puppetserver-helm-chart) to your Helm client as below.
 
 ```bash
-helm repo add puppetserver https://puppetlabs.github.io/puppetserver-helm-chart
+helm repo add puppet https://puppetlabs.github.io/puppetserver-helm-chart
 ```
 
 ### Install the Chart
