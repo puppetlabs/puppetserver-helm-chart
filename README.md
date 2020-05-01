@@ -136,7 +136,17 @@ Those of you who would like to use the chart with Helm v2 - please switch to bra
 
 ## Installing the Chart
 
-You can install the chart with the release name `puppetserver` as below.
+### Add Puppet Server Helm Repository
+
+Before installing Puppet Server Helm chart, you need to add the [Puppet Server Helm repository](https://puppetlabs.github.io/puppetserver-helm-chart) to your Helm client as below.
+
+```bash
+helm repo add puppetserver https://puppetlabs.github.io/puppetserver-helm-chart
+```
+
+### Install the Chart
+
+To install the chart with the release name `puppetserver`.
 
 ```bash
 helm install --namespace puppetserver --name puppetserver puppet/puppetserver-helm-chart --set puppetserver.puppeturl='https://github.com/$SOMEUSER/control-repo.git'
