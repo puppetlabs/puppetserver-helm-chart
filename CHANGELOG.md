@@ -7,7 +7,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 ## [v3.0.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v3.0.1) (2020-05-01)
 
-- Documantation updates to reflect the new GitHub repo and contact details of the chart.
+- Documentation updates to reflect the new GitHub repo and contact details of the chart.
 - Updated `install` and `test` instructions.
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v3.0.0...v3.0.1)
