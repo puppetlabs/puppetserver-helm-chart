@@ -5,6 +5,13 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v1.8.4](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.8.4) (2020-05-01)
+
+- Documentation updates to reflect the new GitHub repo and contact details of the chart.
+- Updated `install` and `test` instructions.
+
+[Full Changelog](https://github.com/Xtigyro/puppetserver-helm-chart/compare/v1.8.3...v1.8.4)
+
 ## [v1.8.3](https://github.com/Xtigyro/puppetserver-helm-chart/tree/v1.8.3) (2020-04-08)
 
 - Improved documentation.
