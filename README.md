@@ -139,7 +139,7 @@ Those of you who would like to use the chart with Helm v2 - please switch to bra
 You can install the chart with the release name `puppetserver` as below.
 
 ```bash
-helm install --namespace puppetserver --name puppetserver ./ --set puppetserver.puppeturl='https://github.com/$SOMEUSER/control-repo.git'
+helm install --namespace puppetserver --name puppetserver puppet/puppetserver-helm-chart --set puppetserver.puppeturl='https://github.com/$SOMEUSER/control-repo.git'
 ```
 
 > Note - If you do not specify a name, helm will select a name for you.
@@ -288,13 +288,13 @@ Parameter | Description | Default
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-helm install --namespace puppetserver --name puppetserver ./ --set puppetserver.puppeturl='https://github.com/$SOMEUSER/puppet.git',hiera.hieradataurl='https://github.com/$SOMEUSER/hieradata.git'
+helm install --namespace puppetserver --name puppetserver puppet/puppetserver-helm-chart --set puppetserver.puppeturl='https://github.com/$SOMEUSER/puppet.git',hiera.hieradataurl='https://github.com/$SOMEUSER/hieradata.git'
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```bash
-helm install --namespace puppetserver --name puppetserver ./ -f values.yaml
+helm install --namespace puppetserver --name puppetserver puppet/puppetserver-helm-chart -f values.yaml
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -304,34 +304,33 @@ helm install --namespace puppetserver --name puppetserver ./ -f values.yaml
 ```bash
 kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
 
-echo '127.0.0.1 puppet' > ~/.tmp_puppet_hosts
-export HOSTALIASES=~/.tmp_puppet_hosts
+TIME_NOW="$(date +"%Y%m%dT%H%M")"
+cp "/etc/hosts"{,.backup_"$TIME_NOW"}
+echo '127.0.0.1 puppet puppet-compilers' >> /etc/hosts
 
 docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it goofy_xtigyro bash
-puppet agent -t --certname ubuntu-goofy_xtigyro
+puppet agent -t --server puppet --masterport 8140 --test --certname ubuntu-goofy_xtigyro
 exit
 docker rm -f goofy_xtigyro
 
 docker run -dit --network host --name buggy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it buggy_xtigyro bash
-puppet agent -t --certname ubuntu-buggy_xtigyro
+puppet agent -t --server puppet --masterport 8140 --test --certname ubuntu-buggy_xtigyro
 exit
 docker rm -f buggy_xtigyro
 
-rm ~/.tmp_puppet_hosts
-unset HOSTALIASES
+yes | mv "/etc/hosts.backup_"$TIME_NOW"" "/etc/hosts"
+unset TIME_NOW
 
 jobs | grep 'port-forward' | grep 'puppetserver'
 # [1]+  Running                 kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
 kill %[job_number_above]
-# or execute ¯¯¯\/
-## kill %$(jobs | grep 'port-forward' | grep 'puppetserver' | cut -d'+' -f1 | tr -d '[' | tr -d ']')
 ```
 
 ## Chart's Dev Team
 
 * Lead Developer: Miroslav Hadzhiev (miroslav.hadzhiev@gmail.com)
-* Developer: Scott Cressi (scottcressi@gmail.com)
-* Developer: Morgan Rhodes (morgan@puppet.com)
 * Developer: Sean Conley (slconley@gmail.com)
+* Developer: Morgan Rhodes (morgan@puppet.com)
+* Developer: Scott Cressi (scottcressi@gmail.com)

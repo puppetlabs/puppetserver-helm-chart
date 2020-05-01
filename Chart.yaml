@@ -1,7 +1,7 @@
 apiVersion: v2
 name: puppetserver-helm-chart
 type: application
-version: 3.0.0
+version: 3.0.1
 appVersion: 6.9.2
 description: Puppet automates the delivery and operation of software.
 keywords: ["puppet", "puppetserver", "automation", "iac", "infrastructure", "cm", "ci", "cd"]
@@ -10,12 +10,12 @@ icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=
 sources:
 - https://github.com/puppetlabs/pupperware/
 maintainers:
-- name: Xtigyro
-  email: miroslav.hadzhiev@gmail.com
-- name: scottcressi
-  email: scottcressi@gmail.com
+- name: Pupperware Team
+  email: pupperware@puppet.com
 - name: underscorgan
   email: morgan@puppet.com
+- name: Xtigyro
+  email: miroslav.hadzhiev@gmail.com
 - name: slconley
   email: slconley@gmail.com
 engine: gotpl
