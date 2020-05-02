@@ -1,10 +1,10 @@
 Puppet Server has been installed/upgraded.
 
 Release Name: "{{ template "puppetserver.fullname" . }}"
-Service Name: "puppet"
-Service Type: "{{.Values.puppetserver.service.type}}"
-Service Port: "{{.Values.puppetserver.service.ports.puppetserver.port}}"
-Ingress Enabled: "{{.Values.puppetserver.ingress.enabled}}"
+Masters' Service Name: "{{ template "puppetserver.puppetserver-masters.serviceName" . }}"
+Masters' Service Type: "{{.Values.puppetserver.masters.service.type}}"
+Masters' Service Port: "{{.Values.puppetserver.masters.service.ports.puppetserver.port}}"
+Masters' Ingress Enabled: "{{.Values.puppetserver.masters.ingress.enabled}}"
 Control Repo: "{{.Values.puppetserver.puppeturl}}"
 {{- if .Values.hiera.hieradataurl }}
 Hieradata Repo: "{{.Values.hiera.hieradataurl}}"

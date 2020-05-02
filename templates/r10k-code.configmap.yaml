@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "puppetserver.r10k.labels" . | nindent 4 }}
 data:
-  r10k.yaml: |
+  r10k_code.yaml: |
     # The location to use for storing cached Git repos
     :cachedir: '/etc/puppetlabs/code/r10k_cache'
     # A list of git repositories to create
@@ -16,13 +16,25 @@ data:
       :puppet_repo:
         remote: '{{.Values.puppetserver.puppeturl}}'
         basedir: '/etc/puppetlabs/code/environments'
-    :git:
-      provider: 'rugged' # Either 'shellgit' or 'rugged', defaults to 'shellgit'
-    {{- with .Values.r10k.code.viaSsh.credentials }}
-    {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
-      private_key: '/home/puppet/.ssh/id_rsa'
-    {{- end }}
-    {{- end }}
-      repositories:
-        - remote: '{{.Values.puppetserver.puppeturl}}'
+
+  r10k_code_cronjob.sh: |
+    #!/usr/bin/env sh
+    exec /docker-entrypoint.sh deploy environment --config /etc/puppetlabs/puppet/r10k_code.yaml \
+    --puppetfile {{ template "r10k.code.args" . }} > ~/.r10k_code_cronjob.out 2>&1
+    retVal=$?
+    if [ "$retVal" -eq "0" ]; then
+      touch ~/.r10k_code_cronjob.success > /dev/null 2>&1
+    else
+      rm ~/.r10k_code_cronjob.success > /dev/null 2>&1
+    fi
+    exit $retVal
+
+  r10k_code_entrypoint.sh: |
+    #!/usr/bin/env sh
+    touch ~/.r10k_code_cronjob.success > /dev/null 2>&1
+    cat > ~/.r10k_code_crontab <<'EOF'
+    {{ .Values.r10k.code.cronJob.schedule }} /bin/sh -c /etc/puppetlabs/puppet/r10k_code_cronjob.sh
+    EOF
+    tail -Fq ~/.r10k_code_cronjob.out &
+    exec supercronic ~/.r10k_code_crontab
 {{- end }}

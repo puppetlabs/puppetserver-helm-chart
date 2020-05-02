@@ -1,0 +1,36 @@
+{{- if .Values.puppetserver.multiCompilers.enabled }}
+{{- if .Values.puppetserver.multiCompilers.ingress.enabled -}}
+{{- $releaseName := .Release.Name -}}
+{{- $serviceName := include "puppetserver.puppetserver-compilers.serviceName" . }}
+{{- $servicePort := .Values.puppetserver.multiCompilers.service.ports.puppetserver.port -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+{{- if .Values.puppetserver.multiCompilers.ingress.annotations }}
+  annotations:
+    {{ toYaml .Values.puppetserver.multiCompilers.ingress.annotations | nindent 4 }}
+{{- end }}
+  labels:
+    {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+  {{- range $key, $value := .Values.puppetserver.multiCompilers.ingress.extraLabels }}
+    {{ $key }}: {{ $value }}
+  {{- end }}
+  name: {{ template "puppetserver.fullname" . }}-compilers
+spec:
+  rules:
+  {{- range .Values.puppetserver.multiCompilers.ingress.hosts }}
+    {{- $url := splitList "/" . }}
+    - host: {{ first $url }}
+      http:
+        paths:
+          - path: /{{ rest $url | join "/" }}
+            backend:
+              serviceName: {{ $serviceName }}
+              servicePort: {{ $servicePort }}
+  {{- end -}}
+{{- if .Values.puppetserver.multiCompilers.ingress.tls }}
+  tls:
+    {{ toYaml .Values.puppetserver.multiCompilers.ingress.tls | nindent 4 }}
+{{- end -}}
+{{- end -}}
+{{- end -}}

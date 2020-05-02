@@ -1,0 +1,27 @@
+{{- if .Values.puppetserver.multiCompilers.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "puppetserver.puppetserver-compilers.serviceName" . }}
+  labels:
+    {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 4 }}
+  {{- if .Values.puppetserver.multiCompilers.service.labels }}
+    {{ toYaml .Values.puppetserver.multiCompilers.service.labels | nindent 4 }}
+  {{- end }}
+{{- if .Values.puppetserver.multiCompilers.service.annotations }}
+  annotations:
+    {{ toYaml .Values.puppetserver.multiCompilers.service.annotations | nindent 4 }}
+{{- end }}
+spec:
+  ports:
+  {{- range $key, $value := .Values.puppetserver.multiCompilers.service.ports }}
+    - name: {{ $key }}
+{{ toYaml $value | indent 6 }}
+  {{- end }}
+  selector:
+    {{- include "puppetserver.puppetserver-compilers.matchLabels" . | nindent 4 }}
+  type: {{ .Values.puppetserver.multiCompilers.service.type }}
+{{- if (and (eq .Values.puppetserver.multiCompilers.service.type "LoadBalancer") (not (empty .Values.puppetserver.multiCompilers.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.puppetserver.multiCompilers.service.loadBalancerIP }}
+{{- end }}
+{{- end }}

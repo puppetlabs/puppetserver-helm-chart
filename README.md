@@ -8,53 +8,6 @@
 
 * You can also use private repos. Just remember to specify your credentials using `r10k.code.viaSsh.credentials.ssh.value`. You can set similar credentials for your Hieradata Repo.
 
-### Kubernetes Storage Class
-
-Depending on your deployment scenario a certain `StorageClass` object might be required.
-In a big K8s megacluster running in the cloud multiple labeled (and/or tainted) nodes in each Availability Zone (AZ) might be present. In such scenario Puppet Server components that use common storage (`puppetserver` and `r10k`) require their volumes to be created in the same AZ. That can be achieved through a custom `StorageClass`.
-
-#### Exemplary definitions
-
-* for Amazon Web Services:
-
-```yaml
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: puppetserver-sc
-provisioner: kubernetes.io/aws-ebs
-parameters:
-  type: gp2
-volumeBindingMode: WaitForFirstConsumer
-allowedTopologies:
-- matchLabelExpressions:
-  - key: failure-domain.beta.kubernetes.io/zone
-    values:
-    - eu-central-1
-```
-
-* for Google Cloud Platform:
-
-```yaml
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: puppetserver-sc
-provisioner: kubernetes.io/gce-pd
-parameters:
-  type: pd-standard
-volumeBindingMode: WaitForFirstConsumer
-allowedTopologies:
-- matchLabelExpressions:
-  - key: failure-domain.beta.kubernetes.io/zone
-    values:
-    - europe-west3
-```
-
-### Common Storage Required for r10k and Puppet Server
-
-Right now we use K8s Cron job to sync the Puppet and Hiera code. We have plans to switch to a sidecar container when we release support for running multiple Puppet compile masters on different K8s nodes. Until then please take advantage of the examples for pod affinity constraint for r10k or the common storage node selector in [values.yaml](values.yaml).
-
 ### Load-Balancing Puppet Server
 
 In case a Load Balancer (LB) must sit in front of Puppet Server - please keep in mind that having a Network LB (operating at OSI Layer 4) is preferable.
@@ -127,7 +80,6 @@ To scale Puppet Server for many thousands of nodes, you’ll need to enable mult
 
 * Creates four deployments: Puppet Server, PuppetDB, PosgreSQL, and Puppetboard.
 * Creates three services that expose: Puppet Server, PuppetDB, and PostgreSQL.
-* Creates a cronjob per configured code repo - up to two.
 * Creates secrets to hold credentials for PuppetDB, PosgreSQL, and r10k.
 
 ## Support for Helm v2
@@ -160,42 +112,32 @@ You can use `kubectl get` to view all of the installed components.
 
 ```console
 $ kubectl get --namespace puppetserver all -l release=puppetserver
-NAME                                                                  READY   STATUS      RESTARTS   AGE
-pod/puppetserver-puppetserver-helm-cha-postgres-5479895bb9-pblfd      1/1     Running     0          10m
-pod/puppetserver-puppetserver-helm-cha-puppetdb-8698789c7f-glzdf      1/1     Running     0          10m
-pod/puppetserver-puppetserver-helm-cha-puppetserver-d99c99896-99z4h   1/1     Running     0          10m
-pod/puppetserver-puppetserver-helm-cha-puppetserver-d99c99896-fhpk4   1/1     Running     0          8m18s
-pod/puppetserver-puppetserver-helm-cha-r10k-code-deploy-158610249kr   0/1     Completed   0          6m3s
-pod/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586109f2t2   0/1     Completed   0          4m3s
-pod/puppetserver-puppetserver-helm-cha-r10k-code-deploy-158610s2568   0/1     Completed   0          3s
-pod/puppetserver-puppetserver-helm-cha-r10k-code-deploy-158610zfdrp   0/1     Completed   0          2m3s
+NAME                                                                READY   STATUS    RESTARTS   AGE
+pod/puppetserver-helm-chart-postgres-5dfc7dc889-dndx2               1/1     Running   0          4m34s
+pod/puppetserver-helm-chart-puppetdb-6c9fd8749f-bnqst               1/1     Running   0          4m34s
+pod/puppetserver-helm-chart-puppetserver-compilers-0                2/2     Running   0          4m34s
+pod/puppetserver-helm-chart-puppetserver-compilers-1                2/2     Running   0          4m12s
+pod/puppetserver-helm-chart-puppetserver-compilers-2                2/2     Running   0          3m59s
+pod/puppetserver-helm-chart-puppetserver-masters-746c8fb479-5pfh4   2/2     Running   0          4m34s
 
-NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
-service/postgres   ClusterIP   10.96.197.10    <none>        5432/TCP            10m
-service/puppet     ClusterIP   10.96.128.168   <none>        8140/TCP            10m
-service/puppetdb   ClusterIP   10.96.114.113   <none>        8080/TCP,8081/TCP   10m
+NAME                       TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
+service/postgres           ClusterIP   10.96.15.141   <none>        5432/TCP            4m34s
+service/puppet             ClusterIP   10.96.107.85   <none>        8140/TCP            4m34s
+service/puppet-compilers   ClusterIP   10.96.43.232   <none>        8140/TCP            4m34s
+service/puppetdb           ClusterIP   10.96.57.106   <none>        8080/TCP,8081/TCP   4m34s
 
-NAME                                                              READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/puppetserver-puppetserver-helm-cha-postgres       1/1     1            1           10m
-deployment.apps/puppetserver-puppetserver-helm-cha-puppetdb       1/1     1            1           10m
-deployment.apps/puppetserver-puppetserver-helm-cha-puppetserver   2/2     2            2           10m
+NAME                                                           READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/puppetserver-helm-chart-postgres               1/1     1            1           4m34s
+deployment.apps/puppetserver-helm-chart-puppetdb               1/1     1            1           4m34s
+deployment.apps/puppetserver-helm-chart-puppetserver-masters   1/1     1            1           4m34s
 
-NAME                                                                        DESIRED   CURRENT   READY   AGE
-replicaset.apps/puppetserver-puppetserver-helm-cha-postgres-5479895bb9      1         1         1       10m
-replicaset.apps/puppetserver-puppetserver-helm-cha-puppetdb-8698789c7f      1         1         1       10m
-replicaset.apps/puppetserver-puppetserver-helm-cha-puppetserver-d99c99896   2         2         2       10m
+NAME                                                                      DESIRED   CURRENT   READY   AGE
+replicaset.apps/puppetserver-helm-chart-postgres-5dfc7dc889               1         1         1       4m34s
+replicaset.apps/puppetserver-helm-chart-puppetdb-6c9fd8749f               1         1         1       4m34s
+replicaset.apps/puppetserver-helm-chart-puppetserver-masters-746c8fb479   1         1         1       4m34s
 
-NAME                                                                                REFERENCE                                                    TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
-horizontalpodautoscaler.autoscaling/puppetserver-puppetserver-helm-cha-autoscaler   Deployment/puppetserver-puppetserver-helm-cha-puppetserver   65%/80%, 0%/80%   1         5         2          10m
-
-NAME                                                                       COMPLETIONS   DURATION   AGE
-job.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586100120   1/1           1s         6m3s
-job.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586100240   1/1           2s         4m3s
-job.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586100360   1/1           2s         2m3s
-job.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586100480   1/1           2s         3s
-
-NAME                                                                SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
-cronjob.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy   */2 * * * *   False     1        3s              10m
+NAME                                                              READY   AGE
+statefulset.apps/puppetserver-helm-chart-puppetserver-compilers   3/3     4m34s
 ```
 
 ## Configuration
@@ -206,7 +148,7 @@ Parameter | Description | Default
 --------- | ----------- | -------
 `puppetserver.name` | puppetserver component label | `puppetserver`
 `puppetserver.image` | puppetserver image | `puppet/puppetserver`
-`puppetserver.tag` | puppetserver img tag | `6.8.0`
+`puppetserver.tag` | puppetserver img tag | `6.10.0`
 `puppetserver.resources` | puppetserver resource limits | ``
 `puppetserver.extraEnv` | puppetserver additional container env vars |``
 `puppetserver.preGeneratedCertsJob.enabled` | puppetserver pre-generated certs |`false`
@@ -235,12 +177,7 @@ Parameter | Description | Default
 `r10k.image` | r10k img | `puppet/r10k`
 `r10k.tag` | r10k img tag | `3.3.3`
 `r10k.pullPolicy` | r10k img pull policy | `IfNotPresent`
-`r10k.affinity` | r10k pod assignment affinity |``
 `r10k.code.cronJob.schedule` | r10k control repo cron job schedule policy | `*/15 * * * *`
-`r10k.code.cronJob.concurrencyPolicy` | r10k control repo cron job concurrency policy | `Forbid`
-`r10k.code.cronJob.restartPolicy` | r10k control repo cron job restart policy | `Never`
-`r10k.code.cronJob.startingDeadlineSeconds` | r10k control repo cron job starting deadline | `500`
-`r10k.code.cronJob.activeDeadlineSeconds` | r10k control repo cron job active deadline | `750`
 `r10k.code.resources` | r10k control repo resource limits |``
 `r10k.code.extraArgs` | r10k control repo additional container env args |``
 `r10k.code.extraEnv` | r10k control repo additional container env vars |``
@@ -248,10 +185,6 @@ Parameter | Description | Default
 `r10k.code.viaSsh.credentials.known_hosts.value`| r10k control repo ssh known hosts file |``
 `r10k.code.viaSsh.credentials.existingSecret`| r10k control repo ssh secret that holds ssh key and known hosts files |``
 `r10k.hiera.cronJob.schedule` | r10k hiera data cron job schedule policy | `*/2 * * * *`
-`r10k.hiera.cronJob.concurrencyPolicy` | r10k control repo cron job concurrency policy | `Forbid`
-`r10k.hiera.cronJob.restartPolicy` | r10k control repo cron job restart policy | `Never`
-`r10k.hiera.cronJob.startingDeadlineSeconds` | r10k control repo cron job starting deadline | `500`
-`r10k.hiera.cronJob.activeDeadlineSeconds` | r10k control repo cron job active deadline | `750`
 `r10k.hiera.resources` | r10k hiera data resource limits |``
 `r10k.hiera.extraArgs` | r10k hiera data additional container env args |``
 `r10k.hiera.extraEnv` | r10k hiera data additional container env vars |``
@@ -266,7 +199,7 @@ Parameter | Description | Default
 `postgres.extraEnv` | postgres additional container env vars |``
 `puppetdb.name` | puppetdb component label | `puppetdb`
 `puppetdb.image` | puppetdb img | `puppet/puppetdb`
-`puppetdb.tag` | puppetdb img tag | `6.8.1`
+`puppetdb.tag` | puppetdb img tag | `6.9.1`
 `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`
 `puppetdb.resources` | puppetdb resource limits |``
 `puppetdb.extraEnv` | puppetdb additional container env vars |``
@@ -291,7 +224,6 @@ Parameter | Description | Default
 `priorityClass`| Leverage a priorityClass to ensure your pods survive resource shortages |``
 `podAnnotations`| Extra Pod annotations |``
 `storage.storageClass`| Storage Class |``
-`storage.selector`| PVs/PVCs Selector Config |`false`
 `storage.annotations`| Storage annotations |``
 `storage.size`| PVCs Storage Size |`100Mi`
 
@@ -313,20 +245,23 @@ helm install --namespace puppetserver --name puppetserver puppet/puppetserver-he
 
 ```bash
 kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
+kubectl port-forward -n puppetserver svc/puppet-compilers 8141:8140 &
 
 TIME_NOW="$(date +"%Y%m%dT%H%M")"
 cp "/etc/hosts"{,.backup_"$TIME_NOW"}
-echo '127.0.0.1 puppet' >> /etc/hosts
+echo '127.0.0.1 puppet puppet-compilers' >> /etc/hosts
 
 docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it goofy_xtigyro bash
-puppet agent -t --server puppet --masterport 8140 --test --certname ubuntu-goofy_xtigyro
+puppet agent -t --server puppet-compilers --masterport 8141 --test --certname ubuntu-goofy_xtigyro
+puppet agent -t --server puppet-compilers --masterport 8140 --test --certname ubuntu-goofy_xtigyro
 exit
 docker rm -f goofy_xtigyro
 
 docker run -dit --network host --name buggy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it buggy_xtigyro bash
 puppet agent -t --server puppet --masterport 8140 --test --certname ubuntu-buggy_xtigyro
+puppet agent -t --server puppet --masterport 8141 --test --certname ubuntu-buggy_xtigyro
 exit
 docker rm -f buggy_xtigyro
 
@@ -335,7 +270,7 @@ unset TIME_NOW
 
 jobs | grep 'port-forward' | grep 'puppetserver'
 # [1]+  Running                 kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
-kill %[job_number_above]
+kill %[job_numbers_above]
 ```
 
 ## Chart's Dev Team

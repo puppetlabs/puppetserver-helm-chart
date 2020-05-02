@@ -9,11 +9,6 @@ metadata:
     {{ toYaml .Values.storage.annotations | nindent 4 }}
 {{- end }}
 spec:
-{{- if .Values.storage.selector }}
-  selector:
-    matchLabels:
-      {{- include "puppetserver.r10k.matchLabels" . | nindent 6 }}
-{{- end }}
   accessModes:
     - ReadWriteOnce
   resources:

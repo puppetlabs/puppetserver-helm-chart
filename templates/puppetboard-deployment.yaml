@@ -40,9 +40,9 @@ spec:
           ports:
             - name: puppetboard
               containerPort: 8000
-    {{- if .Values.nodeSelector.allPods }}
+    {{- if .Values.nodeSelector }}
       nodeSelector:
-        {{ toYaml .Values.nodeSelector.allPods | nindent 10 }}
+        {{ toYaml .Values.nodeSelector | nindent 10 }}
     {{- end }}
     {{- if .Values.affinity }}
       affinity:
