@@ -173,6 +173,30 @@ when running with multiple Puppet compilers.
 {{- end -}}
 
 {{/*
+Compile all compilers' hostnames into a single message.
+*/}}
+{{- define "puppetserver.compilers.hostnames" -}}
+{{- $compilersHostnames := list -}}
+{{- range .Values.puppetserver.multiCompilers.manualScaling.compilers }}
+{{- $compilersHostnames := append $compilersHostnames ({{ template "puppetserver.name" . }}-puppetserver-compilers-0 .) -}}
+  - name: {{ . }}
+{{- end }}
+{{- $compilersHostnames := without $compilersHostnames "" -}}
+{{- $compilersHostnameString := join "\n" $compilersHostnames -}}
+
+{{- define "puppetserver.compilers.hostnames" -}}
+  {{- $compilersCount := .Values.puppetserver.multiCompilers.manualScaling.compilers }}
+  {{- range $mongocount, $e := until (.Values.mongodbReplicaCount|int) -}}
+    {{- printf "%s-mongodb-replicaset-%d." $.Values.mongodbReleaseName $mongocount -}}
+    {{- printf "%s-mongodb-replicaset:%d" $.Values.mongodbReleaseName ($.Values.mongodbPort|int) -}}
+    {{- if lt $mongocount  ( sub ($.Values.mongodbReplicaCount|int) 1 ) -}}
+      {{- printf "," -}}
+    {{- end -}}
+  {{- end -}}
+  {{- printf "/%s?replicaSet=%s" $.Values.mongodbName  $.Values.mongodbReplicaSet -}}
+{{- end -}}
+
+{{/*
 Create the name for the PuppetDB password secret.
 */}}
 {{- define "puppetdb.secret" -}}
