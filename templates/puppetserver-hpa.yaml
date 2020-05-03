@@ -14,21 +14,21 @@ spec:
   minReplicas: {{ .Values.puppetserver.multiCompilers.autoScaling.minCompilers }}
   maxReplicas: {{ .Values.puppetserver.multiCompilers.autoScaling.maxCompilers }}
   metrics:
-{{- with .Values.puppetserver.multiCompilers.autoScaling.cpuUtilizationPercentage }}
+  {{- with .Values.puppetserver.multiCompilers.autoScaling.cpuUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
           averageUtilization: {{ . }}
-{{- end }}
-{{- with .Values.puppetserver.multiCompilers.autoScaling.memoryUtilizationPercentage }}
+  {{- end }}
+  {{- with .Values.puppetserver.multiCompilers.autoScaling.memoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
           averageUtilization: {{ . }}
-{{- end }}
+  {{- end }}
 {{- end }}
 {{- end }}
