@@ -130,7 +130,7 @@ component: {{ .Values.puppetserver.name | quote }}
 {{- end -}}
 
 {{- define "puppetserver.puppetserver-compilers.matchLabels" -}}
-component: "{{ .Values.puppetserver.name}}-compilers"
+component: "{{ .Values.puppetserver.name }}-compilers"
 {{ include "puppetserver.common.matchLabels" . }}
 {{- end -}}
 
@@ -140,7 +140,7 @@ component: "{{ .Values.puppetserver.name}}-compilers"
 {{- end -}}
 
 {{- define "puppetserver.puppetserver-data.matchLabels" -}}
-component: "{{ .Values.puppetserver.name}}-serverdata"
+component: "{{ .Values.puppetserver.name }}-serverdata"
 {{ include "puppetserver.common.matchLabels" . }}
 {{- end -}}
 
@@ -179,11 +179,22 @@ when running with multiple Puppet compilers.
     {{- end }}
 {{- end -}}
 
+{{/*
+Calculates the max. number of compilers
+*/}}
+{{- define "puppetserver.compilers.maxNo" -}}
+{{- if not (.Values.puppetserver.multiCompilers.autoScaling.enabled) -}}
+{{- .Values.puppetserver.multiCompilers.manualScaling.compilers -}}
+{{- else -}}
+{{- .Values.puppetserver.multiCompilers.autoScaling.maxCompilers -}}
+{{- end -}}
+{{- end -}}
+
 {{- define "puppetserver.compilers.hostnames" -}}
-  {{- $dot := . }}
-  {{- range $compilersCount, $e := until (.Values.puppetserver.multiCompilers.manualScaling.compilers|int) -}}
-    {{- printf "%s-puppetserver-compilers-%d" (include "puppetserver.name" $dot) $compilersCount -}}
-    {{- if lt $compilersCount  ( sub ($.Values.puppetserver.multiCompilers.manualScaling.compilers|int) 1 ) -}}
+  {{- $dot := . -}}
+  {{- range $compilersLoopCount, $e := until ((include "puppetserver.compilers.maxNo" $dot) | int) -}}
+    {{- printf "%s-puppetserver-compilers-%d" (include "puppetserver.name" $dot) $compilersLoopCount -}}
+    {{- if lt $compilersLoopCount  ( sub ((include "puppetserver.compilers.maxNo" $dot) | int) 1 ) -}}
       {{- printf "," -}}
     {{- end -}}
   {{- end -}}
