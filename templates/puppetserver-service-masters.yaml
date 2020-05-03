@@ -5,11 +5,11 @@ metadata:
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
     {{- if .Values.puppetserver.masters.service.labels }}
-    {{ toYaml .Values.puppetserver.masters.service.labels | nindent 4 }}
+    {{- toYaml .Values.puppetserver.masters.service.labels | nindent 4 }}
     {{- end }}
   {{- if .Values.puppetserver.masters.service.annotations }}
   annotations:
-    {{ toYaml .Values.puppetserver.masters.service.annotations | nindent 4 }}
+    {{- toYaml .Values.puppetserver.masters.service.annotations | nindent 4 }}
   {{- end }}
 spec:
   ports:

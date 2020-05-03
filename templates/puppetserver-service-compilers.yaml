@@ -6,11 +6,11 @@ metadata:
   labels:
     {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 4 }}
     {{- if .Values.puppetserver.multiCompilers.service.labels }}
-    {{ toYaml .Values.puppetserver.multiCompilers.service.labels | nindent 4 }}
+    {{- toYaml .Values.puppetserver.multiCompilers.service.labels | nindent 4 }}
     {{- end }}
   {{- if .Values.puppetserver.multiCompilers.service.annotations }}
   annotations:
-    {{ toYaml .Values.puppetserver.multiCompilers.service.annotations | nindent 4 }}
+    {{- toYaml .Values.puppetserver.multiCompilers.service.annotations | nindent 4 }}
   {{- end }}
 spec:
   ports:
