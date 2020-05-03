@@ -8,6 +8,13 @@ Expand the name of the chart.
 {{- end -}}
 
 {{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "puppetserver.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified app name.
 We truncate at 52 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
@@ -48,7 +55,7 @@ release: {{ .Release.Name }}
 {{- end -}}
 
 {{- define "puppetserver.common.metaLabels" -}}
-chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+chart: {{ template "puppetserver.chart" . }}
 heritage: {{ .Release.Service }}
 {{- end -}}
 
@@ -172,28 +179,14 @@ when running with multiple Puppet compilers.
     {{- end }}
 {{- end -}}
 
-{{/*
-Compile all compilers' hostnames into a single message.
-*/}}
 {{- define "puppetserver.compilers.hostnames" -}}
-{{- $compilersHostnames := list -}}
-{{- range .Values.puppetserver.multiCompilers.manualScaling.compilers }}
-{{- $compilersHostnames := append $compilersHostnames ({{ template "puppetserver.name" . }}-puppetserver-compilers-0 .) -}}
-  - name: {{ . }}
-{{- end }}
-{{- $compilersHostnames := without $compilersHostnames "" -}}
-{{- $compilersHostnameString := join "\n" $compilersHostnames -}}
-
-{{- define "puppetserver.compilers.hostnames" -}}
-  {{- $compilersCount := .Values.puppetserver.multiCompilers.manualScaling.compilers }}
-  {{- range $mongocount, $e := until (.Values.mongodbReplicaCount|int) -}}
-    {{- printf "%s-mongodb-replicaset-%d." $.Values.mongodbReleaseName $mongocount -}}
-    {{- printf "%s-mongodb-replicaset:%d" $.Values.mongodbReleaseName ($.Values.mongodbPort|int) -}}
-    {{- if lt $mongocount  ( sub ($.Values.mongodbReplicaCount|int) 1 ) -}}
+  {{- $dot := . }}
+  {{- range $compilersCount, $e := until (.Values.puppetserver.multiCompilers.manualScaling.compilers|int) -}}
+    {{- printf "%s-puppetserver-compilers-%d" (include "puppetserver.name" $dot) $compilersCount -}}
+    {{- if lt $compilersCount  ( sub ($.Values.puppetserver.multiCompilers.manualScaling.compilers|int) 1 ) -}}
       {{- printf "," -}}
     {{- end -}}
   {{- end -}}
-  {{- printf "/%s?replicaSet=%s" $.Values.mongodbName  $.Values.mongodbReplicaSet -}}
 {{- end -}}
 
 {{/*
