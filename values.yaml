@@ -264,7 +264,7 @@ r10k:
 postgres:
   name: postgres
   image: postgres
-  tag: 9.6.16
+  tag: 9.6.17
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
