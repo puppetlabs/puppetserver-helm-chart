@@ -10,7 +10,7 @@ metadata:
     {{- toYaml .Values.puppetserver.multiCompilers.annotations | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: {{ template "puppetserver.puppetserver-compilers.serviceName" . }}
+  serviceName: {{ template "puppetserver.puppetserver-compilers.serviceName" . }}-headless
   selector:
     matchLabels:
       {{- include "puppetserver.puppetserver-compilers.matchLabels" . | nindent 6 }}

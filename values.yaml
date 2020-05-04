@@ -154,6 +154,14 @@ puppetserver:
       #  service.kubernetes.io/ibm-load-balancer-cloud-provider-ip-type: "private"
       labels: {}
       loadBalancerIP: ""
+      headless:
+        ports:
+          https:
+            port: 443
+            targetPort: 8140
+            protocol: TCP
+        annotations: {}
+        labels: {}
     ingress:
       ## If true, Puppet Server Ingress will be created
       ##

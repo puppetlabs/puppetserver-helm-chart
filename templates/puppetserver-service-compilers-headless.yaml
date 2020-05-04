@@ -1,0 +1,24 @@
+{{- if .Values.puppetserver.multiCompilers.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "puppetserver.puppetserver-compilers.serviceName" . }}-headless
+  labels:
+    {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 4 }}
+    {{- if .Values.puppetserver.multiCompilers.service.headless.labels }}
+    {{- toYaml .Values.puppetserver.multiCompilers.service.headless.labels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.puppetserver.multiCompilers.service.headless.annotations }}
+  annotations:
+    {{- toYaml .Values.puppetserver.multiCompilers.service.headless.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  clusterIP: None
+  ports:
+    {{- range $key, $value := .Values.puppetserver.multiCompilers.service.headless.ports }}
+    - name: {{ $key }}
+      {{- toYaml $value | nindent 6 }}
+    {{- end }}
+  selector:
+    {{- include "puppetserver.puppetserver-compilers.matchLabels" . | nindent 4 }}
+{{- end }}
