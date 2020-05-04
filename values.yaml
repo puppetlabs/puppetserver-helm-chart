@@ -16,7 +16,7 @@ puppetserver:
     #    memory: 768Mi
     #    cpu: 500m
     #  limits:
-    #    memory: 1Gi
+    #    memory: 1280Mi
     #    cpu: 750m
     ## Additional Masters' container environment variables
     extraEnv: {}
@@ -91,8 +91,8 @@ puppetserver:
         enabled: false
         minMasters: 1
         maxMasters: 3
-        cpuUtilizationPercentage: 80
-        memoryUtilizationPercentage: 80
+        cpuUtilizationPercentage: 75
+        memoryUtilizationPercentage: 75
   ## Optional StatefulSet of Puppet Server Compilers
   multiCompilers:
     enabled: false
@@ -101,7 +101,7 @@ puppetserver:
     #    memory: 768Mi
     #    cpu: 500m
     #  limits:
-    #    memory: 1Gi
+    #    memory: 1280Mi
     #    cpu: 750m
     ## Affinity for puppetserver pod assignment
     ## Schedule compilers on different K8s nodes
@@ -123,8 +123,8 @@ puppetserver:
       enabled: false
       minCompilers: 1
       maxCompilers: 5
-      cpuUtilizationPercentage: 80
-      memoryUtilizationPercentage: 80
+      cpuUtilizationPercentage: 75
+      memoryUtilizationPercentage: 75
     podManagementPolicy: OrderedReady
     ## Fully qualified domain names (FQDN's) to register
     ## the Puppet Server Compilers to be internally reachable via DNS.
