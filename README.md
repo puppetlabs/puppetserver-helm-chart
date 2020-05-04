@@ -275,7 +275,7 @@ kill %[job_numbers_above]
 
 ## Chart's Dev Team
 
-* Lead Developer: Miroslav Hadzhiev (miroslav.hadzhiev@gmail.com)
+* Lead Author and Developer: Miroslav Hadzhiev (miroslav.hadzhiev@gmail.com)
 * Developer: Sean Conley (slconley@gmail.com)
 * Developer: Morgan Rhodes (morgan@puppet.com)
 * Developer: Scott Cressi (scottcressi@gmail.com)
