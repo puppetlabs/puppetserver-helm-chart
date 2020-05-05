@@ -144,6 +144,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: DNS_ALT_NAMES
+              value: "{{ template "puppetserver.puppetserver-compilers.serviceName" . }},{{.Values.puppetserver.multiCompilers.fqdns.alternateServerNames}}"
             - name: PUPPETDB_SERVER_URLS
               value: "https://puppetdb:8081"
             - name: CA_ENABLED

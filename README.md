@@ -248,24 +248,24 @@ helm install --namespace puppetserver --name puppetserver puppet/puppetserver-he
 ## Testing the Deployed Chart Resources
 
 ```bash
-kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
+kubectl port-forward -n puppetserver svc/agents-to-puppet 8140:8140 &
 kubectl port-forward -n puppetserver svc/puppet-compilers 8141:8140 &
 
 TIME_NOW="$(date +"%Y%m%dT%H%M")"
 cp "/etc/hosts"{,.backup_"$TIME_NOW"}
-echo '127.0.0.1 puppet puppet-compilers' >> /etc/hosts
+echo '127.0.0.1 agents-to-puppet puppet-compilers' >> /etc/hosts
 
 docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it goofy_xtigyro bash
 puppet agent -t --server puppet --masterport 8140 --test --waitforcert 10 --certname ubuntu-goofy_xtigyro
-puppet agent -t --server puppet-compilers --ca_server puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-goofy_xtigyro
+puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-goofy_xtigyro
 exit
 docker rm -f goofy_xtigyro
 
 docker run -dit --network host --name buggy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it buggy_xtigyro bash
 puppet agent -t --server puppet --masterport 8140 --test --waitforcert 10 --certname ubuntu-buggy_xtigyro
-puppet agent -t --server puppet-compilers --ca_server puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-buggy_xtigyro
+puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-buggy_xtigyro
 exit
 docker rm -f buggy_xtigyro
 

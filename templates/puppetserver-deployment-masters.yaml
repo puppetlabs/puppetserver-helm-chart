@@ -162,7 +162,7 @@ spec:
             - name: PUPPETSERVER_HOSTNAME
               value: "{{ template "puppetserver.puppetserver-masters.serviceName" . }}"
             - name: DNS_ALT_NAMES
-              value: "{{ template "puppetserver.compilers.hostnames" . }},{{ template "puppetserver.puppetserver-compilers.serviceName" . }},{{.Values.puppetserver.multiCompilers.fqdns.alternateServerNames}},{{.Values.puppetserver.masters.fqdns.alternateServerNames}}"
+              value: "{{ template "puppetserver.compilers.hostnames" . }},{{ template "puppetserver.puppetserver-compilers.serviceName" . }},{{ template "puppetserver.puppetserver-agents-to-masters.serviceName" . }},{{.Values.puppetserver.multiCompilers.fqdns.alternateServerNames}},{{.Values.puppetserver.masters.fqdns.alternateServerNames}}"
             - name: PUPPETDB_SERVER_URLS
               value: "https://puppetdb:8081"
             - name: CA_ALLOW_SUBJECT_ALT_NAMES

@@ -152,6 +152,13 @@ puppet
 {{- end -}}
 
 {{/*
+Set secondary Puppet Server Masters' Service name for Puppet Agents.
+*/}}
+{{- define "puppetserver.puppetserver-agents-to-masters.serviceName" -}}
+agents-to-puppet
+{{- end -}}
+
+{{/*
 Set mandatory Puppet Server Compilers' Service name.
 */}}
 {{- define "puppetserver.puppetserver-compilers.serviceName" -}}
