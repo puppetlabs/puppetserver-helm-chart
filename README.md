@@ -1,5 +1,9 @@
 # HELM Chart for Puppet Server
 
+## Introduction
+
+This chart bootstraps Puppet Server and its components on a Kubernetes cluster using the Helm package manager.
+
 ## Prerequisites
 
 ### Code Repos
@@ -84,7 +88,7 @@ To scale Puppet Server for many thousands of nodes, you’ll need to enable mult
 
 ## Support for Helm v2
 
-Those of you who would like to use the chart with Helm v2 - please switch to branch `helm-v2`.
+Those of you who would like to deploy the chart with Helm v2 - please switch to branch `helm-v2`.
 
 ## Installing the Chart
 
@@ -273,7 +277,7 @@ jobs | grep 'port-forward' | grep 'puppetserver'
 kill %[job_numbers_above]
 ```
 
-## Chart's Dev Team
+## Credits
 
 * [Miroslav Hadzhiev](mailto:miroslav.hadzhiev@gmail.com), Lead Author and Developer
 * [Sean Conley](mailto:slconley@gmail.com), Developer
