@@ -38,7 +38,7 @@ The Ingress resource is disabled by default, but if it is enabled then ssl-passt
 
 ## Support for Helm v2
 
-Those of you who would like to deploy the chart with Helm v2 - please use chart version `v1.x/v2.x`.
+Those of you who would like to deploy the chart with Helm v2 - please use chart version `v1.x`/`v2.x`.
 
 ## Installing the Chart
 
