@@ -173,7 +173,7 @@ when running with multiple Puppet compilers.
     {{- if (or (.Values.affinity) (and (.Values.puppetserver.multiCompilers.enabled) (.Values.puppetserver.multiCompilers.podAntiAffinity))) }}
       affinity:
       {{- if (.Values.affinity) }}
-        {{ toYaml .Values.affinity | nindent 8 }}
+        {{- toYaml .Values.affinity | nindent 8 }}
       {{- end }}
       {{- if (.Values.puppetserver.multiCompilers.podAntiAffinity) }}
         podAntiAffinity:
