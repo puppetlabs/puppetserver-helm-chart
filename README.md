@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This chart bootstraps Puppet Server on a Kubernetes cluster using the Helm package manager.
+This chart bootstraps Puppet Server and its components on a Kubernetes cluster using the Helm package manager.
 
 ## Prerequisites
 
