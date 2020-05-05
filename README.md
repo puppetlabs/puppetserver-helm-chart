@@ -29,13 +29,6 @@ In case a Load Balancer (LB) must sit in front of Puppet Server - please keep in
 
 The Ingress resource is disabled by default, but if it is enabled then ssl-passthrough must be used so that puppet agents will get the expected server certificate when connecting to the service.  This feature must be enabled on the Ingress resource itself, but also must be enabled via command line argument to the NGINX Ingress Controller.  More information on that can be found [here](<https://kubernetes.github.io/ingress-nginx/user-guide/cli-arguments/>).
 
-## Chart Components
-
-* Creates four deployments: Puppet Server, PuppetDB, PosgreSQL, and Puppetboard.
-* Creates three services that expose: Puppet Server, PuppetDB, and PostgreSQL.
-* Creates a cronjob per configured code repo - up to two.
-* Creates secrets to hold credentials for PuppetDB, PosgreSQL, and r10k.
-
 ## Support for Helm v2
 
 Those of you who would like to deploy the chart with Helm v2 - please use chart version `v1.x`/`v2.x`.
