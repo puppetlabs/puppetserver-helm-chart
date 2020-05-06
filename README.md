@@ -164,43 +164,69 @@ Parameter | Description | Default
 `puppetserver.name` | puppetserver component label | `puppetserver`
 `puppetserver.image` | puppetserver image | `puppet/puppetserver`
 `puppetserver.tag` | puppetserver img tag | `6.10.0`
-`puppetserver.resources` | puppetserver resource limits | ``
-`puppetserver.extraEnv` | puppetserver additional container env vars |``
+`puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`
+`puppetserver.masters.resources` | puppetserver masters resource limits | ``
+`puppetserver.masters.extraEnv` | puppetserver masters additional container env vars |``
+`puppetserver.masters.fqdns.alternateServerNames` | puppetserver masters alternate fqdns |``
+`puppetserver.masters.service.type` | puppetserver masters svc type | `ClusterIP`
+`puppetserver.masters.service.ports` | puppetserver masters svc exposed ports | `puppetserver`
+`puppetserver.masters.service.annotations`| puppetserver masters svc annotations |``
+`puppetserver.masters.service.labels`| puppetserver additional masters svc labels |``
+`puppetserver.masters.service.loadBalancerIP`| puppetserver masters svc loadbalancer ip |``
+`puppetserver.masters.ingress.enabled`| puppetserver masters ingress creation enabled |`false`
+`puppetserver.masters.ingress.annotations`| puppetserver masters ingress annotations |``
+`puppetserver.masters.ingress.extraLabels`| puppetserver masters ingress extraLabels |``
+`puppetserver.masters.ingress.hosts`| puppetserver masters ingress hostnames |``
+`puppetserver.masters.ingress.tls`| puppetserver masters ingress tls configuration |``
+`puppetserver.masters.multiMasters.enabled` | If true, creates multiple Puppetserver masters | `false`
+`puppetserver.masters.multiMasters.manualScaling.masters` | If multiple masters are enabled, this field sets masters count | `3`
+`puppetserver.masters.multiMasters.autoScaling.enabled` | If true, creates masters Horizontal Pod Autoscaler | `false`
+`puppetserver.masters.multiMasters.autoScaling.minCompilers` | If masters autoscaling enabled, this field sets minimum masters count | `2`
+`puppetserver.masters.multiMasters.autoScaling.maxCompilers` | If masters autoscaling enabled, this field sets maximum masters count | `11`
+`puppetserver.masters.multiMasters.autoScaling.cpuUtilizationPercentage` | Target masters CPU utilization percentage to scale | `50`
+`puppetserver.masters.multiMasters.autoScaling.memoryUtilizationPercentage` | Target masters memory utilization percentage to scale | `50`
+`puppetserver.compilers.enabled` | If true, creates Puppetserver compilers | `false`
+`puppetserver.compilers.resources` | puppetserver compilers resource limits |``
+`puppetserver.compilers.podAntiAffinity` | puppetserver compilers podAntiAffinity |``
+`puppetserver.compilers.annotations`| puppetserver compilers statefulset annotations |``
+`puppetserver.compilers.extraEnv` | puppetserver compilers additional container env vars |``
+`puppetserver.compilers.manualScaling.compilers` | If multiple compilers are enabled, this field sets compiler count | `3`
+`puppetserver.compilers.autoScaling.enabled` | If true, creates compilers Horizontal Pod Autoscaler | `false`
+`puppetserver.compilers.autoScaling.minCompilers` | If autoscaling enabled, this field sets minimum compiler count | `2`
+`puppetserver.compilers.autoScaling.maxCompilers` | If compilers autoscaling enabled, this field sets maximum compiler count | `11`
+`puppetserver.compilers.autoScaling.cpuUtilizationPercentage` | Target compilers CPU utilization percentage to scale | `50`
+`puppetserver.compilers.autoScaling.memoryUtilizationPercentage` | Target compilers memory utilization percentage to scale | `50`
+`puppetserver.compilers.podManagementPolicy` | puppetserver compilers statefulset pod management policy | `OrderedReady`
+`puppetserver.compilers.fqdns.alternateServerNames` | puppetserver compilers alternate fqdns |``
+`puppetserver.compilers.service.type` | puppetserver compilers svc type | `ClusterIP`
+`puppetserver.compilers.service.ports` | puppetserver compilers svc exposed ports | `puppetserver`
+`puppetserver.compilers.service.annotations`| puppetserver compilers svc annotations |``
+`puppetserver.compilers.service.labels`| puppetserver compilers additional svc labels |``
+`puppetserver.compilers.service.loadBalancerIP`| puppetserver compilers svc loadbalancer ip |``
+`puppetserver.compilers.service.headless.ports`| puppetserver compilers headless svc loadbalancer ip |`https`
+`puppetserver.compilers.service.headless.annotations`| puppetserver compilers headless svc annotations |``
+`puppetserver.compilers.service.headless.labels`| puppetserver compilers additional headless svc labels |``
+`puppetserver.compilers.ingress.enabled`| puppetserver compilers ingress creation enabled |`false`
+`puppetserver.compilers.ingress.annotations`| puppetserver compilers ingress annotations |``
+`puppetserver.compilers.ingress.extraLabels`| puppetserver compilers ingress extraLabels |``
+`puppetserver.compilers.ingress.hosts`| puppetserver compilers ingress hostnames |``
+`puppetserver.compilers.ingress.tls`| puppetserver compilers ingress tls configuration |``
 `puppetserver.preGeneratedCertsJob.enabled` | puppetserver pre-generated certs |`false`
 `puppetserver.preGeneratedCertsJob.jobDeadline` | puppetserver pre-generated certs job deadline in seconds |`60`
-`puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`
-`puppetserver.compilers.enabled` | If true, creates multiple Puppetserver compilers | `false`
-`puppetserver.compilers.manualScaling.compilers` | If multiple compilers are enabled, this field sets compiler count | `3`
-`puppetserver.compilers.autoScaling.enabled` | If true, creates Horizontal Pod Autoscaler | `false`
-`puppetserver.compilers.autoScaling.minCompilers` | If autoscaling enabled, this field sets minimum compiler count | `2`
-`puppetserver.compilers.autoScaling.maxCompilers` | If autoscaling enabled, this field sets maximum compiler count | `11`
-`puppetserver.compilers.autoScaling.cpuUtilizationPercentage` | Target CPU utilization percentage to scale | `50`
-`puppetserver.compilers.autoScaling.memoryUtilizationPercentage` | Target memory utilization percentage to scale | `50`
-`puppetserver.fqdns.alternateServerNames` | puppetserver alternate fqdns |``
-`puppetserver.service.type` | puppetserver svc type | `ClusterIP`
-`puppetserver.service.ports` | puppetserver svc exposed ports | `puppetserver`
-`puppetserver.service.annotations`| puppetserver svc annotations |``
-`puppetserver.service.labels`| puppetserver additional svc labels |``
-`puppetserver.service.loadBalancerIP`| puppetserver svc loadbalancer ip |``
-`puppetserver.ingress.enabled`| puppetserver ingress creation enabled |`false`
-`puppetserver.ingress.annotations`| puppetserver ingress annotations |``
-`puppetserver.ingress.extraLabels`| puppetserver ingress extraLabels |``
-`puppetserver.ingress.hosts`| puppetserver ingress hostnames |``
-`puppetserver.ingress.tls`| puppetserver ingress tls configuration |``
 `puppetserver.puppeturl`| puppetserver control repo url |``
 `r10k.name` | r10k component label | `r10k`
 `r10k.image` | r10k img | `puppet/r10k`
 `r10k.tag` | r10k img tag | `3.3.3`
 `r10k.pullPolicy` | r10k img pull policy | `IfNotPresent`
-`r10k.code.cronJob.schedule` | r10k control repo cron job schedule policy | `*/15 * * * *`
 `r10k.code.resources` | r10k control repo resource limits |``
+`r10k.code.cronJob.schedule` | r10k control repo cron job schedule policy | `*/15 * * * *`
 `r10k.code.extraArgs` | r10k control repo additional container env args |``
 `r10k.code.extraEnv` | r10k control repo additional container env vars |``
 `r10k.code.viaSsh.credentials.ssh.value`| r10k control repo ssh key file |``
 `r10k.code.viaSsh.credentials.known_hosts.value`| r10k control repo ssh known hosts file |``
 `r10k.code.viaSsh.credentials.existingSecret`| r10k control repo ssh secret that holds ssh key and known hosts files |``
-`r10k.hiera.cronJob.schedule` | r10k hiera data cron job schedule policy | `*/2 * * * *`
 `r10k.hiera.resources` | r10k hiera data resource limits |``
+`r10k.hiera.cronJob.schedule` | r10k hiera data cron job schedule policy | `*/2 * * * *`
 `r10k.hiera.extraArgs` | r10k hiera data additional container env args |``
 `r10k.hiera.extraEnv` | r10k hiera data additional container env vars |``
 `r10k.hiera.viaSsh.credentials.ssh.value`| r10k hiera data ssh key file |``
