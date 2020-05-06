@@ -96,7 +96,7 @@ puppetserver:
         cpuUtilizationPercentage: 75
         memoryUtilizationPercentage: 75
   ## Optional StatefulSet of Puppet Server Compilers
-  multiCompilers:
+  compilers:
     enabled: false
     resources: {}
     #  requests:

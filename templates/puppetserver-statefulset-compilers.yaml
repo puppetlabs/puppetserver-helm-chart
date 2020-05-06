@@ -1,23 +1,23 @@
-{{- if .Values.puppetserver.multiCompilers.enabled }}
+{{- if .Values.puppetserver.compilers.enabled }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "puppetserver.name" . }}-puppetserver-compilers
   labels:
     {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 4 }}
-  {{- if .Values.puppetserver.multiCompilers.annotations }}
+  {{- if .Values.puppetserver.compilers.annotations }}
   annotations:
-    {{- toYaml .Values.puppetserver.multiCompilers.annotations | nindent 4 }}
+    {{- toYaml .Values.puppetserver.compilers.annotations | nindent 4 }}
   {{- end }}
 spec:
   serviceName: {{ template "puppetserver.puppetserver-compilers.serviceName" . }}-headless
   selector:
     matchLabels:
       {{- include "puppetserver.puppetserver-compilers.matchLabels" . | nindent 6 }}
-  {{- if not (.Values.puppetserver.multiCompilers.autoScaling.enabled) }}
-  replicas: {{ .Values.puppetserver.multiCompilers.manualScaling.compilers }}
+  {{- if not (.Values.puppetserver.compilers.autoScaling.enabled) }}
+  replicas: {{ .Values.puppetserver.compilers.manualScaling.compilers }}
   {{- end }}
-  podManagementPolicy: {{ .Values.puppetserver.multiCompilers.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.puppetserver.compilers.podManagementPolicy }}
   template:
     metadata:
       labels:
@@ -132,9 +132,9 @@ spec:
           image: "{{.Values.puppetserver.image}}:{{.Values.puppetserver.tag}}"
           imagePullPolicy: "{{.Values.puppetserver.pullPolicy}}"
           resources:
-            {{- toYaml .Values.puppetserver.multiCompilers.resources | nindent 12 }}
+            {{- toYaml .Values.puppetserver.compilers.resources | nindent 12 }}
           env:
-            {{- range $key, $value := .Values.puppetserver.multiCompilers.extraEnv }}
+            {{- range $key, $value := .Values.puppetserver.compilers.extraEnv }}
             - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
@@ -145,7 +145,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: DNS_ALT_NAMES
-              value: "{{ template "puppetserver.puppetserver-compilers.serviceName" . }},{{.Values.puppetserver.multiCompilers.fqdns.alternateServerNames}}"
+              value: "{{ template "puppetserver.puppetserver-compilers.serviceName" . }},{{.Values.puppetserver.compilers.fqdns.alternateServerNames}}"
             - name: PUPPETDB_SERVER_URLS
               value: "https://puppetdb:8081"
             - name: CA_ENABLED

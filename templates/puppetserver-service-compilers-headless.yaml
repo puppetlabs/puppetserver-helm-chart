@@ -1,21 +1,21 @@
-{{- if .Values.puppetserver.multiCompilers.enabled }}
+{{- if .Values.puppetserver.compilers.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "puppetserver.puppetserver-compilers.serviceName" . }}-headless
   labels:
     {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 4 }}
-    {{- if .Values.puppetserver.multiCompilers.service.headless.labels }}
-    {{- toYaml .Values.puppetserver.multiCompilers.service.headless.labels | nindent 4 }}
+    {{- if .Values.puppetserver.compilers.service.headless.labels }}
+    {{- toYaml .Values.puppetserver.compilers.service.headless.labels | nindent 4 }}
     {{- end }}
-  {{- if .Values.puppetserver.multiCompilers.service.headless.annotations }}
+  {{- if .Values.puppetserver.compilers.service.headless.annotations }}
   annotations:
-    {{- toYaml .Values.puppetserver.multiCompilers.service.headless.annotations | nindent 4 }}
+    {{- toYaml .Values.puppetserver.compilers.service.headless.annotations | nindent 4 }}
   {{- end }}
 spec:
   clusterIP: None
   ports:
-    {{- range $key, $value := .Values.puppetserver.multiCompilers.service.headless.ports }}
+    {{- range $key, $value := .Values.puppetserver.compilers.service.headless.ports }}
     - name: {{ $key }}
       {{- toYaml $value | nindent 6 }}
     {{- end }}

@@ -170,12 +170,12 @@ Set's the affinity for pod placement
 when running with multiple Puppet compilers.
 */}}
 {{- define "puppetserver.compilers.affinity" -}}
-    {{- if (or (.Values.affinity) (and (.Values.puppetserver.multiCompilers.enabled) (.Values.puppetserver.multiCompilers.podAntiAffinity))) }}
+    {{- if (or (.Values.affinity) (and (.Values.puppetserver.compilers.enabled) (.Values.puppetserver.compilers.podAntiAffinity))) }}
       affinity:
       {{- if (.Values.affinity) }}
         {{- toYaml .Values.affinity | nindent 8 }}
       {{- end }}
-      {{- if (.Values.puppetserver.multiCompilers.podAntiAffinity) }}
+      {{- if (.Values.puppetserver.compilers.podAntiAffinity) }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
@@ -190,10 +190,10 @@ when running with multiple Puppet compilers.
 Calculates the max. number of compilers
 */}}
 {{- define "puppetserver.compilers.maxNo" -}}
-{{- if not (.Values.puppetserver.multiCompilers.autoScaling.enabled) -}}
-{{- .Values.puppetserver.multiCompilers.manualScaling.compilers -}}
+{{- if not (.Values.puppetserver.compilers.autoScaling.enabled) -}}
+{{- .Values.puppetserver.compilers.manualScaling.compilers -}}
 {{- else -}}
-{{- .Values.puppetserver.multiCompilers.autoScaling.maxCompilers -}}
+{{- .Values.puppetserver.compilers.autoScaling.maxCompilers -}}
 {{- end -}}
 {{- end -}}
 

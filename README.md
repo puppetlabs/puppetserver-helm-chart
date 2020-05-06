@@ -76,14 +76,23 @@ drwxrws--- 4 xtigyro-samba sambashare  4096 Dec  5 21:45 ../
 
 > **NOTE**: For more information please check - [README.md](init/README.md). For more general knowledge on the matter you can also read the article - <https://puppet.com/docs/puppet/5.5/ssl_regenerate_certificates.html.>
 
-## Multiple Puppet Compile Masters
+## Horizontal Scaling
 
-To scale Puppet Server for many thousands of nodes, you’ll need to enable multiple Puppet Compile Masters using `.Values.puppetserver.multiCompilers`. These Servers are known as compile masters, and are simply additional load-balanced Puppet Servers that receive catalog requests from agents and synchronize the results with each other.
+To achieve better availability and higher throughput of Puppet Infrastructure, you'll need to scale out Puppet Masters and/or Puppet Compilers.
+
+### Multiple Puppet Masters
+
+To achieve better availability of Puppet Infrastructure, you'll need to scale out Puppet Server Masters using `.Values.puppetserver.masters.multiMasters`. These Servers are known as masters, and are responsible for the creation and signing of your Puppet Agents' certificates. They are also responsible for receiving catalog requests from agents and synchronize the results with each other.
+
+### Multiple Puppet Compilers
+
+To achieve better throughput of Puppet Infrastructure, you'll need to enable and scale out Puppet Server Compilers using `.Values.puppetserver.compilers`. These Servers are known as compile masters, and are simply additional load-balanced Puppet Servers that receive catalog requests from agents and synchronize the results with each other.
 
 ## Chart Components
 
-* Creates four deployments: Puppet Server, PuppetDB, PosgreSQL, and Puppetboard.
-* Creates three services that expose: Puppet Server, PuppetDB, and PostgreSQL.
+* Creates four deployments: Puppet Server Master/s, PuppetDB, PosgreSQL, and Puppetboard (optional).
+* Creates one statefulset (optional): Puppet Server Compiler/s.
+* Creates six services that expose: Puppet Server Masters, Puppet Server Compilers (optional), PuppetDB, and PostgreSQL.
 * Creates secrets to hold credentials for PuppetDB, PosgreSQL, and r10k.
 
 ## Support for Helm v2
@@ -117,31 +126,33 @@ You can use `kubectl get` to view all of the installed components.
 ```console
 $ kubectl get --namespace puppetserver all -l release=puppetserver
 NAME                                                                READY   STATUS    RESTARTS   AGE
-pod/puppetserver-helm-chart-postgres-5dfc7dc889-dndx2               1/1     Running   0          4m34s
-pod/puppetserver-helm-chart-puppetdb-6c9fd8749f-bnqst               1/1     Running   0          4m34s
-pod/puppetserver-helm-chart-puppetserver-compilers-0                2/2     Running   0          4m34s
-pod/puppetserver-helm-chart-puppetserver-compilers-1                2/2     Running   0          4m12s
-pod/puppetserver-helm-chart-puppetserver-compilers-2                2/2     Running   0          3m59s
-pod/puppetserver-helm-chart-puppetserver-masters-746c8fb479-5pfh4   2/2     Running   0          4m34s
+pod/puppetserver-helm-chart-postgres-6dc7c8b978-4db5k               1/1     Running   0          7m25s
+pod/puppetserver-helm-chart-puppetdb-86645656d5-xg7tj               1/1     Running   0          7m25s
+pod/puppetserver-helm-chart-puppetserver-compilers-0                2/2     Running   0          7m25s
+pod/puppetserver-helm-chart-puppetserver-compilers-1                2/2     Running   0          5m25s
+pod/puppetserver-helm-chart-puppetserver-compilers-2                2/2     Running   0          4m12s
+pod/puppetserver-helm-chart-puppetserver-masters-5bdd9988d7-44c85   2/2     Running   0          7m25s
 
-NAME                       TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
-service/postgres           ClusterIP   10.96.15.141   <none>        5432/TCP            4m34s
-service/puppet             ClusterIP   10.96.107.85   <none>        8140/TCP            4m34s
-service/puppet-compilers   ClusterIP   10.96.43.232   <none>        8140/TCP            4m34s
-service/puppetdb           ClusterIP   10.96.57.106   <none>        8080/TCP,8081/TCP   4m34s
+NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+service/agents-to-puppet            ClusterIP   10.96.101.111    <none>        8140/TCP            7m25s
+service/postgres                    ClusterIP   10.105.251.117   <none>        5432/TCP            7m25s
+service/puppet                      ClusterIP   10.97.215.178    <none>        8140/TCP            7m25s
+service/puppet-compilers            ClusterIP   10.101.13.5      <none>        8140/TCP            7m25s
+service/puppet-compilers-headless   ClusterIP   None             <none>        443/TCP             7m25s
+service/puppetdb                    ClusterIP   10.96.105.245    <none>        8080/TCP,8081/TCP   7m25s
 
 NAME                                                           READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/puppetserver-helm-chart-postgres               1/1     1            1           4m34s
-deployment.apps/puppetserver-helm-chart-puppetdb               1/1     1            1           4m34s
-deployment.apps/puppetserver-helm-chart-puppetserver-masters   1/1     1            1           4m34s
+deployment.apps/puppetserver-helm-chart-postgres               1/1     1            1           7m25s
+deployment.apps/puppetserver-helm-chart-puppetdb               1/1     1            1           7m25s
+deployment.apps/puppetserver-helm-chart-puppetserver-masters   1/1     1            1           7m25s
 
 NAME                                                                      DESIRED   CURRENT   READY   AGE
-replicaset.apps/puppetserver-helm-chart-postgres-5dfc7dc889               1         1         1       4m34s
-replicaset.apps/puppetserver-helm-chart-puppetdb-6c9fd8749f               1         1         1       4m34s
-replicaset.apps/puppetserver-helm-chart-puppetserver-masters-746c8fb479   1         1         1       4m34s
+replicaset.apps/puppetserver-helm-chart-postgres-6dc7c8b978               1         1         1       7m25s
+replicaset.apps/puppetserver-helm-chart-puppetdb-86645656d5               1         1         1       7m25s
+replicaset.apps/puppetserver-helm-chart-puppetserver-masters-5bdd9988d7   1         1         1       7m25s
 
 NAME                                                              READY   AGE
-statefulset.apps/puppetserver-helm-chart-puppetserver-compilers   3/3     4m34s
+statefulset.apps/puppetserver-helm-chart-puppetserver-compilers   3/3     7m25s
 ```
 
 ## Configuration
@@ -158,13 +169,13 @@ Parameter | Description | Default
 `puppetserver.preGeneratedCertsJob.enabled` | puppetserver pre-generated certs |`false`
 `puppetserver.preGeneratedCertsJob.jobDeadline` | puppetserver pre-generated certs job deadline in seconds |`60`
 `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`
-`puppetserver.multiCompilers.enabled` | If true, creates multiple Puppetserver compilers | `false`
-`puppetserver.multiCompilers.manualScaling.compilers` | If multiple compilers are enabled, this field sets compiler count | `3`
-`puppetserver.multiCompilers.autoScaling.enabled` | If true, creates Horizontal Pod Autoscaler | `false`
-`puppetserver.multiCompilers.autoScaling.minCompilers` | If autoscaling enabled, this field sets minimum compiler count | `2`
-`puppetserver.multiCompilers.autoScaling.maxCompilers` | If autoscaling enabled, this field sets maximum compiler count | `11`
-`puppetserver.multiCompilers.autoScaling.cpuUtilizationPercentage` | Target CPU utilization percentage to scale | `50`
-`puppetserver.multiCompilers.autoScaling.memoryUtilizationPercentage` | Target memory utilization percentage to scale | `50`
+`puppetserver.compilers.enabled` | If true, creates multiple Puppetserver compilers | `false`
+`puppetserver.compilers.manualScaling.compilers` | If multiple compilers are enabled, this field sets compiler count | `3`
+`puppetserver.compilers.autoScaling.enabled` | If true, creates Horizontal Pod Autoscaler | `false`
+`puppetserver.compilers.autoScaling.minCompilers` | If autoscaling enabled, this field sets minimum compiler count | `2`
+`puppetserver.compilers.autoScaling.maxCompilers` | If autoscaling enabled, this field sets maximum compiler count | `11`
+`puppetserver.compilers.autoScaling.cpuUtilizationPercentage` | Target CPU utilization percentage to scale | `50`
+`puppetserver.compilers.autoScaling.memoryUtilizationPercentage` | Target memory utilization percentage to scale | `50`
 `puppetserver.fqdns.alternateServerNames` | puppetserver alternate fqdns |``
 `puppetserver.service.type` | puppetserver svc type | `ClusterIP`
 `puppetserver.service.ports` | puppetserver svc exposed ports | `puppetserver`

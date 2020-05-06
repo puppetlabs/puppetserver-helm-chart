@@ -1,5 +1,5 @@
-{{- if .Values.puppetserver.multiCompilers.enabled }}
-{{- if .Values.puppetserver.multiCompilers.autoScaling.enabled }}
+{{- if .Values.puppetserver.compilers.enabled }}
+{{- if .Values.puppetserver.compilers.autoScaling.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -11,10 +11,10 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ template "puppetserver.name" . }}-puppetserver
-  minReplicas: {{ .Values.puppetserver.multiCompilers.autoScaling.minCompilers }}
-  maxReplicas: {{ .Values.puppetserver.multiCompilers.autoScaling.maxCompilers }}
+  minReplicas: {{ .Values.puppetserver.compilers.autoScaling.minCompilers }}
+  maxReplicas: {{ .Values.puppetserver.compilers.autoScaling.maxCompilers }}
   metrics:
-  {{- with .Values.puppetserver.multiCompilers.autoScaling.cpuUtilizationPercentage }}
+  {{- with .Values.puppetserver.compilers.autoScaling.cpuUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
@@ -22,7 +22,7 @@ spec:
           type: Utilization
           averageUtilization: {{ . }}
   {{- end }}
-  {{- with .Values.puppetserver.multiCompilers.autoScaling.memoryUtilizationPercentage }}
+  {{- with .Values.puppetserver.compilers.autoScaling.memoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
