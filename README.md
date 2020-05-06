@@ -187,7 +187,7 @@ Parameter | Description | Default
 `puppetserver.masters.multiMasters.autoScaling.memoryUtilizationPercentage` | Target masters memory utilization percentage to scale | `75`
 `puppetserver.compilers.enabled` | If true, creates Puppetserver compilers | `false`
 `puppetserver.compilers.resources` | puppetserver compilers resource limits |``
-`puppetserver.compilers.podAntiAffinity` | puppetserver compilers podAntiAffinity |``
+`puppetserver.compilers.podAntiAffinity` | puppetserver compilers podAntiAffinity |`false`
 `puppetserver.compilers.annotations`| puppetserver compilers statefulset annotations |``
 `puppetserver.compilers.extraEnv` | puppetserver compilers additional container env vars |``
 `puppetserver.compilers.manualScaling.compilers` | If multiple compilers are enabled, this field sets compiler count | `1`
@@ -234,7 +234,7 @@ Parameter | Description | Default
 `r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``
 `postgres.name` | postgres component label | `postgres`
 `postgres.image` | postgres img | `postgres`
-`postgres.tag` | postgres img tag | `9.6.16`
+`postgres.tag` | postgres img tag | `9.6.17`
 `postgres.pullPolicy` | postgres img pull policy | `IfNotPresent`
 `postgres.resources` | postgres resource limits |``
 `postgres.extraEnv` | postgres additional container env vars |``
