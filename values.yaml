@@ -30,9 +30,9 @@ puppetserver:
     ##
     fqdns:
       alternateServerNames: ""   # Comma-separated
+    ## Service for Puppet Server Masters
     ## The usage of a TCP/Network LB type is strongly preferable
     ## Please check the `README.md` for more information
-    ## Exemplary annotations for few cloud providers
     service:
       type: ClusterIP
       ## The LB type (network protocol) for some cloud providers must be set here.
@@ -40,6 +40,7 @@ puppetserver:
         puppetserver:
           port: 8140
         #  protocol: TCP
+      ## Exemplary annotations for few cloud providers
       annotations: {}
       #  service.beta.kubernetes.io/aws-load-balancer-internal: "true"
       #  service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
@@ -49,24 +50,24 @@ puppetserver:
       labels: {}
       loadBalancerIP: ""
     ingress:
-      ## If true, Puppet Server Ingress will be created
+      ## If true, Puppet Server Masters Ingress will be created
       ##
       enabled: false
-      ## Puppet Server Ingress annotations
+      ## Puppet Server Masters Ingress annotations
       ##
       annotations: {}
         # kubernetes.io/ingress.class: nginx
         # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-      ## Puppet Server Ingress additional labels
+      ## Puppet Server Masters Ingress additional labels
       ##
       extraLabels: {}
-      ## Puppet Server Ingress hostnames with optional path
+      ## Puppet Server Masters Ingress hostnames with optional path
       ## Must be provided if Ingress is enabled
       ##
       hosts: []
       #   - puppet.domain.com
       #   - domain.com/puppet
-      ## Puppet Server Ingress TLS configuration
+      ## Puppet Server Masters Ingress TLS configuration
       ## Secrets must be manually created in the namespace
       ##
       tls: []
@@ -74,15 +75,16 @@ puppetserver:
       #     hosts:
       #       - puppet.domain.com
     ## Horizontal Scaling
-    ## Optional deployment of multiple Puppet Server Masters
-    ## NOTE: Must share the same storage
+    ##
     multiMasters:
+      ## Optional deployment of multiple Puppet Server Masters
+      ## NOTE: Must share the same storage volumes
       enabled: false
-      ## Horizontal Pod Manual Scaling
+      ## Horizontal Pod Manual Scaling for Puppet Server Masters
       ## Set the desired number of Puppet Server Masters
       manualScaling:
         masters: 1
-      ## Horizontal Pod Autoscaling
+      ## Horizontal Pod Autoscaling for Puppet Server Masters
       ## Automatically scales the number of pods (masters)
       ## based on observed CPU/memory utilization
       ## Note that the metrics must be provided by
@@ -110,11 +112,11 @@ puppetserver:
     annotations: {}
     ## Additional Compilers' container environment variables
     extraEnv: {}
-    ## Horizontal Pod Manual Scaling
+    ## Horizontal Pod Manual Scaling for Puppet Server Compilers
     ## Set the desired number of Puppet Server Compilers
     manualScaling:
       compilers: 1
-    ## Horizontal Pod Autoscaling
+    ## Horizontal Pod Autoscaling for Puppet Server Compilers
     ## Automatically scales the number of pods (compilers)
     ## based on observed CPU/memory utilization
     ## Note that the metrics must be provided by
@@ -122,7 +124,7 @@ puppetserver:
     autoScaling:
       enabled: false
       minCompilers: 1
-      maxCompilers: 5
+      maxCompilers: 3
       cpuUtilizationPercentage: 75
       memoryUtilizationPercentage: 75
     podManagementPolicy: OrderedReady
@@ -136,9 +138,9 @@ puppetserver:
     ##
     fqdns:
       alternateServerNames: ""   # Comma-separated
+    ## Service for Puppet Server Compilers
     ## The usage of a TCP/Network LB type is strongly preferable
     ## Please check the `README.md` for more information
-    ## Exemplary annotations for few cloud providers
     service:
       type: ClusterIP
       ## The LB type (network protocol) for some cloud providers must be set here.
@@ -146,6 +148,7 @@ puppetserver:
         puppetserver:
           port: 8140
         #  protocol: TCP
+      ## Exemplary annotations for few cloud providers
       annotations: {}
       #  service.beta.kubernetes.io/aws-load-balancer-internal: "true"
       #  service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
@@ -154,6 +157,7 @@ puppetserver:
       #  service.kubernetes.io/ibm-load-balancer-cloud-provider-ip-type: "private"
       labels: {}
       loadBalancerIP: ""
+      ## Headless service for Puppet Server Compilers
       headless:
         ports:
           https:
@@ -163,31 +167,31 @@ puppetserver:
         annotations: {}
         labels: {}
     ingress:
-      ## If true, Puppet Server Ingress will be created
+      ## If true, Puppet Server Compilers Ingress will be created
       ##
       enabled: false
-      ## Puppet Server Ingress annotations
+      ## Puppet Server Compilers Ingress annotations
       ##
       annotations: {}
         # kubernetes.io/ingress.class: nginx
         # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-      ## Puppet Server Ingress additional labels
+      ## Puppet Server Compilers Ingress additional labels
       ##
       extraLabels: {}
-      ## Puppet Server Ingress hostnames with optional path
+      ## Puppet Server Compilers Ingress hostnames with optional path
       ## Must be provided if Ingress is enabled
       ##
       hosts: []
       #   - puppet-compilers.domain.com
       #   - domain.com/puppet-compilers
-      ## Puppet Server Ingress TLS configuration
+      ## Puppet Server Compilers Ingress TLS configuration
       ## Secrets must be manually created in the namespace
       ##
       tls: []
       #   - secretName: puppet-compilers-server-tls
       #     hosts:
       #       - puppet-compilers.domain.com
-  ## Use pre-generated Puppet certs in `./init/puppet-certs`
+  ## Use pre-generated Puppet Master certs in `./init/puppet-certs`
   ## Check README for related use cases
   preGeneratedCertsJob:
     enabled: false
@@ -204,7 +208,7 @@ puppetserver:
 r10k:
   name: r10k
   image: puppet/r10k
-  tag: 3.3.3   # 3.3.3 or higher required
+  tag: 3.3.3   # 3.4.1 or higher required
   pullPolicy: IfNotPresent
   code:
     resources: {}
