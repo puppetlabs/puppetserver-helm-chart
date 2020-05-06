@@ -179,23 +179,23 @@ Parameter | Description | Default
 `puppetserver.masters.ingress.hosts`| puppetserver masters ingress hostnames |``
 `puppetserver.masters.ingress.tls`| puppetserver masters ingress tls configuration |``
 `puppetserver.masters.multiMasters.enabled` | If true, creates multiple Puppetserver masters | `false`
-`puppetserver.masters.multiMasters.manualScaling.masters` | If multiple masters are enabled, this field sets masters count | `3`
+`puppetserver.masters.multiMasters.manualScaling.masters` | If multiple masters are enabled, this field sets masters count | `1`
 `puppetserver.masters.multiMasters.autoScaling.enabled` | If true, creates masters Horizontal Pod Autoscaler | `false`
-`puppetserver.masters.multiMasters.autoScaling.minCompilers` | If masters autoscaling enabled, this field sets minimum masters count | `2`
-`puppetserver.masters.multiMasters.autoScaling.maxCompilers` | If masters autoscaling enabled, this field sets maximum masters count | `11`
-`puppetserver.masters.multiMasters.autoScaling.cpuUtilizationPercentage` | Target masters CPU utilization percentage to scale | `50`
-`puppetserver.masters.multiMasters.autoScaling.memoryUtilizationPercentage` | Target masters memory utilization percentage to scale | `50`
+`puppetserver.masters.multiMasters.autoScaling.minMasters` | If masters autoscaling enabled, this field sets minimum masters count | `1`
+`puppetserver.masters.multiMasters.autoScaling.maxMasters` | If masters autoscaling enabled, this field sets maximum masters count | `3`
+`puppetserver.masters.multiMasters.autoScaling.cpuUtilizationPercentage` | Target masters CPU utilization percentage to scale | `75`
+`puppetserver.masters.multiMasters.autoScaling.memoryUtilizationPercentage` | Target masters memory utilization percentage to scale | `75`
 `puppetserver.compilers.enabled` | If true, creates Puppetserver compilers | `false`
 `puppetserver.compilers.resources` | puppetserver compilers resource limits |``
 `puppetserver.compilers.podAntiAffinity` | puppetserver compilers podAntiAffinity |``
 `puppetserver.compilers.annotations`| puppetserver compilers statefulset annotations |``
 `puppetserver.compilers.extraEnv` | puppetserver compilers additional container env vars |``
-`puppetserver.compilers.manualScaling.compilers` | If multiple compilers are enabled, this field sets compiler count | `3`
+`puppetserver.compilers.manualScaling.compilers` | If multiple compilers are enabled, this field sets compiler count | `1`
 `puppetserver.compilers.autoScaling.enabled` | If true, creates compilers Horizontal Pod Autoscaler | `false`
-`puppetserver.compilers.autoScaling.minCompilers` | If autoscaling enabled, this field sets minimum compiler count | `2`
-`puppetserver.compilers.autoScaling.maxCompilers` | If compilers autoscaling enabled, this field sets maximum compiler count | `11`
-`puppetserver.compilers.autoScaling.cpuUtilizationPercentage` | Target compilers CPU utilization percentage to scale | `50`
-`puppetserver.compilers.autoScaling.memoryUtilizationPercentage` | Target compilers memory utilization percentage to scale | `50`
+`puppetserver.compilers.autoScaling.minCompilers` | If autoscaling enabled, this field sets minimum compiler count | `1`
+`puppetserver.compilers.autoScaling.maxCompilers` | If compilers autoscaling enabled, this field sets maximum compiler count | `3`
+`puppetserver.compilers.autoScaling.cpuUtilizationPercentage` | Target compilers CPU utilization percentage to scale | `75`
+`puppetserver.compilers.autoScaling.memoryUtilizationPercentage` | Target compilers memory utilization percentage to scale | `75`
 `puppetserver.compilers.podManagementPolicy` | puppetserver compilers statefulset pod management policy | `OrderedReady`
 `puppetserver.compilers.fqdns.alternateServerNames` | puppetserver compilers alternate fqdns |``
 `puppetserver.compilers.service.type` | puppetserver compilers svc type | `ClusterIP`
