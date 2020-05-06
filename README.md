@@ -257,7 +257,7 @@ echo '127.0.0.1 agents-to-puppet puppet-compilers' >> /etc/hosts
 
 docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it goofy_xtigyro bash
-puppet agent -t --server puppet --masterport 8140 --test --waitforcert 10 --certname ubuntu-goofy_xtigyro
+puppet agent -t --server puppet --masterport 8140 --test --waitforcert 15 --certname ubuntu-goofy_xtigyro
 puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-goofy_xtigyro
 puppet agent -t --server puppet-compilers --masterport 8141 --test --certname ubuntu-goofy_xtigyro
 exit
@@ -265,9 +265,9 @@ docker rm -f goofy_xtigyro
 
 docker run -dit --network host --name buggy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it buggy_xtigyro bash
-puppet agent -t --server puppet --masterport 8140 --test --waitforcert 10 --certname ubuntu-buggy_xtigyro
 puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-buggy_xtigyro
 puppet agent -t --server puppet-compilers --masterport 8141 --test --certname ubuntu-buggy_xtigyro
+puppet agent -t --server puppet --masterport 8140 --test --waitforcert 15 --certname ubuntu-buggy_xtigyro
 exit
 docker rm -f buggy_xtigyro
 
