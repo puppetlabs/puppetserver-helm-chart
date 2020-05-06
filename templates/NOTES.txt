@@ -1,10 +1,17 @@
 Puppet Server has been installed/upgraded.
 
 Release Name: "{{ template "puppetserver.fullname" . }}"
-Masters' Service Name: "{{ template "puppetserver.puppetserver-masters.serviceName" . }}"
-Masters' Service Type: "{{.Values.puppetserver.masters.service.type}}"
-Masters' Service Port: "{{.Values.puppetserver.masters.service.ports.puppetserver.port}}"
-Masters' Ingress Enabled: "{{.Values.puppetserver.masters.ingress.enabled}}"
+Masters Service Name: "{{ template "puppetserver.puppetserver-masters.serviceName" . }}"
+Masters Service Type: "{{.Values.puppetserver.masters.service.type}}"
+Masters Service Port: "{{.Values.puppetserver.masters.service.ports.puppetserver.port}}"
+Masters Ingress Enabled: "{{.Values.puppetserver.masters.ingress.enabled}}"
+{{- if .Values.puppetserver.compilers.enabled }}
+Compilers Service Name: "{{ template "puppetserver.puppetserver-compilers.serviceName" . }}"
+Compilers Service Type: "{{.Values.puppetserver.compilers.service.type}}"
+Compilers Service Port: "{{.Values.puppetserver.compilers.service.ports.puppetserver.port}}"
+Compilers Headless Service Port: "{{.Values.puppetserver.compilers.service.headless.ports.https.port}}"
+Compilers Ingress Enabled: "{{.Values.puppetserver.compilers.ingress.enabled}}"
+{{- end }}
 Control Repo: "{{.Values.puppetserver.puppeturl}}"
 {{- if .Values.hiera.hieradataurl }}
 Hieradata Repo: "{{.Values.hiera.hieradataurl}}"
