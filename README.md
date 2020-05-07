@@ -187,7 +187,7 @@ Parameter | Description | Default
 `puppetserver.masters.multiMasters.autoScaling.memoryUtilizationPercentage` | Target masters memory utilization percentage to scale | `75`
 `puppetserver.compilers.enabled` | If true, creates Puppetserver compilers | `false`
 `puppetserver.compilers.resources` | puppetserver compilers resource limits |``
-`puppetserver.compilers.podAntiAffinity` | puppetserver compilers podAntiAffinity |`false`
+`puppetserver.compilers.podAntiAffinity` | puppetserver compilers pod affinity constraints |`false`
 `puppetserver.compilers.annotations`| puppetserver compilers statefulset annotations |``
 `puppetserver.compilers.extraEnv` | puppetserver compilers additional container env vars |``
 `puppetserver.compilers.manualScaling.compilers` | If multiple compilers are enabled, this field sets compiler count | `1`
