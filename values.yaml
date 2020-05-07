@@ -13,11 +13,11 @@ puppetserver:
     ##
     resources: {}
     #  requests:
-    #    memory: 768Mi
-    #    cpu: 500m
+    #    memory: 1024Mi
+    #    cpu: 750m
     #  limits:
     #    memory: 1280Mi
-    #    cpu: 750m
+    #    cpu: 1000m
     ## Additional Masters' container environment variables
     extraEnv: {}
     ## Fully qualified domain names (FQDN's) to register
@@ -100,11 +100,11 @@ puppetserver:
     enabled: false
     resources: {}
     #  requests:
-    #    memory: 768Mi
-    #    cpu: 500m
+    #    memory: 1024Mi
+    #    cpu: 750m
     #  limits:
     #    memory: 1280Mi
-    #    cpu: 750m
+    #    cpu: 1000m
     ## Affinity for puppetserver pod assignment
     ## Schedule compilers on different K8s nodes
     podAntiAffinity: false
