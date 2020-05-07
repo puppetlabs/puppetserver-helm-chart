@@ -13,7 +13,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 2. Support for multiple Puppet Server Masters.
 
-3. Support for optional common/separate load-balancing between Puppet Master/s and Compiler/s.
+3. Support for separate load-balancing between Puppet Master/s and Compiler/s.
 
 4. Significantly simplified topology requirements to use the chart.
 
@@ -29,9 +29,11 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 10. Lowered resource usage of the Puppet Server `initContainers`.
 
+11. Readiness probes for r10k.
+
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v3.1.0...v3.2.0)
 
-## [v3.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v3.1.0) (2020-04-22)
+## [v3.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v3.1.0) (2020-04-29)
 
 - Switch to sidecar containers for r10k.
 - Various small improvements and fixes.
