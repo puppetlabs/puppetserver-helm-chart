@@ -7,29 +7,19 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 ## [v3.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v3.2.0) (2020-05-24)
 
-- Major revamp of the chart:
+### Major revamp of the chart:
 
-1. Support for multiple Puppet Server Compilers on different K8s nodes (incl. across different Cloud Provider's Zones).
-
-2. Support for multiple Puppet Server Masters.
-
-3. Support for separate load-balancing between Puppet Master/s and Compiler/s.
-
-4. Significantly simplified topology requirements to use the chart.
-
-5. Shortened, simpler and improved documentation.
-
-6. Improved built-in Go chart helpers.
-
-7. Improved resource naming.
-
-8. Consistent and easier to navigate indentation across the chart.
-
-9. Ability to set K8s resource limits per chart component.
-
-10. Lowered resource usage of the Puppet Server `initContainers`.
-
-11. Readiness probes for r10k.
+- Support for multiple Puppet Server Compilers on different K8s nodes (incl. across different Cloud Provider's Zones).
+- Support for multiple Puppet Server Masters.
+- Support for separate load-balancing between Puppet Master/s and Compiler/s.
+- Significantly simplified topology requirements to use the chart.
+- Shortened, simpler and improved documentation.
+- Improved built-in Go chart helpers.
+- Improved resource naming.
+- Consistent and easier to navigate indentation across the chart.
+- Ability to set K8s resource limits per chart component.
+- Lowered resource usage of the Puppet Server `initContainers`.
+- Readiness probes for r10k.
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v3.1.0...v3.2.0)
 
