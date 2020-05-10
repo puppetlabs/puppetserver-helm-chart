@@ -16,7 +16,7 @@ puppetserver:
     #    memory: 1024Mi
     #    cpu: 750m
     #  limits:
-    #    memory: 1280Mi
+    #    memory: 1536Mi
     #    cpu: 1000m
     ## Additional Masters' container environment variables
     extraEnv: {}
@@ -103,7 +103,7 @@ puppetserver:
     #    memory: 1024Mi
     #    cpu: 750m
     #  limits:
-    #    memory: 1280Mi
+    #    memory: 1536Mi
     #    cpu: 1000m
     ## Affinity for puppetserver pod assignment
     ## Schedule compilers on different K8s nodes
