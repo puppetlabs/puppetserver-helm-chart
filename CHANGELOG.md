@@ -7,8 +7,6 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 ## [v4.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.0.0) (2020-05-24)
 
-### Major revamp of the chart
-
 - Support for multiple Puppet Compilers on different K8s nodes (incl. across different cloud zones).
 - Support for multiple Puppet Masters.
 - Switch to sidecar containers for r10k.
