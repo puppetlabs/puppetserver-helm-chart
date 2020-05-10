@@ -7,18 +7,18 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 ## [v4.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.0.0) (2020-05-24)
 
-- Support for multiple Puppet Compilers on different K8s nodes (incl. across different cloud zones).
-- Support for multiple Puppet Masters.
+- Support for multiple Puppetserver Compilers on different K8s nodes (incl. across different cloud zones).
+- Support for multiple Puppetserver Masters.
 - Switch to sidecar containers for r10k.
-- Support for separate load-balancing between Puppet Master/s and Compiler/s.
+- Support for separate load-balancing between Puppetserver Master/s and Compiler/s.
 - Simplified topology requirements (especially in the cloud).
 - Improved resource naming.
 - Ability to set K8s resource limits per component.
 - Readiness probes for r10k.
 - Improved built-in Go helpers.
-- Lowered resource usage of the Puppet `initContainers`.
+- Lowered resource usage of the Puppetserver `initContainers`.
 - Consistent and easier to navigate code.
-- Bump Puppet to `v6.11.1`, PuppetDB to `v6.10.1`, and PostgreSQL to `v9.6.17`.
+- Bump Puppetserver to `v6.10.0`, PuppetDB to `v6.10.1`, and PostgreSQL to `v9.6.17`.
 - Various small improvements and fixes.
 - Simpler documentation.
 

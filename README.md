@@ -121,7 +121,7 @@ Parameter | Description | Default
 --------- | ----------- | -------
 `puppetserver.name` | puppetserver component label | `puppetserver`
 `puppetserver.image` | puppetserver image | `puppet/puppetserver`
-`puppetserver.tag` | puppetserver img tag | `6.11.1`
+`puppetserver.tag` | puppetserver img tag | `6.10.0`
 `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`
 `puppetserver.masters.resources` | puppetserver masters resource limits | ``
 `puppetserver.masters.extraEnv` | puppetserver masters additional container env vars |``
