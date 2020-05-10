@@ -18,7 +18,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - Improved built-in Go helpers.
 - Lowered resource usage of the Puppet `initContainers`.
 - Consistent and easier to navigate code.
-- Bump Puppet to `v6.10.0`, PostgreSQL to `v9.6.17`.
+- Bump Puppet to `v6.11.1`, PuppetDB to `v6.10.1`, and PostgreSQL to `v9.6.17`.
 - Various small improvements and fixes.
 - Simpler documentation.
 

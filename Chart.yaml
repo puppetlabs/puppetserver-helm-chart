@@ -2,7 +2,7 @@ apiVersion: v2
 name: puppetserver-helm-chart
 type: application
 version: 4.0.0
-appVersion: 6.10.0
+appVersion: 6.11.1
 description: Puppet automates the delivery and operation of software.
 keywords: ["puppet", "puppetserver", "automation", "iac", "infrastructure", "cm", "ci", "cd"]
 home: https://puppet.com/
