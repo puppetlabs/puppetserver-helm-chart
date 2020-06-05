@@ -208,7 +208,7 @@ puppetserver:
 r10k:
   name: r10k
   image: puppet/r10k
-  tag: 3.3.3   # 3.4.1 or higher required
+  tag: 3.5.0
   pullPolicy: IfNotPresent
   code:
     resources: {}
