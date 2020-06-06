@@ -101,7 +101,7 @@ spec:
             - name: r10k-hiera-volume
               mountPath: /etc/puppetlabs/puppet/configmap/r10k_hiera_cronjob.sh
               subPath: r10k_hiera_cronjob.sh
-            - name: r10k-code-volume
+            - name: r10k-hiera-volume
               mountPath: /etc/puppetlabs/puppet/configmap/r10k_hiera.yaml
               subPath: r10k_hiera.yaml
             {{- end }}
