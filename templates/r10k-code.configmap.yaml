@@ -31,10 +31,11 @@ data:
 
   r10k_code_entrypoint.sh: |
     #!/usr/bin/env sh
-    touch ~/.r10k_code_cronjob.success > /dev/null 2>&1
+    set -e
     cat > ~/.r10k_code_crontab <<'EOF'
     {{ .Values.r10k.code.cronJob.schedule }} /bin/sh -c /etc/puppetlabs/puppet/r10k_code_cronjob.sh
     EOF
     tail -Fq ~/.r10k_code_cronjob.out &
+    touch ~/.r10k_code_cronjob.success > /dev/null 2>&1
     exec supercronic ~/.r10k_code_crontab
 {{- end }}
