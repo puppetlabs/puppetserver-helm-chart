@@ -19,7 +19,7 @@ data:
 
   r10k_hiera_cronjob.sh: |
     #!/usr/bin/env sh
-    exec /docker-entrypoint.sh deploy environment --config /etc/puppetlabs/puppet/r10k_hiera.yaml \
+    /docker-entrypoint.sh deploy environment --config /etc/puppetlabs/puppet/r10k_hiera.yaml \
     --puppetfile {{ template "r10k.hiera.args" . }} > ~/.r10k_hiera_cronjob.out 2>&1
     retVal=$?
     if [ "$retVal" -eq "0" ]; then
