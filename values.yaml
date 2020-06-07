@@ -214,10 +214,10 @@ r10k:
     resources: {}
     #  requests:
     #    memory: 256Mi
-    #    cpu: 250m
+    #    cpu: 200m
     #  limits:
     #    memory: 512Mi
-    #    cpu: 500m
+    #    cpu: 300m
     cronJob:
       schedule: "*/15 * * * *"
     ## Additional r10k code container arguments
@@ -244,10 +244,10 @@ r10k:
     resources: {}
     #  requests:
     #    memory: 256Mi
-    #    cpu: 250m
+    #    cpu: 200m
     #  limits:
     #    memory: 512Mi
-    #    cpu: 500m
+    #    cpu: 300m
     cronJob:
       schedule: "*/2 * * * *"
     ## Additional r10k hiera container environment variables
