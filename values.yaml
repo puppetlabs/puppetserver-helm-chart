@@ -328,7 +328,7 @@ puppetboard:
   #    memory: 368Mi
   #    cpu: 300m
   #  limits:
-  #    memory: 768Mi
+  #    memory: 640Mi
   #    cpu: 500m
   ## Additional puppetboard container environment variables
   extraEnv: {}

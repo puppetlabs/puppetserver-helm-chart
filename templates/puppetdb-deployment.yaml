@@ -46,11 +46,49 @@ spec:
                   name: {{ template "puppetdb.secret" . }}
                   key: username
           ports:
-            - containerPort: 8080
-            - containerPort: 8081
+            - name: pdb-http
+              containerPort: 8080
+            - name: pdb-https
+              containerPort: 8081
           volumeMounts:
             - name: puppetdb-storage
               mountPath: /opt/puppetlabs/server/data/puppetdb/certs
+        {{- if .Values.puppetboard.enabled }}
+        - name: puppetboard
+          image: "{{.Values.puppetboard.image}}:{{.Values.puppetboard.tag}}"
+          imagePullPolicy: "{{.Values.puppetboard.pullPolicy}}"
+          resources:
+            {{- toYaml .Values.puppetboard.resources | nindent 12 }}
+          env:
+            {{- range $key, $value := .Values.puppetboard.extraEnv }}
+            - name: "{{ $key }}"
+              value: "{{ $value }}"
+            {{- end }}
+            - name: PUPPETDB_HOST
+              value: "puppetdb"
+            - name: PUPPETDB_PORT
+              value: "8081"
+            - name: PUPPETDB_SSL_VERIFY
+              value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/ca.pem"
+            - name: PUPPETDB_CERT
+              value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/public.pem"
+            - name: PUPPETDB_KEY
+              value: "/opt/puppetlabs/server/data/puppetdb/certs/private_keys/private.pem"
+            - name: ENABLE_CATALOG
+              value: "True"
+            - name: ENABLE_QUERY
+              value: "True"
+            - name: INVENTORY_FACTS
+              value: "Hostname,fqdn,IP Address,ipaddress"
+            - name: GRAPH_FACTS
+              value: "architecture,puppetversion,osfamily"
+          ports:
+            - name: puppetboard
+              containerPort: 80
+          volumeMounts:
+            - name: puppetdb-storage
+              mountPath: /opt/puppetlabs/server/data/puppetdb/certs
+        {{- end }}
       volumes:
         - name: puppetdb-storage
           persistentVolumeClaim:
