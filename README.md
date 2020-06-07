@@ -186,7 +186,7 @@ helm install --namespace puppetserver --name puppetserver puppet/puppetserver-he
 ## Credits
 
 * [Miroslav Hadzhiev](mailto:miroslav.hadzhiev@gmail.com), Lead Author and Developer
+* [Pupperware Team](mailto:pupperware@puppet.com), Owner
 * [Sean Conley](mailto:slconley@gmail.com), Developer
 * [Morgan Rhodes](mailto:morgan@puppet.com), Developer
 * [Scott Cressi](mailto:scottcressi@gmail.com), Developer
-* [Pupperware Team](mailto:pupperware@puppet.com), Owner
