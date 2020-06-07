@@ -28,7 +28,7 @@ spec:
             {{- toYaml .Values.puppetdb.resources | nindent 12 }}
           env:
             {{- range $key, $value := .Values.puppetdb.extraEnv }}
-            - name: "{{ $key }}"
+            - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
             - name: PUPPETSERVER_HOSTNAME
@@ -61,7 +61,7 @@ spec:
             {{- toYaml .Values.puppetboard.resources | nindent 12 }}
           env:
             {{- range $key, $value := .Values.puppetboard.extraEnv }}
-            - name: "{{ $key }}"
+            - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
             - name: PUPPETDB_HOST
@@ -74,14 +74,6 @@ spec:
               value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/public.pem"
             - name: PUPPETDB_KEY
               value: "/opt/puppetlabs/server/data/puppetdb/certs/private_keys/private.pem"
-            - name: ENABLE_CATALOG
-              value: "True"
-            - name: ENABLE_QUERY
-              value: "True"
-            - name: INVENTORY_FACTS
-              value: "Hostname,fqdn,IP Address,ipaddress"
-            - name: GRAPH_FACTS
-              value: "architecture,puppetversion,osfamily"
           ports:
             - name: puppetboard
               containerPort: 80

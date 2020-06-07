@@ -320,8 +320,8 @@ puppetdb:
 puppetboard:
   enabled: false
   name: puppetboard
-  image: puppet/puppetboard
-  tag: 0.3.0
+  image: xtigyro/puppetboard
+  tag: 2.1.2
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
@@ -332,6 +332,10 @@ puppetboard:
   #    cpu: 500m
   ## Additional puppetboard container environment variables
   extraEnv: {}
+  # ENABLE_CATALOG: True
+  # ENABLE_QUERY: True
+  # INVENTORY_FACTS: Hostname,fqdn,IP Address,ipaddress
+  # GRAPH_FACTS: architecture,puppetversion,osfamily
 
 ## Hiera Configuration for Puppet Server
 ##
