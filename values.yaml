@@ -332,10 +332,10 @@ puppetboard:
   #    cpu: 500m
   ## Additional puppetboard container environment variables
   extraEnv: {}
-  # ENABLE_CATALOG: True
-  # ENABLE_QUERY: True
-  # INVENTORY_FACTS: Hostname,fqdn,IP Address,ipaddress
-  # GRAPH_FACTS: architecture,puppetversion,osfamily
+  #  ENABLE_CATALOG: True
+  #  ENABLE_QUERY: True
+  #  INVENTORY_FACTS: Hostname,fqdn,IP Address,ipaddress
+  #  GRAPH_FACTS: architecture,puppetversion,osfamily
 
 ## Hiera Configuration for Puppet Server
 ##
