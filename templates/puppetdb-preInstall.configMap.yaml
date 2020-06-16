@@ -10,8 +10,8 @@ metadata:
     "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": "hook-succeeded,hook-failed"
 binaryData:
-{{- $root := . }}
-{{- range $path, $bytes := .Files.Glob "init/puppet-certs/puppetdb/*.gz" }}
+  {{- $root := . }}
+  {{- range $path, $bytes := .Files.Glob "init/puppet-certs/puppetdb/*.gz" }}
   {{ base $path }}: {{ $root.Files.Get $path | b64enc | quote }}
-{{- end }}
+  {{- end }}
 {{- end }}

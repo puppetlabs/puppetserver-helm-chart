@@ -1,12 +1,12 @@
-{{- if .Values.puppetserver.multiCompilers.enabled }}
+{{- if .Values.puppetserver.masters.multiMasters.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: init-compilers-config
+  name: init-masters-config
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
 data:
-  check_for_compilers.sh: |
+  check_for_masters.sh: |
     #!/usr/bin/env bash
     if [[ -d "$PUPPET_DATA_DIR" ]]; then
         echo "A Puppetserver master has already started running."
@@ -17,7 +17,7 @@ data:
               echo "Still waiting..."
               sleep 5
             done
-        sleep 60
+        sleep 15
         echo "Puppet SSL certs have been generated. Continuing..."
     else
         echo "No other Puppetserver master is running. Continuing..."

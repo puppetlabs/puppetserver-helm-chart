@@ -7,17 +7,116 @@
 puppetserver:
   name: puppetserver
   image: puppet/puppetserver
-  tag: 6.9.2
+  tag: 6.10.0
   pullPolicy: IfNotPresent
-  ## Horizontal Scaling
-  ## Optional deployment of multiple Puppet Server Compilers
-  multiCompilers:
+  masters:
+    ##
+    resources: {}
+    #  requests:
+    #    memory: 1024Mi
+    #    cpu: 750m
+    #  limits:
+    #    memory: 1536Mi
+    #    cpu: 1000m
+    ## Additional Masters' container environment variables
+    extraEnv: {}
+    ## Fully qualified domain names (FQDN's) to register
+    ## the Puppet Server Masters to be internally reachable via DNS.
+    ## That is necessary to configure "certname" and "server" in `puppet.conf`.
+    ## Required by Puppet server CA CLI application.
+    ## "serverName" is pre-set to "puppet".
+    ## "alternateServerNames" is optional and must differ from
+    ## Puppet Server Compilers' "alternateServerNames".
+    ##
+    fqdns:
+      alternateServerNames: ""   # Comma-separated
+    ## Service for Puppet Server Masters
+    ## The usage of a TCP/Network LB type is strongly preferable
+    ## Please check the `README.md` for more information
+    service:
+      type: ClusterIP
+      ## The LB type (network protocol) for some cloud providers must be set here.
+      ports:
+        puppetserver:
+          port: 8140
+        #  protocol: TCP
+      ## Exemplary annotations for few cloud providers
+      annotations: {}
+      #  service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+      #  service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+      #  service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+      #  cloud.google.com/load-balancer-type: "Internal"
+      #  service.kubernetes.io/ibm-load-balancer-cloud-provider-ip-type: "private"
+      labels: {}
+      loadBalancerIP: ""
+    ingress:
+      ## If true, Puppet Server Masters Ingress will be created
+      ##
+      enabled: false
+      ## Puppet Server Masters Ingress annotations
+      ##
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+        # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      ## Puppet Server Masters Ingress additional labels
+      ##
+      extraLabels: {}
+      ## Puppet Server Masters Ingress hostnames with optional path
+      ## Must be provided if Ingress is enabled
+      ##
+      hosts: []
+      #   - puppet.domain.com
+      #   - domain.com/puppet
+      ## Puppet Server Masters Ingress TLS configuration
+      ## Secrets must be manually created in the namespace
+      ##
+      tls: []
+      #   - secretName: puppet-server-tls
+      #     hosts:
+      #       - puppet.domain.com
+    ## Horizontal Scaling
+    ##
+    multiMasters:
+      ## Optional deployment of multiple Puppet Server Masters
+      ## NOTE: Must share the same storage volumes
+      enabled: false
+      ## Horizontal Pod Manual Scaling for Puppet Server Masters
+      ## Set the desired number of Puppet Server Masters
+      manualScaling:
+        masters: 1
+      ## Horizontal Pod Autoscaling for Puppet Server Masters
+      ## Automatically scales the number of pods (masters)
+      ## based on observed CPU/memory utilization
+      ## Note that the metrics must be provided by
+      ## additionally deployed metrics server of your choice
+      autoScaling:
+        enabled: false
+        minMasters: 1
+        maxMasters: 3
+        cpuUtilizationPercentage: 75
+        memoryUtilizationPercentage: 75
+  ## Optional StatefulSet of Puppet Server Compilers
+  compilers:
     enabled: false
-    ## Horizontal Pod Manual Scaling
+    resources: {}
+    #  requests:
+    #    memory: 1024Mi
+    #    cpu: 750m
+    #  limits:
+    #    memory: 1536Mi
+    #    cpu: 1000m
+    ## Affinity for puppetserver pod assignment
+    ## Schedule compilers on different K8s nodes
+    podAntiAffinity: false
+    ## Puppetserver Compilers' StatefulSet annotations
+    annotations: {}
+    ## Additional Compilers' container environment variables
+    extraEnv: {}
+    ## Horizontal Pod Manual Scaling for Puppet Server Compilers
     ## Set the desired number of Puppet Server Compilers
     manualScaling:
-      compilers: 3
-    ## Horizontal Pod Autoscaling
+      compilers: 1
+    ## Horizontal Pod Autoscaling for Puppet Server Compilers
     ## Automatically scales the number of pods (compilers)
     ## based on observed CPU/memory utilization
     ## Note that the metrics must be provided by
@@ -25,76 +124,78 @@ puppetserver:
     autoScaling:
       enabled: false
       minCompilers: 1
-      maxCompilers: 5
-      cpuUtilizationPercentage: 80
-      memoryUtilizationPercentage: 80
-  resources: {}
-  #  requests:
-  #    memory: 768Mi
-  #    cpu: 500m
-  #  limits:
-  #    memory: 1Gi
-  #    cpu: 750m
-  ## Additional puppetserver container environment variables
-  extraEnv: {}
-  ## Use pre-generated Puppet certs in `./init/puppet-certs`
+      maxCompilers: 3
+      cpuUtilizationPercentage: 75
+      memoryUtilizationPercentage: 75
+    podManagementPolicy: OrderedReady
+    ## Fully qualified domain names (FQDN's) to register
+    ## the Puppet Server Compilers to be internally reachable via DNS.
+    ## That is necessary to configure "certname" and "server" in `puppet.conf`.
+    ## Required by Puppet server CA CLI application.
+    ## "serverName" is pre-set to Compilers' pod names.
+    ## "alternateServerNames" is optional and must differ from
+    ## Puppet Server Masters' "alternateServerNames".
+    ##
+    fqdns:
+      alternateServerNames: ""   # Comma-separated
+    ## Service for Puppet Server Compilers
+    ## The usage of a TCP/Network LB type is strongly preferable
+    ## Please check the `README.md` for more information
+    service:
+      type: ClusterIP
+      ## The LB type (network protocol) for some cloud providers must be set here.
+      ports:
+        puppetserver:
+          port: 8140
+        #  protocol: TCP
+      ## Exemplary annotations for few cloud providers
+      annotations: {}
+      #  service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+      #  service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+      #  service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+      #  cloud.google.com/load-balancer-type: "Internal"
+      #  service.kubernetes.io/ibm-load-balancer-cloud-provider-ip-type: "private"
+      labels: {}
+      loadBalancerIP: ""
+      ## Headless service for Puppet Server Compilers
+      headless:
+        ports:
+          https:
+            port: 443
+            targetPort: 8140
+            protocol: TCP
+        annotations: {}
+        labels: {}
+    ingress:
+      ## If true, Puppet Server Compilers Ingress will be created
+      ##
+      enabled: false
+      ## Puppet Server Compilers Ingress annotations
+      ##
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+        # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      ## Puppet Server Compilers Ingress additional labels
+      ##
+      extraLabels: {}
+      ## Puppet Server Compilers Ingress hostnames with optional path
+      ## Must be provided if Ingress is enabled
+      ##
+      hosts: []
+      #   - puppet-compilers.domain.com
+      #   - domain.com/puppet-compilers
+      ## Puppet Server Compilers Ingress TLS configuration
+      ## Secrets must be manually created in the namespace
+      ##
+      tls: []
+      #   - secretName: puppet-compilers-server-tls
+      #     hosts:
+      #       - puppet-compilers.domain.com
+  ## Use pre-generated Puppet Master certs in `./init/puppet-certs`
   ## Check README for related use cases
   preGeneratedCertsJob:
     enabled: false
     jobDeadline: 300
-  ## Fully qualified domain names (FQDN's) to register
-  ## the Puppet Server to be internally reachable via DNS.
-  ## That is necessary to configure "certname" and "server" in `puppet.conf`.
-  ## Required by Puppet server CA CLI application.
-  ## "serverName" is mandatory and pre-set to "puppet".
-  ## "alternateServerNames" is optional.
-  ##
-  fqdns:
-    alternateServerNames: ""   # Comma-separated
-  ## The usage of a TCP/Network LB type is strongly preferable
-  ## Please check the `README.md` for more information
-  ## Exemplary annotations for few cloud providers
-  service:
-    type: ClusterIP
-    ## The LB type (network protocol) for some cloud providers must be set here.
-    ports:
-      puppetserver:
-        port: 8140
-      #  protocol: TCP
-    annotations: {}
-    #  service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-    #  service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
-    #  service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-    #  cloud.google.com/load-balancer-type: "Internal"
-    #  service.kubernetes.io/ibm-load-balancer-cloud-provider-ip-type: "private"
-    labels: {}
-    loadBalancerIP: ""
-  ingress:
-    ## If true, Puppet Server Ingress will be created
-    ##
-    enabled: false
-    ## Puppet Server Ingress annotations
-    ##
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-    ## Puppet Server Ingress additional labels
-    ##
-    extraLabels: {}
-    ## Puppet Server Ingress hostnames with optional path
-    ## Must be provided if Ingress is enabled
-    ##
-    hosts: []
-    #   - puppet.domain.com
-    #   - domain.com/puppet
-    ## Puppet Server Ingress TLS configuration
-    ## Secrets must be manually created in the namespace
-    ##
-    tls: []
-    #   - secretName: puppet-server-tls
-    #     hosts:
-    #       - puppet.domain.com
-
   ## The pattern of managing Hieradata in a separate repository is
   ## both common and acceptable. Doing so provides the ability to decouple
   ## the management of configuration data from that of the Puppet code base.
@@ -107,27 +208,8 @@ puppetserver:
 r10k:
   name: r10k
   image: puppet/r10k
-  tag: 3.3.3
+  tag: 3.5.0
   pullPolicy: IfNotPresent
-  ## Affinity for "r10k" pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note that the "puppetserver" and "r10k" components of the Puppet Server
-  ## use common storage. That common storage requirement might impose
-  ## certain pod assignment scenarios. It might be required the "puppetserver" and "r10k"
-  ## components to sit in the same K8s Node.
-  ## For that matter optional pod affinity is made available for the "r10k" pod if need be.
-  ## The exemplary configuration can be used without modification,
-  ## if "Values.puppetserver.name" is kept unchanged.
-  affinity: {}
-  #  podAffinity:
-  #    requiredDuringSchedulingIgnoredDuringExecution:
-  #    - labelSelector:
-  #        matchExpressions:
-  #        - key: component
-  #          operator: In
-  #          values:
-  #          - puppetserver
-  #      topologyKey: "kubernetes.io/hostname"
   code:
     resources: {}
     #  requests:
@@ -138,16 +220,12 @@ r10k:
     #    cpu: 500m
     cronJob:
       schedule: "*/15 * * * *"
-      concurrencyPolicy: Forbid
-      restartPolicy: Never
-      startingDeadlineSeconds: 500
-      activeDeadlineSeconds: 750
     ## Additional r10k code container arguments
     extraArgs: {}
     #  - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
     #  - --trace
     #  - --color
-    ## Additional puppetserver code container environment variables
+    ## Additional r10k code container environment variables
     extraEnv: {}
     viaSsh:
       credentials:
@@ -172,11 +250,7 @@ r10k:
     #    cpu: 500m
     cronJob:
       schedule: "*/2 * * * *"
-      concurrencyPolicy: Forbid
-      restartPolicy: Never
-      startingDeadlineSeconds: 60
-      activeDeadlineSeconds: 90
-    ## Additional r10k hiera container arguments
+    ## Additional r10k hiera container environment variables
     extraArgs: {}
     #  - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
     #  - --trace
@@ -202,7 +276,7 @@ r10k:
 postgres:
   name: postgres
   image: postgres
-  tag: 9.6.16
+  tag: 9.6.17
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
@@ -219,7 +293,7 @@ postgres:
 puppetdb:
   name: puppetdb
   image: puppet/puppetdb
-  tag: 6.9.1
+  tag: 6.10.1
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
@@ -293,20 +367,7 @@ hiera:
 ## Pod Configuration
 ##
 ## Node labels for pod assignment
-nodeSelector:
-  ## Common node labels for pod assignment
-  allPods: {}
-    # key: value
-    #
-  ## Node labels for pod assignment of "puppetserver" and "r10k" pods
-  ## Note that the "puppetserver" and "r10k" components of the Puppet Server
-  ## use common storage. That common storage requirement might impose
-  ## certain pod assignment scenarios. It might be required the "puppetserver" and "r10k"
-  ## components to sit in a common Cloud Provider's Availability Zone.
-  ## For that matter separate node labels are made available for those if need be.
-  commonStoragePods: {}
-    # failure-domain.beta.kubernetes.io/zone: eu-central-1a
-    # kubernetes.io/hostname: ip-10-0-6-168.eu-central-1.compute.internal
+nodeSelector: {}
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -336,6 +397,7 @@ storage:
   ## Please check the `README.md` for more information
   ## regarding useful scenarios about "storageClass".
   storageClass: ""
-  selector: false
+  ## Puppetserver data Persistent Volume annotations
+  ##
   annotations: {}
   size: 100Mi

@@ -5,6 +5,25 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v4.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.0.0) (2020-06-08)
+
+- Support for multiple Puppetserver Compilers (optionally) on different K8s nodes (incl. across different cloud zones).
+- Improved support for multiple Puppetserver Masters.
+- Switch to sidecar containers for r10k.
+- Support for separate load-balancing between Puppetserver Master/s and Compiler/s.
+- Simplified topology requirements (especially in the cloud).
+- Improved resource naming.
+- Ability to set K8s resource limits per component.
+- Readiness probes for r10k.
+- Improved built-in Go helpers.
+- Lowered resource usage of the Puppetserver `initContainers`.
+- More syntax consistent and easier to navigate templates code.
+- Bump Puppetserver to `v6.10.0`, PuppetDB to `v6.10.1`, and PostgreSQL to `v9.6.17`.
+- Various small improvements and fixes.
+- Simpler documentation.
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.0.0...v3.0.2)
+
 ## [v3.0.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v3.0.2) (2020-05-01)
 
 - Add Puppet repo instruction to `README`.

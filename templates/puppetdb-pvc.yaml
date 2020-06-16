@@ -4,32 +4,27 @@ metadata:
   name: puppetdb-claim
   labels:
     {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
-{{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.storage.annotations) }}
+  {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.storage.annotations) }}
   annotations:
-{{- end }}
-  {{- if .Values.puppetserver.preGeneratedCertsJob.enabled }}
+  {{- end }}
+    {{- if .Values.puppetserver.preGeneratedCertsJob.enabled }}
     "helm.sh/hook": "pre-install"
     "helm.sh/hook-weight": "0"
     "helm.sh/hook-delete-policy": "before-hook-creation"
-  {{- end }}
-  {{- if .Values.storage.annotations }}
+    {{- end }}
+    {{- if .Values.storage.annotations }}
     {{ toYaml .Values.storage.annotations }}
-  {{- end }}
+    {{- end }}
 spec:
-{{- if .Values.storage.selector }}
-  selector:
-    matchLabels:
-      {{- include "puppetserver.puppetdb.matchLabels" . | nindent 6 }}
-{{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: {{ .Values.storage.size | quote }}
-{{- if .Values.storage.storageClass }}
-{{- if (eq "-" .Values.storage.storageClass) }}
+  {{- if .Values.storage.storageClass }}
+  {{- if (eq "-" .Values.storage.storageClass) }}
   storageClassName: ""
-{{- else }}
+  {{- else }}
   storageClassName: "{{ .Values.storage.storageClass }}"
-{{- end }}
-{{- end }}
+  {{- end }}
+  {{- end }}

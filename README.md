@@ -1,5 +1,9 @@
 # HELM Chart for Puppet Server
 
+## Introduction
+
+This chart bootstraps Puppet Server and its components on a Kubernetes cluster using the Helm package manager.
+
 ## Prerequisites
 
 ### Code Repos
@@ -7,53 +11,6 @@
 * You must specify your Puppet Control Repo using `puppetserver.puppeturl` variable in the `values.yaml` file or include `--set puppetserver.puppeturl=<your_public_repo>` in the command line of `helm install`. You should specify your separate Hieradata Repo as well using the `hiera.hieradataurl` variable.
 
 * You can also use private repos. Just remember to specify your credentials using `r10k.code.viaSsh.credentials.ssh.value`. You can set similar credentials for your Hieradata Repo.
-
-### Kubernetes Storage Class
-
-Depending on your deployment scenario a certain `StorageClass` object might be required.
-In a big K8s megacluster running in the cloud multiple labeled (and/or tainted) nodes in each Availability Zone (AZ) might be present. In such scenario Puppet Server components that use common storage (`puppetserver` and `r10k`) require their volumes to be created in the same AZ. That can be achieved through a custom `StorageClass`.
-
-#### Exemplary definitions
-
-* for Amazon Web Services:
-
-```yaml
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: puppetserver-sc
-provisioner: kubernetes.io/aws-ebs
-parameters:
-  type: gp2
-volumeBindingMode: WaitForFirstConsumer
-allowedTopologies:
-- matchLabelExpressions:
-  - key: failure-domain.beta.kubernetes.io/zone
-    values:
-    - eu-central-1
-```
-
-* for Google Cloud Platform:
-
-```yaml
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: puppetserver-sc
-provisioner: kubernetes.io/gce-pd
-parameters:
-  type: pd-standard
-volumeBindingMode: WaitForFirstConsumer
-allowedTopologies:
-- matchLabelExpressions:
-  - key: failure-domain.beta.kubernetes.io/zone
-    values:
-    - europe-west3
-```
-
-### Common Storage Required for r10k and Puppet Server
-
-Right now we use K8s Cron job to sync the Puppet and Hiera code. We have plans to switch to a sidecar container when we release support for running multiple Puppet compile masters on different K8s nodes. Until then please take advantage of the examples for pod affinity constraint for r10k or the common storage node selector in [values.yaml](values.yaml).
 
 ### Load-Balancing Puppet Server
 
@@ -63,7 +20,7 @@ In case a Load Balancer (LB) must sit in front of Puppet Server - please keep in
 
 The Ingress resource is disabled by default, but if it is enabled then ssl-passthrough must be used so that puppet agents will get the expected server certificate when connecting to the service.  This feature must be enabled on the Ingress resource itself, but also must be enabled via command line argument to the NGINX Ingress Controller.  More information on that can be found [here](<https://kubernetes.github.io/ingress-nginx/user-guide/cli-arguments/>).
 
-## Migrating from a Bare-Metal Puppet Master
+## Migrating from Bare-Metal Puppet Infrastructure
 
 ### Auto-Signing Certificate Requests
 
@@ -75,64 +32,30 @@ You will also need to remove the existing certificates in `/etc/puppetlabs/puppe
 
 If you prefer not to auto-sign or manually sign the Puppet Agents' CSRs - you can use the same Puppet master and PuppetDB certificates which you used in your bare-metal setup. Please archive into two separate files and place your certificates in the `init/puppet-certs/puppetserver` and `init/puppet-certs/puppetdb` directories and enable their usage in the Values file (`.Values.puppetserver.preGeneratedCertsJob.enabled`).
 
-The content of the two archives should be very similar to:
-
-```console
-root@puppet:/# ll /etc/puppetlabs/puppet/ssl/
-total 36
-drwxr-x--- 4 puppet puppet 4096 Nov 26 20:21 ca/
-drwxr-xr-x 2 puppet puppet 4096 Nov 26 20:21 certificate_requests/
-drwxr-xr-x 2 puppet puppet 4096 Nov 26 20:21 certs/
--rw-r----- 1 puppet puppet  950 Nov 26 20:21 crl.pem
-drwxr-x--- 2 puppet puppet 4096 Nov 26 20:21 private/
-drwxr-x--- 2 puppet puppet 4096 Nov 26 20:21 private_keys/
-drwxr-xr-x 2 puppet puppet 4096 Nov 26 20:21 public_keys/
-
-root@puppetdb:/opt/puppetlabs/server/data/puppetdb/certs# ls -l
-total 20
-drwxr-xr-x 2 puppetdb puppetdb 4096 Dec  5 21:49 certificate_requests
-drwx------ 2 puppetdb puppetdb 4096 Dec  5 22:36 certs
--rw-r--r-- 1 puppetdb puppetdb  950 Dec  5 21:49 crl.pem
-drwx------ 2 puppetdb puppetdb 4096 Dec  5 22:36 private_keys
-drwxr-xr-x 2 puppetdb puppetdb 4096 Dec  5 21:49 public_keys
-```
-
-Essentially, on your bare-metal Puppet master and PuppetDB instance that's the content of the directories: `/etc/puppetlabs/puppet/ssl` and `/opt/puppetlabs/server/data/puppetdb/certs/`.
-
-The content of the `init/puppet-certs/puppetserver` and `init/puppet-certs/puppetdb` chart's dirs should be similar to:
-
-```console
-/repos/xtigyro/puppetserver-helm-chart # ll init/puppet-certs/puppetserver/
-total 24
-drwxrws--- 2 xtigyro-samba sambashare  4096 Dec  5 22:00 ./
-drwxrws--- 4 xtigyro-samba sambashare  4096 Dec  5 21:45 ../
--rw-rw---- 1 xtigyro-samba sambashare    71 Dec  5 21:45 .gitignore
--rw-r--r-- 1 xtigyro-samba sambashare 10013 Dec  5 22:00 puppetserver-certs.gz
-
-/repos/xtigyro/puppetserver-helm-chart # ll init/puppet-certs/puppetdb/
-total 24
-drwxrws--- 2 xtigyro-samba sambashare  4096 Dec  5 22:00 ./
-drwxrws--- 4 xtigyro-samba sambashare  4096 Dec  5 21:45 ../
--rw-rw---- 1 xtigyro-samba sambashare    71 Dec  5 21:45 .gitignore
--rw-r--r-- 1 xtigyro-samba sambashare 10158 Dec  5 22:00 puppetdb-certs.gz
-```
-
 > **NOTE**: For more information please check - [README.md](init/README.md). For more general knowledge on the matter you can also read the article - <https://puppet.com/docs/puppet/5.5/ssl_regenerate_certificates.html.>
 
-## Multiple Puppet Compile Masters
+## Horizontal Scaling
 
-To scale Puppet Server for many thousands of nodes, you’ll need to enable multiple Puppet Compile Masters using `.Values.puppetserver.multiCompilers`. These Servers are known as compile masters, and are simply additional load-balanced Puppet Servers that receive catalog requests from agents and synchronize the results with each other.
+To achieve better availability and higher throughput of Puppet Infrastructure, you'll need to scale out Puppet Masters and/or Puppet Compilers.
+
+### Multiple Puppet Masters
+
+To achieve better availability of Puppet Infrastructure, you'll need to scale out Puppet Server Masters using `.Values.puppetserver.masters.multiMasters`. These Servers are known as masters, and are responsible for the creation and signing of your Puppet Agents' certificates. They are also responsible for receiving catalog requests from agents and synchronize the results with each other.
+
+### Multiple Puppet Compilers
+
+To achieve better throughput of Puppet Infrastructure, you'll need to enable and scale out Puppet Server Compilers using `.Values.puppetserver.compilers`. These Servers are known as compile masters, and are simply additional load-balanced Puppet Servers that receive catalog requests from agents and synchronize the results with each other.
 
 ## Chart Components
 
-* Creates four deployments: Puppet Server, PuppetDB, PosgreSQL, and Puppetboard.
-* Creates three services that expose: Puppet Server, PuppetDB, and PostgreSQL.
-* Creates a cronjob per configured code repo - up to two.
+* Creates four deployments: Puppet Server Master/s, PuppetDB, PosgreSQL, and Puppetboard (optional).
+* Creates one statefulset (optional): Puppet Server Compiler/s.
+* Creates six services that expose: Puppet Server Masters, Puppet Server Compilers (optional), PuppetDB, and PostgreSQL.
 * Creates secrets to hold credentials for PuppetDB, PosgreSQL, and r10k.
 
 ## Support for Helm v2
 
-Those of you who would like to use the chart with Helm v2 - please switch to branch `helm-v2`.
+Those of you who would like to deploy the chart with Helm v2 - please switch to branch `helm-v2`.
 
 ## Installing the Chart
 
@@ -160,42 +83,34 @@ You can use `kubectl get` to view all of the installed components.
 
 ```console
 $ kubectl get --namespace puppetserver all -l release=puppetserver
-NAME                                                                  READY   STATUS      RESTARTS   AGE
-pod/puppetserver-puppetserver-helm-cha-postgres-5479895bb9-pblfd      1/1     Running     0          10m
-pod/puppetserver-puppetserver-helm-cha-puppetdb-8698789c7f-glzdf      1/1     Running     0          10m
-pod/puppetserver-puppetserver-helm-cha-puppetserver-d99c99896-99z4h   1/1     Running     0          10m
-pod/puppetserver-puppetserver-helm-cha-puppetserver-d99c99896-fhpk4   1/1     Running     0          8m18s
-pod/puppetserver-puppetserver-helm-cha-r10k-code-deploy-158610249kr   0/1     Completed   0          6m3s
-pod/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586109f2t2   0/1     Completed   0          4m3s
-pod/puppetserver-puppetserver-helm-cha-r10k-code-deploy-158610s2568   0/1     Completed   0          3s
-pod/puppetserver-puppetserver-helm-cha-r10k-code-deploy-158610zfdrp   0/1     Completed   0          2m3s
+NAME                                                                READY   STATUS    RESTARTS   AGE
+pod/puppetserver-helm-chart-postgres-6dc7c8b978-4db5k               1/1     Running   0          7m25s
+pod/puppetserver-helm-chart-puppetdb-86645656d5-xg7tj               1/1     Running   0          7m25s
+pod/puppetserver-helm-chart-puppetserver-compilers-0                2/2     Running   0          7m25s
+pod/puppetserver-helm-chart-puppetserver-compilers-1                2/2     Running   0          5m25s
+pod/puppetserver-helm-chart-puppetserver-compilers-2                2/2     Running   0          4m12s
+pod/puppetserver-helm-chart-puppetserver-masters-5bdd9988d7-44c85   2/2     Running   0          7m25s
 
-NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
-service/postgres   ClusterIP   10.96.197.10    <none>        5432/TCP            10m
-service/puppet     ClusterIP   10.96.128.168   <none>        8140/TCP            10m
-service/puppetdb   ClusterIP   10.96.114.113   <none>        8080/TCP,8081/TCP   10m
+NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+service/agents-to-puppet            ClusterIP   10.96.101.111    <none>        8140/TCP            7m25s
+service/postgres                    ClusterIP   10.105.251.117   <none>        5432/TCP            7m25s
+service/puppet                      ClusterIP   10.97.215.178    <none>        8140/TCP            7m25s
+service/puppet-compilers            ClusterIP   10.101.13.5      <none>        8140/TCP            7m25s
+service/puppet-compilers-headless   ClusterIP   None             <none>        443/TCP             7m25s
+service/puppetdb                    ClusterIP   10.96.105.245    <none>        8080/TCP,8081/TCP   7m25s
 
-NAME                                                              READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/puppetserver-puppetserver-helm-cha-postgres       1/1     1            1           10m
-deployment.apps/puppetserver-puppetserver-helm-cha-puppetdb       1/1     1            1           10m
-deployment.apps/puppetserver-puppetserver-helm-cha-puppetserver   2/2     2            2           10m
+NAME                                                           READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/puppetserver-helm-chart-postgres               1/1     1            1           7m25s
+deployment.apps/puppetserver-helm-chart-puppetdb               1/1     1            1           7m25s
+deployment.apps/puppetserver-helm-chart-puppetserver-masters   1/1     1            1           7m25s
 
-NAME                                                                        DESIRED   CURRENT   READY   AGE
-replicaset.apps/puppetserver-puppetserver-helm-cha-postgres-5479895bb9      1         1         1       10m
-replicaset.apps/puppetserver-puppetserver-helm-cha-puppetdb-8698789c7f      1         1         1       10m
-replicaset.apps/puppetserver-puppetserver-helm-cha-puppetserver-d99c99896   2         2         2       10m
+NAME                                                                      DESIRED   CURRENT   READY   AGE
+replicaset.apps/puppetserver-helm-chart-postgres-6dc7c8b978               1         1         1       7m25s
+replicaset.apps/puppetserver-helm-chart-puppetdb-86645656d5               1         1         1       7m25s
+replicaset.apps/puppetserver-helm-chart-puppetserver-masters-5bdd9988d7   1         1         1       7m25s
 
-NAME                                                                                REFERENCE                                                    TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
-horizontalpodautoscaler.autoscaling/puppetserver-puppetserver-helm-cha-autoscaler   Deployment/puppetserver-puppetserver-helm-cha-puppetserver   65%/80%, 0%/80%   1         5         2          10m
-
-NAME                                                                       COMPLETIONS   DURATION   AGE
-job.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586100120   1/1           1s         6m3s
-job.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586100240   1/1           2s         4m3s
-job.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586100360   1/1           2s         2m3s
-job.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy-1586100480   1/1           2s         3s
-
-NAME                                                                SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
-cronjob.batch/puppetserver-puppetserver-helm-cha-r10k-code-deploy   */2 * * * *   False     1        3s              10m
+NAME                                                              READY   AGE
+statefulset.apps/puppetserver-helm-chart-puppetserver-compilers   3/3     7m25s
 ```
 
 ## Configuration
@@ -206,53 +121,70 @@ Parameter | Description | Default
 --------- | ----------- | -------
 `puppetserver.name` | puppetserver component label | `puppetserver`
 `puppetserver.image` | puppetserver image | `puppet/puppetserver`
-`puppetserver.tag` | puppetserver img tag | `6.8.0`
-`puppetserver.resources` | puppetserver resource limits | ``
-`puppetserver.extraEnv` | puppetserver additional container env vars |``
+`puppetserver.tag` | puppetserver img tag | `6.10.0`
+`puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`
+`puppetserver.masters.resources` | puppetserver masters resource limits | ``
+`puppetserver.masters.extraEnv` | puppetserver masters additional container env vars |``
+`puppetserver.masters.fqdns.alternateServerNames` | puppetserver masters alternate fqdns |``
+`puppetserver.masters.service.type` | puppetserver masters svc type | `ClusterIP`
+`puppetserver.masters.service.ports` | puppetserver masters svc exposed ports | `puppetserver`
+`puppetserver.masters.service.annotations`| puppetserver masters svc annotations |``
+`puppetserver.masters.service.labels`| puppetserver additional masters svc labels |``
+`puppetserver.masters.service.loadBalancerIP`| puppetserver masters svc loadbalancer ip |``
+`puppetserver.masters.ingress.enabled`| puppetserver masters ingress creation enabled |`false`
+`puppetserver.masters.ingress.annotations`| puppetserver masters ingress annotations |``
+`puppetserver.masters.ingress.extraLabels`| puppetserver masters ingress extraLabels |``
+`puppetserver.masters.ingress.hosts`| puppetserver masters ingress hostnames |``
+`puppetserver.masters.ingress.tls`| puppetserver masters ingress tls configuration |``
+`puppetserver.masters.multiMasters.enabled` | If true, creates multiple Puppetserver masters | `false`
+`puppetserver.masters.multiMasters.manualScaling.masters` | If multiple masters are enabled, this field sets masters count | `1`
+`puppetserver.masters.multiMasters.autoScaling.enabled` | If true, creates masters Horizontal Pod Autoscaler | `false`
+`puppetserver.masters.multiMasters.autoScaling.minMasters` | If masters autoscaling enabled, this field sets minimum masters count | `1`
+`puppetserver.masters.multiMasters.autoScaling.maxMasters` | If masters autoscaling enabled, this field sets maximum masters count | `3`
+`puppetserver.masters.multiMasters.autoScaling.cpuUtilizationPercentage` | Target masters CPU utilization percentage to scale | `75`
+`puppetserver.masters.multiMasters.autoScaling.memoryUtilizationPercentage` | Target masters memory utilization percentage to scale | `75`
+`puppetserver.compilers.enabled` | If true, creates Puppetserver compilers | `false`
+`puppetserver.compilers.resources` | puppetserver compilers resource limits |``
+`puppetserver.compilers.podAntiAffinity` | puppetserver compilers pod affinity constraints |`false`
+`puppetserver.compilers.annotations`| puppetserver compilers statefulset annotations |``
+`puppetserver.compilers.extraEnv` | puppetserver compilers additional container env vars |``
+`puppetserver.compilers.manualScaling.compilers` | If multiple compilers are enabled, this field sets compiler count | `1`
+`puppetserver.compilers.autoScaling.enabled` | If true, creates compilers Horizontal Pod Autoscaler | `false`
+`puppetserver.compilers.autoScaling.minCompilers` | If autoscaling enabled, this field sets minimum compiler count | `1`
+`puppetserver.compilers.autoScaling.maxCompilers` | If compilers autoscaling enabled, this field sets maximum compiler count | `3`
+`puppetserver.compilers.autoScaling.cpuUtilizationPercentage` | Target compilers CPU utilization percentage to scale | `75`
+`puppetserver.compilers.autoScaling.memoryUtilizationPercentage` | Target compilers memory utilization percentage to scale | `75`
+`puppetserver.compilers.podManagementPolicy` | puppetserver compilers statefulset pod management policy | `OrderedReady`
+`puppetserver.compilers.fqdns.alternateServerNames` | puppetserver compilers alternate fqdns |``
+`puppetserver.compilers.service.type` | puppetserver compilers svc type | `ClusterIP`
+`puppetserver.compilers.service.ports` | puppetserver compilers svc exposed ports | `puppetserver`
+`puppetserver.compilers.service.annotations`| puppetserver compilers svc annotations |``
+`puppetserver.compilers.service.labels`| puppetserver compilers additional svc labels |``
+`puppetserver.compilers.service.loadBalancerIP`| puppetserver compilers svc loadbalancer ip |``
+`puppetserver.compilers.service.headless.ports`| puppetserver compilers headless svc loadbalancer ip |`https`
+`puppetserver.compilers.service.headless.annotations`| puppetserver compilers headless svc annotations |``
+`puppetserver.compilers.service.headless.labels`| puppetserver compilers additional headless svc labels |``
+`puppetserver.compilers.ingress.enabled`| puppetserver compilers ingress creation enabled |`false`
+`puppetserver.compilers.ingress.annotations`| puppetserver compilers ingress annotations |``
+`puppetserver.compilers.ingress.extraLabels`| puppetserver compilers ingress extraLabels |``
+`puppetserver.compilers.ingress.hosts`| puppetserver compilers ingress hostnames |``
+`puppetserver.compilers.ingress.tls`| puppetserver compilers ingress tls configuration |``
 `puppetserver.preGeneratedCertsJob.enabled` | puppetserver pre-generated certs |`false`
 `puppetserver.preGeneratedCertsJob.jobDeadline` | puppetserver pre-generated certs job deadline in seconds |`60`
-`puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`
-`puppetserver.multiCompilers.enabled` | If true, creates multiple Puppetserver compilers | `false`
-`puppetserver.multiCompilers.manualScaling.compilers` | If multiple compilers are enabled, this field sets compiler count | `3`
-`puppetserver.multiCompilers.autoScaling.enabled` | If true, creates Horizontal Pod Autoscaler | `false`
-`puppetserver.multiCompilers.autoScaling.minCompilers` | If autoscaling enabled, this field sets minimum compiler count | `2`
-`puppetserver.multiCompilers.autoScaling.maxCompilers` | If autoscaling enabled, this field sets maximum compiler count | `11`
-`puppetserver.multiCompilers.autoScaling.cpuUtilizationPercentage` | Target CPU utilization percentage to scale | `50`
-`puppetserver.multiCompilers.autoScaling.memoryUtilizationPercentage` | Target memory utilization percentage to scale | `50`
-`puppetserver.fqdns.alternateServerNames` | puppetserver alternate fqdns |``
-`puppetserver.service.type` | puppetserver svc type | `ClusterIP`
-`puppetserver.service.ports` | puppetserver svc exposed ports | `puppetserver`
-`puppetserver.service.annotations`| puppetserver svc annotations |``
-`puppetserver.service.labels`| puppetserver additional svc labels |``
-`puppetserver.service.loadBalancerIP`| puppetserver svc loadbalancer ip |``
-`puppetserver.ingress.enabled`| puppetserver ingress creation enabled |`false`
-`puppetserver.ingress.annotations`| puppetserver ingress annotations |``
-`puppetserver.ingress.extraLabels`| puppetserver ingress extraLabels |``
-`puppetserver.ingress.hosts`| puppetserver ingress hostnames |``
-`puppetserver.ingress.tls`| puppetserver ingress tls configuration |``
 `puppetserver.puppeturl`| puppetserver control repo url |``
 `r10k.name` | r10k component label | `r10k`
 `r10k.image` | r10k img | `puppet/r10k`
 `r10k.tag` | r10k img tag | `3.3.3`
 `r10k.pullPolicy` | r10k img pull policy | `IfNotPresent`
-`r10k.affinity` | r10k pod assignment affinity |``
-`r10k.code.cronJob.schedule` | r10k control repo cron job schedule policy | `*/15 * * * *`
-`r10k.code.cronJob.concurrencyPolicy` | r10k control repo cron job concurrency policy | `Forbid`
-`r10k.code.cronJob.restartPolicy` | r10k control repo cron job restart policy | `Never`
-`r10k.code.cronJob.startingDeadlineSeconds` | r10k control repo cron job starting deadline | `500`
-`r10k.code.cronJob.activeDeadlineSeconds` | r10k control repo cron job active deadline | `750`
 `r10k.code.resources` | r10k control repo resource limits |``
+`r10k.code.cronJob.schedule` | r10k control repo cron job schedule policy | `*/15 * * * *`
 `r10k.code.extraArgs` | r10k control repo additional container env args |``
 `r10k.code.extraEnv` | r10k control repo additional container env vars |``
 `r10k.code.viaSsh.credentials.ssh.value`| r10k control repo ssh key file |``
 `r10k.code.viaSsh.credentials.known_hosts.value`| r10k control repo ssh known hosts file |``
 `r10k.code.viaSsh.credentials.existingSecret`| r10k control repo ssh secret that holds ssh key and known hosts files |``
-`r10k.hiera.cronJob.schedule` | r10k hiera data cron job schedule policy | `*/2 * * * *`
-`r10k.hiera.cronJob.concurrencyPolicy` | r10k control repo cron job concurrency policy | `Forbid`
-`r10k.hiera.cronJob.restartPolicy` | r10k control repo cron job restart policy | `Never`
-`r10k.hiera.cronJob.startingDeadlineSeconds` | r10k control repo cron job starting deadline | `500`
-`r10k.hiera.cronJob.activeDeadlineSeconds` | r10k control repo cron job active deadline | `750`
 `r10k.hiera.resources` | r10k hiera data resource limits |``
+`r10k.hiera.cronJob.schedule` | r10k hiera data cron job schedule policy | `*/2 * * * *`
 `r10k.hiera.extraArgs` | r10k hiera data additional container env args |``
 `r10k.hiera.extraEnv` | r10k hiera data additional container env vars |``
 `r10k.hiera.viaSsh.credentials.ssh.value`| r10k hiera data ssh key file |``
@@ -260,13 +192,13 @@ Parameter | Description | Default
 `r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``
 `postgres.name` | postgres component label | `postgres`
 `postgres.image` | postgres img | `postgres`
-`postgres.tag` | postgres img tag | `9.6.16`
+`postgres.tag` | postgres img tag | `9.6.17`
 `postgres.pullPolicy` | postgres img pull policy | `IfNotPresent`
 `postgres.resources` | postgres resource limits |``
 `postgres.extraEnv` | postgres additional container env vars |``
 `puppetdb.name` | puppetdb component label | `puppetdb`
 `puppetdb.image` | puppetdb img | `puppet/puppetdb`
-`puppetdb.tag` | puppetdb img tag | `6.8.1`
+`puppetdb.tag` | puppetdb img tag | `6.10.1`
 `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`
 `puppetdb.resources` | puppetdb resource limits |``
 `puppetdb.extraEnv` | puppetdb additional container env vars |``
@@ -291,7 +223,6 @@ Parameter | Description | Default
 `priorityClass`| Leverage a priorityClass to ensure your pods survive resource shortages |``
 `podAnnotations`| Extra Pod annotations |``
 `storage.storageClass`| Storage Class |``
-`storage.selector`| PVs/PVCs Selector Config |`false`
 `storage.annotations`| Storage annotations |``
 `storage.size`| PVCs Storage Size |`100Mi`
 
@@ -312,21 +243,26 @@ helm install --namespace puppetserver --name puppetserver puppet/puppetserver-he
 ## Testing the Deployed Chart Resources
 
 ```bash
-kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
+kubectl port-forward -n puppetserver svc/agents-to-puppet 8140:8140 &
+kubectl port-forward -n puppetserver svc/puppet-compilers 8141:8140 &
 
 TIME_NOW="$(date +"%Y%m%dT%H%M")"
 cp "/etc/hosts"{,.backup_"$TIME_NOW"}
-echo '127.0.0.1 puppet' >> /etc/hosts
+echo '127.0.0.1 puppet agents-to-puppet puppet-compilers' >> /etc/hosts
 
 docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it goofy_xtigyro bash
-puppet agent -t --server puppet --masterport 8140 --test --certname ubuntu-goofy_xtigyro
+puppet agent -t --server puppet --masterport 8140 --test --waitforcert 15 --certname ubuntu-goofy_xtigyro
+puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-goofy_xtigyro
+puppet agent -t --server puppet-compilers --masterport 8141 --test --certname ubuntu-goofy_xtigyro
 exit
 docker rm -f goofy_xtigyro
 
 docker run -dit --network host --name buggy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it buggy_xtigyro bash
-puppet agent -t --server puppet --masterport 8140 --test --certname ubuntu-buggy_xtigyro
+puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-buggy_xtigyro
+puppet agent -t --server puppet-compilers --masterport 8141 --test --certname ubuntu-buggy_xtigyro
+puppet agent -t --server puppet --masterport 8140 --test --waitforcert 15 --certname ubuntu-buggy_xtigyro
 exit
 docker rm -f buggy_xtigyro
 
@@ -335,12 +271,13 @@ unset TIME_NOW
 
 jobs | grep 'port-forward' | grep 'puppetserver'
 # [1]+  Running                 kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
-kill %[job_number_above]
+kill %[job_numbers_above]
 ```
 
-## Chart's Dev Team
+## Credits
 
-* Lead Developer: Miroslav Hadzhiev (miroslav.hadzhiev@gmail.com)
-* Developer: Sean Conley (slconley@gmail.com)
-* Developer: Morgan Rhodes (morgan@puppet.com)
-* Developer: Scott Cressi (scottcressi@gmail.com)
+* [Miroslav Hadzhiev](mailto:miroslav.hadzhiev@gmail.com), Lead Author and Developer
+* [Pupperware Team](mailto:pupperware@puppet.com), Owner
+* [Sean Conley](mailto:slconley@gmail.com), Developer
+* [Morgan Rhodes](mailto:morgan@puppet.com), Developer
+* [Scott Cressi](mailto:scottcressi@gmail.com), Developer

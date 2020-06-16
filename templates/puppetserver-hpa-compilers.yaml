@@ -1,0 +1,34 @@
+{{- if .Values.puppetserver.compilers.enabled }}
+{{- if .Values.puppetserver.compilers.autoScaling.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "puppetserver.name" . }}-compilers-autoscaler
+  labels:
+    {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: {{ template "puppetserver.name" . }}-puppetserver-compilers
+  minReplicas: {{ .Values.puppetserver.compilers.autoScaling.minCompilers }}
+  maxReplicas: {{ .Values.puppetserver.compilers.autoScaling.maxCompilers }}
+  metrics:
+  {{- with .Values.puppetserver.compilers.autoScaling.cpuUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ . }}
+  {{- end }}
+  {{- with .Values.puppetserver.compilers.autoScaling.memoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ . }}
+  {{- end }}
+{{- end }}
+{{- end }}

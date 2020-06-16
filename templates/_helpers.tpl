@@ -4,12 +4,14 @@
 Expand the name of the chart.
 */}}
 {{- define "puppetserver.name" -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- printf .Release.Name | trunc 34 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 34 | trimSuffix "-" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 29 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "puppetserver.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -19,15 +21,29 @@ If release name contains chart name it will be used as a full name.
 */}}
 {{- define "puppetserver.fullname" -}}
 {{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 52 | trimSuffix "-" -}}
+{{- .Values.fullnameOverride | trunc 29 | trimSuffix "-" -}}
 {{- else -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- if contains $name .Release.Name -}}
-{{- printf .Release.Name | trunc 52 | trimSuffix "-" -}}
+{{- printf .Release.Name | trunc 29 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 52 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 29 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Create the args array for "r10k_code_cronjob.sh"
+*/}}
+{{- define "r10k.code.args" -}}
+{{- join " " .Values.r10k.code.extraArgs }}
+{{- end -}}
+
+{{/*
+Create the args array for "r10k_hiera_cronjob.sh"
+*/}}
+{{- define "r10k.hiera.args" -}}
+{{- join " " .Values.r10k.hiera.extraArgs }}
 {{- end -}}
 
 {{/*
@@ -39,7 +55,7 @@ release: {{ .Release.Name }}
 {{- end -}}
 
 {{- define "puppetserver.common.metaLabels" -}}
-chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+chart: {{ template "puppetserver.chart" . }}
 heritage: {{ .Release.Service }}
 {{- end -}}
 
@@ -108,21 +124,87 @@ component: {{ .Values.puppetserver.name | quote }}
 {{ include "puppetserver.common.matchLabels" . }}
 {{- end -}}
 
+{{- define "puppetserver.puppetserver-compilers.labels" -}}
+{{ include "puppetserver.puppetserver-compilers.matchLabels" . }}
+{{ include "puppetserver.common.metaLabels" . }}
+{{- end -}}
+
+{{- define "puppetserver.puppetserver-compilers.matchLabels" -}}
+component: "{{ .Values.puppetserver.name }}-compilers"
+{{ include "puppetserver.common.matchLabels" . }}
+{{- end -}}
+
 {{- define "puppetserver.puppetserver-data.labels" -}}
 {{ include "puppetserver.puppetserver-data.matchLabels" . }}
 {{ include "puppetserver.common.metaLabels" . }}
 {{- end -}}
 
 {{- define "puppetserver.puppetserver-data.matchLabels" -}}
-component: "{{ .Values.puppetserver.name}}-serverdata"
+component: "{{ .Values.puppetserver.name }}-serverdata"
 {{ include "puppetserver.common.matchLabels" . }}
 {{- end -}}
 
 {{/*
-Set mandatory Puppet Server Service name.
+Set mandatory Puppet Server Masters' Service name.
 */}}
-{{- define "puppetserver.puppetserver.serviceName" -}}
+{{- define "puppetserver.puppetserver-masters.serviceName" -}}
 puppet
+{{- end -}}
+
+{{/*
+Set secondary Puppet Server Masters' Service name for Puppet Agents.
+*/}}
+{{- define "puppetserver.puppetserver.agents-to-masters.serviceName" -}}
+agents-to-puppet
+{{- end -}}
+
+{{/*
+Set mandatory Puppet Server Compilers' Service name.
+*/}}
+{{- define "puppetserver.puppetserver-compilers.serviceName" -}}
+puppet-compilers
+{{- end -}}
+
+{{/*
+Set's the affinity for pod placement
+when running with multiple Puppet compilers.
+*/}}
+{{- define "puppetserver.compilers.affinity" -}}
+    {{- if (or (.Values.affinity) (and (.Values.puppetserver.compilers.enabled) (.Values.puppetserver.compilers.podAntiAffinity))) }}
+      affinity:
+      {{- if (.Values.affinity) }}
+        {{- toYaml .Values.affinity | nindent 8 }}
+      {{- end }}
+      {{- if (.Values.puppetserver.compilers.podAntiAffinity) }}
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  {{- include "puppetserver.puppetserver-compilers.matchLabels" . | nindent 18 }}
+              topologyKey: kubernetes.io/hostname
+      {{- end }}
+    {{- end }}
+{{- end -}}
+
+{{/*
+Calculates the max. number of compilers
+*/}}
+{{- define "puppetserver.compilers.maxNo" -}}
+{{- if not (.Values.puppetserver.compilers.autoScaling.enabled) -}}
+{{- .Values.puppetserver.compilers.manualScaling.compilers -}}
+{{- else -}}
+{{- .Values.puppetserver.compilers.autoScaling.maxCompilers -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "puppetserver.compilers.hostnames" -}}
+  {{- $dot := . -}}
+  {{- range $compilersLoopCount, $e := until ((include "puppetserver.compilers.maxNo" $dot) | int) -}}
+    {{- printf "%s-puppetserver-compilers-%d" (include "puppetserver.name" $dot) $compilersLoopCount -}}
+    {{- if lt $compilersLoopCount  ( sub ((include "puppetserver.compilers.maxNo" $dot) | int) 1 ) -}}
+      {{- printf "," -}}
+    {{- end -}}
+  {{- end -}}
 {{- end -}}
 
 {{/*
