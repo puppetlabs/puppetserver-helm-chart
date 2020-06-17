@@ -2,8 +2,41 @@ apiVersion: v1
 entries:
   puppetserver-helm-chart:
   - apiVersion: v2
+    appVersion: 6.10.0
+    created: "2020-06-17T07:28:11.342309988Z"
+    description: Puppet automates the delivery and operation of software.
+    digest: df1d3e9810fe7832e0d523d95d998db19bfeaf55f06137ee4008d08988b6c45c
+    home: https://puppet.com/
+    icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
+    keywords:
+    - puppet
+    - puppetserver
+    - automation
+    - iac
+    - infrastructure
+    - cm
+    - ci
+    - cd
+    kubeVersion: '>=1.10.0-0'
+    maintainers:
+    - email: pupperware@puppet.com
+      name: Pupperware Team
+    - email: morgan@puppet.com
+      name: underscorgan
+    - email: miroslav.hadzhiev@gmail.com
+      name: Xtigyro
+    - email: slconley@gmail.com
+      name: slconley
+    name: puppetserver-helm-chart
+    sources:
+    - https://github.com/puppetlabs/pupperware/
+    type: application
+    urls:
+    - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-helm-chart-4.0.0.tgz
+    version: 4.0.0
+  - apiVersion: v2
     appVersion: 6.9.2
-    created: "2020-05-01T14:15:41.491968-07:00"
+    created: "2020-06-17T07:28:11.34026416Z"
     description: Puppet automates the delivery and operation of software.
     digest: 6e25cc32a56b16e8e87ea7146bf0a196bb82d15af20aeb351660c6c5a88c6912
     home: https://puppet.com/
@@ -36,7 +69,7 @@ entries:
     version: 3.0.2
   - apiVersion: v1
     appVersion: 6.9.2
-    created: "2020-05-01T14:15:41.490169-07:00"
+    created: "2020-06-17T07:28:11.33807693Z"
     description: Puppet automates the delivery and operation of software.
     digest: 48911765317c2ca048ffae164670859834eed98a12d1b32fdc15368767e7d339
     home: https://puppet.com/
@@ -66,4 +99,4 @@ entries:
     urls:
     - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-helm-chart-1.8.4.tgz
     version: 1.8.4
-generated: "2020-05-01T14:15:41.487503-07:00"
+generated: "2020-06-17T07:28:11.335270092Z"
