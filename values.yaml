@@ -336,6 +336,30 @@ puppetboard:
   #  ENABLE_QUERY: True
   #  INVENTORY_FACTS: Hostname,fqdn,IP Address,ipaddress
   #  GRAPH_FACTS: architecture,puppetversion,osfamily
+  ingress:
+    ## If true, Puppetboard Ingress will be created
+    ##
+    enabled: false
+    ## Puppetboard Ingress annotations
+    ##
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+    ## Puppetboard Ingress additional labels
+    ##
+    extraLabels: {}
+    ## Puppetboard Ingress hostnames with optional path
+    ## Must be provided if Ingress is enabled
+    ##
+    hosts: []
+    #   - puppetboard.domain.com
+    #   - domain.com/puppetboard
+    ## Puppetboard Ingress TLS configuration
+    ## Secrets must be manually created in the namespace
+    ##
+    tls: []
+    #   - secretName: puppetboard-server-tls
+    #     hosts:
+    #       - puppetboard.domain.com
 
 ## Hiera Configuration for Puppet Server
 ##
