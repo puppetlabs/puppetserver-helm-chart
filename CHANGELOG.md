@@ -8,8 +8,8 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 ## [v4.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.1.0) (2020-06-20)
 
 - Rework Puppetboard support.
-- Bump r10k to `v3.5.1`, and PostgreSQL to `v9.6.18`.
-- Small fixes.
+- Bump Puppetboard to `v2.1.2`, r10k to `v3.5.1`, and PostgreSQL to `v9.6.18`.
+- Other small improvements and fixes.
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.0.0...v4.1.0)
 
