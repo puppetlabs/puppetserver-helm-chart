@@ -208,7 +208,7 @@ puppetserver:
 r10k:
   name: r10k
   image: puppet/r10k
-  tag: 3.5.0
+  tag: 3.5.1
   pullPolicy: IfNotPresent
   code:
     resources: {}
@@ -276,7 +276,7 @@ r10k:
 postgres:
   name: postgres
   image: postgres
-  tag: 9.6.17
+  tag: 9.6.18
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:

@@ -174,7 +174,7 @@ Parameter | Description | Default
 `puppetserver.puppeturl`| puppetserver control repo url |``
 `r10k.name` | r10k component label | `r10k`
 `r10k.image` | r10k img | `puppet/r10k`
-`r10k.tag` | r10k img tag | `3.3.3`
+`r10k.tag` | r10k img tag | `3.5.1`
 `r10k.pullPolicy` | r10k img pull policy | `IfNotPresent`
 `r10k.code.resources` | r10k control repo resource limits |``
 `r10k.code.cronJob.schedule` | r10k control repo cron job schedule policy | `*/15 * * * *`
@@ -192,7 +192,7 @@ Parameter | Description | Default
 `r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``
 `postgres.name` | postgres component label | `postgres`
 `postgres.image` | postgres img | `postgres`
-`postgres.tag` | postgres img tag | `9.6.17`
+`postgres.tag` | postgres img tag | `9.6.18`
 `postgres.pullPolicy` | postgres img pull policy | `IfNotPresent`
 `postgres.resources` | postgres resource limits |``
 `postgres.extraEnv` | postgres additional container env vars |``
@@ -208,7 +208,7 @@ Parameter | Description | Default
 `puppetboard.enabled` | puppetboard availability | `false`
 `puppetboard.name` | puppetboard component label | `puppetboard`
 `puppetboard.image` | puppetboard img | `puppet/puppetboard`
-`puppetboard.tag` | puppetboard img tag | `0.3.0`
+`puppetboard.tag` | puppetboard img tag | `2.1.2`
 `puppetboard.pullPolicy` | puppetboard img pull policy | `IfNotPresent`
 `puppetboard.resources` | puppetboard resource limits |``
 `puppetboard.extraEnv` | puppetboard additional container env vars |``
