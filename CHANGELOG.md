@@ -13,6 +13,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - Change default chart app name to `puppetserver`.
 - Bump Puppetboard to `v2.1.2`, r10k to `v3.5.1`, and PostgreSQL to `v9.6.18`.
 - Other small improvements and fixes.
+- Update `OWNERS`.
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.0.0...v4.1.0)
 
