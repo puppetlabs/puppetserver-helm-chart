@@ -1,5 +1,39 @@
 apiVersion: v1
 entries:
+  puppetserver:
+  - apiVersion: v2
+    appVersion: 6.10.0
+    created: "2020-06-19T11:36:22.539252159Z"
+    description: Puppet automates the delivery and operation of software.
+    digest: 25766f227a105248ba33519025ca5c084c285d1195106eda8de44082b567392b
+    home: https://puppet.com/
+    icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
+    keywords:
+    - puppet
+    - puppetserver
+    - automation
+    - iac
+    - infrastructure
+    - cm
+    - ci
+    - cd
+    kubeVersion: '>=1.10.0-0'
+    maintainers:
+    - email: pupperware@puppet.com
+      name: Pupperware Team
+    - email: morgan@puppet.com
+      name: underscorgan
+    - email: miroslav.hadzhiev@gmail.com
+      name: Xtigyro
+    - email: slconley@gmail.com
+      name: slconley
+    name: puppetserver
+    sources:
+    - https://github.com/puppetlabs/pupperware/
+    type: application
+    urls:
+    - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-4.1.0.tgz
+    version: 4.1.0
   puppetserver-helm-chart:
   - apiVersion: v2
     appVersion: 6.10.0
@@ -99,4 +133,4 @@ entries:
     urls:
     - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-helm-chart-1.8.4.tgz
     version: 1.8.4
-generated: "2020-06-17T07:28:11.335270092Z"
+generated: "2020-06-19T11:36:22.523093071Z"
