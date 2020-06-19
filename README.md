@@ -48,9 +48,9 @@ To achieve better throughput of Puppet Infrastructure, you'll need to enable and
 
 ## Chart Components
 
-* Creates four deployments: Puppet Server Master/s, PuppetDB, PosgreSQL, and Puppetboard (optional).
+* Creates three deployments: Puppet Server Master/s, PuppetDB, and PosgreSQL.
 * Creates one statefulset (optional): Puppet Server Compiler/s.
-* Creates six services that expose: Puppet Server Masters, Puppet Server Compilers (optional), PuppetDB, and PostgreSQL.
+* Creates seven services that expose: Puppet Server Masters, Puppet Server Compilers (optional), PuppetDB, PostgreSQL, and Puppetboard (optional).
 * Creates secrets to hold credentials for PuppetDB, PosgreSQL, and r10k.
 
 ## Support for Helm v2
