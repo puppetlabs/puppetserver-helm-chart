@@ -212,6 +212,11 @@ Parameter | Description | Default
 `puppetboard.pullPolicy` | puppetboard img pull policy | `IfNotPresent`
 `puppetboard.resources` | puppetboard resource limits |``
 `puppetboard.extraEnv` | puppetboard additional container env vars |``
+`puppetboard.ingress.enabled`| puppetboard ingress creation enabled |`false`
+`puppetboard.ingress.annotations`| puppetboard ingress annotations |``
+`puppetboard.ingress.extraLabels`| puppetboard ingress extraLabels |``
+`puppetboard.ingress.hosts`| puppetboard ingress hostnames |``
+`puppetboard.ingress.tls`| puppetboard ingress tls configuration |``
 `hiera.name` | hiera component label | `hiera`
 `hiera.hieradataurl`| hieradata repo url |``
 `hiera.config`| hieradata yaml config |``

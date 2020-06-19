@@ -5,9 +5,11 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v4.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.1.0) (2020-06-20)
+## [v4.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.1.0) (2020-06-22)
 
 - Rework Puppetboard support.
+- Add Puppetboard Service.
+- Add optional Puppetboard Ingress.
 - Bump Puppetboard to `v2.1.2`, r10k to `v3.5.1`, and PostgreSQL to `v9.6.18`.
 - Other small improvements and fixes.
 
