@@ -10,6 +10,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - Rework Puppetboard support.
 - Add Puppetboard Service.
 - Add optional Puppetboard Ingress.
+- Change default chart app name to `puppetserver`.
 - Bump Puppetboard to `v2.1.2`, r10k to `v3.5.1`, and PostgreSQL to `v9.6.18`.
 - Other small improvements and fixes.
 
