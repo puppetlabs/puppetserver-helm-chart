@@ -83,34 +83,35 @@ You can use `kubectl get` to view all of the installed components.
 
 ```console
 $ kubectl get --namespace puppetserver all -l release=puppetserver
-NAME                                                                READY   STATUS    RESTARTS   AGE
-pod/puppetserver-helm-chart-postgres-6dc7c8b978-4db5k               1/1     Running   0          7m25s
-pod/puppetserver-helm-chart-puppetdb-86645656d5-xg7tj               1/1     Running   0          7m25s
-pod/puppetserver-helm-chart-puppetserver-compilers-0                2/2     Running   0          7m25s
-pod/puppetserver-helm-chart-puppetserver-compilers-1                2/2     Running   0          5m25s
-pod/puppetserver-helm-chart-puppetserver-compilers-2                2/2     Running   0          4m12s
-pod/puppetserver-helm-chart-puppetserver-masters-5bdd9988d7-44c85   2/2     Running   0          7m25s
+NAME                                                     READY   STATUS    RESTARTS   AGE
+pod/puppetserver-postgres-fc66cbc49-d5pl7                1/1     Running   0          7m17s
+pod/puppetserver-puppetdb-56498d68dc-8c54g               2/2     Running   0          7m17s
+pod/puppetserver-puppetserver-compilers-0                3/3     Running   0          7m17s
+pod/puppetserver-puppetserver-masters-5c6dbdc78f-8xf6x   3/3     Running   0          7m17s
 
-NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
-service/agents-to-puppet            ClusterIP   10.96.101.111    <none>        8140/TCP            7m25s
-service/postgres                    ClusterIP   10.105.251.117   <none>        5432/TCP            7m25s
-service/puppet                      ClusterIP   10.97.215.178    <none>        8140/TCP            7m25s
-service/puppet-compilers            ClusterIP   10.101.13.5      <none>        8140/TCP            7m25s
-service/puppet-compilers-headless   ClusterIP   None             <none>        443/TCP             7m25s
-service/puppetdb                    ClusterIP   10.96.105.245    <none>        8080/TCP,8081/TCP   7m25s
+NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                    AGE
+service/agents-to-puppet            ClusterIP   10.104.117.137   <none>        8140/TCP                   7m17s
+service/postgres                    ClusterIP   10.111.140.243   <none>        5432/TCP                   7m17s
+service/puppet                      ClusterIP   10.101.45.131    <none>        8140/TCP                   7m17s
+service/puppet-compilers            ClusterIP   10.104.54.107    <none>        8140/TCP                   7m17s
+service/puppet-compilers-headless   ClusterIP   None             <none>        443/TCP                    7m17s
+service/puppetdb                    ClusterIP   10.111.63.231    <none>        8080/TCP,8081/TCP,80/TCP   7m17s
 
-NAME                                                           READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/puppetserver-helm-chart-postgres               1/1     1            1           7m25s
-deployment.apps/puppetserver-helm-chart-puppetdb               1/1     1            1           7m25s
-deployment.apps/puppetserver-helm-chart-puppetserver-masters   1/1     1            1           7m25s
+NAME                                                READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/puppetserver-postgres               1/1     1            1           7m17s
+deployment.apps/puppetserver-puppetdb               1/1     1            1           7m17s
+deployment.apps/puppetserver-puppetserver-masters   1/1     1            1           7m17s
 
-NAME                                                                      DESIRED   CURRENT   READY   AGE
-replicaset.apps/puppetserver-helm-chart-postgres-6dc7c8b978               1         1         1       7m25s
-replicaset.apps/puppetserver-helm-chart-puppetdb-86645656d5               1         1         1       7m25s
-replicaset.apps/puppetserver-helm-chart-puppetserver-masters-5bdd9988d7   1         1         1       7m25s
+NAME                                                           DESIRED   CURRENT   READY   AGE
+replicaset.apps/puppetserver-postgres-fc66cbc49                1         1         1       7m17s
+replicaset.apps/puppetserver-puppetdb-56498d68dc               1         1         1       7m17s
+replicaset.apps/puppetserver-puppetserver-masters-5c6dbdc78f   1         1         1       7m17s
 
-NAME                                                              READY   AGE
-statefulset.apps/puppetserver-helm-chart-puppetserver-compilers   3/3     7m25s
+NAME                                                   READY   AGE
+statefulset.apps/puppetserver-puppetserver-compilers   1/1     7m17s
+
+NAME                                                                    REFERENCE                                         TARGETS            MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/puppetserver-compilers-autoscaler   StatefulSet/puppetserver-puppetserver-compilers   43%/75%, 67%/75%   1         3         1          7m17s
 ```
 
 ## Configuration
