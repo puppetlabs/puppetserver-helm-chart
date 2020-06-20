@@ -3,9 +3,9 @@ entries:
   puppetserver:
   - apiVersion: v2
     appVersion: 6.10.0
-    created: "2020-06-19T11:36:22.539252159Z"
+    created: "2020-06-20T17:37:39.652140701Z"
     description: Puppet automates the delivery and operation of software.
-    digest: 25766f227a105248ba33519025ca5c084c285d1195106eda8de44082b567392b
+    digest: cbe548590cccb0eb37bfaf402e0726abe2f1a6e874e784bc3d56faed66e5d2a3
     home: https://puppet.com/
     icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
     keywords:
@@ -133,4 +133,4 @@ entries:
     urls:
     - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-helm-chart-1.8.4.tgz
     version: 1.8.4
-generated: "2020-06-19T11:36:22.523093071Z"
+generated: "2020-06-20T17:37:39.649385972Z"
