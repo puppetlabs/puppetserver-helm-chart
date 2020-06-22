@@ -5,6 +5,12 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v4.1.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.1.1) (2020-06-22)
+
+- Small adjustments in `README` for new chart app name and new default Puppetboard image owner.
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.1.0...v4.1.1)
+
 ## [v4.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.1.0) (2020-06-22)
 
 - Rework Puppetboard support.
