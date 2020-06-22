@@ -67,12 +67,11 @@ entries:
     urls:
     - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-4.1.0.tgz
     version: 4.1.0
-  puppetserver-helm-chart:
   - apiVersion: v2
     appVersion: 6.10.0
-    created: "2020-06-17T07:28:11.342309988Z"
+    created: "2020-06-23T01:51:45.279456894+03:00"
     description: Puppet automates the delivery and operation of software.
-    digest: df1d3e9810fe7832e0d523d95d998db19bfeaf55f06137ee4008d08988b6c45c
+    digest: 663b5815e160cc962e24a6a61cbcb1101d04eba0c4c58508b65f78dc5052e920
     home: https://puppet.com/
     icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
     keywords:
@@ -94,18 +93,18 @@ entries:
       name: Xtigyro
     - email: slconley@gmail.com
       name: slconley
-    name: puppetserver-helm-chart
+    name: puppetserver
     sources:
     - https://github.com/puppetlabs/pupperware/
     type: application
     urls:
-    - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-helm-chart-4.0.0.tgz
-    version: 4.0.0
+    - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-4.0.1.tgz
+    version: 4.0.1
   - apiVersion: v2
     appVersion: 6.9.2
-    created: "2020-05-01T14:15:41.491968-07:00"
+    created: "2020-06-23T01:51:45.277313487+03:00"
     description: Puppet automates the delivery and operation of software.
-    digest: 6e25cc32a56b16e8e87ea7146bf0a196bb82d15af20aeb351660c6c5a88c6912
+    digest: 4be5da98025ce5e95a76433a70be1341fe94278894232636cdb591c3f0508477
     home: https://puppet.com/
     icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
     keywords:
@@ -127,18 +126,18 @@ entries:
       name: Xtigyro
     - email: slconley@gmail.com
       name: slconley
-    name: puppetserver-helm-chart
+    name: puppetserver
     sources:
     - https://github.com/puppetlabs/pupperware/
     type: application
     urls:
-    - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-helm-chart-3.0.2.tgz
-    version: 3.0.2
+    - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-3.0.3.tgz
+    version: 3.0.3
   - apiVersion: v1
     appVersion: 6.9.2
-    created: "2020-05-01T14:15:41.491968-07:00"
+    created: "2020-06-23T01:51:45.275578981+03:00"
     description: Puppet automates the delivery and operation of software.
-    digest: 48911765317c2ca048ffae164670859834eed98a12d1b32fdc15368767e7d339
+    digest: 26712ff5ef6dd45020db4eaa0ab190b42f5912dd8777c5d3c673612cd133e801
     home: https://puppet.com/
     icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
     keywords:
@@ -160,10 +159,10 @@ entries:
       name: Xtigyro
     - email: slconley@gmail.com
       name: slconley
-    name: puppetserver-helm-chart
+    name: puppetserver
     sources:
     - https://github.com/puppetlabs/pupperware/
     urls:
-    - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-helm-chart-1.8.4.tgz
-    version: 1.8.4
-generated: "2020-06-22T22:34:38.427351401+03:00"
+    - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-1.8.5.tgz
+    version: 1.8.5
+generated: "2020-06-23T01:51:45.272827672+03:00"
