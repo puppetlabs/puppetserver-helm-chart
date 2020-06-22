@@ -5,6 +5,18 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v4.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.1.0) (2020-06-22)
+
+- Rework Puppetboard support.
+- Add Puppetboard Service.
+- Add optional Puppetboard Ingress.
+- Change default chart app name to `puppetserver`.
+- Bump Puppetboard to `v2.1.2`, r10k to `v3.5.1`, and PostgreSQL to `v9.6.18`.
+- Other small improvements and fixes.
+- Update `OWNERS`.
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.0.0...v4.1.0)
+
 ## [v4.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.0.0) (2020-06-08)
 
 - Support for multiple Puppetserver Compilers (optionally) on different K8s nodes (incl. across different cloud zones).
@@ -22,7 +34,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - Various small improvements and fixes.
 - Simpler documentation.
 
-[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.0.0...v3.0.2)
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v3.0.2...v4.0.0)
 
 ## [v3.0.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v3.0.2) (2020-05-01)
 
