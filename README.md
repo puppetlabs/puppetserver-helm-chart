@@ -145,7 +145,7 @@ helm repo add puppet https://puppetlabs.github.io/puppetserver-helm-chart
 To install the chart with the release name `puppetserver`.
 
 ```bash
-helm install --namespace puppetserver --name puppetserver puppet/puppetserver-helm-chart --set puppetserver.puppeturl='https://github.com/$SOMEUSER/control-repo.git'
+helm install --namespace puppetserver --name puppetserver puppet/puppetserver --set puppetserver.puppeturl='https://github.com/$SOMEUSER/control-repo.git'
 ```
 
 > Note - If you do not specify a name, helm will select a name for you.
@@ -294,13 +294,13 @@ Parameter | Description | Default
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-helm install --namespace puppetserver --name puppetserver puppet/puppetserver-helm-chart --set puppetserver.puppeturl='https://github.com/$SOMEUSER/puppet.git',hiera.hieradataurl='https://github.com/$SOMEUSER/hieradata.git'
+helm install --namespace puppetserver --name puppetserver puppet/puppetserver --set puppetserver.puppeturl='https://github.com/$SOMEUSER/puppet.git',hiera.hieradataurl='https://github.com/$SOMEUSER/hieradata.git'
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```bash
-helm install --namespace puppetserver --name puppetserver puppet/puppetserver-helm-chart -f values.yaml
+helm install --namespace puppetserver --name puppetserver puppet/puppetserver -f values.yaml
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

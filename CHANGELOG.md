@@ -5,6 +5,12 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v1.8.5](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.8.5) (2020-06-23)
+
+- Change default chart app name to `puppetserver`.
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.8.4...v1.8.5)
+
 ## [v1.8.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.8.4) (2020-05-01)
 
 - Documentation updates to reflect the new GitHub repo and contact details of the chart.
