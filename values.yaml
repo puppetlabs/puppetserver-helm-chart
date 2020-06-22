@@ -208,16 +208,16 @@ puppetserver:
 r10k:
   name: r10k
   image: puppet/r10k
-  tag: 3.5.0
+  tag: 3.5.1
   pullPolicy: IfNotPresent
   code:
     resources: {}
     #  requests:
     #    memory: 256Mi
-    #    cpu: 250m
+    #    cpu: 200m
     #  limits:
     #    memory: 512Mi
-    #    cpu: 500m
+    #    cpu: 300m
     cronJob:
       schedule: "*/15 * * * *"
     ## Additional r10k code container arguments
@@ -244,10 +244,10 @@ r10k:
     resources: {}
     #  requests:
     #    memory: 256Mi
-    #    cpu: 250m
+    #    cpu: 200m
     #  limits:
     #    memory: 512Mi
-    #    cpu: 500m
+    #    cpu: 300m
     cronJob:
       schedule: "*/2 * * * *"
     ## Additional r10k hiera container environment variables
@@ -276,7 +276,7 @@ r10k:
 postgres:
   name: postgres
   image: postgres
-  tag: 9.6.17
+  tag: 9.6.18
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
@@ -320,18 +320,46 @@ puppetdb:
 puppetboard:
   enabled: false
   name: puppetboard
-  image: puppet/puppetboard
-  tag: 0.3.0
+  image: xtigyro/puppetboard
+  tag: 2.1.2
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
   #    memory: 368Mi
   #    cpu: 300m
   #  limits:
-  #    memory: 768Mi
+  #    memory: 640Mi
   #    cpu: 500m
   ## Additional puppetboard container environment variables
   extraEnv: {}
+  #  ENABLE_CATALOG: True
+  #  ENABLE_QUERY: True
+  #  INVENTORY_FACTS: Hostname,fqdn,IP Address,ipaddress
+  #  GRAPH_FACTS: architecture,puppetversion,osfamily
+  ingress:
+    ## If true, Puppetboard Ingress will be created
+    ##
+    enabled: false
+    ## Puppetboard Ingress annotations
+    ##
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+    ## Puppetboard Ingress additional labels
+    ##
+    extraLabels: {}
+    ## Puppetboard Ingress hostnames with optional path
+    ## Must be provided if Ingress is enabled
+    ##
+    hosts: []
+    #   - puppetboard.domain.com
+    #   - domain.com/puppetboard
+    ## Puppetboard Ingress TLS configuration
+    ## Secrets must be manually created in the namespace
+    ##
+    tls: []
+    #   - secretName: puppetboard-server-tls
+    #     hosts:
+    #       - puppetboard.domain.com
 
 ## Hiera Configuration for Puppet Server
 ##
