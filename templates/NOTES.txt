@@ -1,7 +1,11 @@
 Puppet Server has been installed/upgraded.
 
 Release Name: "{{ template "puppetserver.fullname" . }}"
+{{- if .Values.puppetserver.compilers.enabled }}
+Masters Service Name: "{{ template "puppetserver.puppetserver.agents-to-masters.serviceName" . }}"
+{{- else }}
 Masters Service Name: "{{ template "puppetserver.puppetserver-masters.serviceName" . }}"
+{{- end }}
 Masters Service Type: "{{.Values.puppetserver.masters.service.type}}"
 Masters Service Port: "{{.Values.puppetserver.masters.service.ports.puppetserver.port}}"
 Masters Ingress Enabled: "{{.Values.puppetserver.masters.ingress.enabled}}"
