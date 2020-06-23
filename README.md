@@ -53,10 +53,6 @@ To achieve better throughput of Puppet Infrastructure, you'll need to enable and
 * Creates seven services that expose: Puppet Server Masters, Puppet Server Compilers (optional), PuppetDB, PostgreSQL, and Puppetboard (optional).
 * Creates secrets to hold credentials for PuppetDB, PosgreSQL, and r10k.
 
-## Support for Helm v2
-
-Those of you who would like to deploy the chart with Helm v2 - please switch to branch `helm-v2`.
-
 ## Installing the Chart
 
 ### Add Puppet Server Helm Repository
