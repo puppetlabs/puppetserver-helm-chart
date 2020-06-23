@@ -32,10 +32,6 @@ To achieve better availability of Puppet Infrastructure, you'll need to scale ou
 
 To achieve better throughput of Puppet Infrastructure, you'll need to enable and scale out Puppet Server Compilers using `.Values.puppetserver.compilers`. These Servers are known as compile masters, and are simply additional load-balanced Puppet Servers that receive catalog requests from agents and synchronize the results with each other.
 
-## Support for Helm v2
-
-Those of you who would like to deploy the chart with Helm v2 - please use chart version `v1.x`.
-
 ## Installing the Chart
 
 ### Add Puppet Server Helm Repository
