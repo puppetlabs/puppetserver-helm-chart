@@ -237,7 +237,7 @@ r10k:
           ## A multi-line string
           value:  # |
             #  KNOWN_HOSTS CONTENTS
-        ## Or set the git-sync Known Hosts file and SSH Private Key
+        ## or set the r10k known hosts file and SSH Private Key
         ## from a pre-existing K8s secret
         existingSecret: ""
   hiera:
@@ -267,7 +267,7 @@ r10k:
           ## A multi-line string
           value:  # |
             #  KNOWN_HOSTS CONTENTS
-        ## Or set the git-sync Known Hosts file and SSH Private Key
+        ## or set the r10k known hosts file and SSH Private Key
         ## from a pre-existing K8s secret
         existingSecret: ""
 
