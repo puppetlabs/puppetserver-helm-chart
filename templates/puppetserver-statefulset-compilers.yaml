@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ template "puppetserver.name" . }}-puppetserver-compilers
+  name: {{ template "puppetserver.name" . }}-puppetserver-compiler
   labels:
     {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 4 }}
   {{- if .Values.puppetserver.compilers.annotations }}
