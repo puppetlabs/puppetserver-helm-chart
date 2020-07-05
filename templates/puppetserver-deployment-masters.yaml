@@ -167,6 +167,22 @@ spec:
               value: "https://puppetdb:8081"
             - name: CA_ALLOW_SUBJECT_ALT_NAMES
               value: "true"
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8140
+            initialDelaySeconds: {{ .Values.puppetserver.readinessProbeInitialDelay }}
+            timeoutSeconds: {{ .Values.puppetserver.readinessProbeTimeout }}
+            failureThreshold: {{ .Values.puppetserver.readinessProbeFailureThreshold }}
+            successThreshold: {{ .Values.puppetserver.readinessProbeSuccessThreshold }}
+          livenessProbe:
+            httpGet:
+              path: /healthy
+              port: 8140
+            initialDelaySeconds: {{ .Values.puppetserver.livenessProbeInitialDelay }}
+            timeoutSeconds: {{ .Values.puppetserver.livenessProbeTimeout }}
+            failureThreshold: {{ .Values.puppetserver.livenessProbeFailureThreshold }}
+            successThreshold: {{ .Values.puppetserver.livenessProbeSuccessThreshold }}
           ports:
             - containerPort: 8140
           volumeMounts:
