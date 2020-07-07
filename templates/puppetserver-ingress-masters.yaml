@@ -14,7 +14,7 @@ metadata:
     {{- range $key, $value := .Values.puppetserver.masters.ingress.extraLabels }}
     {{ $key }}: {{ $value }}
     {{- end }}
-  name: {{ template "puppetserver.fullname" . }}-compilers
+  name: {{ template "puppetserver.fullname" . }}-masters
 spec:
   rules:
     {{- range .Values.puppetserver.masters.ingress.hosts }}
