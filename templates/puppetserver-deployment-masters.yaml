@@ -169,20 +169,22 @@ spec:
               value: "true"
           readinessProbe:
             httpGet:
-              path: /ready
+              path: /status/v1/simple
               port: 8140
-            initialDelaySeconds: {{ .Values.puppetserver.readinessProbeInitialDelay }}
-            timeoutSeconds: {{ .Values.puppetserver.readinessProbeTimeout }}
-            failureThreshold: {{ .Values.puppetserver.readinessProbeFailureThreshold }}
-            successThreshold: {{ .Values.puppetserver.readinessProbeSuccessThreshold }}
+              scheme: HTTPS
+            initialDelaySeconds: {{ .Values.puppetserver.masters.readinessProbeInitialDelay }}
+            periodSeconds: {{ .Values.puppetserver.masters.readinessProbePeriodSeconds }}
+            timeoutSeconds: {{ .Values.puppetserver.masters.readinessProbeTimeout }}
+            failureThreshold: {{ .Values.puppetserver.masters.readinessProbeFailureThreshold }}
+            successThreshold: {{ .Values.puppetserver.masters.readinessProbeSuccessThreshold }}
           livenessProbe:
-            httpGet:
-              path: /healthy
+            tcpSocket:
               port: 8140
-            initialDelaySeconds: {{ .Values.puppetserver.livenessProbeInitialDelay }}
-            timeoutSeconds: {{ .Values.puppetserver.livenessProbeTimeout }}
-            failureThreshold: {{ .Values.puppetserver.livenessProbeFailureThreshold }}
-            successThreshold: {{ .Values.puppetserver.livenessProbeSuccessThreshold }}
+            initialDelaySeconds: {{ .Values.puppetserver.masters.livenessProbeInitialDelay }}
+            periodSeconds: {{ .Values.puppetserver.masters.livenessProbePeriodSeconds }}
+            timeoutSeconds: {{ .Values.puppetserver.masters.livenessProbeTimeout }}
+            failureThreshold: {{ .Values.puppetserver.masters.livenessProbeFailureThreshold }}
+            successThreshold: {{ .Values.puppetserver.masters.livenessProbeSuccessThreshold }}
           ports:
             - containerPort: 8140
           volumeMounts:

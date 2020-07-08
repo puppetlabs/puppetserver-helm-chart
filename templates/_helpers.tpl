@@ -200,7 +200,7 @@ Calculates the max. number of compilers
 {{- define "puppetserver.compilers.hostnames" -}}
   {{- $dot := . -}}
   {{- range $compilersLoopCount, $e := until ((include "puppetserver.compilers.maxNo" $dot) | int) -}}
-    {{- printf "%s-puppetserver-compilers-%d" (include "puppetserver.name" $dot) $compilersLoopCount -}}
+    {{- printf "%s-puppetserver-compiler-%d" (include "puppetserver.name" $dot) $compilersLoopCount -}}
     {{- if lt $compilersLoopCount  ( sub ((include "puppetserver.compilers.maxNo" $dot) | int) 1 ) -}}
       {{- printf "," -}}
     {{- end -}}
