@@ -20,6 +20,8 @@ In case a Load Balancer (LB) must sit in front of Puppet Server - please keep in
 
 The Ingress resource is disabled by default, but if it is enabled then ssl-passthrough must be used so that puppet agents will get the expected server certificate when connecting to the service.  This feature must be enabled on the Ingress resource itself, but also must be enabled via command line argument to the NGINX Ingress Controller.  More information on that can be found [here](<https://kubernetes.github.io/ingress-nginx/user-guide/cli-arguments/>).
 
+> **NOTE**: Ingress URLs must be passed in the `Values.puppetserver.masters.fqdns.alternateServerNames`. Also - in the `Values.puppetserver.compilers.fqdns.alternateServerNames` (if Puppet Compilers and their Ingress resources are deployed).
+
 ## Migrating from Bare-Metal Puppet Infrastructure
 
 ### Auto-Signing Certificate Requests
@@ -256,6 +258,8 @@ docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppe
 docker exec -it goofy_xtigyro bash
 puppet agent -t --server puppet --masterport 8140 --test --waitforcert 15 --certname ubuntu-goofy_xtigyro
 puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-goofy_xtigyro
+# if Ingress is used, e.g.
+# puppet agent -t --server puppet.local.compilers --ca_server puppet.local.masters --masterport 443 --ca_port 443 --test --certname ubuntu-goofy_xtigyro
 puppet agent -t --server puppet-compilers --masterport 8141 --test --certname ubuntu-goofy_xtigyro
 exit
 docker rm -f goofy_xtigyro
