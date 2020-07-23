@@ -152,12 +152,12 @@ puppetserver:
     ## Puppet Server Compiler readiness and liveness probe initial delays and timeouts
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
     ##
-    readinessProbeInitialDelay: 120
+    readinessProbeInitialDelay: 180
     readinessProbePeriodSeconds: 30
     readinessProbeTimeout: 30
     readinessProbeFailureThreshold: 3
     readinessProbeSuccessThreshold: 1
-    livenessProbeInitialDelay: 150
+    livenessProbeInitialDelay: 420
     livenessProbePeriodSeconds: 20
     livenessProbeTimeout: 30
     livenessProbeFailureThreshold: 3
