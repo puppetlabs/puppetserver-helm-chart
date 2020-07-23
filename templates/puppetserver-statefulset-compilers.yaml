@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ template "puppetserver.name" . }}-puppetserver-compilers
+  name: {{ template "puppetserver.name" . }}-puppetserver-compiler
   labels:
     {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 4 }}
   {{- if .Values.puppetserver.compilers.annotations }}
@@ -152,6 +152,24 @@ spec:
               value: "false"
             - name: CA_HOSTNAME
               value: "{{ template "puppetserver.puppetserver-masters.serviceName" . }}"
+          readinessProbe:
+            httpGet:
+              path: /status/v1/simple
+              port: 8140
+              scheme: HTTPS
+            initialDelaySeconds: {{ .Values.puppetserver.compilers.readinessProbeInitialDelay }}
+            periodSeconds: {{ .Values.puppetserver.compilers.readinessProbePeriodSeconds }}
+            timeoutSeconds: {{ .Values.puppetserver.compilers.readinessProbeTimeout }}
+            failureThreshold: {{ .Values.puppetserver.compilers.readinessProbeFailureThreshold }}
+            successThreshold: {{ .Values.puppetserver.compilers.readinessProbeSuccessThreshold }}
+          livenessProbe:
+            tcpSocket:
+              port: 8140
+            initialDelaySeconds: {{ .Values.puppetserver.compilers.livenessProbeInitialDelay }}
+            periodSeconds: {{ .Values.puppetserver.compilers.livenessProbePeriodSeconds }}
+            timeoutSeconds: {{ .Values.puppetserver.compilers.livenessProbeTimeout }}
+            failureThreshold: {{ .Values.puppetserver.compilers.livenessProbeFailureThreshold }}
+            successThreshold: {{ .Values.puppetserver.compilers.livenessProbeSuccessThreshold }}
           ports:
             - containerPort: 8140
           volumeMounts:

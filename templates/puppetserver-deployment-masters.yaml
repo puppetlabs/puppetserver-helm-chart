@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "puppetserver.name" . }}-puppetserver-masters
+  name: {{ template "puppetserver.name" . }}-puppetserver-master
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
 spec:
@@ -167,6 +167,24 @@ spec:
               value: "https://puppetdb:8081"
             - name: CA_ALLOW_SUBJECT_ALT_NAMES
               value: "true"
+          readinessProbe:
+            httpGet:
+              path: /status/v1/simple
+              port: 8140
+              scheme: HTTPS
+            initialDelaySeconds: {{ .Values.puppetserver.masters.readinessProbeInitialDelay }}
+            periodSeconds: {{ .Values.puppetserver.masters.readinessProbePeriodSeconds }}
+            timeoutSeconds: {{ .Values.puppetserver.masters.readinessProbeTimeout }}
+            failureThreshold: {{ .Values.puppetserver.masters.readinessProbeFailureThreshold }}
+            successThreshold: {{ .Values.puppetserver.masters.readinessProbeSuccessThreshold }}
+          livenessProbe:
+            tcpSocket:
+              port: 8140
+            initialDelaySeconds: {{ .Values.puppetserver.masters.livenessProbeInitialDelay }}
+            periodSeconds: {{ .Values.puppetserver.masters.livenessProbePeriodSeconds }}
+            timeoutSeconds: {{ .Values.puppetserver.masters.livenessProbeTimeout }}
+            failureThreshold: {{ .Values.puppetserver.masters.livenessProbeFailureThreshold }}
+            successThreshold: {{ .Values.puppetserver.masters.livenessProbeSuccessThreshold }}
           ports:
             - containerPort: 8140
           volumeMounts:
