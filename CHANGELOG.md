@@ -12,7 +12,13 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - Style improvements in `README`.
 - Small fixes in `values`.
 
-[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.2.0...v4.3.0)
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.2.1...v4.3.0)
+
+## [v4.2.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.2.1) (2020-07-08)
+
+- Fix naming for Puppet Server Masters' Ingress.
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.2.0...v4.2.1)
 
 ## [v4.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.2.0) (2020-06-23)
 
