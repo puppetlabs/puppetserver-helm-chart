@@ -30,13 +30,13 @@ puppetserver:
     ## Puppet Server Master readiness and liveness probe initial delays and timeouts
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
     ##
-    readinessProbeInitialDelay: 120
-    readinessProbePeriodSeconds: 30
+    readinessProbeInitialDelay: 180
+    readinessProbePeriodSeconds: 60
     readinessProbeTimeout: 10
     readinessProbeFailureThreshold: 3
     readinessProbeSuccessThreshold: 1
-    livenessProbeInitialDelay: 150
-    livenessProbePeriodSeconds: 20
+    livenessProbeInitialDelay: 420
+    livenessProbePeriodSeconds: 30
     livenessProbeTimeout: 10
     livenessProbeFailureThreshold: 3
     livenessProbeSuccessThreshold: 1
@@ -153,12 +153,12 @@ puppetserver:
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
     ##
     readinessProbeInitialDelay: 180
-    readinessProbePeriodSeconds: 30
+    readinessProbePeriodSeconds: 60
     readinessProbeTimeout: 30
     readinessProbeFailureThreshold: 3
     readinessProbeSuccessThreshold: 1
     livenessProbeInitialDelay: 420
-    livenessProbePeriodSeconds: 20
+    livenessProbePeriodSeconds: 30
     livenessProbeTimeout: 30
     livenessProbeFailureThreshold: 3
     livenessProbeSuccessThreshold: 1
