@@ -5,6 +5,15 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v4.3.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.3.0) (2020-07-24)
+
+- Liveness and readiness probes for Puppet Server.
+- Adjust further resource naming.
+- Style improvements in `README`.
+- Small fixes in `values`.
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.2.1...v4.3.0)
+
 ## [v4.2.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.2.1) (2020-07-08)
 
 - Fix naming for Puppet Server Masters' Ingress.
