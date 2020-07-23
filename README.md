@@ -126,12 +126,12 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.masters.extraEnv` | puppetserver masters additional container env vars |``|
 | `puppetserver.masters.readinessProbeInitialDelay` | the initial delay for the puppetserver masters readiness probe | `180`|
 | `puppetserver.masters.readinessProbePeriodSeconds` | how often (in seconds) to perform the puppetserver masters readiness probe | `60`|
-| `puppetserver.masters.readinessProbeTimeout` | the timeout for the puppetserver masters readiness probe | `30`|
+| `puppetserver.masters.readinessProbeTimeout` | the timeout for the puppetserver masters readiness probe | `20`|
 | `puppetserver.masters.readinessProbeFailureThreshold` | the failure threshold for the puppetserver masters readiness probe | `3`|
 | `puppetserver.masters.readinessProbeSuccessThreshold` | the success threshold for the puppetserver masters readiness probe | `1`|
 | `puppetserver.masters.livenessProbeInitialDelay` | the initial delay for the puppetserver masters liveness probe | `420`|
 | `puppetserver.masters.livenessProbePeriodSeconds` | how often (in seconds) to perform the puppetserver masters liveness probe | `30`|
-| `puppetserver.masters.livenessProbeTimeout` | the timeout for the puppetserver masters liveness probe  | `30`|
+| `puppetserver.masters.livenessProbeTimeout` | the timeout for the puppetserver masters liveness probe  | `10`|
 | `puppetserver.masters.livenessProbeFailureThreshold` | the failure threshold for the puppetserver masters liveness probe | `3`|
 | `puppetserver.masters.livenessProbeSuccessThreshold` | the success threshold for the puppetserver masters liveness probe | `1`|
 | `puppetserver.masters.fqdns.alternateServerNames` | puppetserver masters alternate fqdns |``|
@@ -159,7 +159,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.compilers.extraEnv` | puppetserver compilers additional container env vars |``|
 | `puppetserver.compilers.readinessProbeInitialDelay` | the initial delay for the puppetserver masters readiness probe | `180`|
 | `puppetserver.compilers.readinessProbePeriodSeconds` | how often (in seconds) to perform the puppetserver masters readiness probe | `60`|
-| `puppetserver.compilers.readinessProbeTimeout` | the timeout for the puppetserver masters readiness probe | `10`|
+| `puppetserver.compilers.readinessProbeTimeout` | the timeout for the puppetserver masters readiness probe | `20`|
 | `puppetserver.compilers.readinessProbeFailureThreshold` | the failure threshold for the puppetserver masters readiness probe | `3`|
 | `puppetserver.compilers.readinessProbeSuccessThreshold` | the success threshold for the puppetserver masters readiness probe | `1`|
 | `puppetserver.compilers.livenessProbeInitialDelay` | the initial delay for the puppetserver masters liveness probe | `420`|

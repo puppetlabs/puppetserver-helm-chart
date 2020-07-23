@@ -32,7 +32,7 @@ puppetserver:
     ##
     readinessProbeInitialDelay: 180
     readinessProbePeriodSeconds: 60
-    readinessProbeTimeout: 10
+    readinessProbeTimeout: 20
     readinessProbeFailureThreshold: 3
     readinessProbeSuccessThreshold: 1
     livenessProbeInitialDelay: 420
@@ -154,12 +154,12 @@ puppetserver:
     ##
     readinessProbeInitialDelay: 180
     readinessProbePeriodSeconds: 60
-    readinessProbeTimeout: 30
+    readinessProbeTimeout: 20
     readinessProbeFailureThreshold: 3
     readinessProbeSuccessThreshold: 1
     livenessProbeInitialDelay: 420
     livenessProbePeriodSeconds: 30
-    livenessProbeTimeout: 30
+    livenessProbeTimeout: 10
     livenessProbeFailureThreshold: 3
     livenessProbeSuccessThreshold: 1
 
