@@ -288,6 +288,8 @@ docker run -dit --network host --name buggy_xtigyro --entrypoint /bin/bash puppe
 docker exec -it buggy_xtigyro bash
 puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-buggy_xtigyro
 puppet agent -t --server puppet-compilers --masterport 8141 --test --certname ubuntu-buggy_xtigyro
+# if Ingress is used, e.g.
+# puppet agent -t --server puppet.local.compilers --ca_server puppet.local.masters --masterport 443 --ca_port 443 --test --certname ubuntu-buggy_xtigyro
 puppet agent -t --server puppet --masterport 8140 --test --waitforcert 15 --certname ubuntu-buggy_xtigyro
 exit
 docker rm -f buggy_xtigyro
