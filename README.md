@@ -84,8 +84,8 @@ $ kubectl get --namespace puppetserver all -l release=puppetserver
 NAME                                                     READY   STATUS    RESTARTS   AGE
 pod/puppetserver-postgres-fc66cbc49-d5pl7                1/1     Running   0          7m17s
 pod/puppetserver-puppetdb-56498d68dc-8c54g               2/2     Running   0          7m17s
-pod/puppetserver-puppetserver-compilers-0                3/3     Running   0          7m17s
-pod/puppetserver-puppetserver-masters-5c6dbdc78f-8xf6x   3/3     Running   0          7m17s
+pod/puppetserver-puppetserver-compiler-0                 3/3     Running   0          7m17s
+pod/puppetserver-puppetserver-master-5c6dbdc78f-8xf6x    3/3     Running   0          7m17s
 
 NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                    AGE
 service/agents-to-puppet            ClusterIP   10.104.117.137   <none>        8140/TCP                   7m17s
@@ -98,15 +98,15 @@ service/puppetdb                    ClusterIP   10.111.63.231    <none>        8
 NAME                                                READY   UP-TO-DATE   AVAILABLE   AGE
 deployment.apps/puppetserver-postgres               1/1     1            1           7m17s
 deployment.apps/puppetserver-puppetdb               1/1     1            1           7m17s
-deployment.apps/puppetserver-puppetserver-masters   1/1     1            1           7m17s
+deployment.apps/puppetserver-puppetserver-master    1/1     1            1           7m17s
 
 NAME                                                           DESIRED   CURRENT   READY   AGE
 replicaset.apps/puppetserver-postgres-fc66cbc49                1         1         1       7m17s
 replicaset.apps/puppetserver-puppetdb-56498d68dc               1         1         1       7m17s
-replicaset.apps/puppetserver-puppetserver-masters-5c6dbdc78f   1         1         1       7m17s
+replicaset.apps/puppetserver-puppetserver-master-5c6dbdc78f    1         1         1       7m17s
 
 NAME                                                   READY   AGE
-statefulset.apps/puppetserver-puppetserver-compilers   1/1     7m17s
+statefulset.apps/puppetserver-puppetserver-compiler   1/1     7m17s
 
 NAME                                                                    REFERENCE                                         TARGETS            MINPODS   MAXPODS   REPLICAS   AGE
 horizontalpodautoscaler.autoscaling/puppetserver-compilers-autoscaler   StatefulSet/puppetserver-puppetserver-compilers   43%/75%, 67%/75%   1         3         1          7m17s
