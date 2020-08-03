@@ -35,7 +35,7 @@ entries:
     version: 4.3.0
   - apiVersion: v1
     appVersion: 6.10.0
-    created: "2020-07-23T20:05:13.82592011+03:00"
+    created: "2020-07-10T00:50:25.744089709+03:00"
     description: Puppet automates the delivery and operation of software.
     digest: 8792851353b93473f091aef183ef2efde8b9406c4847dd60da318afa87cc8511
     home: https://puppet.com/
