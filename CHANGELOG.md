@@ -10,9 +10,9 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - Allow for changing the default Puppet Server port for Masters and Compilers.
 - Bump `puppetserver` to `v6.12.1`, `puppetdb` to `v6.11.3`, `r10k` to `v3.5.2`, `puppetboard` to `v2.2.0`, `postgres` to `v9.6.19`.
 - Code style fixes in "values.yaml".
-- Improve Testing section in `README.md`.
+- Improve `Testing the Deployed Chart Resources` in `README.md`.
 
-[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.3.0...v4.3.1)
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.3.0...v4.4.0)
 
 ## [v4.3.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.3.0) (2020-07-24)
 
