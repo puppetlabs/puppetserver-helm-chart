@@ -1,3 +1,4 @@
+{{- $puppetserverMastersServicePort := .Values.puppetserver.masters.service.ports.puppetserver.port -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -33,6 +34,8 @@ spec:
             {{- end }}
             - name: PUPPETSERVER_HOSTNAME
               value: "puppet"
+            - name: PUPPETSERVER_PORT
+              value: {{ $puppetserverMastersServicePort }}
             - name: PUPPETDB_POSTGRES_HOSTNAME
               value: "postgres"
             - name: PUPPETDB_PASSWORD
