@@ -61,9 +61,6 @@ puppetserver:
       ## The LB type (network protocol) for some cloud providers must be set here.
       ports:
         puppetserver:
-          ## WARNING: if a different port is set, PuppetDB and Puppet Compiler/s container images
-          ## must be modified - so that they can connect to Puppet Master/s K8s Service and vice versa.
-          ## Their Docker entrypoint scripts expect port "8140".
           port: 8140
         #  protocol: TCP
       ## Exemplary annotations for few cloud providers
@@ -204,9 +201,6 @@ puppetserver:
       ## The LB type (network protocol) for some cloud providers must be set here.
       ports:
         puppetserver:
-          ## WARNING: if a different port is set, PuppetDB and Puppet Master/s container images
-          ## must be modified - so that they can connect to Puppet Compilers/s K8s Service and vice versa.
-          ## Their Docker entrypoint scripts expect port "8140".
           port: 8140
         #  protocol: TCP
       ## Exemplary annotations for few cloud providers
