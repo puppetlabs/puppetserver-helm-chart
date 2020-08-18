@@ -146,7 +146,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: PUPPETSERVER_PORT
-              value: {{ $puppetserverCompilersServicePort }}
+              value: "{{ $puppetserverCompilersServicePort }}"
             - name: DNS_ALT_NAMES
               value: "{{ template "puppetserver.puppetserver-compilers.serviceName" . }},{{.Values.puppetserver.compilers.fqdns.alternateServerNames}}"
             - name: PUPPETDB_SERVER_URLS
