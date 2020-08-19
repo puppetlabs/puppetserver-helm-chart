@@ -158,7 +158,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /status/v1/simple
-              port: 8140
+              port: {{ $puppetserverCompilersServicePort }}
               scheme: HTTPS
             initialDelaySeconds: {{ .Values.puppetserver.compilers.readinessProbeInitialDelay }}
             periodSeconds: {{ .Values.puppetserver.compilers.readinessProbePeriodSeconds }}
@@ -167,14 +167,14 @@ spec:
             successThreshold: {{ .Values.puppetserver.compilers.readinessProbeSuccessThreshold }}
           livenessProbe:
             tcpSocket:
-              port: 8140
+              port: {{ $puppetserverCompilersServicePort }}
             initialDelaySeconds: {{ .Values.puppetserver.compilers.livenessProbeInitialDelay }}
             periodSeconds: {{ .Values.puppetserver.compilers.livenessProbePeriodSeconds }}
             timeoutSeconds: {{ .Values.puppetserver.compilers.livenessProbeTimeout }}
             failureThreshold: {{ .Values.puppetserver.compilers.livenessProbeFailureThreshold }}
             successThreshold: {{ .Values.puppetserver.compilers.livenessProbeSuccessThreshold }}
           ports:
-            - containerPort: 8140
+            - containerPort: {{ $puppetserverCompilersServicePort }}
           volumeMounts:
             - name: puppet-code-volume
               mountPath: /etc/puppetlabs/code/
