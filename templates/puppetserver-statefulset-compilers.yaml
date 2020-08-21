@@ -1,4 +1,5 @@
 {{- $puppetserverCompilersServicePort := .Values.puppetserver.compilers.service.ports.puppetserver.port -}}
+{{- $puppetserverMastersServicePort := .Values.puppetserver.masters.service.ports.puppetserver.port -}}
 {{- if .Values.puppetserver.compilers.enabled }}
 apiVersion: apps/v1
 kind: StatefulSet
@@ -145,7 +146,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: PUPPETSERVER_PORT
+            - name: PUPPET_MASTERPORT
               value: "{{ $puppetserverCompilersServicePort }}"
             - name: DNS_ALT_NAMES
               value: "{{ template "puppetserver.puppetserver-compilers.serviceName" . }},{{.Values.puppetserver.compilers.fqdns.alternateServerNames}}"
@@ -155,6 +156,8 @@ spec:
               value: "false"
             - name: CA_HOSTNAME
               value: "{{ template "puppetserver.puppetserver-masters.serviceName" . }}"
+            - name: CA_MASTERPORT
+              value: "{{ $puppetserverMastersServicePort }}"
           readinessProbe:
             httpGet:
               path: /status/v1/simple

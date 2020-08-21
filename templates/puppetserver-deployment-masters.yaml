@@ -162,7 +162,7 @@ spec:
             # puppetserver ca cli application
             - name: PUPPETSERVER_HOSTNAME
               value: "{{ template "puppetserver.puppetserver-masters.serviceName" . }}"
-            - name: PUPPETSERVER_PORT
+            - name: PUPPET_MASTERPORT
               value: "{{ $puppetserverMastersServicePort }}"
             - name: DNS_ALT_NAMES
               value: "{{ template "puppetserver.compilers.hostnames" . }},{{ template "puppetserver.puppetserver-compilers.serviceName" . }},{{ template "puppetserver.puppetserver.agents-to-masters.serviceName" . }},{{.Values.puppetserver.compilers.fqdns.alternateServerNames}},{{.Values.puppetserver.masters.fqdns.alternateServerNames}}"
