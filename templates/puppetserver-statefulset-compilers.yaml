@@ -20,6 +20,8 @@ spec:
   replicas: {{ .Values.puppetserver.compilers.manualScaling.compilers }}
   {{- end }}
   podManagementPolicy: {{ .Values.puppetserver.compilers.podManagementPolicy }}
+  updateStrategy:
+    type: RollingUpdate
   template:
     metadata:
       labels:
