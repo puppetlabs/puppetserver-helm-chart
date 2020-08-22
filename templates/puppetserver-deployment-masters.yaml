@@ -1,4 +1,3 @@
-{{- $puppetserverMastersServicePort := .Values.puppetserver.masters.service.ports.puppetserver.port -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -163,7 +162,7 @@ spec:
             - name: PUPPETSERVER_HOSTNAME
               value: "{{ template "puppetserver.puppetserver-masters.serviceName" . }}"
             - name: PUPPET_MASTERPORT
-              value: "{{ $puppetserverMastersServicePort }}"
+              value: "{{ template "puppetserver.puppetserver-masters.port" . }}"
             - name: DNS_ALT_NAMES
               value: "{{ template "puppetserver.compilers.hostnames" . }},{{ template "puppetserver.puppetserver-compilers.serviceName" . }},{{ template "puppetserver.puppetserver.agents-to-masters.serviceName" . }},{{.Values.puppetserver.compilers.fqdns.alternateServerNames}},{{.Values.puppetserver.masters.fqdns.alternateServerNames}}"
             - name: PUPPETDB_SERVER_URLS
@@ -173,7 +172,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /status/v1/simple
-              port: {{ $puppetserverMastersServicePort}}
+              port: {{ template "puppetserver.puppetserver-masters.port" .}}
               scheme: HTTPS
             initialDelaySeconds: {{ .Values.puppetserver.masters.readinessProbeInitialDelay }}
             periodSeconds: {{ .Values.puppetserver.masters.readinessProbePeriodSeconds }}
@@ -182,14 +181,14 @@ spec:
             successThreshold: {{ .Values.puppetserver.masters.readinessProbeSuccessThreshold }}
           livenessProbe:
             tcpSocket:
-              port: {{ $puppetserverMastersServicePort}}
+              port: {{ template "puppetserver.puppetserver-masters.port" .}}
             initialDelaySeconds: {{ .Values.puppetserver.masters.livenessProbeInitialDelay }}
             periodSeconds: {{ .Values.puppetserver.masters.livenessProbePeriodSeconds }}
             timeoutSeconds: {{ .Values.puppetserver.masters.livenessProbeTimeout }}
             failureThreshold: {{ .Values.puppetserver.masters.livenessProbeFailureThreshold }}
             successThreshold: {{ .Values.puppetserver.masters.livenessProbeSuccessThreshold }}
           ports:
-            - containerPort: {{ $puppetserverMastersServicePort}}
+            - containerPort: {{ template "puppetserver.puppetserver-masters.port" .}}
           volumeMounts:
             - name: puppet-code-storage
               mountPath: /etc/puppetlabs/code/

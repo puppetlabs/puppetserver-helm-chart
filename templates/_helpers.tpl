@@ -166,6 +166,20 @@ puppet-compilers
 {{- end -}}
 
 {{/*
+Puppet Masters' port.
+*/}}
+{{- define "puppetserver.puppetserver-masters.port" -}}
+{{- .Values.puppetserver.masters.service.ports.puppetserver.port -}}
+{{- end -}}
+
+{{/*
+Puppet Compilers' port.
+*/}}
+{{- define "puppetserver.puppetserver-compilers.port" -}}
+{{- .Values.puppetserver.compilers.service.ports.puppetserver.port -}}
+{{- end -}}
+
+{{/*
 Set's the affinity for pod placement
 when running with multiple Puppet compilers.
 */}}
