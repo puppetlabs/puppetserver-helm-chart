@@ -7,7 +7,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 ## [v4.4.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.4.0) (2020-08-24)
 
-- Allow for changing the default Puppet Server port for Masters and Compilers.
+- Allow for changing the default Puppet Server ports for Masters and Compilers.
 - Switch to percentage `rollingUpdate` strategy for Puppet Masters.
 - Set `updateStrategy` to `RollingUpdate` for Puppet Compilers.
 - Bump `puppetserver` to `v6.12.1`, `puppetdb` to `v6.11.3`, `r10k` to `v3.5.2`, `puppetboard` to `v2.2.0`, `postgres` to `v9.6.19`.
