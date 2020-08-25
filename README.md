@@ -310,4 +310,4 @@ kill %[job_numbers_above]
 * [Pupperware Team](mailto:pupperware@puppet.com), Owner
 * [Sean Conley](mailto:slconley@gmail.com), Developer
 * [Morgan Rhodes](mailto:morgan@puppet.com), Developer
-* [Scott Cressi](mailto:scottcressi@gmail.com), Developer
+* [Scott Cressi](mailto:scottcressi@gmail.com), Co-Author
