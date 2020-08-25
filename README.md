@@ -306,8 +306,8 @@ kill %[job_numbers_above]
 
 ## Credits
 
-* [Miroslav Hadzhiev](mailto:miroslav.hadzhiev@gmail.com), Lead Author and Developer
+* [Miroslav Hadzhiev](https://www.linkedin.com/in/mehadzhiev/), Lead Author and Developer
 * [Pupperware Team](mailto:pupperware@puppet.com), Owner
 * [Sean Conley](mailto:slconley@gmail.com), Developer
 * [Morgan Rhodes](mailto:morgan@puppet.com), Developer
-* [Scott Cressi](mailto:scottcressi@gmail.com), Developer
+* [Scott Cressi](mailto:scottcressi@gmail.com), Co-Author
