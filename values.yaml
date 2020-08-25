@@ -330,22 +330,20 @@ r10k:
         ## from a pre-existing K8s secret
         existingSecret: ""
 
-## PostgreSQL Configuration for PuppetDB
+## PostgreSQL Sub-Chart Configuration for PuppetDB
+## Please see https://github.com/helm/charts/tree/master/stable/postgresql
 ##
-postgres:
-  name: postgres
-  image: postgres
-  tag: 9.6.19
-  pullPolicy: IfNotPresent
-  resources: {}
+postgresql:
+  enabled: true
+  postgresqlUsername:
+  postgresqlPostgresPassword:
+  # resources:
   #  requests:
   #    memory: 512Mi
   #    cpu: 500m
   #  limits:
   #    memory: 768Mi
   #    cpu: 750m
-  ## Additional postgres container environment variables
-  extraEnv: {}
 
 ## PuppetDB Configuration
 ##
