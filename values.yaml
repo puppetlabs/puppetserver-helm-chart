@@ -449,6 +449,10 @@ hiera:
     public_key:  # |
       #  PUB_KEY CONTENTS
 
+## Provide a name in place of prometheus-operator for `app:` labels
+##
+nameOverride: ""
+
 ## Pod Configuration
 ##
 ## Node labels for pod assignment
