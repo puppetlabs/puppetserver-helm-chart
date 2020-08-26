@@ -33,6 +33,8 @@ spec:
             {{- end }}
             - name: PUPPETSERVER_HOSTNAME
               value: "puppet"
+            - name: PUPPETSERVER_PORT
+              value: "{{ template "puppetserver.puppetserver-masters.port" . }}"
             - name: PUPPETDB_POSTGRES_HOSTNAME
               value: "postgres"
             - name: PUPPETDB_PASSWORD

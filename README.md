@@ -84,8 +84,8 @@ $ kubectl get --namespace puppetserver all -l release=puppetserver
 NAME                                                     READY   STATUS    RESTARTS   AGE
 pod/puppetserver-postgres-fc66cbc49-d5pl7                1/1     Running   0          7m17s
 pod/puppetserver-puppetdb-56498d68dc-8c54g               2/2     Running   0          7m17s
-pod/puppetserver-puppetserver-compilers-0                3/3     Running   0          7m17s
-pod/puppetserver-puppetserver-masters-5c6dbdc78f-8xf6x   3/3     Running   0          7m17s
+pod/puppetserver-puppetserver-compiler-0                 3/3     Running   0          7m17s
+pod/puppetserver-puppetserver-master-5c6dbdc78f-8xf6x    3/3     Running   0          7m17s
 
 NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                    AGE
 service/agents-to-puppet            ClusterIP   10.104.117.137   <none>        8140/TCP                   7m17s
@@ -98,15 +98,15 @@ service/puppetdb                    ClusterIP   10.111.63.231    <none>        8
 NAME                                                READY   UP-TO-DATE   AVAILABLE   AGE
 deployment.apps/puppetserver-postgres               1/1     1            1           7m17s
 deployment.apps/puppetserver-puppetdb               1/1     1            1           7m17s
-deployment.apps/puppetserver-puppetserver-masters   1/1     1            1           7m17s
+deployment.apps/puppetserver-puppetserver-master    1/1     1            1           7m17s
 
 NAME                                                           DESIRED   CURRENT   READY   AGE
 replicaset.apps/puppetserver-postgres-fc66cbc49                1         1         1       7m17s
 replicaset.apps/puppetserver-puppetdb-56498d68dc               1         1         1       7m17s
-replicaset.apps/puppetserver-puppetserver-masters-5c6dbdc78f   1         1         1       7m17s
+replicaset.apps/puppetserver-puppetserver-master-5c6dbdc78f    1         1         1       7m17s
 
 NAME                                                   READY   AGE
-statefulset.apps/puppetserver-puppetserver-compilers   1/1     7m17s
+statefulset.apps/puppetserver-puppetserver-compiler   1/1     7m17s
 
 NAME                                                                    REFERENCE                                         TARGETS            MINPODS   MAXPODS   REPLICAS   AGE
 horizontalpodautoscaler.autoscaling/puppetserver-compilers-autoscaler   StatefulSet/puppetserver-puppetserver-compilers   43%/75%, 67%/75%   1         3         1          7m17s
@@ -273,6 +273,8 @@ kubectl port-forward -n puppetserver svc/puppet-compilers 8141:8140 &
 TIME_NOW="$(date +"%Y%m%dT%H%M")"
 cp "/etc/hosts"{,.backup_"$TIME_NOW"}
 echo '127.0.0.1 puppet agents-to-puppet puppet-compilers' >> /etc/hosts
+# if Ingress is used, e.g.
+# echo '127.0.0.1 puppet.local.masters puppet.local.compilers' >> /etc/hosts
 
 docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it goofy_xtigyro bash
@@ -288,6 +290,8 @@ docker run -dit --network host --name buggy_xtigyro --entrypoint /bin/bash puppe
 docker exec -it buggy_xtigyro bash
 puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-buggy_xtigyro
 puppet agent -t --server puppet-compilers --masterport 8141 --test --certname ubuntu-buggy_xtigyro
+# if Ingress is used, e.g.
+# puppet agent -t --server puppet.local.compilers --ca_server puppet.local.masters --masterport 443 --ca_port 443 --test --certname ubuntu-buggy_xtigyro
 puppet agent -t --server puppet --masterport 8140 --test --waitforcert 15 --certname ubuntu-buggy_xtigyro
 exit
 docker rm -f buggy_xtigyro
@@ -302,8 +306,8 @@ kill %[job_numbers_above]
 
 ## Credits
 
-* [Miroslav Hadzhiev](mailto:miroslav.hadzhiev@gmail.com), Lead Author and Developer
+* [Miroslav Hadzhiev](https://www.linkedin.com/in/mehadzhiev/), Lead Author and Developer
 * [Pupperware Team](mailto:pupperware@puppet.com), Owner
-* [Sean Conley](mailto:slconley@gmail.com), Developer
+* [Sean Conley](https://www.linkedin.com/in/seanconley/), Developer
 * [Morgan Rhodes](mailto:morgan@puppet.com), Developer
-* [Scott Cressi](mailto:scottcressi@gmail.com), Developer
+* [Scott Cressi](mailto:scottcressi@gmail.com), Co-Author

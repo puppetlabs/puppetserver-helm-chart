@@ -7,7 +7,7 @@
 puppetserver:
   name: puppetserver
   image: puppet/puppetserver
-  tag: 6.10.0
+  tag: 6.12.1
   pullPolicy: IfNotPresent
   ## Mandatory Deployment of Puppet Server Master/s
   ##
@@ -80,8 +80,8 @@ puppetserver:
       ## Puppet Server Masters Ingress annotations
       ##
       annotations: {}
-        # kubernetes.io/ingress.class: nginx
-        # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+        #  kubernetes.io/ingress.class: nginx
+        #  nginx.ingress.kubernetes.io/ssl-passthrough: "true"
       ## Puppet Server Masters Ingress additional labels
       ##
       extraLabels: {}
@@ -229,8 +229,8 @@ puppetserver:
       ## Puppet Server Compilers Ingress annotations
       ##
       annotations: {}
-        # kubernetes.io/ingress.class: nginx
-        # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+        #  kubernetes.io/ingress.class: nginx
+        #  nginx.ingress.kubernetes.io/ssl-passthrough: "true"
       ## Puppet Server Compilers Ingress additional labels
       ##
       extraLabels: {}
@@ -260,14 +260,14 @@ puppetserver:
   ## the management of configuration data from that of the Puppet code base.
   ## A separate Hieradata Repo can be included in the "hiera" section in this file.
   ##
-  puppeturl: ""   # git@github.com:$SOMEUSER/puppet.git
+  puppeturl: ""   #  git@github.com:$SOMEUSER/puppet.git
 
 ## r10k Repo Configuration
 ##
 r10k:
   name: r10k
   image: puppet/r10k
-  tag: 3.5.1
+  tag: 3.5.2
   pullPolicy: IfNotPresent
   code:
     resources: {}
@@ -281,9 +281,9 @@ r10k:
       schedule: "*/15 * * * *"
     ## Additional r10k code container arguments
     extraArgs: {}
-    #  - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
-    #  - --trace
-    #  - --color
+    #   - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
+    #   - --trace
+    #   - --color
     ## Additional r10k code container environment variables
     extraEnv: {}
     viaSsh:
@@ -311,9 +311,9 @@ r10k:
       schedule: "*/2 * * * *"
     ## Additional r10k hiera container environment variables
     extraArgs: {}
-    #  - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
-    #  - --trace
-    #  - --color
+    #   - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
+    #   - --trace
+    #   - --color
     ## Additional puppetserver hiera container environment variables
     extraEnv: {}
     viaSsh:
@@ -335,7 +335,7 @@ r10k:
 postgres:
   name: postgres
   image: postgres
-  tag: 9.6.18
+  tag: 9.6.19
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
@@ -352,7 +352,7 @@ postgres:
 puppetdb:
   name: puppetdb
   image: puppet/puppetdb
-  tag: 6.10.1
+  tag: 6.11.3
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
@@ -380,7 +380,7 @@ puppetboard:
   enabled: false
   name: puppetboard
   image: xtigyro/puppetboard
-  tag: 2.1.2
+  tag: 2.2.0
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
