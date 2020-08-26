@@ -22,6 +22,20 @@ The Ingress resource is disabled by default, but if it is enabled then ssl-passt
 
 > **NOTE**: Ingress URLs must be passed in the `Values.puppetserver.masters.fqdns.alternateServerNames`. Also - in the `Values.puppetserver.compilers.fqdns.alternateServerNames` (if Puppet Compilers and their Ingress resources are deployed).
 
+## Migrating from Bare-Metal Puppet Infrastructure
+
+### Auto-Signing Certificate Requests
+
+In general, the easiest way to switch the Puppet Agents from using one Puppet master to another is by enabling the auto-signing of CSRs. By default, that has been pre-enabled in the Puppet Server Docker container. It can be disabled in the Values file by passing an extra environment variable: `AUTOSIGN=false` (in `.Values.puppetserver.extraEnv`).
+
+You will also need to remove the existing certificates in `/etc/puppetlabs/puppet/ssl` on each Puppet agent.
+
+### Using Pre-Generated Puppet Master Certificates
+
+If you prefer not to auto-sign or manually sign the Puppet Agents' CSRs - you can use the same Puppet master and PuppetDB certificates which you used in your bare-metal setup. Please archive into two separate files and place your certificates in the `init/puppet-certs/puppetserver` and `init/puppet-certs/puppetdb` directories and enable their usage in the Values file (`.Values.puppetserver.preGeneratedCertsJob.enabled`).
+
+> **NOTE**: For more information please check - [README.md](init/README.md). For more general knowledge on the matter you can also read the article - <https://puppet.com/docs/puppet/5.5/ssl_regenerate_certificates.html.>
+
 ## Horizontal Scaling
 
 To achieve better availability and higher throughput of Puppet Infrastructure, you'll need to scale out Puppet Masters and/or Puppet Compilers.
@@ -33,6 +47,13 @@ To achieve better availability of Puppet Infrastructure, you'll need to scale ou
 ### Multiple Puppet Compilers
 
 To achieve better throughput of Puppet Infrastructure, you'll need to enable and scale out Puppet Server Compilers using `.Values.puppetserver.compilers`. These Servers are known as compile masters, and are simply additional load-balanced Puppet Servers that receive catalog requests from agents and synchronize the results with each other.
+
+## Chart Components
+
+* Creates three deployments: Puppet Server Master/s, PuppetDB, and PosgreSQL.
+* Creates one statefulset (optional): Puppet Server Compiler/s.
+* Creates seven services that expose: Puppet Server Masters, Puppet Server Compilers (optional), PuppetDB, PostgreSQL, and Puppetboard (optional).
+* Creates secrets to hold credentials for PuppetDB, PosgreSQL, and r10k.
 
 ## Installing the Chart
 
@@ -53,6 +74,43 @@ helm install --namespace puppetserver --name puppetserver puppet/puppetserver --
 ```
 
 > Note - If you do not specify a name, helm will select a name for you.
+
+### Installed Components
+
+You can use `kubectl get` to view all of the installed components.
+
+```console
+$ kubectl get --namespace puppetserver all -l release=puppetserver
+NAME                                                     READY   STATUS    RESTARTS   AGE
+pod/puppetserver-postgres-fc66cbc49-d5pl7                1/1     Running   0          7m17s
+pod/puppetserver-puppetdb-56498d68dc-8c54g               2/2     Running   0          7m17s
+pod/puppetserver-puppetserver-compiler-0                 3/3     Running   0          7m17s
+pod/puppetserver-puppetserver-master-5c6dbdc78f-8xf6x    3/3     Running   0          7m17s
+
+NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                    AGE
+service/agents-to-puppet            ClusterIP   10.104.117.137   <none>        8140/TCP                   7m17s
+service/postgres                    ClusterIP   10.111.140.243   <none>        5432/TCP                   7m17s
+service/puppet                      ClusterIP   10.101.45.131    <none>        8140/TCP                   7m17s
+service/puppet-compilers            ClusterIP   10.104.54.107    <none>        8140/TCP                   7m17s
+service/puppet-compilers-headless   ClusterIP   None             <none>        443/TCP                    7m17s
+service/puppetdb                    ClusterIP   10.111.63.231    <none>        8080/TCP,8081/TCP,80/TCP   7m17s
+
+NAME                                                READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/puppetserver-postgres               1/1     1            1           7m17s
+deployment.apps/puppetserver-puppetdb               1/1     1            1           7m17s
+deployment.apps/puppetserver-puppetserver-master    1/1     1            1           7m17s
+
+NAME                                                           DESIRED   CURRENT   READY   AGE
+replicaset.apps/puppetserver-postgres-fc66cbc49                1         1         1       7m17s
+replicaset.apps/puppetserver-puppetdb-56498d68dc               1         1         1       7m17s
+replicaset.apps/puppetserver-puppetserver-master-5c6dbdc78f    1         1         1       7m17s
+
+NAME                                                   READY   AGE
+statefulset.apps/puppetserver-puppetserver-compiler   1/1     7m17s
+
+NAME                                                                    REFERENCE                                         TARGETS            MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/puppetserver-compilers-autoscaler   StatefulSet/puppetserver-puppetserver-compilers   43%/75%, 67%/75%   1         3         1          7m17s
+```
 
 ## Configuration
 
@@ -206,10 +264,50 @@ helm install --namespace puppetserver --name puppetserver puppet/puppetserver -f
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Testing the Deployed Chart Resources
+
+```bash
+kubectl port-forward -n puppetserver svc/agents-to-puppet 8140:8140 &
+kubectl port-forward -n puppetserver svc/puppet-compilers 8141:8140 &
+
+TIME_NOW="$(date +"%Y%m%dT%H%M")"
+cp "/etc/hosts"{,.backup_"$TIME_NOW"}
+echo '127.0.0.1 puppet agents-to-puppet puppet-compilers' >> /etc/hosts
+# if Ingress is used, e.g.
+# echo '127.0.0.1 puppet.local.masters puppet.local.compilers' >> /etc/hosts
+
+docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
+docker exec -it goofy_xtigyro bash
+puppet agent -t --server puppet --masterport 8140 --test --waitforcert 15 --certname ubuntu-goofy_xtigyro
+puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-goofy_xtigyro
+# if Ingress is used, e.g.
+# puppet agent -t --server puppet.local.compilers --ca_server puppet.local.masters --masterport 443 --ca_port 443 --test --certname ubuntu-goofy_xtigyro
+puppet agent -t --server puppet-compilers --masterport 8141 --test --certname ubuntu-goofy_xtigyro
+exit
+docker rm -f goofy_xtigyro
+
+docker run -dit --network host --name buggy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
+docker exec -it buggy_xtigyro bash
+puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-buggy_xtigyro
+puppet agent -t --server puppet-compilers --masterport 8141 --test --certname ubuntu-buggy_xtigyro
+# if Ingress is used, e.g.
+# puppet agent -t --server puppet.local.compilers --ca_server puppet.local.masters --masterport 443 --ca_port 443 --test --certname ubuntu-buggy_xtigyro
+puppet agent -t --server puppet --masterport 8140 --test --waitforcert 15 --certname ubuntu-buggy_xtigyro
+exit
+docker rm -f buggy_xtigyro
+
+yes | mv "/etc/hosts.backup_"$TIME_NOW"" "/etc/hosts"
+unset TIME_NOW
+
+jobs | grep 'port-forward' | grep 'puppetserver'
+# [1]+  Running                 kubectl port-forward -n puppetserver svc/puppet 8140:8140 &
+kill %[job_numbers_above]
+```
+
 ## Credits
 
-* [Miroslav Hadzhiev](mailto:miroslav.hadzhiev@gmail.com), Lead Author and Developer
+* [Miroslav Hadzhiev](https://www.linkedin.com/in/mehadzhiev/), Lead Author and Developer
 * [Pupperware Team](mailto:pupperware@puppet.com), Owner
-* [Sean Conley](mailto:slconley@gmail.com), Developer
+* [Sean Conley](https://www.linkedin.com/in/seanconley/), Developer
 * [Morgan Rhodes](mailto:morgan@puppet.com), Developer
-* [Scott Cressi](mailto:scottcressi@gmail.com), Developer
+* [Scott Cressi](mailto:scottcressi@gmail.com), Co-Author
