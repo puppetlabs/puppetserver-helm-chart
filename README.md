@@ -308,6 +308,6 @@ kill %[job_numbers_above]
 
 * [Miroslav Hadzhiev](https://www.linkedin.com/in/mehadzhiev/), Lead Author and Developer
 * [Pupperware Team](mailto:pupperware@puppet.com), Owner
-* [Sean Conley](mailto:slconley@gmail.com), Developer
+* [Sean Conley](https://www.linkedin.com/in/seanconley/), Developer
 * [Morgan Rhodes](mailto:morgan@puppet.com), Developer
 * [Scott Cressi](mailto:scottcressi@gmail.com), Co-Author
