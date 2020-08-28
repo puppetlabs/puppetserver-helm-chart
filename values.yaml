@@ -330,21 +330,6 @@ r10k:
         ## from a pre-existing K8s secret
         existingSecret: ""
 
-## PostgreSQL Sub-Chart Configuration for PuppetDB
-## Please see https://github.com/helm/charts/tree/master/stable/postgresql
-##
-postgresql:
-  enabled: true
-  postgresqlUsername:
-  postgresqlPostgresPassword:
-  # resources:
-  #  requests:
-  #    memory: 512Mi
-  #    cpu: 500m
-  #  limits:
-  #    memory: 768Mi
-  #    cpu: 750m
-
 ## PuppetDB Configuration
 ##
 puppetdb:
@@ -371,6 +356,18 @@ puppetdb:
     # using this secret supercedes all other credentials settings.
     existingSecret: ""
 
+## PostgreSQL Sub-Chart Configuration for PuppetDB
+## Please see https://github.com/helm/charts/tree/master/stable/postgresql
+##
+postgresql:
+  enabled: true
+  # resources:
+  #  requests:
+  #    memory: 512Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 768Mi
+  #    cpu: 750m
 
 ## Puppetboard Configuration
 ##
@@ -448,6 +445,11 @@ hiera:
     ## A multi-line string
     public_key:  # |
       #  PUB_KEY CONTENTS
+
+## Global Values
+global:
+  postgresqlUsername:
+  postgresqlPostgresPassword:
 
 ## Provide a name in place of prometheus-operator for `app:` labels
 ##
