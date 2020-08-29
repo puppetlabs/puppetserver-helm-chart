@@ -230,6 +230,30 @@ Calculates the max. number of compilers
 {{- end -}}
 
 {{/*
+Return PostgreSQL username
+*/}}
+{{- define "postgresql.username" -}}
+{{- if .Values.global.puppetdbUsername }}
+    {{- .Values.global.puppetdbUsername -}}
+{{- else -}}
+    {{- .Values.puppetdbUsername -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return PuppetDB and PostgreSQL password
+*/}}
+{{- define "postgresql.password" -}}
+{{- if .Values.global.postgresql.postgresqlPassword }}
+    {{- .Values.global.postgresql.postgresqlPassword -}}
+{{- else if .Values.postgresqlPassword -}}
+    {{- .Values.postgresqlPassword -}}
+{{- else -}}
+    {{- randAlphaNum 20 -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create the name for the PuppetDB password secret.
 */}}
 {{- define "puppetdb.secret" -}}
@@ -246,28 +270,6 @@ Create the name for the PuppetDB password secret key.
 {{- define "puppetdb.passwordKey" -}}
 {{- if .Values.puppetdb.credentials.existingSecretKey -}}
   {{- .Values.puppetdb.credentials.existingSecretKey -}}
-{{- else -}}
-  password
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create the name for the PostgreSQL password secret.
-*/}}
-{{- define "postgres.secret" -}}
-{{- if .Values.postgres.credentials.existingSecret -}}
-  {{- .Values.postgres.credentials.existingSecret -}}
-{{- else -}}
-  postgres-secret
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create the name for the PostgreSQL password secret key.
-*/}}
-{{- define "postgres.passwordKey" -}}
-{{- if .Values.postgres.credentials.existingSecretKey -}}
-  {{- .Values.postgres.credentials.existingSecretKey -}}
 {{- else -}}
   password
 {{- end -}}

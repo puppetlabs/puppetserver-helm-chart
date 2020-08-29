@@ -347,14 +347,14 @@ puppetdb:
   ## Additional puppetdb container environment variables
   extraEnv: {}
   ## Credentials for PuppetDB and PostgreSQL
-  credentials:
-    username: puppetdb
-    ## Override the 20-char random "password" in templates/puppetdb-secret.yaml
-    password:
-      value: ""
-    # if used, the following existing secret must contain "username" and "password" keys, already base64 encoded.
-    # using this secret supercedes all other credentials settings.
-    existingSecret: ""
+  # credentials:
+  #   username: puppetdb
+  #   ## Override the 20-char random "password" in templates/puppetdb-secret.yaml
+  #   password:
+  #     value: ""
+  #   # if used, the following existing secret must contain "username" and "password" keys, already base64 encoded.
+  #   # using this secret supercedes all other credentials settings.
+  #   existingSecret: ""
 
 ## PostgreSQL Sub-Chart Configuration for PuppetDB
 ## Please see https://github.com/helm/charts/tree/master/stable/postgresql
@@ -447,9 +447,13 @@ hiera:
       #  PUB_KEY CONTENTS
 
 ## Global Values
+##
 global:
-  postgresqlUsername:
-  postgresqlPostgresPassword:
+  ## Credentials for PuppetDB and PostgreSQL
+  ##
+  puppetdbUsername: postgresql
+  puppetdbPostgresPassword: ""
+  existingSecret: ""
 
 ## Provide a name in place of prometheus-operator for `app:` labels
 ##
