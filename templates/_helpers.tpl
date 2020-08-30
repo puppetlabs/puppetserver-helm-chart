@@ -270,21 +270,10 @@ Return PuppetDB and PostgreSQL password
 Create the name for the PuppetDB password secret.
 */}}
 {{- define "puppetdb.secret" -}}
-{{- if .Values.puppetdb.credentials.existingSecret -}}
-  {{- .Values.puppetdb.credentials.existingSecret -}}
+{{- if .Values.global.credentials.existingSecret -}}
+  {{- .Values.global.credentials.existingSecret -}}
 {{- else -}}
   puppetdb-secret
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create the name for the PuppetDB password secret key.
-*/}}
-{{- define "puppetdb.passwordKey" -}}
-{{- if .Values.puppetdb.credentials.existingSecretKey -}}
-  {{- .Values.puppetdb.credentials.existingSecretKey -}}
-{{- else -}}
-  password
 {{- end -}}
 {{- end -}}
 

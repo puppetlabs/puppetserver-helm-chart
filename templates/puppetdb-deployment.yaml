@@ -41,7 +41,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "puppetdb.secret" . }}
-                  key: {{ template "puppetdb.passwordKey" . }}
+                  key: password
             - name: PUPPETDB_USER
               valueFrom:
                 secretKeyRef:
