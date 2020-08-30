@@ -233,8 +233,8 @@ Calculates the max. number of compilers
 Return PostgreSQL username
 */}}
 {{- define "postgresql.username" -}}
-{{- if .Values.global.puppetdbUsername }}
-  {{- .Values.global.puppetdbUsername -}}
+{{- if .Values.global.credentials.username }}
+  {{- .Values.global.credentials.username -}}
 {{- else -}}
   {{- .Values.postgresqlUsername -}}
 {{- end -}}
@@ -244,8 +244,8 @@ Return PostgreSQL username
 Return PuppetDB and PostgreSQL password
 */}}
 {{- define "postgresql.password" -}}
-{{- if .Values.global.puppetdbPassword }}
-  {{- .Values.global.puppetdbPassword -}}
+{{- if .Values.global.credentials.password }}
+  {{- .Values.global.credentials.password -}}
 {{- else if .Values.postgresqlPassword -}}
   {{- .Values.postgresqlPassword -}}
 {{- else -}}
@@ -257,8 +257,8 @@ Return PuppetDB and PostgreSQL password
 Return PuppetDB and PostgreSQL password
 */}}
 {{- define "postgresql.postgres.password" -}}
-{{- if .Values.global.puppetdbPassword }}
-  {{- .Values.global.puppetdbPassword -}}
+{{- if .Values.global.credentials.password }}
+  {{- .Values.global.credentials.password -}}
 {{- else if .Values.postgresqlPostgresPassword -}}
     {{- .Values.postgresqlPostgresPassword -}}
 {{- else -}}
