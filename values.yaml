@@ -335,7 +335,7 @@ r10k:
 puppetdb:
   name: puppetdb
   image: puppet/puppetdb
-  tag: 6.11.3
+  tag: 6.12.0
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
@@ -357,10 +357,14 @@ puppetdb:
   #   existingSecret: ""
 
 ## PostgreSQL Sub-Chart Configuration for PuppetDB
-## Please see https://github.com/helm/charts/tree/master/stable/postgresql
+## Please check: https://github.com/helm/charts/tree/master/stable/postgresql
 ##
 postgresql:
   enabled: true
+  name: postgresql
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
   # resources:
   #  requests:
   #    memory: 512Mi
@@ -368,6 +372,35 @@ postgresql:
   #  limits:
   #    memory: 768Mi
   #    cpu: 750m
+  ## Create a database
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
+  ##
+  postgresqlDatabase: puppetdb
+  ## ConfigMap with scripts to be run at first boot
+  ## NOTE: This will override initdbScripts
+  ##
+  initdbScriptsConfigMap: postgresql-custom-extensions
+  ## PostgreSQL data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  persistence:
+    enabled: true
+    ## A manually managed Persistent Volume and Claim
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template, so, for example, the name can depend on .Release or .Chart
+    ##
+    # existingClaim:
+    size: 1Gi
+  ## Replication settings
+  ## Please check: https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml#L98
+  ##
+  replication:
+    enabled: false
+    slaveReplicas: 1
 
 ## Puppetboard Configuration
 ##

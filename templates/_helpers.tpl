@@ -84,13 +84,13 @@ component: {{ .Values.r10k.name | quote }}
 {{ include "puppetserver.common.matchLabels" . }}
 {{- end -}}
 
-{{- define "puppetserver.postgres.labels" -}}
-{{ include "puppetserver.postgres.matchLabels" . }}
+{{- define "puppetserver.postgresql.labels" -}}
+{{ include "puppetserver.postgresql.matchLabels" . }}
 {{ include "puppetserver.common.metaLabels" . }}
 {{- end -}}
 
-{{- define "puppetserver.postgres.matchLabels" -}}
-component: {{ .Values.postgres.name | quote }}
+{{- define "puppetserver.postgresql.matchLabels" -}}
+component: {{ .Values.postgresql.name | quote }}
 {{ include "puppetserver.common.matchLabels" . }}
 {{- end -}}
 
