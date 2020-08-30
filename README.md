@@ -221,7 +221,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `postgresql.replication.slaveReplicas` | postgres replication slave replicas |`1`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
 | `puppetdb.image` | puppetdb img | `puppet/puppetdb`|
-| `puppetdb.tag` | puppetdb img tag | `6.10.1`|
+| `puppetdb.tag` | puppetdb img tag | `6.12.0`|
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
