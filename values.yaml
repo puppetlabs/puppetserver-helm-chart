@@ -451,11 +451,11 @@ hiera:
 global:
   ## Credentials for PuppetDB and PostgreSQL
   ##
-  puppetdbUsername: postgresql
-  puppetdbPostgresPassword: ""
+  puppetdbUsername: puppetdb
+  puppetdbPassword: ""
   existingSecret: ""
 
-## Provide a name in place of prometheus-operator for `app:` labels
+## Provide a name in place of Puppet Server components for `app:` labels
 ##
 nameOverride: ""
 

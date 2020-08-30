@@ -234,9 +234,9 @@ Return PostgreSQL username
 */}}
 {{- define "postgresql.username" -}}
 {{- if .Values.global.puppetdbUsername }}
-    {{- .Values.global.puppetdbUsername -}}
+  {{- .Values.global.puppetdbUsername -}}
 {{- else -}}
-    {{- .Values.puppetdbUsername -}}
+  {{- .Values.postgresqlUsername -}}
 {{- end -}}
 {{- end -}}
 
@@ -244,12 +244,25 @@ Return PostgreSQL username
 Return PuppetDB and PostgreSQL password
 */}}
 {{- define "postgresql.password" -}}
-{{- if .Values.global.postgresql.postgresqlPassword }}
-    {{- .Values.global.postgresql.postgresqlPassword -}}
+{{- if .Values.global.puppetdbPassword }}
+  {{- .Values.global.puppetdbPassword -}}
 {{- else if .Values.postgresqlPassword -}}
-    {{- .Values.postgresqlPassword -}}
+  {{- .Values.postgresqlPassword -}}
 {{- else -}}
-    {{- randAlphaNum 20 -}}
+  unbreakablePassword
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return PuppetDB and PostgreSQL password
+*/}}
+{{- define "postgresql.postgres.password" -}}
+{{- if .Values.global.puppetdbPassword }}
+  {{- .Values.global.puppetdbPassword -}}
+{{- else if .Values.postgresqlPostgresPassword -}}
+    {{- .Values.postgresqlPostgresPassword -}}
+{{- else -}}
+  unbreakablePassword
 {{- end -}}
 {{- end -}}
 
