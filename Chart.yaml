@@ -9,6 +9,7 @@ icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=
 sources:
 - https://github.com/puppetlabs/pupperware/
 - https://github.com/postgres/postgres
+- https://github.com/helm/charts/tree/master/stable/postgresql
 maintainers:
 - name: Pupperware Team
   email: pupperware@puppet.com

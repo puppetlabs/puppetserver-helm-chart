@@ -120,7 +120,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | --------- | ----------- | -------|
 | `puppetserver.name` | puppetserver component label | `puppetserver`|
 | `puppetserver.image` | puppetserver image | `puppet/puppetserver`|
-| `puppetserver.tag` | puppetserver img tag | `6.10.0`|
+| `puppetserver.tag` | puppetserver img tag | `6.12.1`|
 | `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`|
 | `puppetserver.masters.resources` | puppetserver masters resource limits | ``|
 | `puppetserver.masters.extraEnv` | puppetserver masters additional container env vars |``|
@@ -209,12 +209,16 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.hiera.viaSsh.credentials.ssh.value`| r10k hiera data ssh key file |``|
 | `r10k.hiera.viaSsh.credentials.known_hosts.value`| r10k hiera data ssh known hosts file |``|
 | `r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``|
-| `postgres.name` | postgres component label | `postgres`|
-| `postgres.image` | postgres img | `postgres`|
-| `postgres.tag` | postgres img tag | `9.6.18`|
-| `postgres.pullPolicy` | postgres img pull policy | `IfNotPresent`|
-| `postgres.resources` | postgres resource limits |``|
-| `postgres.extraEnv` | postgres additional container env vars |``|
+| `postgresql.enabled` | postgres deployment as puppetdb backend | `true`|
+| `postgresql.name` | postgres component label | `postgresql`|
+| `postgresql.resources` | postgres resource limits |``|
+| `postgresql.postgresqlDatabase` | postgres database name |`puppetdb`|
+| `postgresql.initdbScriptsConfigMap` | postgres initdb scripts run at first boot |`postgresql-custom-extensions`|
+| `postgresql.persistence.enabled` | postgres database persistence |`true`|
+| `postgresql.persistence.existingClaim` | postgres manually managed pvc |``|
+| `postgresql.persistence.size` | postgres persistence pvc size |`1Gi`|
+| `postgresql.replication.enabled` | postgres replication availability |`false`|
+| `postgresql.replication.slaveReplicas` | postgres replication slave replicas |`1`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
 | `puppetdb.image` | puppetdb img | `puppet/puppetdb`|
 | `puppetdb.tag` | puppetdb img tag | `6.10.1`|
