@@ -347,7 +347,7 @@ puppetdb:
   ## Additional puppetdb container environment variables
   extraEnv: {}
 
-## PostgreSQL Sub-Chart Configuration as PuppetDB backend
+## PostgreSQL Sub-Chart Configuration
 ## Please check: https://github.com/helm/charts/tree/master/stable/postgresql
 ##
 postgresql:
@@ -444,22 +444,46 @@ puppetboard:
 hiera:
   name: hiera
   hieradataurl: ""   # git@github.com:$SOMEUSER/hieradata.git
-  ## If "hiera.config" is set, the pre-filled value of ":eyaml::datadir:",
-  ## ":eyaml::pkcs7_private_key:" and ":eyaml::pkcs7_public_key:"
-  ## must be kept unchanged.
   ## A multi-line string
   ##
   config:  # |-
-  #  :backends:
-  #    - eyaml
-  #  :hierarchy:
-  #    - common
-  #  :eyaml:
-  #    # Set branch name - e.g. "master", "%{::environment}", etc.
-  #    :datadir: /etc/puppetlabs/code/hiera-data/[branch]   # keep base path unchanged.
-  #    :extension: 'yaml'
-  #    :pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem   # keep unchanged
-  #    :pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem   # keep unchanged
+  ## Hiera version 5 Example
+  ##
+    # ---
+    # version: 5
+    # defaults:
+    #   datadir: data          # Datadir has moved into `defaults`.
+    #   data_hash: yaml_data   # Default backend: New feature in v5.
+    # hierarchy:
+    #   - name: "Nodes"        # Can omit `backend` if using the default.
+    #     path:
+    #       - "nodes/%{trusted.certname}.yaml"   # Add file extension!
+    #   - name: "Per-datacenter secret data (encrypted)"
+    #     lookup_key: eyaml_lookup_key
+    #     path: "secrets/%{facts.whereami}.eyaml"
+    #     options:
+    #       pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem   # keep unchanged
+    #       pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem    # keep unchanged
+    #   - name: "Virtualization platform"
+    #     path: "virtual/%{facts.virtual}.yaml"   # Name and path are now separated.
+    #   - name: "Common"
+    #     path: "common.yaml"
+  ## Hiera version 3 Example
+  ##
+    # ---
+    # :backends:
+    #   - eyaml
+    # :hierarchy:
+    #   - "nodes/%{trusted.certname}"
+    #   - "secrets/%{facts.whereami}"
+    #   - "virtual/%{facts.virtual}"
+    #   - "common"
+    # :eyaml:
+    #   # Set branch name - e.g. "master", "%{::environment}", etc.
+    #   :datadir: /etc/puppetlabs/code/hiera-data/[branch]   # keep base path unchanged.
+    #   :extension: 'yaml'
+    #   :pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem   # keep unchanged
+    #   :pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem    # keep unchanged
   eyaml:
     # choose using either a pre-existing configMap containing keys, or the private_key/public_key set
     existingMap: ""
@@ -523,4 +547,4 @@ storage:
   ## Puppetserver data Persistent Volume annotations
   ##
   annotations: {}
-  size: 100Mi
+  size: 200Mi

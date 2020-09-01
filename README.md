@@ -8,7 +8,7 @@ This chart bootstraps Puppet Server and its components on a Kubernetes cluster u
 
 ### Code Repos
 
-* You must specify your Puppet Control Repo using `puppetserver.puppeturl` variable in the `values.yaml` file or include `--set puppetserver.puppeturl=<your_public_repo>` in the command line of `helm install`. You should specify your separate Hieradata Repo as well using the `hiera.hieradataurl` variable.
+* You must specify your Puppet Control Repo using `puppetserver.puppeturl` variable in the `values.yaml` file or include `--set puppetserver.puppeturl=<your_public_repo>` in the command line of `helm install`. You can specify your separate Hieradata Repo as well using the `hiera.hieradataurl` variable.
 
 * You can also use private repos. Just remember to specify your credentials using `r10k.code.viaSsh.credentials.ssh.value`. You can set similar credentials for your Hieradata Repo.
 
@@ -225,9 +225,6 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
-| `puppetdb.credentials.username`| puppetdb username |`puppetdb`|
-| `puppetdb.credentials.value.password`| puppetdb password |`20-char randomly generated`|
-| `puppetdb.credentials.existingSecret`| existing k8s secret that holds puppetdb username and password |``|
 | `puppetboard.enabled` | puppetboard availability | `false`|
 | `puppetboard.name` | puppetboard component label | `puppetboard`|
 | `puppetboard.image` | puppetboard img | `xtigyro/puppetboard`|
@@ -245,6 +242,10 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `hiera.config`| hieradata yaml config |``|
 | `hiera.eyaml.private_key`| hiera eyaml private key |``|
 | `hiera.eyaml.public_key`| hiera eyaml public key |``|
+| `global.credentials.username`| puppetdb and postgresql username |`puppetdb`|
+| `global.credentials.password`| puppetdb and postgresql password |`unbreakablePassword`|
+| `global.credentials.existingSecret`| existing k8s secret that holds puppetdb and postgresql username and password |``|
+| `nameOverride`| puppetserver components name for `component:` labels |``|
 | `nodeSelector`| Node labels for pod assignment |``|
 | `affinity`| Affinity for pod assignment |``|
 | `tolerations`| Tolerations for pod assignment |``|
@@ -311,7 +312,8 @@ kill %[job_numbers_above]
 ## Credits
 
 * [Miroslav Hadzhiev](https://www.linkedin.com/in/mehadzhiev/), Lead Author and Developer
-* [Pupperware Team](mailto:pupperware@puppet.com), Owner
-* [Sean Conley](https://www.linkedin.com/in/seanconley/), Developer
+* [Pupperware Team](mailto:pupperware@puppet.com), Co-Author and Owner
 * [Morgan Rhodes](mailto:morgan@puppet.com), Developer
+* [Sean Conley](https://www.linkedin.com/in/seanconley/), Notable Contributor
 * [Scott Cressi](https://www.linkedin.com/in/scottcressi/), Co-Author
+* [Kai Sisterhenn](https://www.sistason.de/), Contributor
