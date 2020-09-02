@@ -278,7 +278,7 @@ r10k:
     #    memory: 512Mi
     #    cpu: 300m
     cronJob:
-      schedule: "*/15 * * * *"
+      schedule: "*/5 * * * *"
     ## Additional r10k code container arguments
     extraArgs: {}
     #   - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
@@ -308,7 +308,7 @@ r10k:
     #    memory: 512Mi
     #    cpu: 300m
     cronJob:
-      schedule: "*/2 * * * *"
+      schedule: "*/4 * * * *"
     ## Additional r10k hiera container environment variables
     extraArgs: {}
     #   - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
@@ -453,15 +453,15 @@ hiera:
     # ---
     # version: 5
     # defaults:
-    #   datadir: data          # Datadir has moved into `defaults`.
+    #   datadir: data          # Datadir has moved into `defaults`. Relative to hiera.yaml's directory.
     #   data_hash: yaml_data   # Default backend: New feature in v5.
     # hierarchy:
-    #   - name: "Nodes"        # Can omit `backend` if using the default.
+    #   - name: "Per-node data"        # Human-readable name. Can omit `backend` if using the default.
     #     path:
-    #       - "nodes/%{trusted.certname}.yaml"   # Add file extension!
+    #       - "nodes/%{trusted.certname}.yaml"   # File path, relative to datadir. Add file extension!
     #   - name: "Per-datacenter secret data (encrypted)"
     #     lookup_key: eyaml_lookup_key
-    #     path: "secrets/%{facts.whereami}.eyaml"
+    #     path: "secrets/%{facts.whereami}.eyaml"   # Can use custom facts.
     #     options:
     #       pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem   # keep unchanged
     #       pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem    # keep unchanged
