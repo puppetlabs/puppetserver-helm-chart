@@ -11,13 +11,13 @@ sources:
 - https://github.com/postgres/postgres
 - https://github.com/helm/charts/tree/master/stable/postgresql
 maintainers:
-- name: Pupperware Team
-  email: pupperware@puppet.com
-- name: underscorgan
-  email: morgan@puppet.com
 - name: Xtigyro
   email: miroslav.hadzhiev@gmail.com
+- name: underscorgan
+  email: morgan@puppet.com
 - name: slconley
   email: slconley@gmail.com
+- name: Pupperware Team
+  email: pupperware@puppet.com
 engine: gotpl
 kubeVersion: ">=1.10.0-0"
