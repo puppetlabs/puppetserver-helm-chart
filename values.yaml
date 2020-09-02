@@ -409,6 +409,7 @@ puppetboard:
   #    memory: 640Mi
   #    cpu: 500m
   ## Additional puppetboard container environment variables
+  ##
   extraEnv: {}
   #  ENABLE_CATALOG: True
   #  ENABLE_QUERY: True
@@ -485,12 +486,15 @@ hiera:
     #   :pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem   # keep unchanged
     #   :pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem    # keep unchanged
   eyaml:
-    # choose using either a pre-existing configMap containing keys, or the private_key/public_key set
+    ## Choose using either a pre-existing configMap containing keys, or the private_key/public_key set.
+    ##
     existingMap: ""
     ## A multi-line string
+    ##
     private_key:  # |
       #  PRIV_KEY CONTENTS
     ## A multi-line string
+    ##
     public_key:  # |
       #  PUB_KEY CONTENTS
 
@@ -514,6 +518,7 @@ nameOverride: ""
 ## Pod Configuration
 ##
 ## Node labels for pod assignment
+##
 nodeSelector: {}
 
 ## Affinity for pod assignment
@@ -529,6 +534,7 @@ tolerations: []
 # priorityClass: system-cluster-critical
 
 ## Extra Pod annotations
+##
 podAnnotations: {}
 
 ## Storage Configuration
