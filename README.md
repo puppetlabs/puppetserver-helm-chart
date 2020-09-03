@@ -213,10 +213,12 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `postgresql.name` | postgres component label | `postgresql`|
 | `postgresql.resources` | postgres resource limits |``|
 | `postgresql.postgresqlDatabase` | postgres database name |`puppetdb`|
+| `postgresql.initdbUser` | postgres username to run initdb scripts at first boot |`postgres`|
 | `postgresql.initdbScriptsConfigMap` | postgres initdb scripts run at first boot |`postgresql-custom-extensions`|
 | `postgresql.persistence.enabled` | postgres database persistence |`true`|
 | `postgresql.persistence.existingClaim` | postgres manually managed pvc |``|
 | `postgresql.persistence.size` | postgres persistence pvc size |`1Gi`|
+| `postgresql.persistence.annotations` | postgres persistence resource policy via annotations |`keep`|
 | `postgresql.replication.enabled` | postgres replication availability |`false`|
 | `postgresql.replication.slaveReplicas` | postgres replication slave replicas |`1`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
