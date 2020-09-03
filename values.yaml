@@ -369,6 +369,9 @@ postgresql:
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
   ##
   postgresqlDatabase: puppetdb
+  ## Specify the PostgreSQL username and password to execute the initdb scripts
+  ##
+  initdbUser: postgres
   ## ConfigMap with scripts to be run at first boot
   ## NOTE: This will override initdbScripts
   ##
@@ -388,6 +391,12 @@ postgresql:
     ##
     # existingClaim:
     size: 1Gi
+    annotations:
+      ## The annotation instructs Helm to skip deleting this resource
+      ## when a helm operation (such as helm uninstall, helm upgrade or helm rollback)
+      ## would result in its deletion.
+      ##
+      helm.sh/resource-policy: keep
   ## Replication settings
   ## Please check: https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml#L98
   ##
