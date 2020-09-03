@@ -5,6 +5,19 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.0) (2020-09-03)
+
+- Externalize the creation of PostgreSQL backend using the official PostgreSQL Helm chart.
+- Add high-availability and performance read replicas support for PostgreSQL.
+- Add storage persistennce for PostgreSQL. Allow only manual storage deletion.
+- Tweak r10k cronjob schedules and Puppet Server components storage size.
+- Add Hiera v5 example with explanations.
+- Improve informational comments in values file.
+- Bump Puppet Server to `v6.12.1`, PuppetDB to `v6.12.0`, and PostgreSQL to `v11.7.*`.
+- Numerous other small tweaks.
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.4.0...v5.0.0)
+
 ## [v4.4.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.4.0) (2020-08-24)
 
 - Allow for changing the default Puppet Server ports for Masters and Compilers.
