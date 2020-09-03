@@ -9,7 +9,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 - Externalize the creation of PostgreSQL backend using the official PostgreSQL Helm chart.
 - Add high-availability and performance read replicas support for PostgreSQL.
-- Add storage persistennce for PostgreSQL.
+- Add storage persistence for PostgreSQL.
 - Allow only manual storage deletion for PostgreSQL.
 - Tweak r10k cronjob schedules and Puppet Server components storage size.
 - Add Hiera v5 example with explanations.
