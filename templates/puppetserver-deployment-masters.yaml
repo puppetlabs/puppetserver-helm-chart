@@ -49,7 +49,7 @@ spec:
           {{- end }}
           command: [ "sh", "-c" ]
           args:
-            - mkdir -p /etc/puppetlabs/puppet/eyaml;
+            - mkdir -p /etc/puppetlabs/puppet/eyaml/keys;
               {{- if .Values.puppetserver.masters.multiMasters.enabled }}
               cp /etc/puppetlabs/puppet/configmap/check_for_masters.sh /etc/puppetlabs/puppet/check_for_masters.sh;
               chown puppet:puppet /etc/puppetlabs/puppet/check_for_masters.sh;

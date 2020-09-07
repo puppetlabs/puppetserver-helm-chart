@@ -43,7 +43,7 @@ spec:
               cpu: 300m
           command: [ "sh", "-c" ]
           args:
-            - mkdir -p /etc/puppetlabs/puppet/eyaml;
+            - mkdir -p /etc/puppetlabs/puppet/eyaml/keys;
               mkdir -p /etc/puppetlabs/code/environments;
               mkdir -p /etc/puppetlabs/puppet/manifests;
               mkdir -p /etc/puppetlabs/code/r10k_cache;
@@ -69,12 +69,12 @@ spec:
               cp /etc/puppetlabs/puppet/configmap/site.pp /etc/puppetlabs/puppet/manifests/site.pp;
               chown puppet:puppet /etc/puppetlabs/puppet/manifests/site.pp;
               {{- if or (.Values.hiera.eyaml.private_key) (.Values.hiera.eyaml.existingMap) }}
-              cp /etc/puppetlabs/puppet/configmap/eyaml/private_key.pkcs7.pem /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem;
-              chown puppet:puppet /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem;
+              cp /etc/puppetlabs/puppet/configmap/eyaml/private_key.pkcs7.pem /etc/puppetlabs/puppet/eyaml/keys/private_key.pkcs7.pem;
+              chown puppet:puppet /etc/puppetlabs/puppet/eyaml/keys/private_key.pkcs7.pem;
               {{- end }}
               {{- if or (.Values.hiera.eyaml.public_key) (.Values.hiera.eyaml.existingMap) }}
-              cp /etc/puppetlabs/puppet/configmap/eyaml/public_key.pkcs7.pem /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem;
-              chown puppet:puppet /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem;
+              cp /etc/puppetlabs/puppet/configmap/eyaml/public_key.pkcs7.pem /etc/puppetlabs/puppet/eyaml/keys/public_key.pkcs7.pem;
+              chown puppet:puppet /etc/puppetlabs/puppet/eyaml/keys/public_key.pkcs7.pem;
               {{- end }}
           securityContext:
             runAsUser: 0
