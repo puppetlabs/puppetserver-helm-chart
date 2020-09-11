@@ -474,8 +474,8 @@ hiera:
     #     lookup_key: eyaml_lookup_key
     #     path: "secrets/%{facts.whereami}.eyaml"   # Can use custom facts.
     #     options:
-    #       pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem   # keep unchanged
-    #       pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem    # keep unchanged
+    #       pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/keys/private_key.pkcs7.pem   # keep unchanged
+    #       pkcs7_public_key: /etc/puppetlabs/puppet/eyaml/keys/public_key.pkcs7.pem     # keep unchanged
     #   - name: "Virtualization platform"
     #     path: "virtual/%{facts.virtual}.yaml"   # Name and path are now separated.
     #   - name: "Common"
@@ -494,8 +494,8 @@ hiera:
     #   # Set branch name - e.g. "master", "%{::environment}", etc.
     #   :datadir: /etc/puppetlabs/code/hiera-data/[branch]   # keep base path unchanged.
     #   :extension: 'yaml'
-    #   :pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem   # keep unchanged
-    #   :pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem    # keep unchanged
+    #   :pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/keys/private_key.pkcs7.pem   # keep unchanged
+    #   :pkcs7_public_key: /etc/puppetlabs/puppet/eyaml/keys/public_key.pkcs7.pem     # keep unchanged
   eyaml:
     ## Choose using either a pre-existing configMap containing keys, or the private_key/public_key set.
     ##
