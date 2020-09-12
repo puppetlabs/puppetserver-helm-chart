@@ -390,7 +390,7 @@ postgresql:
     ## The value is evaluated as a template, so, for example, the name can depend on .Release or .Chart
     ##
     # existingClaim:
-    size: 1Gi
+    size: 10Gi
     annotations:
       ## The annotation instructs Helm to skip deleting this resource
       ## when a helm operation (such as helm uninstall, helm upgrade or helm rollback)
@@ -564,4 +564,4 @@ storage:
   ## Puppetserver data Persistent Volume annotations
   ##
   annotations: {}
-  size: 200Mi
+  size: 400Mi
