@@ -217,7 +217,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `postgresql.initdbScriptsConfigMap` | postgres initdb scripts run at first boot |`postgresql-custom-extensions`|
 | `postgresql.persistence.enabled` | postgres database persistence |`true`|
 | `postgresql.persistence.existingClaim` | postgres manually managed pvc |``|
-| `postgresql.persistence.size` | postgres persistence pvc size |`1Gi`|
+| `postgresql.persistence.size` | postgres persistence pvc size |`10Gi`|
 | `postgresql.persistence.annotations` | postgres persistence resource policy via annotations |`keep`|
 | `postgresql.replication.enabled` | postgres replication availability |`false`|
 | `postgresql.replication.slaveReplicas` | postgres replication slave replicas |`1`|
@@ -255,7 +255,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `podAnnotations`| Extra Pod annotations |``|
 | `storage.storageClass`| Storage Class |``|
 | `storage.annotations`| Storage annotations |``|
-| `storage.size`| PVCs Storage Size |`100Mi`|
+| `storage.size`| PVCs Storage Size |`400Mi`|
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
