@@ -14,7 +14,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - Tweak r10k cronjob schedules and Puppet Server components storage size.
 - Add Hiera v5 example with explanations.
 - Improve informational comments in values file.
-- Bump Puppet Server to `v6.12.1`, PuppetDB to `v6.12.0`, and PostgreSQL to `v11.7.*`.
+- Bump PuppetDB to `v6.12.0`, and PostgreSQL to `v11.7.*`.
 - Add `CODEOWNERS`.
 - Numerous other small tweaks.
 
