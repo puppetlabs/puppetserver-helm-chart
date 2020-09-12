@@ -20,8 +20,8 @@ puppetserver:
     #    memory: 1024Mi
     #    cpu: 750m
     #  limits:
-    #    memory: 1536Mi
-    #    cpu: 1000m
+    #    memory: 2048Mi
+    #    cpu: 1500m
 
     ## Additional Masters' container environment variables
     ##
@@ -133,8 +133,8 @@ puppetserver:
     #    memory: 1024Mi
     #    cpu: 750m
     #  limits:
-    #    memory: 1536Mi
-    #    cpu: 1000m
+    #    memory: 2048Mi
+    #    cpu: 1500m
 
     ## Affinity for puppetserver pod assignment
     ## Schedule compilers on different K8s nodes
@@ -344,8 +344,8 @@ puppetdb:
   #    memory: 512Mi
   #    cpu: 500m
   #  limits:
-  #    memory: 768Mi
-  #    cpu: 750m
+  #    memory: 1024Mi
+  #    cpu: 1000m
   ## Additional puppetdb container environment variables
   extraEnv: {}
 
@@ -363,8 +363,8 @@ postgresql:
   #    memory: 512Mi
   #    cpu: 500m
   #  limits:
-  #    memory: 768Mi
-  #    cpu: 750m
+  #    memory: 1024Mi
+  #    cpu: 1000m
   ## Create a database
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
   ##
