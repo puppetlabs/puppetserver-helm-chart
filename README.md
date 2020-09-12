@@ -281,7 +281,8 @@ TIME_NOW="$(date +"%Y%m%dT%H%M")"
 cp "/etc/hosts"{,.backup_"$TIME_NOW"}
 echo '127.0.0.1 puppet agents-to-puppet puppet-compilers' >> /etc/hosts
 # if Ingress is used, e.g.
-# echo '127.0.0.1 puppet.local.masters puppet.local.compilers' >> /etc/hosts
+# INGRESS_IP="$(kubectl -n puppetserver get ingress | grep '\-masters' | tr -s " " | cut -d' ' -f4 | cut -d',' -f1)"
+# echo "$INGRESS_IP" puppet.local.masters puppet.local.compilers >> /etc/hosts
 
 docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it goofy_xtigyro bash
