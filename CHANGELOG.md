@@ -13,7 +13,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - Allow only manual storage deletion for PostgreSQL.
 - Tweak r10k cronjob schedules and Puppet Server components storage size.
 - Add Hiera v5 example with explanations.
-- Improve informational comments in values file.
+- Improve info comments and exemplary values in Values file.
 - Bump PuppetDB to `v6.12.0`, and PostgreSQL to `v11.9.*`.
 - Add `CODEOWNERS`.
 - Numerous other small tweaks.
