@@ -64,10 +64,12 @@ jobs:
           git worktree add "$gh_pages_worktree" gh-pages
           cp .release-packages/puppetserver-${{ env.version }}.tgz $gh_pages_worktree
           cp CHANGELOG.md README.md LICENSE OWNERS $gh_pages_worktree
-          helm repo index $gh_pages_worktree --url $HELM_REPO_URL
+          find "$gh_pages_worktree" -type f ! -name "puppetserver-${{ env.version }}.tgz" -name 'puppetserver*.tgz' -delete
+          helm repo index $gh_pages_worktree --url $HELM_REPO_URL --merge "$gh_pages_worktree/index.yaml"
           pushd "$gh_pages_worktree" > /dev/null
           git add index.yaml puppetserver-${{ env.version }}.tgz
           git commit --message "puppetserver-${{ env.version }} release"
+          git checkout 'puppetserver*.tgz' # reset the files removed to make the index accurate
           git commit --all --message "Sync files from master branch" ||:
           repo_url="https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPO"
           git push "$repo_url" gh-pages
