@@ -116,7 +116,7 @@ statefulset.apps/puppetserver-postgresql-slave        1/1     9m25s
 statefulset.apps/puppetserver-puppetserver-compiler   1/1     9m25s
 
 NAME                                                                    REFERENCE                                         TARGETS                        MINPODS   MAXPODS   REPLICAS   AGE
-horizontalpodautoscaler.autoscaling/puppetserver-compilers-autoscaler   StatefulSet/puppetserver-puppetserver-compilers   33%/75%, 47%/75%   1         3         0          9m25s
+horizontalpodautoscaler.autoscaling/puppetserver-compilers-autoscaler   StatefulSet/puppetserver-puppetserver-compilers   33%/75%, 47%/75%               1         3         0          9m25s
 ```
 
 ## Configuration
