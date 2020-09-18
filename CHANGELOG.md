@@ -5,6 +5,13 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.0.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.1) (2020-09-19)
+
+- Fix for resource names of Horizontal Pod Autoscalers.
+- Several `README` updates.
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.0.0...v5.0.1)
+
 ## [v5.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.0) (2020-09-12)
 
 - Externalize the creation of PostgreSQL backend using the Bitnami's PostgreSQL Helm chart.
