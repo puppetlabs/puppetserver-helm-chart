@@ -42,16 +42,20 @@ To achieve better availability and higher throughput of Puppet Infrastructure, y
 
 ### Multiple Puppet Masters
 
-To achieve better availability of Puppet Infrastructure, you'll need to scale out Puppet Server Masters using `.Values.puppetserver.masters.multiMasters`. These Servers are known as masters, and are responsible for the creation and signing of your Puppet Agents' certificates. They are also responsible for receiving catalog requests from agents and synchronize the results with each other.
+To achieve better availability of Puppet Infrastructure, you can scale out Puppet Server Masters using `.Values.puppetserver.masters.multiMasters`. These Servers are known as masters, and are responsible for the creation and signing of your Puppet Agents' certificates. They are also responsible for receiving catalog requests from agents and synchronize the results with each other.
 
 ### Multiple Puppet Compilers
 
-To achieve better throughput of Puppet Infrastructure, you'll need to enable and scale out Puppet Server Compilers using `.Values.puppetserver.compilers`. These Servers are known as compile masters, and are simply additional load-balanced Puppet Servers that receive catalog requests from agents and synchronize the results with each other.
+To achieve better throughput of Puppet Infrastructure, you can enable and scale out Puppet Server Compilers using `.Values.puppetserver.compilers`. These Servers are known as compile masters, and are simply additional load-balanced Puppet Servers that receive catalog requests from agents and synchronize the results with each other.
+
+### Multiple PostgreSQL Read Replicas
+
+To achieve better throughput of Puppet Infrastructure, you can enable and scale out PostgreSQL cluster using `.Values.postgresql.replication.enabled` and `.Values.postgresql.replication.slaveReplicas`.
 
 ## Chart Components
 
-* Creates three deployments: Puppet Server Master/s, PuppetDB, and PosgreSQL.
-* Creates one statefulset (optional): Puppet Server Compiler/s.
+* Creates three deployments: Puppet Server Master/s, and PuppetDB.
+* Creates three statefulsets (optional): Puppet Server Compiler/s, PostgreSQL Master, and PostgreSQL Read Replicas.
 * Creates seven services that expose: Puppet Server Masters, Puppet Server Compilers (optional), PuppetDB, PostgreSQL, and Puppetboard (optional).
 * Creates secrets to hold credentials for PuppetDB, PosgreSQL, and r10k.
 
@@ -80,36 +84,39 @@ helm install --namespace puppetserver --name puppetserver puppet/puppetserver --
 You can use `kubectl get` to view all of the installed components.
 
 ```console
-$ kubectl get --namespace puppetserver all -l release=puppetserver
-NAME                                                     READY   STATUS    RESTARTS   AGE
-pod/puppetserver-postgres-fc66cbc49-d5pl7                1/1     Running   0          7m17s
-pod/puppetserver-puppetdb-56498d68dc-8c54g               2/2     Running   0          7m17s
-pod/puppetserver-puppetserver-compiler-0                 3/3     Running   0          7m17s
-pod/puppetserver-puppetserver-master-5c6dbdc78f-8xf6x    3/3     Running   0          7m17s
+$ kubectl get --namespace puppetserver all
+NAME                                                   READY   STATUS    RESTARTS   AGE
+pod/puppetserver-postgresql-master-0                   1/1     Running   0          9m25s
+pod/puppetserver-postgresql-slave-0                    1/1     Running   0          9m25s
+pod/puppetserver-puppetdb-fc4978b6d-z9bsx              2/2     Running   0          9m25s
+pod/puppetserver-puppetserver-compiler-0               2/2     Running   0          9m25s
+pod/puppetserver-puppetserver-master-7b59cb946-9bwv6   2/2     Running   0          9m25s
 
-NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                    AGE
-service/agents-to-puppet            ClusterIP   10.104.117.137   <none>        8140/TCP                   7m17s
-service/postgres                    ClusterIP   10.111.140.243   <none>        5432/TCP                   7m17s
-service/puppet                      ClusterIP   10.101.45.131    <none>        8140/TCP                   7m17s
-service/puppet-compilers            ClusterIP   10.104.54.107    <none>        8140/TCP                   7m17s
-service/puppet-compilers-headless   ClusterIP   None             <none>        443/TCP                    7m17s
-service/puppetdb                    ClusterIP   10.111.63.231    <none>        8080/TCP,8081/TCP,80/TCP   7m17s
+NAME                                       TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                    AGE
+service/agents-to-puppet                   ClusterIP   10.96.236.202   <none>        8140/TCP                   9m25s
+service/puppet                             ClusterIP   10.96.51.23     <none>        8140/TCP                   9m25s
+service/puppet-compilers                   ClusterIP   10.96.185.43    <none>        8140/TCP                   9m25s
+service/puppet-compilers-headless          ClusterIP   None            <none>        443/TCP                    9m25s
+service/puppetdb                           ClusterIP   10.96.160.91    <none>        8080/TCP,8081/TCP,80/TCP   9m25s
+service/puppetserver-postgresql            ClusterIP   10.96.48.166    <none>        5432/TCP                   9m25s
+service/puppetserver-postgresql-headless   ClusterIP   None            <none>        5432/TCP                   9m25s
+service/puppetserver-postgresql-read       ClusterIP   10.96.219.155   <none>        5432/TCP                   9m25s
 
-NAME                                                READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/puppetserver-postgres               1/1     1            1           7m17s
-deployment.apps/puppetserver-puppetdb               1/1     1            1           7m17s
-deployment.apps/puppetserver-puppetserver-master    1/1     1            1           7m17s
+NAME                                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/puppetserver-puppetdb              1/1     1            1           9m25s
+deployment.apps/puppetserver-puppetserver-master   1/1     1            1           9m25s
 
-NAME                                                           DESIRED   CURRENT   READY   AGE
-replicaset.apps/puppetserver-postgres-fc66cbc49                1         1         1       7m17s
-replicaset.apps/puppetserver-puppetdb-56498d68dc               1         1         1       7m17s
-replicaset.apps/puppetserver-puppetserver-master-5c6dbdc78f    1         1         1       7m17s
+NAME                                                         DESIRED   CURRENT   READY   AGE
+replicaset.apps/puppetserver-puppetdb-fc4978b6d              1         1         1       9m25s
+replicaset.apps/puppetserver-puppetserver-master-7b59cb946   1         1         1       9m25s
 
-NAME                                                   READY   AGE
-statefulset.apps/puppetserver-puppetserver-compiler   1/1     7m17s
+NAME                                                  READY   AGE
+statefulset.apps/puppetserver-postgresql-master       1/1     9m25s
+statefulset.apps/puppetserver-postgresql-slave        1/1     9m25s
+statefulset.apps/puppetserver-puppetserver-compiler   1/1     9m25s
 
-NAME                                                                    REFERENCE                                         TARGETS            MINPODS   MAXPODS   REPLICAS   AGE
-horizontalpodautoscaler.autoscaling/puppetserver-compilers-autoscaler   StatefulSet/puppetserver-puppetserver-compilers   43%/75%, 67%/75%   1         3         1          7m17s
+NAME                                                                    REFERENCE                                         TARGETS                        MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/puppetserver-compilers-autoscaler   StatefulSet/puppetserver-puppetserver-compilers   33%/75%, 47%/75%   1         3         0          9m25s
 ```
 
 ## Configuration
