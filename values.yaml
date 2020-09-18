@@ -20,8 +20,8 @@ puppetserver:
     #    memory: 1024Mi
     #    cpu: 750m
     #  limits:
-    #    memory: 1536Mi
-    #    cpu: 1000m
+    #    memory: 2048Mi
+    #    cpu: 1500m
 
     ## Additional Masters' container environment variables
     ##
@@ -133,8 +133,8 @@ puppetserver:
     #    memory: 1024Mi
     #    cpu: 750m
     #  limits:
-    #    memory: 1536Mi
-    #    cpu: 1000m
+    #    memory: 2048Mi
+    #    cpu: 1500m
 
     ## Affinity for puppetserver pod assignment
     ## Schedule compilers on different K8s nodes
@@ -278,7 +278,7 @@ r10k:
     #    memory: 512Mi
     #    cpu: 300m
     cronJob:
-      schedule: "*/15 * * * *"
+      schedule: "*/5 * * * *"
     ## Additional r10k code container arguments
     extraArgs: {}
     #   - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
@@ -298,6 +298,7 @@ r10k:
             #  KNOWN_HOSTS CONTENTS
         ## or set the r10k known hosts file and SSH Private Key
         ## from a pre-existing K8s secret
+        ## NOTE: Using this secret supercedes all other credentials settings.
         existingSecret: ""
   hiera:
     resources: {}
@@ -308,7 +309,7 @@ r10k:
     #    memory: 512Mi
     #    cpu: 300m
     cronJob:
-      schedule: "*/2 * * * *"
+      schedule: "*/4 * * * *"
     ## Additional r10k hiera container environment variables
     extraArgs: {}
     #   - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
@@ -328,51 +329,80 @@ r10k:
             #  KNOWN_HOSTS CONTENTS
         ## or set the r10k known hosts file and SSH Private Key
         ## from a pre-existing K8s secret
+        ## NOTE: Using this secret supercedes all other credentials settings.
         existingSecret: ""
-
-## PostgreSQL Configuration for PuppetDB
-##
-postgres:
-  name: postgres
-  image: postgres
-  tag: 9.6.19
-  pullPolicy: IfNotPresent
-  resources: {}
-  #  requests:
-  #    memory: 512Mi
-  #    cpu: 500m
-  #  limits:
-  #    memory: 768Mi
-  #    cpu: 750m
-  ## Additional postgres container environment variables
-  extraEnv: {}
 
 ## PuppetDB Configuration
 ##
 puppetdb:
   name: puppetdb
   image: puppet/puppetdb
-  tag: 6.11.3
+  tag: 6.12.0
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
   #    memory: 512Mi
   #    cpu: 500m
   #  limits:
-  #    memory: 768Mi
-  #    cpu: 750m
+  #    memory: 1024Mi
+  #    cpu: 1000m
   ## Additional puppetdb container environment variables
   extraEnv: {}
-  ## Credentials for PuppetDB and PostgreSQL
-  credentials:
-    username: puppetdb
-    ## Override the 20-char random "password" in templates/puppetdb-secret.yaml
-    password:
-      value: ""
-    # if used, the following existing secret must contain "username" and "password" keys, already base64 encoded.
-    # using this secret supercedes all other credentials settings.
-    existingSecret: ""
 
+## PostgreSQL Sub-Chart Configuration
+## Please check: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+##
+postgresql:
+  enabled: true
+  name: postgresql
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  # resources:
+  #  requests:
+  #    memory: 512Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 1024Mi
+  #    cpu: 1000m
+  ## Create a database
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
+  ##
+  postgresqlDatabase: puppetdb
+  ## Specify the PostgreSQL username and password to execute the initdb scripts
+  ##
+  initdbUser: postgres
+  ## ConfigMap with scripts to be run at first boot
+  ## NOTE: This will override initdbScripts
+  ##
+  initdbScriptsConfigMap: postgresql-custom-extensions
+  ## PostgreSQL data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  persistence:
+    enabled: true
+    ## A manually managed Persistent Volume and Claim
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template, so, for example, the name can depend on .Release or .Chart
+    ##
+    # existingClaim:
+    size: 10Gi
+    annotations:
+      ## The annotation instructs Helm to skip deleting this resource
+      ## when a helm operation (such as helm uninstall, helm upgrade or helm rollback)
+      ## would result in its deletion.
+      ##
+      helm.sh/resource-policy: keep
+  ## Replication settings
+  ## Please check: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+  ##
+  replication:
+    enabled: false
+    slaveReplicas: 1
 
 ## Puppetboard Configuration
 ##
@@ -390,6 +420,7 @@ puppetboard:
   #    memory: 640Mi
   #    cpu: 500m
   ## Additional puppetboard container environment variables
+  ##
   extraEnv: {}
   #  ENABLE_CATALOG: True
   #  ENABLE_QUERY: True
@@ -425,35 +456,80 @@ puppetboard:
 hiera:
   name: hiera
   hieradataurl: ""   # git@github.com:$SOMEUSER/hieradata.git
-  ## If "hiera.config" is set, the pre-filled value of ":eyaml::datadir:",
-  ## ":eyaml::pkcs7_private_key:" and ":eyaml::pkcs7_public_key:"
-  ## must be kept unchanged.
   ## A multi-line string
   ##
   config:  # |-
-  #  :backends:
-  #    - eyaml
-  #  :hierarchy:
-  #    - common
-  #  :eyaml:
-  #    # Set branch name - e.g. "master", "%{::environment}", etc.
-  #    :datadir: /etc/puppetlabs/code/hiera-data/[branch]   # keep base path unchanged.
-  #    :extension: 'yaml'
-  #    :pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem   # keep unchanged
-  #    :pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem   # keep unchanged
+  ## Hiera version 5 Example
+  ##
+    # ---
+    # version: 5
+    # defaults:
+    #   datadir: data          # Datadir has moved into `defaults`. Relative to hiera.yaml's directory.
+    #   data_hash: yaml_data   # Default backend: New feature in v5.
+    # hierarchy:
+    #   - name: "Per-node data"        # Human-readable name. Can omit `backend` if using the default.
+    #     path:
+    #       - "nodes/%{trusted.certname}.yaml"   # File path, relative to datadir. Add file extension!
+    #   - name: "Per-datacenter secret data (encrypted)"
+    #     lookup_key: eyaml_lookup_key
+    #     path: "secrets/%{facts.whereami}.eyaml"   # Can use custom facts.
+    #     options:
+    #       pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/keys/private_key.pkcs7.pem   # keep unchanged
+    #       pkcs7_public_key: /etc/puppetlabs/puppet/eyaml/keys/public_key.pkcs7.pem     # keep unchanged
+    #   - name: "Virtualization platform"
+    #     path: "virtual/%{facts.virtual}.yaml"   # Name and path are now separated.
+    #   - name: "Common"
+    #     path: "common.yaml"
+  ## Hiera version 3 Example
+  ##
+    # ---
+    # :backends:
+    #   - eyaml
+    # :hierarchy:
+    #   - "nodes/%{trusted.certname}"
+    #   - "secrets/%{facts.whereami}"
+    #   - "virtual/%{facts.virtual}"
+    #   - "common"
+    # :eyaml:
+    #   # Set branch name - e.g. "master", "%{::environment}", etc.
+    #   :datadir: /etc/puppetlabs/code/hiera-data/[branch]   # keep base path unchanged.
+    #   :extension: 'yaml'
+    #   :pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/keys/private_key.pkcs7.pem   # keep unchanged
+    #   :pkcs7_public_key: /etc/puppetlabs/puppet/eyaml/keys/public_key.pkcs7.pem     # keep unchanged
   eyaml:
-    # choose using either a pre-existing configMap containing keys, or the private_key/public_key set
+    ## Choose using either a pre-existing configMap containing keys, or the private_key/public_key set.
+    ##
     existingMap: ""
     ## A multi-line string
+    ##
     private_key:  # |
       #  PRIV_KEY CONTENTS
     ## A multi-line string
+    ##
     public_key:  # |
       #  PUB_KEY CONTENTS
+
+## Global Values
+##
+global:
+  ## Credentials for PuppetDB and PostgreSQL
+  ##
+  credentials:
+    username: puppetdb
+    password: ""
+    ## If used, the following existing secret must contain "username" and "password" keys.
+    ## NOTE: Using this secret supercedes all other credentials settings.
+    ##
+    existingSecret: ""
+
+## Provide a name in place of Puppet Server components for `app:` labels
+##
+nameOverride: ""
 
 ## Pod Configuration
 ##
 ## Node labels for pod assignment
+##
 nodeSelector: {}
 
 ## Affinity for pod assignment
@@ -469,6 +545,7 @@ tolerations: []
 # priorityClass: system-cluster-critical
 
 ## Extra Pod annotations
+##
 podAnnotations: {}
 
 ## Storage Configuration
@@ -487,4 +564,4 @@ storage:
   ## Puppetserver data Persistent Volume annotations
   ##
   annotations: {}
-  size: 100Mi
+  size: 400Mi

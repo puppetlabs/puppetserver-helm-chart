@@ -8,7 +8,7 @@ This chart bootstraps Puppet Server and its components on a Kubernetes cluster u
 
 ### Code Repos
 
-* You must specify your Puppet Control Repo using `puppetserver.puppeturl` variable in the `values.yaml` file or include `--set puppetserver.puppeturl=<your_public_repo>` in the command line of `helm install`. You should specify your separate Hieradata Repo as well using the `hiera.hieradataurl` variable.
+* You must specify your Puppet Control Repo using `puppetserver.puppeturl` variable in the `values.yaml` file or include `--set puppetserver.puppeturl=<your_public_repo>` in the command line of `helm install`. You can specify your separate Hieradata Repo as well using the `hiera.hieradataurl` variable.
 
 * You can also use private repos. Just remember to specify your credentials using `r10k.code.viaSsh.credentials.ssh.value`. You can set similar credentials for your Hieradata Repo.
 
@@ -120,7 +120,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | --------- | ----------- | -------|
 | `puppetserver.name` | puppetserver component label | `puppetserver`|
 | `puppetserver.image` | puppetserver image | `puppet/puppetserver`|
-| `puppetserver.tag` | puppetserver img tag | `6.10.0`|
+| `puppetserver.tag` | puppetserver img tag | `6.12.1`|
 | `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`|
 | `puppetserver.masters.resources` | puppetserver masters resource limits | ``|
 | `puppetserver.masters.extraEnv` | puppetserver masters additional container env vars |``|
@@ -209,21 +209,24 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.hiera.viaSsh.credentials.ssh.value`| r10k hiera data ssh key file |``|
 | `r10k.hiera.viaSsh.credentials.known_hosts.value`| r10k hiera data ssh known hosts file |``|
 | `r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``|
-| `postgres.name` | postgres component label | `postgres`|
-| `postgres.image` | postgres img | `postgres`|
-| `postgres.tag` | postgres img tag | `9.6.18`|
-| `postgres.pullPolicy` | postgres img pull policy | `IfNotPresent`|
-| `postgres.resources` | postgres resource limits |``|
-| `postgres.extraEnv` | postgres additional container env vars |``|
+| `postgresql.enabled` | postgres deployment as puppetdb backend | `true`|
+| `postgresql.name` | postgres component label | `postgresql`|
+| `postgresql.resources` | postgres resource limits |``|
+| `postgresql.postgresqlDatabase` | postgres database name |`puppetdb`|
+| `postgresql.initdbUser` | postgres username to run initdb scripts at first boot |`postgres`|
+| `postgresql.initdbScriptsConfigMap` | postgres initdb scripts run at first boot |`postgresql-custom-extensions`|
+| `postgresql.persistence.enabled` | postgres database persistence |`true`|
+| `postgresql.persistence.existingClaim` | postgres manually managed pvc |``|
+| `postgresql.persistence.size` | postgres persistence pvc size |`10Gi`|
+| `postgresql.persistence.annotations` | postgres persistence resource policy via annotations |`keep`|
+| `postgresql.replication.enabled` | postgres replication availability |`false`|
+| `postgresql.replication.slaveReplicas` | postgres replication slave replicas |`1`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
 | `puppetdb.image` | puppetdb img | `puppet/puppetdb`|
-| `puppetdb.tag` | puppetdb img tag | `6.10.1`|
+| `puppetdb.tag` | puppetdb img tag | `6.12.0`|
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
-| `puppetdb.credentials.username`| puppetdb username |`puppetdb`|
-| `puppetdb.credentials.value.password`| puppetdb password |`20-char randomly generated`|
-| `puppetdb.credentials.existingSecret`| existing k8s secret that holds puppetdb username and password |``|
 | `puppetboard.enabled` | puppetboard availability | `false`|
 | `puppetboard.name` | puppetboard component label | `puppetboard`|
 | `puppetboard.image` | puppetboard img | `xtigyro/puppetboard`|
@@ -241,6 +244,10 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `hiera.config`| hieradata yaml config |``|
 | `hiera.eyaml.private_key`| hiera eyaml private key |``|
 | `hiera.eyaml.public_key`| hiera eyaml public key |``|
+| `global.credentials.username`| puppetdb and postgresql username |`puppetdb`|
+| `global.credentials.password`| puppetdb and postgresql password |`unbreakablePassword`|
+| `global.credentials.existingSecret`| existing k8s secret that holds puppetdb and postgresql username and password |``|
+| `nameOverride`| puppetserver components name for `component:` labels |``|
 | `nodeSelector`| Node labels for pod assignment |``|
 | `affinity`| Affinity for pod assignment |``|
 | `tolerations`| Tolerations for pod assignment |``|
@@ -248,7 +255,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `podAnnotations`| Extra Pod annotations |``|
 | `storage.storageClass`| Storage Class |``|
 | `storage.annotations`| Storage annotations |``|
-| `storage.size`| PVCs Storage Size |`100Mi`|
+| `storage.size`| PVCs Storage Size |`400Mi`|
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -274,25 +281,26 @@ TIME_NOW="$(date +"%Y%m%dT%H%M")"
 cp "/etc/hosts"{,.backup_"$TIME_NOW"}
 echo '127.0.0.1 puppet agents-to-puppet puppet-compilers' >> /etc/hosts
 # if Ingress is used, e.g.
-# echo '127.0.0.1 puppet.local.masters puppet.local.compilers' >> /etc/hosts
+# INGRESS_IP="$(kubectl -n puppetserver get ingress | grep '\-masters' | tr -s " " | cut -d' ' -f4 | cut -d',' -f1)"
+# echo "$INGRESS_IP" puppet.local.masters puppet.local.compilers >> /etc/hosts
 
 docker run -dit --network host --name goofy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it goofy_xtigyro bash
-puppet agent -t --server puppet --masterport 8140 --test --waitforcert 15 --certname ubuntu-goofy_xtigyro
-puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-goofy_xtigyro
+puppet agent -t --server puppet --masterport 8140 --waitforcert 15 --summarize --certname ubuntu-goofy_xtigyro
+puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --summarize --certname ubuntu-goofy_xtigyro
 # if Ingress is used, e.g.
-# puppet agent -t --server puppet.local.compilers --ca_server puppet.local.masters --masterport 443 --ca_port 443 --test --certname ubuntu-goofy_xtigyro
-puppet agent -t --server puppet-compilers --masterport 8141 --test --certname ubuntu-goofy_xtigyro
+# puppet agent -t --server puppet.local.compilers --ca_server puppet.local.masters --masterport 443 --ca_port 443 --summarize --certname ubuntu-goofy_xtigyro
+puppet agent -t --server puppet-compilers --masterport 8141 --summarize --certname ubuntu-goofy_xtigyro
 exit
 docker rm -f goofy_xtigyro
 
 docker run -dit --network host --name buggy_xtigyro --entrypoint /bin/bash puppet/puppet-agent
 docker exec -it buggy_xtigyro bash
-puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --test --certname ubuntu-buggy_xtigyro
-puppet agent -t --server puppet-compilers --masterport 8141 --test --certname ubuntu-buggy_xtigyro
+puppet agent -t --server puppet-compilers --ca_server agents-to-puppet --masterport 8141 --ca_port 8140 --summarize --certname ubuntu-buggy_xtigyro
+puppet agent -t --server puppet-compilers --masterport 8141 --summarize --certname ubuntu-buggy_xtigyro
 # if Ingress is used, e.g.
-# puppet agent -t --server puppet.local.compilers --ca_server puppet.local.masters --masterport 443 --ca_port 443 --test --certname ubuntu-buggy_xtigyro
-puppet agent -t --server puppet --masterport 8140 --test --waitforcert 15 --certname ubuntu-buggy_xtigyro
+# puppet agent -t --server puppet.local.compilers --ca_server puppet.local.masters --masterport 443 --ca_port 443 --summarize --certname ubuntu-buggy_xtigyro
+puppet agent -t --server puppet --masterport 8140 --waitforcert 15 --summarize --certname ubuntu-buggy_xtigyro
 exit
 docker rm -f buggy_xtigyro
 
@@ -306,8 +314,11 @@ kill %[job_numbers_above]
 
 ## Credits
 
-* [Miroslav Hadzhiev](https://www.linkedin.com/in/mehadzhiev/), Lead Author and Developer
-* [Pupperware Team](mailto:pupperware@puppet.com), Owner
-* [Sean Conley](https://www.linkedin.com/in/seanconley/), Developer
-* [Morgan Rhodes](mailto:morgan@puppet.com), Developer
-* [Scott Cressi](mailto:scottcressi@gmail.com), Co-Author
+* [Miroslav Hadzhiev](https://www.linkedin.com/in/mehadzhiev/), Lead Author and Owner
+* [Pupperware Team](mailto:pupperware@puppet.com), Co-Author and Owner
+* [Morgan Rhodes](mailto:morgan@puppet.com), Maintainer
+* [Sean Conley](https://www.linkedin.com/in/seanconley/), Maintainer
+* [Scott Cressi](https://www.linkedin.com/in/scottcressi/), Co-Author
+* [Kai Sisterhenn](https://www.sistason.de/), Contributor
+* [chwehrli](https://github.com/chwehrli), Contributor
+* [Niels Højen](https://github.com/nielshojen), Contributor

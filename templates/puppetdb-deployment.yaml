@@ -36,12 +36,12 @@ spec:
             - name: PUPPETSERVER_PORT
               value: "{{ template "puppetserver.puppetserver-masters.port" . }}"
             - name: PUPPETDB_POSTGRES_HOSTNAME
-              value: "postgres"
+              value: "{{ template "puppetserver.name" . }}-postgresql"
             - name: PUPPETDB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "puppetdb.secret" . }}
-                  key: {{ template "puppetdb.passwordKey" . }}
+                  key: password
             - name: PUPPETDB_USER
               valueFrom:
                 secretKeyRef:
