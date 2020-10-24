@@ -55,6 +55,14 @@ spec:
           volumeMounts:
             - name: puppetdb-storage
               mountPath: /opt/puppetlabs/server/data/puppetdb/certs
+            {{- if .Values.puppetdb.enabledMetric }}
+            - name: puppetdb-metrics-volume
+              mountPath: /etc/puppetlabs/puppetdb/jolokia-access.xml
+              subPath: jolokia-access.xml
+            - name: puppetdb-metrics-volume
+              mountPath: /etc/puppetlabs/puppetdb/conf.d/metrics.conf
+              subPath: metrics.conf
+            {{- end -}}
         {{- if .Values.puppetboard.enabled }}
         - name: puppetboard
           image: "{{.Values.puppetboard.image}}:{{.Values.puppetboard.tag}}"
@@ -87,6 +95,11 @@ spec:
         - name: puppetdb-storage
           persistentVolumeClaim:
             claimName: puppetdb-claim
+        {{- if .Values.puppetdb.enabledMetric }}
+        - name: puppetdb-metrics-volume
+          configMap:
+            name: puppetdb-metrics-config
+        {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 10 }}
