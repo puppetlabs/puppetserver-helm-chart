@@ -7,7 +7,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 ## [v5.0.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.2) (2020-10-30)
 
-- Fix for `DNS_ALT_NAMES` for non-compilers deployments.
+- Fix for `DNS_ALT_NAMES` for non-compiler deployments.
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.0.1...v5.0.2)
 
