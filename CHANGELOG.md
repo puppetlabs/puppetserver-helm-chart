@@ -5,6 +5,12 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.0.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.2) (2020-10-30)
+
+- Fix for `DNS_ALT_NAMES` for non-compilers deployments.
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.0.1...v5.0.2)
+
 ## [v5.0.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.1) (2020-09-19)
 
 - Fix for resource names of Horizontal Pod Autoscalers.
