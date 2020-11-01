@@ -348,8 +348,8 @@ puppetdb:
   #    cpu: 1000m
   ## Additional puppetdb container environment variables
   extraEnv: {}
-  enabledMetric: true
-
+  metrics:
+    enabled: false
 ## PostgreSQL Sub-Chart Configuration
 ## Please check: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
 ##
