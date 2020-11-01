@@ -9,7 +9,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 - Fix for r10k_code_cronjob.sh and r10k_hiera_cronjob.sh syntax error with `map[]`
 
-[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.0.1...v5.0.3)
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.0.2...v5.0.3)
 
 ## [v5.0.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.2) (2020-10-30)
 
