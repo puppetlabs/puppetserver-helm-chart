@@ -348,6 +348,7 @@ puppetdb:
   #    cpu: 1000m
   ## Additional puppetdb container environment variables
   extraEnv: {}
+  ## puppetdb metrics enable/disable flag
   metrics:
     enabled: false
 ## PostgreSQL Sub-Chart Configuration
