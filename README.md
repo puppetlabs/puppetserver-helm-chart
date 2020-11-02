@@ -234,6 +234,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
+| `puppetdb.metrics.enabled` | puppetdb metrics enable/disable flag |`false`|
 | `puppetboard.enabled` | puppetboard availability | `false`|
 | `puppetboard.name` | puppetboard component label | `puppetboard`|
 | `puppetboard.image` | puppetboard img | `xtigyro/puppetboard`|
