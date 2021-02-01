@@ -121,6 +121,17 @@ puppetserver:
         cpuUtilizationPercentage: 75
         memoryUtilizationPercentage: 75
 
+    customPersistentVolumeClaim:
+      enable: false
+      config: {}
+      
+    ## Use custom pvc for the Puppet Server Master
+      #  azureDisk:
+      #    kind: Managed
+      #    diskName: myAKSDisk
+      #    diskURI: /subscriptions/<subscriptionID>/resourceGroups/MC_myAKSCluster_myAKSCluster_eastus/providers/Microsoft.Compute/disks/myAKSDisk
+
+
   ## Optional StatefulSet of Puppet Server Compiler/s
   ##
   compilers:
@@ -247,19 +258,6 @@ puppetserver:
       #   - secretName: puppet-compilers-server-tls
       #     hosts:
       #       - puppet-compilers.domain.com
-
-    customPersistentVolumeClaim:
-      enable: false
-      config: {}
-        azureDisk:
-          kind: Managed
-          diskName: myAKSDisk
-          diskURI: /subscriptions/1a88599f-83ef-4245-a04d-d811198caa1f/resourceGroups/MC_x100-jetti-front_jfd-prod_northeurope/providers/Microsoft.Compute/disks/puppet-serverdata
-
-      #  azureDisk:
-      #    kind: Managed
-      #    diskName: myAKSDisk
-      #    diskURI: /subscriptions/<subscriptionID>/resourceGroups/MC_myAKSCluster_myAKSCluster_eastus/providers/Microsoft.Compute/disks/myAKSDisk
 
   ## Use pre-generated Puppet Master certs in `./init/puppet-certs`
   ## Check README for related use cases
