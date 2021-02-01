@@ -1,0 +1,77 @@
+apiVersion: v1
+entries:
+  postgresql:
+  - annotations:
+      category: Database
+    apiVersion: v1
+    appVersion: 11.9.0
+    created: "2021-02-01T15:23:49.616007+02:00"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 0.x.x
+    description: Chart for PostgreSQL, an object-relational database management system
+      (ORDBMS) with an emphasis on extensibility and on standards-compliance.
+    digest: 0a01bd8cb02a6384dce22984c0ba803161dab0bf2c0523989484bcb9c1c6bfce
+    home: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+    icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-110x117.png
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    - cluster
+    maintainers:
+    - email: containers@bitnami.com
+      name: Bitnami
+    - email: cedric@desaintmartin.fr
+      name: desaintmartin
+    name: postgresql
+    sources:
+    - https://github.com/bitnami/bitnami-docker-postgresql
+    - https://www.postgresql.org/
+    urls:
+    - charts/postgresql-9.4.1.tgz
+    version: 9.4.1
+  puppetserver:
+  - apiVersion: v1
+    appVersion: 6.12.1
+    created: "2021-02-01T15:23:49.611581+02:00"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 9.4.*
+    description: Puppet automates the delivery and operation of software.
+    digest: ee3ee6e1283a4226b6ce0492e1075c9f74c11d5c91db723270e6439ecb6a98fc
+    home: https://puppet.com/
+    icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
+    keywords:
+    - puppet
+    - puppetserver
+    - automation
+    - iac
+    - infrastructure
+    - cm
+    - ci
+    - cd
+    kubeVersion: '>=1.10.0-0'
+    maintainers:
+    - email: miroslav.hadzhiev@gmail.com
+      name: Xtigyro
+    - email: morgan@puppet.com
+      name: underscorgan
+    - email: slconley@gmail.com
+      name: slconley
+    - email: pupperware@puppet.com
+      name: Pupperware Team
+    name: puppetserver
+    sources:
+    - https://github.com/puppetlabs/pupperware/
+    - https://github.com/postgres/postgres
+    - https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+    urls:
+    - puppetserver-5.0.4.tgz
+    version: 5.0.4
+generated: "2021-02-01T15:23:49.601516+02:00"
