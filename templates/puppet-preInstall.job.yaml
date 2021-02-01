@@ -47,11 +47,19 @@ spec:
               mountPath: /opt/puppetlabs/server/data/puppetdb/certs
       volumes:
         - name: puppet-puppet-storage
+        {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.puppet.enable }}
+          {{- toYaml .Values.puppetserver.masters.customPersistentVolumeClaim.puppet.config | nindent 10 }}
+        {{- else }}
           persistentVolumeClaim:
             claimName: puppet-puppet-claim
+        {{- end }}
         - name: puppetdb-storage
+        {{- if .Values.puppetdb.customPersistentVolumeClaim.storage.enable }}
+          {{- toYaml .Values.puppetserver.puppetdb.customPersistentVolumeClaim.storage.config | nindent 10 }}
+        {{- else }}
           persistentVolumeClaim:
             claimName: puppetdb-claim
+        {{- end }}
         - name: puppetserver-certs
           configMap:
             name: "{{ template "puppetserver.name" . }}-puppetserver-preinstall"
