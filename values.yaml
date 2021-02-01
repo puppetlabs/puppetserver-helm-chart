@@ -248,6 +248,19 @@ puppetserver:
       #     hosts:
       #       - puppet-compilers.domain.com
 
+    customPersistentVolumeClaim:
+      enable: false
+      config: {}
+        azureDisk:
+          kind: Managed
+          diskName: myAKSDisk
+          diskURI: /subscriptions/1a88599f-83ef-4245-a04d-d811198caa1f/resourceGroups/MC_x100-jetti-front_jfd-prod_northeurope/providers/Microsoft.Compute/disks/puppet-serverdata
+
+      #  azureDisk:
+      #    kind: Managed
+      #    diskName: myAKSDisk
+      #    diskURI: /subscriptions/<subscriptionID>/resourceGroups/MC_myAKSCluster_myAKSCluster_eastus/providers/Microsoft.Compute/disks/myAKSDisk
+
   ## Use pre-generated Puppet Master certs in `./init/puppet-certs`
   ## Check README for related use cases
   ##

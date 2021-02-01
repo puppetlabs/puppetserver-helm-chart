@@ -278,8 +278,12 @@ spec:
           persistentVolumeClaim:
             claimName: puppet-puppet-claim
         - name: puppet-serverdata-storage
+        {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.enable  }}
+          {{- toYaml .Values.puppetserver.masters.customPersistentVolumeClaim.config | nindent 12 }}
+        {{ else }}
           persistentVolumeClaim:
             claimName: puppet-serverdata-claim
+        {{- end }}
         {{- if .Values.puppetserver.masters.multiMasters.enabled }}
         - name: init-masters-volume
           configMap:
