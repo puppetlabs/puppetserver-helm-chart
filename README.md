@@ -159,6 +159,12 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.masters.multiMasters.autoScaling.maxMasters` | If masters autoscaling enabled, this field sets maximum masters count | `3`|
 | `puppetserver.masters.multiMasters.autoScaling.cpuUtilizationPercentage` | Target masters CPU utilization percentage to scale | `75`|
 | `puppetserver.masters.multiMasters.autoScaling.memoryUtilizationPercentage` | Target masters memory utilization percentage to scale | `75`|
+| `puppetserver.masters.customPersistentVolumeClaim.puppet.enable`| If true, use custom PVC for puppet |``|
+| `puppetserver.masters.customPersistentVolumeClaim.puppet.config `| Configuration for custom PVC for puppet |``|
+| `puppetserver.masters.customPersistentVolumeClaim.code.enable`| If true, use custom PVC for code  |``|
+| `puppetserver.masters.customPersistentVolumeClaim.code.config `| Configuration for custom PVC for code |``|
+| `puppetserver.masters.customPersistentVolumeClaim.serverdata.enable`| If true, use custom PVC for serverdata  |``|
+| `puppetserver.masters.customPersistentVolumeClaim.serverdata.config `| Configuration for custom PVC for serverdata |``|
 | `puppetserver.compilers.enabled` | If true, creates Puppetserver compilers | `false`|
 | `puppetserver.compilers.resources` | puppetserver compilers resource limits |``|
 | `puppetserver.compilers.podAntiAffinity` | puppetserver compilers pod affinity constraints |`false`|
@@ -235,6 +241,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
 | `puppetdb.metrics.enabled` | puppetdb metrics enable/disable flag |`false`|
+| `puppetdb.customPersistentVolumeClaim.storage.enable`| If true, use custom PVC for storage |``|
+| `puppetdb.customPersistentVolumeClaim.storage.config `| Configuration for custom PVC for storage |``|
 | `puppetboard.enabled` | puppetboard availability | `false`|
 | `puppetboard.name` | puppetboard component label | `puppetboard`|
 | `puppetboard.image` | puppetboard img | `xtigyro/puppetboard`|
