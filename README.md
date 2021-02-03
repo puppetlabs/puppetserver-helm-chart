@@ -338,3 +338,4 @@ kill %[job_numbers_above]
 * [Kai Sisterhenn](https://www.sistason.de/), Contributor
 * [chwehrli](https://github.com/chwehrli), Contributor
 * [Niels Højen](https://github.com/nielshojen), Contributor
+* [Hryhorii Didenko](https://github.com/HryhoriiDidenko), Contributor
