@@ -121,6 +121,22 @@ puppetserver:
         cpuUtilizationPercentage: 75
         memoryUtilizationPercentage: 75
 
+    ## Use custom PVC for the Puppet Server Master
+    customPersistentVolumeClaim:
+      serverdata:
+        enable: false
+        config: {}
+      #  azureDisk:
+      #    kind: Managed
+      #    diskName: myAKSDisk
+      #    diskURI: /subscriptions/<subscriptionID>/resourceGroups/MC_myAKSCluster_myAKSCluster_eastus/providers/Microsoft.Compute/disks/myAKSDisk
+      puppet:
+        enable: false
+        config: {}
+      code:
+        enable: false
+        config: {}
+
   ## Optional StatefulSet of Puppet Server Compiler/s
   ##
   compilers:
@@ -351,6 +367,12 @@ puppetdb:
   ## puppetdb metrics enable/disable flag
   metrics:
     enabled: false
+  ## Use custom PVC for the Puppet PuppetDB
+  customPersistentVolumeClaim:
+    storage:
+      enable: false
+      config: {}
+
 ## PostgreSQL Sub-Chart Configuration
 ## Please check: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
 ##

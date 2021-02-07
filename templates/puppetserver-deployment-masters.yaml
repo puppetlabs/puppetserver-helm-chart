@@ -272,14 +272,26 @@ spec:
         fsGroup: 999   # "puppet" GID
       volumes:
         - name: puppet-code-storage
+        {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.code.enable }}
+          {{- toYaml .Values.puppetserver.masters.customPersistentVolumeClaim.code.config | nindent 10 }}
+        {{- else }}
           persistentVolumeClaim:
             claimName: puppet-code-claim
+        {{- end }}
         - name: puppet-puppet-storage
+        {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.puppet.enable }}
+          {{- toYaml .Values.puppetserver.masters.customPersistentVolumeClaim.puppet.config | nindent 10 }}
+        {{- else }}
           persistentVolumeClaim:
             claimName: puppet-puppet-claim
+        {{- end }}
         - name: puppet-serverdata-storage
+        {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.serverdata.enable }}
+          {{- toYaml .Values.puppetserver.masters.customPersistentVolumeClaim.serverdata.config | nindent 10 }}
+        {{- else }}
           persistentVolumeClaim:
             claimName: puppet-serverdata-claim
+        {{- end }}
         {{- if .Values.puppetserver.masters.multiMasters.enabled }}
         - name: init-masters-volume
           configMap:
