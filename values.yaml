@@ -121,7 +121,7 @@ puppetserver:
         cpuUtilizationPercentage: 75
         memoryUtilizationPercentage: 75
 
-    ## Use custom pvc for the Puppet Server Master
+    ## Use custom PVC for the Puppet Server Master
     customPersistentVolumeClaim:
       serverdata:
         enable: false
@@ -367,6 +367,7 @@ puppetdb:
   ## puppetdb metrics enable/disable flag
   metrics:
     enabled: false
+  ## Use custom PVC for the Puppet PuppetDB
   customPersistentVolumeClaim:
     storage:
       enable: false
