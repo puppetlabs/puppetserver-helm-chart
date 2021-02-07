@@ -7,7 +7,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 ## [v5.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.1.0) (2021-02-07)
 
-- Add ability to use custom PVC.
+- Add ability to use custom PVCs.
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.0.4...v5.1.0)
 
