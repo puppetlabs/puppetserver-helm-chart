@@ -48,8 +48,8 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: v"${{ env.version }}"
-          release_name: "${{ env.release_name }}"
+          tag_name: v${{ env.version }}
+          release_name: ${{ env.release_name }}
           body_path: body.md
       - name: upload artifacts to the release
         uses: actions/upload-release-asset@v1
@@ -63,7 +63,7 @@ jobs:
           gh_pages_worktree=$(mktemp -d)
           git worktree add "$gh_pages_worktree" gh-pages
           cp .release-packages/puppetserver-${{ env.version }}.tgz $gh_pages_worktree
-          cp CHANGELOG.md README.md LICENSE OWNERS $gh_pages_worktree
+          cp CHANGELOG.md README.md LICENSE CODEOWNERS $gh_pages_worktree
           find "$gh_pages_worktree" -type f ! -name "puppetserver-${{ env.version }}.tgz" -name 'puppetserver*.tgz' -delete
           helm repo index $gh_pages_worktree --url $HELM_REPO_URL --merge "$gh_pages_worktree/index.yaml"
           pushd "$gh_pages_worktree" > /dev/null
