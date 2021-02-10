@@ -33,7 +33,7 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
       - name: Set the version
         run: |
-          echo "::set-env name=version::$(grep 'version:' Chart.yaml| awk '{print $2}')"
+          echo "version=$(grep 'version:' Chart.yaml| awk '{print $2}')" >> $GITHUB_ENV
       - name: Package the chart
         run: |
           helm package . --destination .release-packages --dependency-update
@@ -43,13 +43,13 @@ jobs:
           echo "RELEASE NOTES: $release_notes"
           echo "$release_notes" > body.md
           release_name=`echo "$release_notes"| head -1 | sed 's/^- //'`
-          echo "::set-env name=release_name::$release_name"
+          echo "release_name=$release_name" >> $GITHUB_ENV
       - name: Make the release
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: v${{ env.version }}
-          release_name: ${{ env.release_name }}
+          tag_name: v"${{ env.version }}"
+          release_name: "${{ env.release_name }}"
           body_path: body.md
       - name: upload artifacts to the release
         uses: actions/upload-release-asset@v1
