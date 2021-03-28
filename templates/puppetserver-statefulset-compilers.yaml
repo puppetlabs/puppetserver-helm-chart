@@ -324,7 +324,7 @@ spec:
       {{- end }}
       spec:
         accessModes:
-          - ReadWriteOnce
+          {{- toYaml .Values.storage.accessModes | nindent 10 }}
         resources:
           requests:
             storage: "{{ .Values.storage.size }}"
@@ -343,7 +343,7 @@ spec:
       {{- end }}
       spec:
         accessModes:
-          - ReadWriteOnce
+          {{- toYaml .Values.storage.accessModes | nindent 10 }}
         resources:
           requests:
             storage: "{{ .Values.storage.size }}"

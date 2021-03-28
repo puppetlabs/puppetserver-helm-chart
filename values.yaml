@@ -575,6 +575,10 @@ podAnnotations: {}
 ## Storage Configuration
 ##
 storage:
+  ## Puppet Server data Persistent Volume Access Modes
+  ## Be sure your chosen Storage Class below allows this Access Mode
+  accessModes:
+    - ReadWriteOnce
   ## Puppet Server data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
