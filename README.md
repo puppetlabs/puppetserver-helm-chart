@@ -269,6 +269,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `tolerations`| Tolerations for pod assignment |``|
 | `priorityClass`| Leverage a priorityClass to ensure your pods survive resource shortages |``|
 | `podAnnotations`| Extra Pod annotations |``|
+| `storage.accessModes`| Storage Access Modes (expects array) |`["ReadWriteOnce"]`|
 | `storage.storageClass`| Storage Class |``|
 | `storage.annotations`| Storage annotations |``|
 | `storage.size`| PVCs Storage Size |`400Mi`|
@@ -339,3 +340,4 @@ kill %[job_numbers_above]
 * [chwehrli](https://github.com/chwehrli), Contributor
 * [Niels Højen](https://github.com/nielshojen), Contributor
 * [Hryhorii Didenko](https://github.com/HryhoriiDidenko), Contributor
+* [John Stewart](https://github.com/jstewart612), Contributor
