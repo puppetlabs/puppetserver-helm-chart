@@ -341,3 +341,4 @@ kill %[job_numbers_above]
 * [Niels Højen](https://github.com/nielshojen), Contributor
 * [Hryhorii Didenko](https://github.com/HryhoriiDidenko), Contributor
 * [John Stewart](https://github.com/jstewart612), Contributor
+* [Erlon Pinheiro](https://github.com/erlonpinheiro), Contributor

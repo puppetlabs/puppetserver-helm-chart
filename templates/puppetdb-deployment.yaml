@@ -70,10 +70,6 @@ spec:
           resources:
             {{- toYaml .Values.puppetboard.resources | nindent 12 }}
           env:
-            {{- range $key, $value := .Values.puppetboard.extraEnv }}
-            - name: {{ $key }}
-              value: "{{ $value }}"
-            {{- end }}
             - name: PUPPETDB_HOST
               value: "puppetdb"
             - name: PUPPETDB_PORT
@@ -84,6 +80,10 @@ spec:
               value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/public.pem"
             - name: PUPPETDB_KEY
               value: "/opt/puppetlabs/server/data/puppetdb/certs/private_keys/private.pem"
+            {{- range $key, $value := .Values.puppetboard.extraEnv }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
           ports:
             - name: puppetboard
               containerPort: 80

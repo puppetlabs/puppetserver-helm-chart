@@ -5,6 +5,10 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.3.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.3.0) (2021-04-22)
+
+- Add ability to ovewrite PuppetBoard variables in order to work properly with newer PuppetDB versions.
+
 ## [v5.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.2.0) (2021-03-29)
 
 - Add ability to change PVC accessModes.
