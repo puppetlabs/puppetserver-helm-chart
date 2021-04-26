@@ -21,6 +21,9 @@ spec:
     spec:
       hostname: puppetdb
       containers:
+        {{- if .Values.puppetdb.containers }}
+          {{ toYaml .Values.puppetdb.containers | indent 8 }}
+        {{- end }}
         - name: puppetdb
           image: "{{.Values.puppetdb.image}}:{{.Values.puppetdb.tag}}"
           imagePullPolicy: "{{.Values.puppetdb.pullPolicy}}"
