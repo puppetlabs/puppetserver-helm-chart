@@ -247,6 +247,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetboard.name` | puppetboard component label | `puppetboard`|
 | `puppetboard.image` | puppetboard img | `xtigyro/puppetboard`|
 | `puppetboard.tag` | puppetboard img tag | `2.1.2`|
+| `puppetboard.port` | puppetboard container port | `9090`|
 | `puppetboard.pullPolicy` | puppetboard img pull policy | `IfNotPresent`|
 | `puppetboard.resources` | puppetboard resource limits |``|
 | `puppetboard.extraEnv` | puppetboard additional container env vars |``|
@@ -335,6 +336,7 @@ kill %[job_numbers_above]
 * [Pupperware Team](mailto:pupperware@puppet.com), Co-Author and Owner
 * [Morgan Rhodes](mailto:morgan@puppet.com), Maintainer
 * [Sean Conley](https://www.linkedin.com/in/seanconley/), Maintainer
+* [Raphaël Pinson](https://github.com/raphink), Maintainer
 * [Scott Cressi](https://www.linkedin.com/in/scottcressi/), Co-Author
 * [Kai Sisterhenn](https://www.sistason.de/), Contributor
 * [chwehrli](https://github.com/chwehrli), Contributor

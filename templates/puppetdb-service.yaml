@@ -12,7 +12,7 @@ spec:
       port: 8081
     {{- if .Values.puppetboard.enabled }}
     - name: puppetboard
-      port: 80
+      port: {{ .Values.puppetboard.port }}
     {{- end }}
   selector:
     {{- include "puppetserver.puppetdb.matchLabels" . | nindent 4 }}

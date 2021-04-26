@@ -433,8 +433,9 @@ postgresql:
 puppetboard:
   enabled: false
   name: puppetboard
-  image: xtigyro/puppetboard
-  tag: 2.2.0
+  image: ghcr.io/voxpupuli/puppetboard
+  tag: 3.0.0
+  port: 9090
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:

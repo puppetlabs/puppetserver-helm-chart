@@ -21,6 +21,9 @@ spec:
     spec:
       hostname: puppetdb
       containers:
+        {{- if .Values.puppetdb.containers }}
+          {{ toYaml .Values.puppetdb.containers | indent 8 }}
+        {{- end }}
         - name: puppetdb
           image: "{{.Values.puppetdb.image}}:{{.Values.puppetdb.tag}}"
           imagePullPolicy: "{{.Values.puppetdb.pullPolicy}}"
@@ -80,13 +83,15 @@ spec:
               value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/public.pem"
             - name: PUPPETDB_KEY
               value: "/opt/puppetlabs/server/data/puppetdb/certs/private_keys/private.pem"
+            - name: PUPPETBOARD_PORT
+              value: {{ .Values.puppetboard.port | quote }}
             {{- range $key, $value := .Values.puppetboard.extraEnv }}
             - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
           ports:
             - name: puppetboard
-              containerPort: 80
+              containerPort: {{ .Values.puppetboard.port }}
           volumeMounts:
             - name: puppetdb-storage
               mountPath: /opt/puppetlabs/server/data/puppetdb/certs
