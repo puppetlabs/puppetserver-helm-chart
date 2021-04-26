@@ -17,6 +17,8 @@ maintainers:
     email: morgan@puppet.com
   - name: slconley
     email: slconley@gmail.com
+  - name: raphink
+    email: raphael.pinson@camptocamp.com
   - name: Pupperware Team
     email: pupperware@puppet.com
 engine: gotpl
