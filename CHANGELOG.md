@@ -5,7 +5,7 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v5.5.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.4.0) (2021-04-26)
+## [v5.5.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.4.0) (2021-04-30)
 
 - fix: use puppetboard.port in puppetboard-ingress.yaml
 - fix: use proper syntax for extra containers in puppetdb-deployment.yaml
