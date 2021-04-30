@@ -2,7 +2,7 @@
 {{- if .Values.puppetboard.ingress.enabled }}
 {{- $releaseName := .Release.Name -}}
 {{- $serviceName := "puppetdb" }}
-{{- $servicePort := "80" -}}
+{{- $servicePort := .Values.puppetboard.port -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
