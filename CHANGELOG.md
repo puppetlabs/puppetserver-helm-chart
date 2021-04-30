@@ -5,6 +5,13 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.5.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.4.0) (2021-04-26)
+
+- fix: use puppetboard.port in puppetboard-ingress.yaml
+- fix: use proper syntax for extra containers in puppetdb-deployment.yaml
+- fix: force targetPorts in puppetdb-service.yaml
+- enhancement: allow to specify puppetboard.service.targetPort
+
 ## [v5.4.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.4.0) (2021-04-26)
 
 - Use official Puppetboard image, use port 9090, and allow extra PuppetDB containers.
