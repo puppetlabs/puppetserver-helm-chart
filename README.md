@@ -242,7 +242,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
 | `puppetdb.metrics.enabled` | puppetdb metrics enable/disable flag |`false`|
 | `puppetdb.customPersistentVolumeClaim.storage.enable`| If true, use custom PVC for storage |``|
-| `puppetdb.customPersistentVolumeClaim.storage.config `| Configuration for custom PVC for storage |``|
+| `puppetdb.customPersistentVolumeClaim.storage.config`| Configuration for custom PVC for storage |``|
+| `puppetdb.containers`| Extra containers to inject in the puppetdb pod |``|
 | `puppetboard.enabled` | puppetboard availability | `false`|
 | `puppetboard.name` | puppetboard component label | `puppetboard`|
 | `puppetboard.image` | puppetboard img | `xtigyro/puppetboard`|
@@ -251,6 +252,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetboard.pullPolicy` | puppetboard img pull policy | `IfNotPresent`|
 | `puppetboard.resources` | puppetboard resource limits |``|
 | `puppetboard.extraEnv` | puppetboard additional container env vars |``|
+| `puppetboard.service.targetPort` | target port for the puppetboard service port |`puppetboard`|
 | `puppetboard.ingress.enabled`| puppetboard ingress creation enabled |`false`|
 | `puppetboard.ingress.annotations`| puppetboard ingress annotations |``|
 | `puppetboard.ingress.extraLabels`| puppetboard ingress extraLabels |``|
