@@ -8,11 +8,14 @@ spec:
   ports:
     - name: pdb-http
       port: 8080
+      targetPort: pdb-http
     - name: pdb-https
       port: 8081
+      targetPort: pdb-https
     {{- if .Values.puppetboard.enabled }}
     - name: puppetboard
       port: {{ .Values.puppetboard.port }}
+      targetPort: {{ .Values.puppetboard.service.targetPort }}
     {{- end }}
   selector:
     {{- include "puppetserver.puppetdb.matchLabels" . | nindent 4 }}
