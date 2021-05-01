@@ -7,7 +7,7 @@
 puppetserver:
   name: puppetserver
   image: puppet/puppetserver
-  tag: 6.12.1
+  tag: 7.1.2
   pullPolicy: IfNotPresent
   ## Mandatory Deployment of Puppet Server Master/s
   ##
@@ -283,7 +283,7 @@ puppetserver:
 r10k:
   name: r10k
   image: puppet/r10k
-  tag: 3.5.2
+  tag: 3.8.0
   pullPolicy: IfNotPresent
   code:
     resources: {}
@@ -353,7 +353,7 @@ r10k:
 puppetdb:
   name: puppetdb
   image: puppet/puppetdb
-  tag: 6.12.0
+  tag: 7.2.0
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
@@ -362,6 +362,8 @@ puppetdb:
   #  limits:
   #    memory: 1024Mi
   #    cpu: 1000m
+  ## Extra containers to inject into the PuppetDB pod
+  extraContainers: []
   ## Additional puppetdb container environment variables
   extraEnv: {}
   ## puppetdb metrics enable/disable flag

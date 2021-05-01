@@ -21,7 +21,7 @@ spec:
     spec:
       hostname: puppetdb
       containers:
-        {{- with .Values.puppetdb.containers }}
+        {{- with .Values.puppetdb.extraContainers }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
         - name: puppetdb
