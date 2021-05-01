@@ -5,7 +5,15 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v5.5.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.4.0) (2021-04-30)
+## [v5.6.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.6.0) (2021-05-01)
+
+- update: Puppetserver to `v7.1.2`; PuppetDB to `v7.2.0`; r10k to `v3.8.0`; PostgreSQL chart to `v10.4.*`.
+- fix: [Wrong parameter name in README to disable autosign](https://github.com/puppetlabs/puppetserver-helm-chart/issues/79).
+- fix: bad naming for PuppetDB extra containers variable.
+- fix: add missing placeholder for PuppetDB extra containers in `values.yaml`.
+- fix: wrong url to Puppetserver chart v5.5.0 in `CHANGELOG`.
+
+## [v5.5.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.5.0) (2021-04-30)
 
 - fix: use puppetboard.port in puppetboard-ingress.yaml
 - fix: use proper syntax for extra containers in puppetdb-deployment.yaml
