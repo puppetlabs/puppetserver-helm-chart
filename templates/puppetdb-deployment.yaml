@@ -80,9 +80,9 @@ spec:
             - name: PUPPETDB_SSL_VERIFY
               value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/ca.pem"
             - name: PUPPETDB_CERT
-              value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/public.pem"
+              value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/puppetdb.pem"
             - name: PUPPETDB_KEY
-              value: "/opt/puppetlabs/server/data/puppetdb/certs/private_keys/private.pem"
+              value: "/opt/puppetlabs/server/data/puppetdb/certs/private_keys/puppetdb.pem"
             - name: PUPPETBOARD_PORT
               value: {{ .Values.puppetboard.port | quote }}
             {{- range $key, $value := .Values.puppetboard.extraEnv }}
