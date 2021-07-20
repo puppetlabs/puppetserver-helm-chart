@@ -196,6 +196,8 @@ spec:
               mountPath: /etc/puppetlabs/puppet/
             - name: puppet-serverdata-storage
               mountPath: /opt/puppetlabs/server/data/puppetserver/
+            - name: puppet-ca-storage
+              mountPath: /etc/puppetlabs/puppetserver/ca/
         {{- if .Values.puppetserver.puppeturl }}
         # r10k Code Sidecar
         - name: r10k-code
@@ -277,6 +279,13 @@ spec:
         {{- else }}
           persistentVolumeClaim:
             claimName: puppet-code-claim
+        {{- end }}
+        - name: puppet-ca-storage
+        {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.ca.enable }}
+          {{- toYaml .Values.puppetserver.masters.customPersistentVolumeClaim.ca.config | nindent 10 }}
+        {{- else }}
+          persistentVolumeClaim:
+            claimName: puppet-ca-claim
         {{- end }}
         - name: puppet-puppet-storage
         {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.puppet.enable }}

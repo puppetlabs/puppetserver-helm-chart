@@ -136,6 +136,9 @@ puppetserver:
       code:
         enable: false
         config: {}
+      ca:
+        enable: false
+        config: {}
 
   ## Optional StatefulSet of Puppet Server Compiler/s
   ##
