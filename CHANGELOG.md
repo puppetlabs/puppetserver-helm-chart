@@ -5,6 +5,11 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.6.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.6.1) (2021-07-20)
+
+- fix: use correct puppetdb certs in puppetboard
+- fix: persist CA, now located in /etc/puppetlabs/puppetserver/ca/
+
 ## [v5.6.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.6.0) (2021-05-01)
 
 - update: Puppetserver to `v7.1.2`; PuppetDB to `v7.2.0`; r10k to `v3.8.0`; PostgreSQL chart to `v10.4.*`.
