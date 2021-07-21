@@ -16,6 +16,7 @@ data:
       :hiera_repo:
         remote: '{{.Values.hiera.hieradataurl}}'
         basedir: '/etc/puppetlabs/code/hiera-data'
+    {{ .Values.r10k.hiera.extraSettings | nindent 4 }}
 
   r10k_hiera_cronjob.sh: |
     #!/usr/bin/env sh

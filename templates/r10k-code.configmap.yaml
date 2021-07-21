@@ -16,6 +16,7 @@ data:
       :puppet_repo:
         remote: '{{.Values.puppetserver.puppeturl}}'
         basedir: '/etc/puppetlabs/code/environments'
+    {{ .Values.r10k.code.extraSettings | nindent 4 }}
 
   r10k_code_cronjob.sh: |
     #!/usr/bin/env sh
