@@ -24,6 +24,7 @@ spec:
       http:
         paths:
           - path: /{{ rest $url | join "/" }}
+            pathType: Prefix
             backend:
               serviceName: {{ $serviceName }}
               servicePort: {{ $servicePort }}
