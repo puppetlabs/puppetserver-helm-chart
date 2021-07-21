@@ -202,8 +202,15 @@ spec:
           volumeMounts:
           {{- with .Values.r10k.code.viaSsh.credentials }}
           {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
-          - name: r10k-code-secret
+          - name: r10k-code-ssh
             mountPath: /home/puppet/.ssh
+          {{- end }}
+          {{- end }}
+          {{- with .Values.r10k.code.viaHttps.credentials }}
+          {{- if or .existingSecret .netrc.value }}
+          - name: r10k-code-netrc
+            mountPath: /home/puppet/.netrc
+            subPath: .netrc
           {{- end }}
           {{- end }}
           - name: puppet-code-volume
@@ -238,8 +245,15 @@ spec:
           volumeMounts:
           {{- with .Values.r10k.hiera.viaSsh.credentials }}
           {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
-          - name: r10k-hiera-secret
+          - name: r10k-hiera-ssh
             mountPath: /home/puppet/.ssh
+          {{- end }}
+          {{- end }}
+          {{- with .Values.r10k.hiera.viaHttps.credentials }}
+          {{- if or .existingSecret .netrc.value }}
+          - name: r10k-hiera-netrc
+            mountPath: /home/puppet/.netrc
+            subPath: .netrc
           {{- end }}
           {{- end }}
           - name: puppet-code-volume
@@ -282,10 +296,24 @@ spec:
             name: {{ template "puppetserver.hiera.privateMap" . }}
         {{- end }}
         {{- if or (.Values.r10k.code.viaSsh.credentials.existingSecret) (and (.Values.r10k.code.viaSsh.credentials.ssh.value) (.Values.r10k.code.viaSsh.credentials.known_hosts.value)) }}
-        - name: r10k-code-secret
+        - name: r10k-code-ssh
           secret:
-            secretName: {{ template "r10k.code.secret" . }}
+            secretName: {{ template "r10k.code.viaSsh.secret" . }}
             defaultMode: 288 # = mode 0440
+            items:
+              - key: id_rsa
+                path: id_rsa
+              - key: known_hosts
+                path: known_hosts
+        {{- end }}
+        {{- if or .Values.r10k.code.viaHttps.credentials.existingSecret .Values.r10k.code.viaHttps.credentials.netrc.value }}
+        - name: r10k-code-netrc
+          secret:
+            secretName: {{ template "r10k.code.viaHttps.secret" . }}
+            defaultMode: 288 # = mode 0440
+            items:
+              - key: netrc
+                path: .netrc
         {{- end }}
         {{- if .Values.puppetserver.puppeturl }}
         - name: r10k-code-volume
@@ -298,10 +326,24 @@ spec:
             name: r10k-hiera-config
         {{- end }}
         {{- if or (.Values.r10k.hiera.viaSsh.credentials.existingSecret) (and (.Values.r10k.hiera.viaSsh.credentials.ssh.value) (.Values.r10k.hiera.viaSsh.credentials.known_hosts.value)) }}
-        - name: r10k-hiera-secret
+        - name: r10k-hiera-ssh
           secret:
-            secretName: {{ template "r10k.hiera.secret" . }}
+            secretName: {{ template "r10k.hiera.viaSsh.secret" . }}
             defaultMode: 288 # = mode 0440
+            items:
+              - key: id_rsa
+                path: id_rsa
+              - key: known_hosts
+                path: known_hosts
+        {{- end }}
+        {{- if or .Values.r10k.hiera.viaHttps.credentials.existingSecret .Values.r10k.hiera.viaHttps.credentials.netrc.value }}
+        - name: r10k-hiera-netrc
+          secret:
+            secretName: {{ template "r10k.hiera.viaHttps.secret" . }}
+            defaultMode: 288 # = mode 0440
+            items:
+              - key: netrc
+                path: .netrc
         {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector:

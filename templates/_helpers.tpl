@@ -278,9 +278,9 @@ Create the name for the PuppetDB password secret.
 {{- end -}}
 
 {{/*
-Create the name for the r10k.code secret.
+Create the name for the r10k.code.viaSsh secret.
 */}}
-{{- define "r10k.code.secret" -}}
+{{- define "r10k.code.viaSsh.secret" -}}
 {{- if .Values.r10k.code.viaSsh.credentials.existingSecret -}}
   {{- .Values.r10k.code.viaSsh.credentials.existingSecret -}}
 {{- else -}}
@@ -289,11 +289,33 @@ Create the name for the r10k.code secret.
 {{- end -}}
 
 {{/*
-Create the name for the r10k.hiera secret.
+Create the name for the r10k.code.viaHttps secret.
 */}}
-{{- define "r10k.hiera.secret" -}}
+{{- define "r10k.code.viaHttps.secret" -}}
+{{- if .Values.r10k.code.viaHttps.credentials.existingSecret -}}
+  {{- .Values.r10k.code.viaHttps.credentials.existingSecret -}}
+{{- else -}}
+  r10k-code-creds
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name for the r10k.hiera.viaSsh secret.
+*/}}
+{{- define "r10k.hiera.viaSsh.secret" -}}
 {{- if .Values.r10k.hiera.viaSsh.credentials.existingSecret -}}
   {{- .Values.r10k.hiera.viaSsh.credentials.existingSecret -}}
+{{- else -}}
+  r10k-hiera-creds
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name for the r10k.hiera.viaHttps secret.
+*/}}
+{{- define "r10k.hiera.viaHttps.secret" -}}
+{{- if .Values.r10k.hiera.viaHttps.credentials.existingSecret -}}
+  {{- .Values.r10k.hiera.viaHttps.credentials.existingSecret -}}
 {{- else -}}
   r10k-hiera-creds
 {{- end -}}
