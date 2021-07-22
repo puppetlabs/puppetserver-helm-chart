@@ -5,6 +5,10 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.6.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.6.3) (2021-07-22)
+
+- update: update to new api version (networking.k8s.io/v1) of ingress (v1.19+)
+
 ## [v5.6.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.6.2) (2021-07-21)
 
 - fix: add pathType Prefix to puppetboard ingress
