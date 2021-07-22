@@ -3,7 +3,7 @@
 {{- $releaseName := .Release.Name -}}
 {{- $serviceName := include "puppetserver.puppetserver-compilers.serviceName" . }}
 {{- $servicePort := .Values.puppetserver.compilers.service.ports.puppetserver.port -}}
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   {{- if .Values.puppetserver.compilers.ingress.annotations }}
@@ -25,8 +25,10 @@ spec:
         paths:
           - path: /{{ rest $url | join "/" }}
             backend:
-              serviceName: {{ $serviceName }}
-              servicePort: {{ $servicePort }}
+              service:
+                name: {{ $serviceName }}
+                port:
+                  number: {{ $servicePort }}
     {{- end -}}
   {{- if .Values.puppetserver.compilers.ingress.tls }}
   tls:
