@@ -5,6 +5,11 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.8.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.8.0) (2021-07-22)
+
+- feat: Add r10k.code.extraSettings and r10k.hiera.extraSettings
+- feat: Add viaHttps options for r10k.code
+
 ## [v5.7.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.7.0) (2021-07-22)
 
 - update: update to new api version (networking.k8s.io/v1) of ingress (v1.19+)
