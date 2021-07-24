@@ -305,6 +305,17 @@ r10k:
     #   - --color
     ## Additional r10k code container environment variables
     extraEnv: {}
+    extraSettings: ""
+    viaHttps:
+      credentials:
+        netrc:
+          ## A multi-line string
+          value:  # |
+            #  NETRC CONTENTS
+        ## or set the r10k netrc file
+        ## from a pre-existing K8s secret
+        ## NOTE: Using this secret supercedes all other credentials settings.
+        existingSecret: ""
     viaSsh:
       credentials:
         ssh:
@@ -336,6 +347,17 @@ r10k:
     #   - --color
     ## Additional puppetserver hiera container environment variables
     extraEnv: {}
+    extraSettings: ""
+    viaHttps:
+      credentials:
+        netrc:
+          ## A multi-line string
+          value:  # |
+            #  NETRC CONTENTS
+        ## or set the r10k netrc file
+        ## from a pre-existing K8s secret
+        ## NOTE: Using this secret supercedes all other credentials settings.
+        existingSecret: ""
     viaSsh:
       credentials:
         ssh:
