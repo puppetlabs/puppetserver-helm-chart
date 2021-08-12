@@ -38,8 +38,10 @@ spec:
               value: "puppet"
             - name: PUPPETSERVER_PORT
               value: "{{ template "puppetserver.puppetserver-masters.port" . }}"
+            {{- if not (hasKey .Values.puppetdb.extraEnv "PUPPETDB_POSTGRES_HOSTNAME") }}
             - name: PUPPETDB_POSTGRES_HOSTNAME
               value: "{{ template "puppetserver.name" . }}-postgresql"
+            {{- end }}
             - name: PUPPETDB_PASSWORD
               valueFrom:
                 secretKeyRef:
