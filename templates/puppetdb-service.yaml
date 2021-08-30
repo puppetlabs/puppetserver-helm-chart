@@ -4,6 +4,13 @@ metadata:
   name: puppetdb
   labels:
     {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
+    {{- if .Values.puppetdb.service.labels }}
+    {{- toYaml .Values.puppetdb.service.labels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.puppetdb.service.annotations }}
+  annotations:
+    {{- toYaml .Values.puppetdb.service.annotations | nindent 4 }}
+  {{- end }}
 spec:
   ports:
     - name: pdb-http
@@ -19,3 +26,7 @@ spec:
     {{- end }}
   selector:
     {{- include "puppetserver.puppetdb.matchLabels" . | nindent 4 }}
+  type: {{ .Values.puppetdb.service.type }}
+  {{- if (and (eq .Values.puppetdb.service.type "LoadBalancer") (not (empty .Values.puppetdb.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.puppetdb.service.loadBalancerIP }}
+  {{- end }}
