@@ -94,6 +94,10 @@ spec:
           ports:
             - name: puppetboard
               containerPort: {{ .Values.puppetboard.port }}
+          securityContext:
+            runAsUser: 0
+            runAsNonRoot: false
+            privileged: true
           volumeMounts:
             - name: puppetdb-storage
               mountPath: /opt/puppetlabs/server/data/puppetdb/certs
