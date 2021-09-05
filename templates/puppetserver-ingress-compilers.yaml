@@ -1,8 +1,10 @@
-{{- if .Values.puppetserver.compilers.enabled }}
-{{- if .Values.puppetserver.compilers.ingress.enabled -}}
+{{- if and .Values.puppetserver.compilers.enabled .Values.puppetserver.compilers.ingress.enabled -}}
 {{- $releaseName := .Release.Name -}}
 {{- $serviceName := include "puppetserver.puppetserver-compilers.serviceName" . }}
 {{- $servicePort := .Values.puppetserver.compilers.service.ports.puppetserver.port -}}
+{{- $pathType := .Values.puppetserver.compilers.ingress.pathType | default "ImplementationSpecific" -}}
+{{- $apiIsStable := eq (include "puppetserver.ingress.isStable" .) "true" -}}
+{{- $ingressSupportsPathType := eq (include "puppetserver.ingress.supportsPathType" .) "true" -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -24,6 +26,9 @@ spec:
       http:
         paths:
           - path: /{{ rest $url | join "/" }}
+            {{- if and $pathType $ingressSupportsPathType }}
+            pathType: {{ $pathType }}
+            {{- end }}
             backend:
               service:
                 name: {{ $serviceName }}
@@ -34,5 +39,4 @@ spec:
   tls:
     {{ toYaml .Values.puppetserver.compilers.ingress.tls | nindent 4 }}
   {{- end -}}
-{{- end -}}
 {{- end -}}

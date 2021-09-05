@@ -1,8 +1,10 @@
-{{- if .Values.puppetboard.enabled }}
-{{- if .Values.puppetboard.ingress.enabled }}
+{{- if and .Values.puppetboard.enabled .Values.puppetboard.ingress.enabled }}
 {{- $releaseName := .Release.Name -}}
 {{- $serviceName := "puppetdb" }}
 {{- $servicePort := .Values.puppetboard.port -}}
+{{- $pathType := .Values.puppetboard.ingress.pathType | default "ImplementationSpecific" -}}
+{{- $apiIsStable := eq (include "puppetserver.ingress.isStable" .) "true" -}}
+{{- $ingressSupportsPathType := eq (include "puppetserver.ingress.supportsPathType" .) "true" -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -25,6 +27,9 @@ spec:
         paths:
           - path: /{{ rest $url | join "/" }}
             pathType: Prefix
+            {{- if and $pathType $ingressSupportsPathType }}
+            pathType: {{ $pathType }}
+            {{- end }}
             backend:
               service:
                 name: {{ $serviceName }}
@@ -35,5 +40,4 @@ spec:
   tls:
     {{ toYaml .Values.puppetboard.ingress.tls | nindent 4 }}
   {{- end -}}
-{{- end -}}
 {{- end -}}
