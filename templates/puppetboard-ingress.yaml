@@ -35,10 +35,15 @@ spec:
             pathType: {{ $pathType }}
             {{- end }}
             backend:
+              {{- if $apiIsStable }}
               service:
                 name: {{ $serviceName }}
                 port:
                   number: {{ $servicePort }}
+              {{- else }}
+              serviceName: {{ $serviceName }}
+              servicePort: {{ $servicePort }}
+    {{- end }}
     {{- end -}}
   {{- if .Values.puppetboard.ingress.tls }}
   tls:
