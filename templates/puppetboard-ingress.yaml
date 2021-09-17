@@ -26,7 +26,6 @@ spec:
       http:
         paths:
           - path: /{{ rest $url | join "/" }}
-            pathType: Prefix
             {{- if and $pathType $ingressSupportsPathType }}
             pathType: {{ $pathType }}
             {{- end }}
