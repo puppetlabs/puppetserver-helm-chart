@@ -19,6 +19,11 @@ metadata:
     {{- end }}
   name: puppetboard
 spec:
+  {{- if $apiIsStable }}
+  {{- if .Values.puppetboard.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.puppetboard.ingress.ingressClassName }}
+  {{- end }}
+  {{- end }}
   rules:
     {{- range .Values.puppetboard.ingress.hosts }}
     {{- $url := splitList "/" . }}
