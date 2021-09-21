@@ -7,7 +7,7 @@
 puppetserver:
   name: puppetserver
   image: puppet/puppetserver
-  tag: 7.1.2
+  tag: 7.3.0
   pullPolicy: IfNotPresent
   ## Mandatory Deployment of Puppet Server Master/s
   ##
@@ -378,7 +378,7 @@ r10k:
 puppetdb:
   name: puppetdb
   image: puppet/puppetdb
-  tag: 7.2.0
+  tag: 7.5.2
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
@@ -594,6 +594,10 @@ global:
 ## Provide a name in place of Puppet Server components for `app:` labels
 ##
 nameOverride: ""
+
+## Allow KubeVersion to be overridden.
+##
+kubeVersionOverride: ""
 
 ## Pod Configuration
 ##

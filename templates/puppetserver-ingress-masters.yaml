@@ -2,7 +2,10 @@
 {{- $releaseName := .Release.Name -}}
 {{- $serviceName := include "puppetserver.puppetserver-masters.serviceName" . }}
 {{- $servicePort := .Values.puppetserver.masters.service.ports.puppetserver.port -}}
-apiVersion: networking.k8s.io/v1
+{{- $pathType := .Values.puppetserver.masters.ingress.pathType | default "ImplementationSpecific" -}}
+{{- $apiIsStable := eq (include "puppetserver.ingress.isStable" .) "true" -}}
+{{- $ingressSupportsPathType := eq (include "puppetserver.ingress.supportsPathType" .) "true" -}}
+apiVersion: {{ include "puppetserver.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   {{- if .Values.puppetserver.masters.ingress.annotations }}
@@ -16,6 +19,11 @@ metadata:
     {{- end }}
   name: {{ template "puppetserver.fullname" . }}-masters
 spec:
+  {{- if $apiIsStable }}
+  {{- if .Values.puppetserver.masters.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.puppetserver.masters.ingress.ingressClassName }}
+  {{- end }}
+  {{- end }}
   rules:
     {{- range .Values.puppetserver.masters.ingress.hosts }}
     {{- $url := splitList "/" . }}
@@ -23,11 +31,19 @@ spec:
       http:
         paths:
           - path: /{{ rest $url | join "/" }}
+            {{- if and $pathType $ingressSupportsPathType }}
+            pathType: {{ $pathType }}
+            {{- end }}
             backend:
+              {{- if $apiIsStable }}
               service:
                 name: {{ $serviceName }}
                 port:
                   number: {{ $servicePort }}
+              {{- else }}
+              serviceName: {{ $serviceName }}
+              servicePort: {{ $servicePort }}
+              {{- end }}
     {{- end -}}
   {{- if .Values.puppetserver.masters.ingress.tls }}
   tls:
