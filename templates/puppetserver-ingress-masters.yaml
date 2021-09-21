@@ -43,7 +43,7 @@ spec:
               {{- else }}
               serviceName: {{ $serviceName }}
               servicePort: {{ $servicePort }}
-    {{- end }}
+              {{- end }}
     {{- end -}}
   {{- if .Values.puppetserver.masters.ingress.tls }}
   tls:
