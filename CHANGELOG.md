@@ -5,6 +5,12 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.13.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.13.0) (2021-11-21)
+
+- feat: bump Puppetserver to `v7.4.2`.
+- feat: bump PuppetDB to `v7.7.1`.
+- feat: bump R10K to `v3.13.0`.
+
 ## [v5.12.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.12.0) (2021-09-21)
 
 - feat: add support for Ingress `pathType` and `ingressClassName`.

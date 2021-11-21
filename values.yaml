@@ -7,7 +7,7 @@
 puppetserver:
   name: puppetserver
   image: puppet/puppetserver
-  tag: 7.3.0
+  tag: 7.4.2
   pullPolicy: IfNotPresent
   ## Mandatory Deployment of Puppet Server Master/s
   ##
@@ -286,7 +286,7 @@ puppetserver:
 r10k:
   name: r10k
   image: puppet/r10k
-  tag: 3.8.0
+  tag: 3.13.0
   pullPolicy: IfNotPresent
   code:
     resources: {}
@@ -378,7 +378,7 @@ r10k:
 puppetdb:
   name: puppetdb
   image: puppet/puppetdb
-  tag: 7.5.2
+  tag: 7.7.1
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
