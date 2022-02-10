@@ -5,6 +5,13 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.14.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.14.0) (2021-12-01)
+
+- feat: bump Puppetserver to `v7.4.2`.
+- feat: bump PuppetDB to `v7.7.1`.
+- feat: bump R10K to `v3.13.0`.
+- feat: bump Puppetboard to `v3.3.0`.
+
 ## [v5.13.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.13.0) (2021-11-29)
 
 - feat(eyaml): allow more than one pub/priv keypair in existing eyaml key map
