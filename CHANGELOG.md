@@ -1,454 +1,533 @@
-# Change Log
+# Changelog
 
-This file documents all notable changes to Puppet Server Helm Chart. The release
-numbering uses [semantic versioning](http://semver.org).
+## [Unreleased](https://github.com/puppetlabs/puppetserver-helm-chart/tree/HEAD)
 
-NOTE: The change log until version `v0.2.4` is auto-generated.
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.14.0...HEAD)
 
-## [v5.14.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.14.0) (2021-12-01)
+**Fixed bugs:**
 
-- feat: bump Puppetserver to `v7.4.2`.
-- feat: bump PuppetDB to `v7.7.1`.
-- feat: bump R10K to `v3.13.0`.
-- feat: bump Puppetboard to `v3.3.0`.
+- R10k stop responding causing continues deployments to be halted [\#102](https://github.com/puppetlabs/puppetserver-helm-chart/issues/102)
+
+## [v5.14.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.14.0) (2022-02-10)
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.13.0...v5.14.0)
+
+**Implemented enhancements:**
+
+- Allow to set PVC option volumeBindingMode [\#100](https://github.com/puppetlabs/puppetserver-helm-chart/issues/100)
+
+**Merged pull requests:**
+
+- Update Components to Latest Versions [\#98](https://github.com/puppetlabs/puppetserver-helm-chart/pull/98) ([Xtigyro](https://github.com/Xtigyro))
 
 ## [v5.13.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.13.0) (2021-11-29)
 
-- feat(eyaml): allow more than one pub/priv keypair in existing eyaml key map
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.12.0...v5.13.0)
+
+**Merged pull requests:**
+
+- feat\(eyaml\): allow more than one pub/priv keypair in existing eyaml key map [\#99](https://github.com/puppetlabs/puppetserver-helm-chart/pull/99) ([raphink](https://github.com/raphink))
 
 ## [v5.12.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.12.0) (2021-09-21)
 
-- feat: add support for Ingress `pathType` and `ingressClassName`.
-- feat: bump Puppetserver to `v7.3.0`.
-- feat: bump PuppetDB to `v7.5.2`.
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.11.0...v5.12.0)
 
-## [v5.11.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.11.0) (2021-08-30)
+**Merged pull requests:**
 
-- fix: set securityContext for puppetboard container
+- Add Support for Ingress pathType and ingressClassName. Bump Puppetserver and PuppetDB Versions to Latest. Allow KubeVersion To Be Overridden. [\#97](https://github.com/puppetlabs/puppetserver-helm-chart/pull/97) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v5.11.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.11.0) (2021-08-31)
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.10.0...v5.11.0)
+
+**Merged pull requests:**
+
+- set securityContext for puppetboard container [\#96](https://github.com/puppetlabs/puppetserver-helm-chart/pull/96) ([skoef](https://github.com/skoef))
 
 ## [v5.10.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.10.0) (2021-08-30)
 
-- feat: allow to expose puppetdb service outside of the kubernetes cluster
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.9.0...v5.10.0)
+
+**Merged pull requests:**
+
+- allow to expose puppetdb service outside of the kubernetes cluster [\#95](https://github.com/puppetlabs/puppetserver-helm-chart/pull/95) ([skoef](https://github.com/skoef))
 
 ## [v5.9.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.9.0) (2021-08-12)
 
-- feat: allow to override PUPPETDB_POSTGRES_HOSTNAME for puppetdb container
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.8.0...v5.9.0)
 
-## [v5.8.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.8.0) (2021-07-22)
+**Merged pull requests:**
 
-- feat: Add r10k.code.extraSettings and r10k.hiera.extraSettings
-- feat: Add viaHttps options for r10k.code
+- allow to override PUPPETDB\_POSTGRES\_HOSTNAME for puppetdb container [\#94](https://github.com/puppetlabs/puppetserver-helm-chart/pull/94) ([skoef](https://github.com/skoef))
+
+## [v5.8.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.8.0) (2021-07-24)
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.7.0...v5.8.0)
+
+**Merged pull requests:**
+
+- r10k: extra settings + https credentials support [\#90](https://github.com/puppetlabs/puppetserver-helm-chart/pull/90) ([raphink](https://github.com/raphink))
 
 ## [v5.7.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.7.0) (2021-07-22)
 
-- update: update to new api version (networking.k8s.io/v1) of ingress (v1.19+)
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.6.2...v5.7.0)
+
+**Merged pull requests:**
+
+- update to new api version of ingress \(v1.19+\) [\#91](https://github.com/puppetlabs/puppetserver-helm-chart/pull/91) ([h-phil](https://github.com/h-phil))
 
 ## [v5.6.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.6.2) (2021-07-21)
 
-- fix: add pathType Prefix to puppetboard ingress
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.6.1...v5.6.2)
+
+**Merged pull requests:**
+
+- puppetboard prefix [\#89](https://github.com/puppetlabs/puppetserver-helm-chart/pull/89) ([raphink](https://github.com/raphink))
 
 ## [v5.6.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.6.1) (2021-07-20)
 
-- fix: use correct puppetdb certs in puppetboard
-- fix: persist CA, now located in /etc/puppetlabs/puppetserver/ca/
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.6.0...v5.6.1)
+
+**Fixed bugs:**
+
+- Wrong parameter name in README to disable autosign [\#79](https://github.com/puppetlabs/puppetserver-helm-chart/issues/79)
+
+**Merged pull requests:**
+
+- fix: use correct puppetdb certs in puppetboard & persist puppet ca [\#88](https://github.com/puppetlabs/puppetserver-helm-chart/pull/88) ([raphink](https://github.com/raphink))
 
 ## [v5.6.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.6.0) (2021-05-01)
 
-- update: Puppetserver to `v7.1.2`; PuppetDB to `v7.2.0`; r10k to `v3.8.0`; PostgreSQL chart to `v10.4.*`.
-- fix: [Wrong parameter name in README to disable autosign](https://github.com/puppetlabs/puppetserver-helm-chart/issues/79).
-- fix: bad naming for PuppetDB extra containers variable.
-- fix: add missing placeholder for PuppetDB extra containers in `values.yaml`.
-- fix: wrong url to Puppetserver chart v5.5.0 in `CHANGELOG`.
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.5.0...v5.6.0)
+
+**Implemented enhancements:**
+
+- Update Components. Small Fixes and Tweaks. [\#87](https://github.com/puppetlabs/puppetserver-helm-chart/pull/87) ([Xtigyro](https://github.com/Xtigyro))
 
 ## [v5.5.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.5.0) (2021-04-30)
 
-- fix: use puppetboard.port in puppetboard-ingress.yaml
-- fix: use proper syntax for extra containers in puppetdb-deployment.yaml
-- fix: force targetPorts in puppetdb-service.yaml
-- enhancement: allow to specify puppetboard.service.targetPort
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.4.0...v5.5.0)
+
+**Merged pull requests:**
+
+- PuppetDB/Puppetboard: fix containers syntax and allow alternate containerPort [\#86](https://github.com/puppetlabs/puppetserver-helm-chart/pull/86) ([raphink](https://github.com/raphink))
 
 ## [v5.4.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.4.0) (2021-04-26)
 
-- Use official Puppetboard image, use port 9090, and allow extra PuppetDB containers.
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.3.0...v5.4.0)
+
+**Implemented enhancements:**
+
+- Use official Puppetboard image, use port 9090, and allow extra PuppetDB containers. [\#84](https://github.com/puppetlabs/puppetserver-helm-chart/pull/84) ([raphink](https://github.com/raphink))
 
 ## [v5.3.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.3.0) (2021-04-22)
 
-- Add ability to ovewrite PuppetBoard variables in order to work properly with newer PuppetDB versions.
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.2.0...v5.3.0)
+
+**Implemented enhancements:**
+
+- Change the order how env block is built [\#83](https://github.com/puppetlabs/puppetserver-helm-chart/pull/83) ([erlonpinheiro](https://github.com/erlonpinheiro))
 
 ## [v5.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.2.0) (2021-03-29)
 
-- Add ability to change PVC accessModes.
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.1.0...v5.2.0)
 
-## [v5.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.1.0) (2021-02-07)
+**Implemented enhancements:**
 
-- Add ability to use custom PVCs.
+- Configurable accessModes for persistence [\#80](https://github.com/puppetlabs/puppetserver-helm-chart/issues/80)
+
+**Merged pull requests:**
+
+- feat\(accessModes\): make it a configurable parameter for chart PVCs [\#82](https://github.com/puppetlabs/puppetserver-helm-chart/pull/82) ([jstewart612](https://github.com/jstewart612))
+
+## [v5.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.1.0) (2021-02-10)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.0.4...v5.1.0)
 
-## [v5.0.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.4) (2020-11-02)
+**Fixed bugs:**
 
-- Fix PuppetBoard showing "Internal server 500" when metric menu clicked.
+- Error puppetboard - java.lang.Exception : No access from client \<ip-address\> allowed [\#72](https://github.com/puppetlabs/puppetserver-helm-chart/issues/72)
+
+**Merged pull requests:**
+
+- \[gh-actions\] Replace "set-env". Replace "OWNERS". [\#78](https://github.com/puppetlabs/puppetserver-helm-chart/pull/78) ([Xtigyro](https://github.com/Xtigyro))
+- \(maint\) Add CODEOWNERS [\#77](https://github.com/puppetlabs/puppetserver-helm-chart/pull/77) ([mwaggett](https://github.com/mwaggett))
+- Update CHANGELOG.md for v5.1.0 [\#76](https://github.com/puppetlabs/puppetserver-helm-chart/pull/76) ([Xtigyro](https://github.com/Xtigyro))
+- Added the ability to use custom PVC  [\#75](https://github.com/puppetlabs/puppetserver-helm-chart/pull/75) ([HryhoriiDidenko](https://github.com/HryhoriiDidenko))
+
+## [v5.0.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.4) (2020-11-02)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.0.3...v5.0.4)
 
-## [v5.0.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.3) (2020-11-01)
+**Fixed bugs:**
 
-- Fix for r10k_code_cronjob.sh and r10k_hiera_cronjob.sh syntax error with `map[]`
+- r10k\_code\_cronjob.sh and r10k\_hiera\_cronjob.sh might not be generated properly. [\#70](https://github.com/puppetlabs/puppetserver-helm-chart/issues/70)
+
+**Merged pull requests:**
+
+- Fixed issue \# 72 - Puppetboard showing "internal server 500" [\#73](https://github.com/puppetlabs/puppetserver-helm-chart/pull/73) ([pjamenaja](https://github.com/pjamenaja))
+
+## [v5.0.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.3) (2020-11-01)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.0.2...v5.0.3)
 
-## [v5.0.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.2) (2020-10-30)
+**Merged pull requests:**
 
-- Fix for `DNS_ALT_NAMES` for non-compiler deployments.
+- Fixed issue \#70 - r10k and hiera cron script [\#71](https://github.com/puppetlabs/puppetserver-helm-chart/pull/71) ([pjamenaja](https://github.com/pjamenaja))
+
+## [v5.0.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.2) (2020-10-31)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.0.1...v5.0.2)
 
-## [v5.0.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.1) (2020-09-19)
+**Merged pull requests:**
 
-- Fix for resource names of Horizontal Pod Autoscalers.
-- Several `README` updates.
+- Fix for "DNS\_ALT\_NAMES" for Non-Compiler Deployments [\#74](https://github.com/puppetlabs/puppetserver-helm-chart/pull/74) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v5.0.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.1) (2020-09-18)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v5.0.0...v5.0.1)
 
-## [v5.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.0) (2020-09-12)
+**Merged pull requests:**
 
-- Externalize the creation of PostgreSQL backend using the Bitnami's PostgreSQL Helm chart.
-- Add high-availability and performance read replicas support for PostgreSQL.
-- Add storage persistence for PostgreSQL.
-- Allow only manual storage deletion for PostgreSQL.
-- Tweak r10k cronjob schedules and Puppet Server components storage size.
-- Add Hiera v5 example with explanations.
-- Improve info comments and exemplary values in Values file.
-- Bump PuppetDB to `v6.12.0`, and PostgreSQL to `v11.9.*`.
-- Add `CODEOWNERS`.
-- Numerous other small tweaks.
+- Fixes for Resource Names of HorizontalPodAutoscaler. README Updates. [\#69](https://github.com/puppetlabs/puppetserver-helm-chart/pull/69) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v5.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.0.0) (2020-09-18)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.4.0...v5.0.0)
 
-## [v4.4.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.4.0) (2020-08-24)
+**Implemented enhancements:**
 
-- Allow for changing the default Puppet Server ports for Masters and Compilers.
-- Switch to percentage `rollingUpdate` strategy for Puppet Masters.
-- Set `updateStrategy` to `RollingUpdate` for Puppet Compilers.
-- Bump `puppetserver` to `v6.12.1`, `puppetdb` to `v6.11.3`, `r10k` to `v3.5.2`, `puppetboard` to `v2.2.0`, `postgres` to `v9.6.19`.
-- Code style fixes in "values.yaml".
-- Improve `Testing the Deployed Chart Resources` in `README.md`.
+- Register Puppetserver Helm Chart on Kubeapps Hub [\#67](https://github.com/puppetlabs/puppetserver-helm-chart/issues/67)
+
+**Merged pull requests:**
+
+- \(maint\) Work around issue where all the dates in the index are overwritten [\#68](https://github.com/puppetlabs/puppetserver-helm-chart/pull/68) ([underscorgan](https://github.com/underscorgan))
+- Add High-Availability and Read Replicas Support for PostgreSQL [\#66](https://github.com/puppetlabs/puppetserver-helm-chart/pull/66) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v4.4.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.4.0) (2020-08-26)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.3.0...v4.4.0)
 
-## [v4.3.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.3.0) (2020-07-24)
+**Merged pull requests:**
 
-- Liveness and readiness probes for Puppet Server.
-- Adjust further resource naming.
-- Style improvements in `README`.
-- Small fixes in `values`.
+- \[v4.4.0\] Allow for changing the default Puppet Server ports for Masters and Compilers [\#64](https://github.com/puppetlabs/puppetserver-helm-chart/pull/64) ([Xtigyro](https://github.com/Xtigyro))
+- \(maint\) Add a github action for on-demand chart releases [\#61](https://github.com/puppetlabs/puppetserver-helm-chart/pull/61) ([underscorgan](https://github.com/underscorgan))
+
+## [v4.3.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.3.0) (2020-07-23)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.2.1...v4.3.0)
 
-## [v4.2.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.2.1) (2020-07-08)
+**Merged pull requests:**
 
-- Fix naming for Puppet Server Masters' Ingress.
+- Chart V4.3.0 [\#60](https://github.com/puppetlabs/puppetserver-helm-chart/pull/60) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v4.2.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.2.1) (2020-07-09)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.2.0...v4.2.1)
 
-## [v4.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.2.0) (2020-06-23)
+**Merged pull requests:**
 
-- Add Helm v2 backward compatibility.
-- Update README to reflect Helm v2 backward compatibility.
-- Improve post-deployment NOTES to show recommended Puppet Server Masters K8s Service name.
+- Align CHANGELOG and Chart.yaml for v4.2.1 [\#55](https://github.com/puppetlabs/puppetserver-helm-chart/pull/55) ([Xtigyro](https://github.com/Xtigyro))
+- Update puppetserver-ingress-masters.yaml [\#53](https://github.com/puppetlabs/puppetserver-helm-chart/pull/53) ([nielshojen](https://github.com/nielshojen))
+
+## [v4.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.2.0) (2020-06-23)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.1.1...v4.2.0)
 
-## [v4.1.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.1.1) (2020-06-22)
+**Merged pull requests:**
 
-- Small adjustments in `README` for new chart app name and new default Puppetboard image owner.
+- Helm v2 Backward Compatibility [\#51](https://github.com/puppetlabs/puppetserver-helm-chart/pull/51) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v4.1.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.1.1) (2020-06-22)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.1.0...v4.1.1)
 
-## [v4.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.1.0) (2020-06-22)
+**Merged pull requests:**
 
-- Rework Puppetboard support.
-- Add Puppetboard Service.
-- Add optional Puppetboard Ingress.
-- Change default chart app name to `puppetserver`.
-- Bump Puppetboard to `v2.1.2`, r10k to `v3.5.1`, and PostgreSQL to `v9.6.18`.
-- Other small improvements and fixes.
-- Update `OWNERS`.
+- Small adjustments in `README` for new chart app name and new default Puppetboard Img Owner [\#47](https://github.com/puppetlabs/puppetserver-helm-chart/pull/47) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v4.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.1.0) (2020-06-22)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v4.0.0...v4.1.0)
 
-## [v4.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.0.0) (2020-06-08)
+**Merged pull requests:**
 
-- Support for multiple Puppetserver Compilers (optionally) on different K8s nodes (incl. across different cloud zones).
-- Improved support for multiple Puppetserver Masters.
-- Switch to sidecar containers for r10k.
-- Support for separate load-balancing between Puppetserver Master/s and Compiler/s.
-- Simplified topology requirements (especially in the cloud).
-- Improved resource naming.
-- Ability to set K8s resource limits per component.
-- Readiness probes for r10k.
-- Improved built-in Go helpers.
-- Lowered resource usage of the Puppetserver `initContainers`.
-- More syntax consistent and easier to navigate templates code.
-- Bump Puppetserver to `v6.10.0`, PuppetDB to `v6.10.1`, and PostgreSQL to `v9.6.17`.
-- Various small improvements and fixes.
-- Simpler documentation.
+- Rework Puppetboard Support [\#45](https://github.com/puppetlabs/puppetserver-helm-chart/pull/45) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v4.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v4.0.0) (2020-06-16)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v3.0.2...v4.0.0)
 
+**Merged pull requests:**
+
+- Multiple Puppetserver Compilers \(Optionally\) on Different K8s Nodes [\#41](https://github.com/puppetlabs/puppetserver-helm-chart/pull/41) ([Xtigyro](https://github.com/Xtigyro))
+
 ## [v3.0.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v3.0.2) (2020-05-01)
 
-- Add Puppet repo instruction to `README`.
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.8.4...v3.0.2)
 
-[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v3.0.1...v3.0.2)
+**Merged pull requests:**
+
+- Add Puppet Repo Instruction to `README` [\#39](https://github.com/puppetlabs/puppetserver-helm-chart/pull/39) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.8.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.8.4) (2020-05-01)
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v3.0.1...v1.8.4)
 
 ## [v3.0.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v3.0.1) (2020-05-01)
 
-- Documentation updates to reflect the new GitHub repo and contact details of the chart.
-- Updated `install` and `test` instructions.
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.8.3...v3.0.1)
 
-[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v3.0.0...v3.0.1)
+**Merged pull requests:**
 
-## [v3.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v3.0.0) (2020-04-05)
+- Reflect the New GitHub Repo and Contact Details [\#37](https://github.com/puppetlabs/puppetserver-helm-chart/pull/37) ([Xtigyro](https://github.com/Xtigyro))
 
-- Helm v3 support.
-- Improved documentation.
-- Log msg fixes.
-- Bump versions of Puppet Server (to v6.9.2) and PuppetDB (to v6.9.1).
-- Other small fixes.
+## [v1.8.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.8.3) (2020-04-08)
+
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v3.0.0...v1.8.3)
+
+## [v3.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v3.0.0) (2020-04-07)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.8.2...v3.0.0)
 
-## [v1.8.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.8.2) (2020-03-22)
+**Implemented enhancements:**
 
-- Better default auto-scaling and resource limits values for Puppetserver.
+- Helm v3 Support [\#36](https://github.com/puppetlabs/puppetserver-helm-chart/pull/36) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.8.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.8.2) (2020-03-24)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.8.1...v1.8.2)
 
-## [v1.8.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.8.1) (2020-03-21)
+**Merged pull requests:**
 
-- Fix auto-scaling of Puppetserver.
+- Better default auto-scaling and resource limits values for Puppetserver [\#35](https://github.com/puppetlabs/puppetserver-helm-chart/pull/35) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.8.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.8.1) (2020-03-21)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.8.0...v1.8.1)
 
-## [v1.8.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.8.0) (2020-03-13)
+**Merged pull requests:**
 
-- Better distinction between storage selectors.
-- Bump default versions: Puppetserver to `6.9.0` and PuppetDB to `6.9.0`.
+- Fix Auto-Scaling of Puppetserver [\#34](https://github.com/puppetlabs/puppetserver-helm-chart/pull/34) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.8.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.8.0) (2020-03-16)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.7.2...v1.8.0)
 
-## [v1.7.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.7.2) (2020-02-11)
+**Merged pull requests:**
 
-- Improve further `Chart.yaml`.
-- Clean outdated comments in Values file.
+- Prepare for Releasing Chart's v1.8.0 [\#33](https://github.com/puppetlabs/puppetserver-helm-chart/pull/33) ([Xtigyro](https://github.com/Xtigyro))
+- better distinction between storage selectors [\#32](https://github.com/puppetlabs/puppetserver-helm-chart/pull/32) ([slconley](https://github.com/slconley))
+
+## [v1.7.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.7.2) (2020-02-11)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.7.1...v1.7.2)
 
-## [v1.7.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.7.1) (2020-02-01)
+**Merged pull requests:**
 
-- Improve `Chart.yaml`.
-- Bump default versions: Puppetserver to `6.8.0`, PostgreSQL to `9.6.16` and PuppetDB to `6.8.1`.
+- Chart v1.7.2 [\#30](https://github.com/puppetlabs/puppetserver-helm-chart/pull/30) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.7.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.7.1) (2020-02-02)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.7.0...v1.7.1)
 
-## [v1.7.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.7.0) (2020-01-27)
+**Merged pull requests:**
 
-- Add support for multiple Puppet Compile Masters.
-- Fix passing extra container environment variables.
-- Indentation improvements.
-- Bump default PuppetDB version to `6.8.0`.
+- Improve `Chart.yaml`. Bump Component Versions. [\#29](https://github.com/puppetlabs/puppetserver-helm-chart/pull/29) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.7.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.7.0) (2020-01-28)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.6.6...v1.7.0)
 
-## [v1.6.6](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.6) (2020-01-09)
+**Merged pull requests:**
 
-- Fix outdated r10k exemplary variable in README.
+- Chart v1.7.0 [\#28](https://github.com/puppetlabs/puppetserver-helm-chart/pull/28) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.6.6](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.6) (2020-01-09)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.6.5...v1.6.6)
 
-## [v1.6.5](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.5) (2020-01-05)
+**Merged pull requests:**
 
-- Fixes for Helm packaging.
+- Fix Outdated r10k Exemplary Variable in README [\#27](https://github.com/puppetlabs/puppetserver-helm-chart/pull/27) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.6.5](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.5) (2020-01-04)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.6.4...v1.6.5)
 
-## [v1.6.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.4) (2020-01-04)
+**Merged pull requests:**
 
-- Corrections and additional info for use of Ingress resource.
+- Fixes for Helm Packaging [\#26](https://github.com/puppetlabs/puppetserver-helm-chart/pull/26) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.6.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.4) (2020-01-04)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.6.3...v1.6.4)
 
-## [v1.6.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.3) (2020-01-03)
+**Merged pull requests:**
 
-- Allow for using the chart as a chart package.
+- Corrections and additional info for use of Ingress resource [\#25](https://github.com/puppetlabs/puppetserver-helm-chart/pull/25) ([slconley](https://github.com/slconley))
+
+## [v1.6.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.3) (2020-01-03)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.6.2...v1.6.3)
 
-## [v1.6.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.2) (2020-01-01)
+**Merged pull requests:**
 
-- Puppetserver Service:
+- Allow for using the chart as a chart package [\#24](https://github.com/puppetlabs/puppetserver-helm-chart/pull/24) ([Xtigyro](https://github.com/Xtigyro))
 
-1. Allow for more general way of setting the network protocol.
-2. Improve the way of setting the loadBalancerIP.
+## [v1.6.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.2) (2020-01-02)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.6.1...v1.6.2)
 
-## [v1.6.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.1) (2019-12-31)
+**Merged pull requests:**
 
-- Add comments in Values file for Puppetserver Service.
+- Puppetserver Service Improvements [\#23](https://github.com/puppetlabs/puppetserver-helm-chart/pull/23) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.6.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.1) (2019-12-31)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.6.0...v1.6.1)
 
-## [v1.6.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.0) (2019-12-26)
+**Merged pull requests:**
 
-- Add optional affinity for "r10k" pod assignment.
-- File permission fixes for "r10k" jobs' SSH keys.
-- Security fixes for the "r10k" jobs.
+- Add Values File Comments for Puppetserver Service [\#22](https://github.com/puppetlabs/puppetserver-helm-chart/pull/22) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.6.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.6.0) (2019-12-27)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.5.3...v1.6.0)
 
-## [v1.5.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.5.3) (2019-12-09)
+**Implemented enhancements:**
 
-- Small README fixes.
-- Add information about the chart in the main [README.md](https://github.com/puppetlabs/pupperware/blob/master/README.md) of Puppetlabs's Pupperware repo.
+- This is what I had to adjust to get it up and running on an Azure AKS cluster [\#20](https://github.com/puppetlabs/puppetserver-helm-chart/pull/20) ([chwehrli](https://github.com/chwehrli))
+
+**Merged pull requests:**
+
+- Add Comments for "r10k" optional affinity for pod assignment. Security Fixes. [\#21](https://github.com/puppetlabs/puppetserver-helm-chart/pull/21) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.5.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.5.3) (2019-12-07)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.5.2...v1.5.3)
 
-## [v1.5.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.5.2) (2019-12-06)
+**Merged pull requests:**
 
-- Fix PuppetDB usage of pre-generated Puppet SSL certs.
-- Increase deadline time for Puppet pre-install job.
+- Small README Fixes and One Addition. [\#19](https://github.com/puppetlabs/puppetserver-helm-chart/pull/19) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.5.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.5.2) (2019-12-06)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.5.1...v1.5.2)
 
-## [v1.5.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.5.1) (2019-12-03)
+**Merged pull requests:**
 
-- Small Indentation Fixes.
-- Use Recommended Dir for PostreSQL's PGDATA.
+- Chart v1.5.2 [\#18](https://github.com/puppetlabs/puppetserver-helm-chart/pull/18) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.5.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.5.1) (2019-12-03)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.5.0...v1.5.1)
 
-## [v1.5.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.5.0) (2019-12-02)
+**Fixed bugs:**
 
-- Fixes and additions to setting SSH credentials from existing K8s secret.
-- Create separate r10k jobs/schedules for Control Repo and Hiera Data.
-- Place r10k cache on PVC.
-- Deprecate HTTPS authentication.
-- Indentation corrections.
-- General code clean-up.
-- Updates to README.
+- r10k credentials for https [\#9](https://github.com/puppetlabs/puppetserver-helm-chart/issues/9)
+
+**Merged pull requests:**
+
+- Bump Chart Ver. Update CHANGELOG. [\#17](https://github.com/puppetlabs/puppetserver-helm-chart/pull/17) ([Xtigyro](https://github.com/Xtigyro))
+- Chart v1.5.1 [\#16](https://github.com/puppetlabs/puppetserver-helm-chart/pull/16) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.5.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.5.0) (2019-12-01)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.4.0...v1.5.0)
 
-## [v1.4.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.4.0) (2019-11-28)
+**Implemented enhancements:**
 
-- Add optional usage of pre-generated Puppet SSL certificates.
-- Use default path for eYaml keys.
-- Small Values file comment fixes.
-- Code clean-up and lint fixes.
+- rollup commit from sean.conley [\#13](https://github.com/puppetlabs/puppetserver-helm-chart/pull/13) ([slconley](https://github.com/slconley))
+
+**Merged pull requests:**
+
+- Update README.md [\#15](https://github.com/puppetlabs/puppetserver-helm-chart/pull/15) ([Xtigyro](https://github.com/Xtigyro))
+- Chart v1.5.0 [\#14](https://github.com/puppetlabs/puppetserver-helm-chart/pull/14) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.4.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.4.0) (2019-11-30)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.3.1...v1.4.0)
 
-## [v1.3.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.3.1) (2019-11-25)
+**Merged pull requests:**
 
-- Small Values file fix.
+- Use default path for eYaml keys [\#12](https://github.com/puppetlabs/puppetserver-helm-chart/pull/12) ([Xtigyro](https://github.com/Xtigyro))
+- Chart v1.4.0 [\#11](https://github.com/puppetlabs/puppetserver-helm-chart/pull/11) ([Xtigyro](https://github.com/Xtigyro))
+- \(maint\) Update for cert documentation [\#8](https://github.com/puppetlabs/puppetserver-helm-chart/pull/8) ([underscorgan](https://github.com/underscorgan))
+
+## [v1.3.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.3.1) (2019-11-24)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.3.0...v1.3.1)
 
-## [v1.3.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.3.0) (2019-11-25)
-
-- [Firewall Related] Add support for separate r10k network protocols to gather the code of Puppet and Hiera repos.
-- Increase default r10k sync runtime interval to every 5 minutes.
-- Syntax improvements.
+## [v1.3.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.3.0) (2019-11-23)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.2.2...v1.3.0)
 
-## [v1.2.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.2.2) (2019-11-24)
+**Merged pull requests:**
 
-- Fixes <https://github.com/puppetlabs/pupperware/issues/187> and <https://github.com/puppetlabs/pupperware/issues/188.>
-- `r10k` now runs with the `puppet` username and group id - meaning all the files in `/etc/puppetlabs` are now owned by Puppet Server.
+- Chart - v1.3.0 [\#6](https://github.com/puppetlabs/puppetserver-helm-chart/pull/6) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.2.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.2.2) (2019-11-21)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.2.1...v1.2.2)
 
-## [v1.2.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.2.1) (2019-11-22)
+**Merged pull requests:**
 
-- Fixes for "r10k" extra container args.
-- Values file small fixes.
+- Chart v1.2.2 [\#5](https://github.com/puppetlabs/puppetserver-helm-chart/pull/5) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.2.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.2.1) (2019-11-17)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.2.0...v1.2.1)
 
-## [v1.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.2.0) (2019-11-21)
+**Merged pull requests:**
 
-- Add optional extra container environment variables.
-- Add optional "r10k" extra container arguments.
-- Bump PupptDB to v6.7.3.
-- Small code indentation improvements.
-- README updates.
+- Fixes for "r10k" Extra Container Args. [\#4](https://github.com/puppetlabs/puppetserver-helm-chart/pull/4) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.2.0) (2019-11-16)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.1.0...v1.2.0)
 
-## [v1.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.1.0) (2019-11-19)
+**Merged pull requests:**
 
-- Switch Pulling the Hiera Data Repo from Using "git_sync" to "r10k".
+- Chart v1.2.0 [\#3](https://github.com/puppetlabs/puppetserver-helm-chart/pull/3) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.1.0) (2019-11-15)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.0.1...v1.1.0)
 
-## [v1.0.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.0.1) (2019-11-11)
+**Merged pull requests:**
 
-- Fix Permissions for Hiera, Puppet Server and eYaml Configs.
+- V110 [\#2](https://github.com/puppetlabs/puppetserver-helm-chart/pull/2) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v1.0.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.0.1) (2019-11-07)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v1.0.0...v1.0.1)
 
-## [v1.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.0.0) (2019-11-08)
-
-- Differentiate "nodeSelector" for Pods with Common Storage.
-- Fix for PostgreSQL on AWS.
-- Small Syntax and Indentation Fixes.
-- Improve README.
-- Improve Values Comments.
+## [v1.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v1.0.0) (2019-11-06)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v0.3.5...v1.0.0)
 
-## [v0.3.5](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v0.3.5) (2019-10-31)
+**Merged pull requests:**
 
-- Add Optional `selector` for PVs/PVCs.
-- Switch to Apache v2.0 License.
+- Add pvc nodeselector [\#1](https://github.com/puppetlabs/puppetserver-helm-chart/pull/1) ([Xtigyro](https://github.com/Xtigyro))
+
+## [v0.3.5](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v0.3.5) (2019-10-30)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v0.3.4...v0.3.5)
 
-## [v0.3.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v0.3.4) (2019-10-28)
-
-- Add Ingress.
-- Improve Tmpl Helpers.
-- Improve `NOTES`.
+## [v0.3.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v0.3.4) (2019-10-27)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v0.3.3...v0.3.4)
 
-## [v0.3.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v0.3.3) (2019-10-27)
-
-- Add Optional Static Data Volumes.
-- Add Configurable PVC's Size.
-- Add Optional PVC's Annotations.
+## [v0.3.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v0.3.3) (2019-10-26)
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v0.3.2...v0.3.3)
 
 ## [v0.3.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v0.3.2) (2019-10-26)
 
-- Add optional extra Pod Annotations.
-- Add optional Pod Priority Scheduling.
-- Add LICENSE.
-- Add CHANGELOG.
-- Update README.
-- Fixes.
-
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v0.3.1...v0.3.2)
 
 ## [v0.3.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v0.3.1) (2019-10-24)
-
-- Add optional "nodeSelector", "affinity" and "tolerations" for Pod Deployments.
-- Improve Values Comments.
-- Bump Component Versions.
 
 [Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/v0.2.4...v0.3.1)
 
@@ -466,4 +545,8 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 ## [v0.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v0.2.0) (2019-09-20)
 
-\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
+[Full Changelog](https://github.com/puppetlabs/puppetserver-helm-chart/compare/237af8eaff7490fe50986c07251e1494789f8282...v0.2.0)
+
+
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
