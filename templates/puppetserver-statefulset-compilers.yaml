@@ -289,12 +289,12 @@ spec:
           configMap:
             name: {{ .Values.hiera.eyaml.existingMap }}
         {{- end }}
-        {{- if and (.Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.existingSecret)}}
+        {{- if and (.Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.existingMap) (not .Values.hiera.eyaml.existingSecret)}}
         - name: eyamlpub-volume
           secret:
             secretName: {{ template "puppetserver.hiera.publicSecret" . }}
         {{- end }}
-        {{- if and (.Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingSecret)}}
+        {{- if and (.Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingMap) (not .Values.hiera.eyaml.existingSecret)}}
         - name: eyamlpriv-volume
           secret:
             secretName: {{ template "puppetserver.hiera.privateSecret" . }}
