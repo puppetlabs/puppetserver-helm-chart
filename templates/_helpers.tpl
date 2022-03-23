@@ -363,15 +363,24 @@ Create the name for the hiera eyaml key configMap (private/public keys combined)
 {{- end -}}
 
 {{/*
-Create the name for the hiera eyaml private key configMap.
+Create the name for the hiera eyaml key secret (private/public keys combined).
 */}}
-{{- define "puppetserver.hiera.privateMap" -}}
-  eyamlpriv-config
+{{- define "puppetserver.hiera.existingSecret" -}}
+{{- if .Values.hiera.eyaml.existingSecret -}}
+  {{- .Values.hiera.eyaml.existingSecret -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
-Create the name for the hiera eyaml public cert configMap.
+Create the name for the hiera eyaml private key Secrets.
 */}}
-{{- define "puppetserver.hiera.publicMap" -}}
-  eyamlpub-config
+{{- define "puppetserver.hiera.privateSecret" -}}
+  eyamlpriv-secret
+{{- end -}}
+
+{{/*
+Create the name for the hiera eyaml public cert Secrets.
+*/}}
+{{- define "puppetserver.hiera.publicSecret" -}}
+  eyamlpub-secret
 {{- end -}}

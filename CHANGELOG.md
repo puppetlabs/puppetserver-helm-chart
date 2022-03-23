@@ -5,6 +5,10 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.15.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.15.0) (2022-04-20)
+
+- feat: use k8s secrets instead of configmaps for eyaml secrets
+
 ## [v5.14.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.14.0) (2021-12-01)
 
 - feat: bump Puppetserver to `v7.4.2`.

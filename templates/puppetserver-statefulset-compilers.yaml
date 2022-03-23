@@ -280,20 +280,24 @@ spec:
         - name: manifests-volume
           configMap:
             name: manifests-config
-        {{- if .Values.hiera.eyaml.existingMap }}
+        {{- if .Values.hiera.eyaml.existingSecret }}
+        - name: eyaml-volume
+          secret:
+            secretName: {{ .Values.hiera.eyaml.existingSecret }}
+        {{- else if .Values.hiera.eyaml.existingMap }}
         - name: eyaml-volume
           configMap:
             name: {{ .Values.hiera.eyaml.existingMap }}
         {{- end }}
-        {{- if and (.Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.existingMap)}}
+        {{- if and (.Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.existingMap) (not .Values.hiera.eyaml.existingSecret)}}
         - name: eyamlpub-volume
-          configMap:
-            name: {{ template "puppetserver.hiera.publicMap" . }}
+          secret:
+            secretName: {{ template "puppetserver.hiera.publicSecret" . }}
         {{- end }}
-        {{- if and (.Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingMap)}}
+        {{- if and (.Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingMap) (not .Values.hiera.eyaml.existingSecret)}}
         - name: eyamlpriv-volume
-          configMap:
-            name: {{ template "puppetserver.hiera.privateMap" . }}
+          secret:
+            secretName: {{ template "puppetserver.hiera.privateSecret" . }}
         {{- end }}
         {{- if or (.Values.r10k.code.viaSsh.credentials.existingSecret) (and (.Values.r10k.code.viaSsh.credentials.ssh.value) (.Values.r10k.code.viaSsh.credentials.known_hosts.value)) }}
         - name: r10k-code-ssh

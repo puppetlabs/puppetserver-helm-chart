@@ -347,3 +347,4 @@ kill %[job_numbers_above]
 * [John Stewart](https://github.com/jstewart612), Contributor
 * [Erlon Pinheiro](https://github.com/erlonpinheiro), Contributor
 * [Reinier Schoof](https://github.com/skoef), Contributor
+* [Manasseh MMadu](https://github.com/mensaah), Contributor
