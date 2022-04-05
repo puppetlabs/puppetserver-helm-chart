@@ -131,6 +131,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`|
 | `puppetserver.masters.resources` | puppetserver masters resource limits | ``|
 | `puppetserver.masters.extraEnv` | puppetserver masters additional container env vars |``|
+| `puppetserver.masters.updateStrategy` | puppetserver masters update strategy |`RollingUpdate`|
 | `puppetserver.masters.readinessProbeInitialDelay` | the initial delay for the puppetserver masters readiness probe | `180`|
 | `puppetserver.masters.readinessProbePeriodSeconds` | how often (in seconds) to perform the puppetserver masters readiness probe | `60`|
 | `puppetserver.masters.readinessProbeTimeout` | the timeout for the puppetserver masters readiness probe | `20`|
@@ -170,6 +171,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.compilers.podAntiAffinity` | puppetserver compilers pod affinity constraints |`false`|
 | `puppetserver.compilers.annotations`| puppetserver compilers statefulset annotations |``|
 | `puppetserver.compilers.extraEnv` | puppetserver compilers additional container env vars |``|
+| `puppetserver.compilers.updateStrategy` | puppetserver compilers update strategy |`RollingUpdate`|
 | `puppetserver.compilers.readinessProbeInitialDelay` | the initial delay for the puppetserver masters readiness probe | `180`|
 | `puppetserver.compilers.readinessProbePeriodSeconds` | how often (in seconds) to perform the puppetserver masters readiness probe | `60`|
 | `puppetserver.compilers.readinessProbeTimeout` | the timeout for the puppetserver masters readiness probe | `20`|
@@ -240,6 +242,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
+| `puppetdb.updateStrategy` | puppetdb update strategy |`Recreate`|
 | `puppetdb.metrics.enabled` | puppetdb metrics enable/disable flag |`false`|
 | `puppetdb.customPersistentVolumeClaim.storage.enable`| If true, use custom PVC for storage |``|
 | `puppetdb.customPersistentVolumeClaim.storage.config`| Configuration for custom PVC for storage |``|
@@ -348,3 +351,4 @@ kill %[job_numbers_above]
 * [Erlon Pinheiro](https://github.com/erlonpinheiro), Contributor
 * [Reinier Schoof](https://github.com/skoef), Contributor
 * [Manasseh MMadu](https://github.com/mensaah), Contributor
+* [Aidan](https://github.com/artificial-aidan), Contributor
