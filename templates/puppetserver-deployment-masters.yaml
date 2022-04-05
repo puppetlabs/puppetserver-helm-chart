@@ -13,11 +13,9 @@ spec:
   selector:
     matchLabels:
       {{- include "puppetserver.puppetserver.matchLabels" . | nindent 6 }}
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 20%
-      maxUnavailable: 0%
+  {{- if .Values.puppetserver.masters.updateStrategy }}
+  strategy: {{- toYaml .Values.puppetserver.masters.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels:

@@ -27,6 +27,12 @@ puppetserver:
     ##
     extraEnv: {}
 
+    updateStrategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 20%
+        maxUnavailable: 0%
+
     ## Puppet Server Master readiness and liveness probe initial delays and timeouts
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
     ##
@@ -167,6 +173,9 @@ puppetserver:
     ## Additional Compilers' container environment variables
     ##
     extraEnv: {}
+
+    updateStrategy:
+      type: RollingUpdate
 
     ## Puppet Server Compiler readiness and liveness probe initial delays and timeouts
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
@@ -391,6 +400,9 @@ puppetdb:
   extraContainers: []
   ## Additional puppetdb container environment variables
   extraEnv: {}
+
+  updateStrategy:
+    type: Recreate
 
   ## Service for PuppetDB
   service:
