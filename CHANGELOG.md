@@ -5,7 +5,8 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v5.17.O](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.17.0) (2022-04-13)
+## [v5.17.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.17.0) (2022-04-13)
+
 - feat: delete parameter '--strip-components 1'of Puppetserver certificate (unzip)
 
 ## [v5.16.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.16.0) (2022-04-05)
