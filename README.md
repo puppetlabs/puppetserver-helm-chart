@@ -352,3 +352,4 @@ kill %[job_numbers_above]
 * [Reinier Schoof](https://github.com/skoef), Contributor
 * [Manasseh MMadu](https://github.com/mensaah), Contributor
 * [Aidan](https://github.com/artificial-aidan), Contributor
+* [Aurélien Le Clainche](https://www.linkedin.com/in/aurelien-le-clainche/), Contributor
