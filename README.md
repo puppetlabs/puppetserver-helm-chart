@@ -206,6 +206,10 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.preGeneratedCertsJob.enabled` | puppetserver pre-generated certs |`false`|
 | `puppetserver.preGeneratedCertsJob.jobDeadline` | puppetserver pre-generated certs job deadline in seconds |`60`|
 | `puppetserver.puppeturl`| puppetserver control repo url |``|
+| `puppetserver.serviceAccount.enabled`| Enable service account (Note: Service Account will only be automatically created if `puppetserver.serviceAccount.create` is not set.  |`false`|
+| `puppetserver.serviceAccount.create`| puppetserver additional masters svc labels |`false`|
+| `puppetserver.rbac.create`| Enable PodSecurityPolicy's RBAC rules |`false`|
+| `puppetserver.psp.create`| Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later |`false`|
 | `r10k.name` | r10k component label | `r10k`|
 | `r10k.image` | r10k img | `puppet/r10k`|
 | `r10k.tag` | r10k img tag | `3.5.1`|
@@ -247,6 +251,10 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.customPersistentVolumeClaim.storage.enable`| If true, use custom PVC for storage |``|
 | `puppetdb.customPersistentVolumeClaim.storage.config`| Configuration for custom PVC for storage |``|
 | `puppetdb.extraContainers`| Extra containers to inject into the puppetdb pod |``|
+| `puppetdb.serviceAccount.enabled`| Enable service account (Note: Service Account will only be automatically created if `puppetdb.serviceAccount.create` is not set.  |`false`|
+| `puppetdb.serviceAccount.create`| puppetdb additional masters svc labels |`false`|
+| `puppetdb.rbac.create`| Enable PodSecurityPolicy's RBAC rules |`false`|
+| `puppetdb.psp.create`| Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later |`false`|
 | `puppetboard.enabled` | puppetboard availability | `false`|
 | `puppetboard.name` | puppetboard component label | `puppetboard`|
 | `puppetboard.image` | puppetboard img | `xtigyro/puppetboard`|
@@ -353,3 +361,4 @@ kill %[job_numbers_above]
 * [Manasseh MMadu](https://github.com/mensaah), Contributor
 * [Aidan](https://github.com/artificial-aidan), Contributor
 * [Aurélien Le Clainche](https://www.linkedin.com/in/aurelien-le-clainche/), Contributor
+* [David Phayanouvong](https://github.com/davidphayanouvong), Contributor

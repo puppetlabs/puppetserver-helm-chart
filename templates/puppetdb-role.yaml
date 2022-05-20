@@ -1,0 +1,15 @@
+{{- if .Values.puppetdb.rbac.create }}
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ default "puppetdb" .Values.puppetdb.serviceAccount.accountName }}-role
+  namespace: {{ .Release.Namespace }}
+rules:
+  {{- if .Values.puppetdb.psp.create }}
+  - apiGroups: ["extensions"]
+    resources: ["podsecuritypolicies"]
+    verbs: ["use"]
+    resourceNames:
+      - {{ default "puppetdb" .Values.puppetdb.serviceAccount.accountName }}-psp
+  {{- end }}
+{{- end }}
