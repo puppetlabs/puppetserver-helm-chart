@@ -1,0 +1,20 @@
+puppetserver:
+  serviceAccount:
+    enabled: true
+    create: true
+    accountName: puppetserver
+
+  rbac:
+    create: false
+  psp:
+    create: false
+
+puppetdb:
+  serviceAccount:
+    enabled: true
+    create: true
+    accountName: puppetdb
+  rbac:
+    create: false
+  psp:
+    create: false

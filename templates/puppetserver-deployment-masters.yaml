@@ -27,6 +27,9 @@ spec:
         {{- end }}
     spec:
       hostname: {{ template "puppetserver.puppetserver-masters.serviceName" . }}
+      {{- if .Values.puppetserver.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.puppetserver.serviceAccount.accountName }}
+      {{- end }}
       initContainers:
         - name: perms-and-dirs
           image: "{{.Values.puppetserver.image}}:{{.Values.puppetserver.tag}}"
