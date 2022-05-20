@@ -283,6 +283,17 @@ puppetserver:
     enabled: false
     jobDeadline: 300
 
+  ## Optional configure serviceAccount & rbac
+  serviceAccount:
+    enabled: false
+    create: false
+
+  rbac:
+    create: false
+
+  psp:
+    create: false
+
   ## The pattern of managing Hieradata in a separate repository is
   ## both common and acceptable. Doing so provides the ability to decouple
   ## the management of configuration data from that of the Puppet code base.
@@ -421,11 +432,23 @@ puppetdb:
   ## puppetdb metrics enable/disable flag
   metrics:
     enabled: false
+    
   ## Use custom PVC for the Puppet PuppetDB
   customPersistentVolumeClaim:
     storage:
       enable: false
       config: {}
+
+  ## Optional configure serviceAccount & rbac
+  serviceAccount:
+    enabled: false
+    create: false
+
+  rbac:
+    create: false
+
+  psp:
+    create: false
 
 ## PostgreSQL Sub-Chart Configuration
 ## Please check: https://github.com/bitnami/charts/tree/master/bitnami/postgresql

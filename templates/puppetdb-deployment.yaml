@@ -21,6 +21,9 @@ spec:
       {{- end }}
     spec:
       hostname: puppetdb
+      {{- if .Values.puppetdb.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.puppetdb.serviceAccount.accountName }}
+      {{- end }}
       containers:
         {{- with .Values.puppetdb.extraContainers }}
           {{- toYaml . | nindent 8 }}
