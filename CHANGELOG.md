@@ -5,6 +5,10 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.18.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.18.0) (2022-05-20)
+
+- feat: add pod security policies
+
 ## [v5.17.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.17.0) (2022-04-13)
 
 - fix: delete parameter '--strip-components 1' of Puppetserver certificate (unzip)
