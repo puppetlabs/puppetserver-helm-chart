@@ -348,6 +348,16 @@ Create the name for the r10k.hiera.viaHttps secret.
 {{- end -}}
 {{- end -}}
 
+{{/*
+check if hiera is define
+*/}}
+{{- define "hiera.enable" -}}
+{{- if or .Values.hiera.hieradataurl .Values.r10k.hiera.extraRepository }}
+  {{- true -}}
+{{- end -}}
+{{- end -}}
+
+
 {{/* *************************************************************************************
 The following definitions were more complex and necessary during part of this development.
 Now they are essentially just stubs but left here in case they might be needed again soon.

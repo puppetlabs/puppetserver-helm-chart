@@ -21,7 +21,7 @@ spec:
       labels:
         {{- include "puppetserver.puppetserver.labels" . | nindent 8 }}
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/hiera-configmap.yaml") . | sha256sum }}
+        checksum/hiera-configmap: {{ include (print $.Template.BasePath "/hiera-configmap.yaml") . | sha256sum }}
         {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
@@ -59,22 +59,7 @@ spec:
               {{- end }}
               mkdir -p /etc/puppetlabs/code/environments;
               mkdir -p /etc/puppetlabs/puppet/manifests;
-              mkdir -p /etc/puppetlabs/code/r10k_cache;
               chown -R puppet:puppet /etc/puppetlabs;
-              {{- if .Values.puppetserver.puppeturl }}
-              cp /etc/puppetlabs/puppet/configmap/r10k_code_entrypoint.sh /etc/puppetlabs/puppet/r10k_code_entrypoint.sh;
-              cp /etc/puppetlabs/puppet/configmap/r10k_code_cronjob.sh /etc/puppetlabs/puppet/r10k_code_cronjob.sh;
-              cp /etc/puppetlabs/puppet/configmap/r10k_code.yaml /etc/puppetlabs/puppet/r10k_code.yaml;
-              chown puppet:puppet /etc/puppetlabs/puppet/r10k_code_entrypoint.sh /etc/puppetlabs/puppet/r10k_code_cronjob.sh /etc/puppetlabs/puppet/r10k_code.yaml;
-              chmod +x /etc/puppetlabs/puppet/r10k_code_entrypoint.sh /etc/puppetlabs/puppet/r10k_code_cronjob.sh;
-              {{- end }}
-              {{- if .Values.hiera.hieradataurl }}
-              cp /etc/puppetlabs/puppet/configmap/r10k_hiera_entrypoint.sh /etc/puppetlabs/puppet/r10k_hiera_entrypoint.sh;
-              cp /etc/puppetlabs/puppet/configmap/r10k_hiera_cronjob.sh /etc/puppetlabs/puppet/r10k_hiera_cronjob.sh;
-              cp /etc/puppetlabs/puppet/configmap/r10k_hiera.yaml /etc/puppetlabs/puppet/r10k_hiera.yaml;
-              chown puppet:puppet /etc/puppetlabs/puppet/r10k_hiera_entrypoint.sh /etc/puppetlabs/puppet/r10k_hiera_cronjob.sh /etc/puppetlabs/puppet/r10k_hiera.yaml;
-              chmod +x /etc/puppetlabs/puppet/r10k_hiera_entrypoint.sh /etc/puppetlabs/puppet/r10k_hiera_cronjob.sh;
-              {{- end }}
               {{- if .Values.hiera.config }}
               cp /etc/puppetlabs/puppet/configmap/hiera.yaml /etc/puppetlabs/puppet/hiera.yaml;
               chown puppet:puppet /etc/puppetlabs/puppet/hiera.yaml;
@@ -98,28 +83,6 @@ spec:
               mountPath: /etc/puppetlabs/code/
             - name: puppet-puppet-storage
               mountPath: /etc/puppetlabs/puppet/
-            {{- if .Values.puppetserver.puppeturl }}
-            - name: r10k-code-volume
-              mountPath: /etc/puppetlabs/puppet/configmap/r10k_code_entrypoint.sh
-              subPath: r10k_code_entrypoint.sh
-            - name: r10k-code-volume
-              mountPath: /etc/puppetlabs/puppet/configmap/r10k_code_cronjob.sh
-              subPath: r10k_code_cronjob.sh
-            - name: r10k-code-volume
-              mountPath: /etc/puppetlabs/puppet/configmap/r10k_code.yaml
-              subPath: r10k_code.yaml
-            {{- end }}
-            {{- if .Values.hiera.hieradataurl }}
-            - name: r10k-hiera-volume
-              mountPath: /etc/puppetlabs/puppet/configmap/r10k_hiera_entrypoint.sh
-              subPath: r10k_hiera_entrypoint.sh
-            - name: r10k-hiera-volume
-              mountPath: /etc/puppetlabs/puppet/configmap/r10k_hiera_cronjob.sh
-              subPath: r10k_hiera_cronjob.sh
-            - name: r10k-hiera-volume
-              mountPath: /etc/puppetlabs/puppet/configmap/r10k_hiera.yaml
-              subPath: r10k_hiera.yaml
-            {{- end }}
             {{- if .Values.puppetserver.masters.multiMasters.enabled }}
             - name: init-masters-volume
               mountPath: /etc/puppetlabs/puppet/configmap/check_for_masters.sh
@@ -199,92 +162,6 @@ spec:
               mountPath: /opt/puppetlabs/server/data/puppetserver/
             - name: puppet-ca-storage
               mountPath: /etc/puppetlabs/puppetserver/ca/
-        {{- if .Values.puppetserver.puppeturl }}
-        # r10k Code Sidecar
-        - name: r10k-code
-          image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
-          imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
-          resources:
-            {{- toYaml .Values.r10k.code.resources | nindent 12 }}
-          env:
-          {{- range $key, $value := .Values.r10k.code.extraEnv }}
-          - name: {{ $key }}
-            value: "{{ $value }}"
-          {{- end }}
-          command: [ "sh", "-c", "/etc/puppetlabs/puppet/r10k_code_entrypoint.sh" ]
-          securityContext:
-            runAsUser: 999   # "puppet" UID
-            runAsGroup: 999 # "puppet" GID
-          volumeMounts:
-          {{- with .Values.r10k.code.viaSsh.credentials }}
-          {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
-          - name: r10k-code-ssh
-            mountPath: /home/puppet/.ssh
-          {{- end }}
-          {{- end }}
-          {{- with .Values.r10k.code.viaHttps.credentials }}
-          {{- if or .existingSecret .netrc.value }}
-          - name: r10k-code-netrc
-            mountPath: /home/puppet/.netrc
-            subPath: .netrc
-          {{- end }}
-          {{- end }}
-          - name: puppet-code-storage
-            mountPath: /etc/puppetlabs/code/
-          - name: puppet-puppet-storage
-            mountPath: /etc/puppetlabs/puppet/
-          readinessProbe:
-            exec:
-              command: ["/bin/sh", "-ec", "test -f ~/.r10k_code_cronjob.success"]
-            failureThreshold: 2
-            initialDelaySeconds: 5
-            periodSeconds: 20
-            successThreshold: 1
-            timeoutSeconds: 5
-        {{- end }}
-        {{- if .Values.hiera.hieradataurl }}
-        # r10k Hiera Sidecar
-        - name: r10k-hiera
-          image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
-          imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
-          resources:
-            {{- toYaml .Values.r10k.hiera.resources | nindent 12 }}
-          env:
-          {{- range $key, $value := .Values.r10k.hiera.extraEnv }}
-          - name: {{ $key }}
-            value: "{{ $value }}"
-          {{- end }}
-          command: [ "sh", "-c", "/etc/puppetlabs/puppet/r10k_hiera_entrypoint.sh" ]
-          securityContext:
-            runAsUser: 999   # "puppet" UID
-            runAsGroup: 999 # "puppet" GID
-          volumeMounts:
-          {{- with .Values.r10k.hiera.viaSsh.credentials }}
-          {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
-          - name: r10k-hiera-ssh
-            mountPath: /home/puppet/.ssh
-          {{- end }}
-          {{- end }}
-          {{- with .Values.r10k.hiera.viaHttps.credentials }}
-          {{- if or .existingSecret .netrc.value }}
-          - name: r10k-hiera-netrc
-            mountPath: /home/puppet/.netrc
-            subPath: .netrc
-          {{- end }}
-          {{- end }}
-          - name: puppet-code-storage
-            mountPath: /etc/puppetlabs/code/
-          - name: puppet-puppet-storage
-            mountPath: /etc/puppetlabs/puppet/
-          readinessProbe:
-            exec:
-              command: ["/bin/sh", "-ec", "test -f ~/.r10k_hiera_cronjob.success"]
-            failureThreshold: 2
-            initialDelaySeconds: 5
-            periodSeconds: 20
-            successThreshold: 1
-            timeoutSeconds: 5
-        {{- end }}
       securityContext:
         fsGroup: 999   # "puppet" GID
       volumes:
@@ -347,56 +224,6 @@ spec:
         - name: eyamlpriv-volume
           secret:
             secretName: {{ template "puppetserver.hiera.privateSecret" . }}
-        {{- end }}
-        {{- if or (.Values.r10k.code.viaSsh.credentials.existingSecret) (and (.Values.r10k.code.viaSsh.credentials.ssh.value) (.Values.r10k.code.viaSsh.credentials.known_hosts.value)) }}
-        - name: r10k-code-ssh
-          secret:
-            secretName: {{ template "r10k.code.viaSsh.secret" . }}
-            defaultMode: 288 # = mode 0440
-            items:
-              - key: id_rsa
-                path: id_rsa
-              - key: known_hosts
-                path: known_hosts
-        {{- end }}
-        {{- if or .Values.r10k.code.viaHttps.credentials.existingSecret .Values.r10k.code.viaHttps.credentials.netrc.value }}
-        - name: r10k-code-netrc
-          secret:
-            secretName: {{ template "r10k.code.viaHttps.secret" . }}
-            defaultMode: 288 # = mode 0440
-            items:
-              - key: netrc
-                path: .netrc
-        {{- end }}
-        {{- if .Values.puppetserver.puppeturl }}
-        - name: r10k-code-volume
-          configMap:
-            name: r10k-code-config
-        {{- end }}
-        {{- if .Values.hiera.hieradataurl }}
-        - name: r10k-hiera-volume
-          configMap:
-            name: r10k-hiera-config
-        {{- end }}
-        {{- if or (.Values.r10k.hiera.viaSsh.credentials.existingSecret) (and (.Values.r10k.hiera.viaSsh.credentials.ssh.value) (.Values.r10k.hiera.viaSsh.credentials.known_hosts.value)) }}
-        - name: r10k-hiera-ssh
-          secret:
-            secretName: {{ template "r10k.hiera.viaSsh.secret" . }}
-            defaultMode: 288 # = mode 0440
-            items:
-              - key: id_rsa
-                path: id_rsa
-              - key: known_hosts
-                path: known_hosts
-        {{- end }}
-        {{- if or .Values.r10k.hiera.viaHttps.credentials.existingSecret .Values.r10k.hiera.viaHttps.credentials.netrc.value }}
-        - name: r10k-hiera-netrc
-          secret:
-            secretName: {{ template "r10k.hiera.viaHttps.secret" . }}
-            defaultMode: 288 # = mode 0440
-            items:
-              - key: netrc
-                path: .netrc
         {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector:

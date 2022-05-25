@@ -318,6 +318,7 @@ r10k:
     #    memory: 512Mi
     #    cpu: 300m
     cronJob:
+      enabled: true
       schedule: "*/5 * * * *"
     ## Additional r10k code container arguments
     extraArgs: []
@@ -360,6 +361,7 @@ r10k:
     #    memory: 512Mi
     #    cpu: 300m
     cronJob:
+      enabled: true
       schedule: "*/4 * * * *"
     ## Additional r10k hiera container environment variables
     extraArgs: []
@@ -393,6 +395,15 @@ r10k:
         ## from a pre-existing K8s secret
         ## NOTE: Using this secret supercedes all other credentials settings.
         existingSecret: ""
+
+  ## Optional configure serviceAccount & rbac
+  serviceAccount:
+    enabled: false
+    create: false
+  rbac:
+    create: false
+  psp:
+    create: false
 
 ## PuppetDB Configuration
 ##
