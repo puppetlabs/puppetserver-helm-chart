@@ -228,6 +228,11 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.hiera.viaSsh.credentials.ssh.value`| r10k hiera data ssh key file |``|
 | `r10k.hiera.viaSsh.credentials.known_hosts.value`| r10k hiera data ssh known hosts file |``|
 | `r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``|
+| `r10k.serviceAccount.enabled`| Enable service account (Note: Service Account will only be automatically created if `r10k.serviceAccount.create` is not set.  |`false`|
+| `r10k.serviceAccount.create`| create the serviceAccount with helm |`false`|
+| `r10k.serviceAccount.accountName`| set the serviceAccount name |`r10k`|
+| `r10k.rbac.create`| Enable PodSecurityPolicy's RBAC rules |`false`|
+| `r10k.psp.create`| Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later |`false`|
 | `postgresql.enabled` | postgres deployment as puppetdb backend | `true`|
 | `postgresql.name` | postgres component label | `postgresql`|
 | `postgresql.resources` | postgres resource limits |``|
