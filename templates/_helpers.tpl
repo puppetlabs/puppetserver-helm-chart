@@ -348,6 +348,42 @@ Create the name for the r10k.hiera.viaHttps secret.
 {{- end -}}
 {{- end -}}
 
+{{/*
+Create the name for the hiera eyaml private key Secrets.
+*/}}
+{{- define "puppetserver.hiera.privateSecret" -}}
+  eyamlpriv-secret
+{{- end -}}
+
+{{/*
+Create the name for the hiera eyaml public cert Secrets.
+*/}}
+{{- define "puppetserver.hiera.publicSecret" -}}
+  eyamlpub-secret
+{{- end -}}
+
+{{/*
+Test if eyaml is enable or not
+*/}}
+{{- define "puppetserver.hiera.eyaml.enabled" -}}
+{{- if or (.Values.hiera.eyaml.public_key) (.Values.hiera.eyaml.private_key) (.Values.hiera.eyaml.existingSecret) (.Values.hiera.eyaml.existingMap) -}}
+true
+{{- else -}}
+false
+{{- end -}}
+{{- end -}}
+
+{{/*
+Check if eyaml keys are stored in secret
+*/}}
+{{- define "puppetserver.hiera.eyaml.secret.enabled" -}}
+{{- if or (.Values.hiera.eyaml.public_key) (.Values.hiera.eyaml.private_key) (.Values.hiera.eyaml.existingSecret) -}}
+true
+{{- else -}}
+false
+{{- end -}}
+{{- end -}}
+
 {{/* *************************************************************************************
 The following definitions were more complex and necessary during part of this development.
 Now they are essentially just stubs but left here in case they might be needed again soon.
@@ -371,16 +407,4 @@ Create the name for the hiera eyaml key secret (private/public keys combined).
 {{- end -}}
 {{- end -}}
 
-{{/*
-Create the name for the hiera eyaml private key Secrets.
-*/}}
-{{- define "puppetserver.hiera.privateSecret" -}}
-  eyamlpriv-secret
-{{- end -}}
 
-{{/*
-Create the name for the hiera eyaml public cert Secrets.
-*/}}
-{{- define "puppetserver.hiera.publicSecret" -}}
-  eyamlpub-secret
-{{- end -}}
