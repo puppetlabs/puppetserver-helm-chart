@@ -67,12 +67,12 @@ spec:
               chmod +x /etc/puppetlabs/puppet/r10k_hiera_entrypoint.sh /etc/puppetlabs/puppet/r10k_hiera_cronjob.sh;
               {{- end }}
               {{- if .Values.hiera.config }}
-              cp /etc/puppetlabs/puppet/configmap/hiera.ya(not .Values.hiera.eyaml.existingSecret)ml /etc/puppetlabs/puppet/hiera.yaml;
+              cp /etc/puppetlabs/puppet/configmap/hiera.yaml /etc/puppetlabs/puppet/hiera.yaml;
               chown puppet:puppet /etc/puppetlabs/puppet/hiera.yaml;
               {{- end }}
               cp /etc/puppetlabs/puppet/configmap/site.pp /etc/puppetlabs/puppet/manifests/site.pp;
               chown puppet:puppet /etc/puppetlabs/puppet/manifests/site.pp;
-              {{- if and (include "puppetserver.hiera.eyaml.enabled" .) (not .Values.hiera.eyaml.existingSecret) }}
+              {{- if or (.Values.hiera.eyaml.public_key) (.Values.hiera.eyaml.private_key) (.Values.hiera.eyaml.existingMap) -}}
               cp /etc/puppetlabs/puppet/configmap/eyaml/*private_key.pkcs7.pem /etc/puppetlabs/puppet/eyaml/keys/;
               chown puppet:puppet /etc/puppetlabs/puppet/eyaml/keys/*private_key.pkcs7.pem;
               cp /etc/puppetlabs/puppet/configmap/eyaml/*public_key.pkcs7.pem /etc/puppetlabs/puppet/eyaml/keys/;
@@ -117,7 +117,7 @@ spec:
             - name: manifests-volume
               mountPath: /etc/puppetlabs/puppet/configmap/site.pp
               subPath: site.pp
-            {{- if and (.Values.hiera.eyaml.existingMap) (not (include "puppetserver.hiera.eyaml.secret.enabled" .)) }}
+            {{- if and (.Values.hiera.eyaml.existingMap) (not .Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingSecret) }}
             - name: eyaml-volume
               mountPath: /etc/puppetlabs/puppet/configmap/eyaml
             {{- end }}
