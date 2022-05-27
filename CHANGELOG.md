@@ -5,6 +5,13 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.19.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.19.0) (2022-05-27)
+
+- feat: deploy only necessary configuration regarding the solution (secret, keys defined in values.yaml, configmap )
+- feat deploy only the most secure configuration (secret > keys defined in values.yaml > configMap)
+- feat: generate a warning if configmap or keys are defined in values.yaml is used
+- feat: generate an error if keys are defined in values.yaml and if .Values.eyaml.public_key or .Values.eyaml.private_key is missing
+
 ## [v5.18.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.18.0) (2022-05-20)
 
 - feat: add pod security policies
