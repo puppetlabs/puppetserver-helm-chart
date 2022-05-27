@@ -81,11 +81,9 @@ spec:
               {{- end }}
               cp /etc/puppetlabs/puppet/configmap/site.pp /etc/puppetlabs/puppet/manifests/site.pp;
               chown puppet:puppet /etc/puppetlabs/puppet/manifests/site.pp;
-              {{- if or (.Values.hiera.eyaml.private_key) (.Values.hiera.eyaml.existingMap) }}
+              {{- if or (.Values.hiera.eyaml.public_key) (.Values.hiera.eyaml.private_key) (.Values.hiera.eyaml.existingMap) -}}
               cp /etc/puppetlabs/puppet/configmap/eyaml/*private_key.pkcs7.pem /etc/puppetlabs/puppet/eyaml/keys/;
               chown puppet:puppet /etc/puppetlabs/puppet/eyaml/keys/*private_key.pkcs7.pem;
-              {{- end }}
-              {{- if or (.Values.hiera.eyaml.public_key) (.Values.hiera.eyaml.existingMap) }}
               cp /etc/puppetlabs/puppet/configmap/eyaml/*public_key.pkcs7.pem /etc/puppetlabs/puppet/eyaml/keys/;
               chown puppet:puppet /etc/puppetlabs/puppet/eyaml/keys/*public_key.pkcs7.pem;
               {{- end }}
@@ -133,16 +131,14 @@ spec:
             - name: manifests-volume
               mountPath: /etc/puppetlabs/puppet/configmap/site.pp
               subPath: site.pp
-            {{- if .Values.hiera.eyaml.existingMap }}
+            {{- if and (.Values.hiera.eyaml.existingMap) (not .Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingSecret) }}
             - name: eyaml-volume
               mountPath: /etc/puppetlabs/puppet/configmap/eyaml
             {{- end }}
-            {{- if and (.Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.existingMap)}}
+            {{- if and (or (.Values.hiera.eyaml.public_key) (.Values.hiera.eyaml.private_key)) (not .Values.hiera.eyaml.existingSecret)}}
             - name: eyamlpub-volume
               mountPath: /etc/puppetlabs/puppet/configmap/eyaml/public_key.pkcs7.pem
               subPath: public_key.pkcs7.pem
-            {{- end }}
-            {{- if and (.Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingMap)}}
             - name: eyamlpriv-volume
               mountPath: /etc/puppetlabs/puppet/configmap/eyaml/private_key.pkcs7.pem
               subPath: private_key.pkcs7.pem
@@ -333,20 +329,17 @@ spec:
         - name: eyaml-volume
           secret:
             secretName: {{ .Values.hiera.eyaml.existingSecret }}
-        {{- else if .Values.hiera.eyaml.existingMap }}
-        - name: eyaml-volume
-          configMap:
-            name: {{ .Values.hiera.eyaml.existingMap }}
-        {{- end }}
-        {{- if and (.Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.existingMap) (not .Values.hiera.eyaml.existingSecret)}}
+        {{- else if or (.Values.hiera.eyaml.public_key) (.Values.hiera.eyaml.private_key) }}
         - name: eyamlpub-volume
           secret:
             secretName: {{ template "puppetserver.hiera.publicSecret" . }}
-        {{- end }}
-        {{- if and (.Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingMap) (not .Values.hiera.eyaml.existingSecret)}}
         - name: eyamlpriv-volume
           secret:
             secretName: {{ template "puppetserver.hiera.privateSecret" . }}
+        {{- else if .Values.hiera.eyaml.existingMap  }}
+        - name: eyaml-volume
+          configMap:
+            name: {{ .Values.hiera.eyaml.existingMap }}
         {{- end }}
         {{- if or (.Values.r10k.code.viaSsh.credentials.existingSecret) (and (.Values.r10k.code.viaSsh.credentials.ssh.value) (.Values.r10k.code.viaSsh.credentials.known_hosts.value)) }}
         - name: r10k-code-ssh
