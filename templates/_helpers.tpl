@@ -1,6 +1,17 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
+Return the appropriate apiVersion for podsecuritypolicy.
+*/}}
+{{- define "podsecuritypolicy.apiVersion" -}}
+{{- if semverCompare "<1.10-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "policy/v1beta1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Expand the name of the chart.
 */}}
 {{- define "puppetserver.name" -}}
