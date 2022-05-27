@@ -368,6 +368,12 @@ check if hiera is define
 {{- end -}}
 {{- end -}}
 
+{{/*
+Define r10k service Account name
+*/}}
+{{- define "puppetserver.r10k.serviceAccount.name" -}}
+{{ default "r10k" .Values.r10k.serviceAccount.accountName }}
+{{- end -}} 
 
 {{/* *************************************************************************************
 The following definitions were more complex and necessary during part of this development.

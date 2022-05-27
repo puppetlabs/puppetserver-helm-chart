@@ -24,7 +24,7 @@ spec:
         {{- end }}
     spec:
       {{- if .Values.r10k.serviceAccount.enabled }}
-      serviceAccountName: {{  default "r10k" .Values.r10k.serviceAccount.accountName }}
+      serviceAccountName: {{ include "puppetserver.r10k.serviceAccount.name" . }}
       {{- end }}
       initContainers:
         - name: perms-and-dirs
