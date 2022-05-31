@@ -349,6 +349,15 @@ Create the name for the r10k.hiera.viaHttps secret.
 {{- end -}}
 
 {{/*
+check if hiera is define
+*/}}
+{{- define "hiera.enable" -}}
+{{- if or .Values.hiera.hieradataurl .Values.r10k.hiera.extraRepository }}
+  {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create the name for the hiera eyaml private key Secrets.
 */}}
 {{- define "puppetserver.hiera.privateSecret" -}}

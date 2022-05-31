@@ -21,7 +21,7 @@ spec:
       labels:
         {{- include "puppetserver.puppetserver.labels" . | nindent 8 }}
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/hiera-configmap.yaml") . | sha256sum }}
+        checksum/hiera-configmap: {{ include (print $.Template.BasePath "/hiera-configmap.yaml") . | sha256sum }}
         {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
@@ -68,7 +68,7 @@ spec:
               chown puppet:puppet /etc/puppetlabs/puppet/r10k_code_entrypoint.sh /etc/puppetlabs/puppet/r10k_code_cronjob.sh /etc/puppetlabs/puppet/r10k_code.yaml;
               chmod +x /etc/puppetlabs/puppet/r10k_code_entrypoint.sh /etc/puppetlabs/puppet/r10k_code_cronjob.sh;
               {{- end }}
-              {{- if .Values.hiera.hieradataurl }}
+              {{- if (include "hiera.enable" .) }}
               cp /etc/puppetlabs/puppet/configmap/r10k_hiera_entrypoint.sh /etc/puppetlabs/puppet/r10k_hiera_entrypoint.sh;
               cp /etc/puppetlabs/puppet/configmap/r10k_hiera_cronjob.sh /etc/puppetlabs/puppet/r10k_hiera_cronjob.sh;
               cp /etc/puppetlabs/puppet/configmap/r10k_hiera.yaml /etc/puppetlabs/puppet/r10k_hiera.yaml;
@@ -107,7 +107,7 @@ spec:
               mountPath: /etc/puppetlabs/puppet/configmap/r10k_code.yaml
               subPath: r10k_code.yaml
             {{- end }}
-            {{- if .Values.hiera.hieradataurl }}
+            {{- if (include "hiera.enable" .) }}
             - name: r10k-hiera-volume
               mountPath: /etc/puppetlabs/puppet/configmap/r10k_hiera_entrypoint.sh
               subPath: r10k_hiera_entrypoint.sh
@@ -238,7 +238,7 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
         {{- end }}
-        {{- if .Values.hiera.hieradataurl }}
+        {{- if (include "hiera.enable" .) }}
         # r10k Hiera Sidecar
         - name: r10k-hiera
           image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
@@ -366,7 +366,7 @@ spec:
           configMap:
             name: r10k-code-config
         {{- end }}
-        {{- if .Values.hiera.hieradataurl }}
+        {{- if (include "hiera.enable" .) }}
         - name: r10k-hiera-volume
           configMap:
             name: r10k-hiera-config
