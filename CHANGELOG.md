@@ -5,6 +5,12 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v5.20.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.20.0) (2022-05-31)
+
+- Allow r10k cron jobs to be disabled
+- Allow multi hieradata repos
+- restart automatically pods if r10k or hiera configmap or secret change
+
 ## [v5.19.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.19.0) (2022-05-27)
 
 - feat: deploy only necessary configuration regarding the solution (secret, keys defined in values.yaml, configmap )
