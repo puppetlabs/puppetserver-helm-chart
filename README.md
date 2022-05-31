@@ -350,6 +350,7 @@ kill %[job_numbers_above]
 * [Morgan Rhodes](mailto:morgan@puppet.com), Maintainer
 * [Sean Conley](https://www.linkedin.com/in/seanconley/), Maintainer
 * [Raphaël Pinson](https://github.com/raphink), Maintainer
+* [David Phayanouvong](https://github.com/davidphay), Maintainer
 * [Scott Cressi](https://www.linkedin.com/in/scottcressi/), Co-Author
 * [Kai Sisterhenn](https://www.sistason.de/), Contributor
 * [chwehrli](https://github.com/chwehrli), Contributor
@@ -361,4 +362,3 @@ kill %[job_numbers_above]
 * [Manasseh MMadu](https://github.com/mensaah), Contributor
 * [Aidan](https://github.com/artificial-aidan), Contributor
 * [Aurélien Le Clainche](https://www.linkedin.com/in/aurelien-le-clainche/), Contributor
-* [David Phayanouvong](https://github.com/davidphayanouvong), Contributor
