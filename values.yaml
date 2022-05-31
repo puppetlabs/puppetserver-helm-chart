@@ -680,3 +680,32 @@ storage:
   ##
   annotations: {}
   size: 400Mi
+
+singleCA:
+  enabled: false
+  cronJob: 
+    schedule: "* 0 * * * *"
+  crl:
+    url:
+    credential:
+      existingSecret:
+  # crl:
+    # url:
+    # credential:
+    #   existingSecret:
+  extraEnv: {}
+  resources: {}
+    #  requests:
+    #    memory: 128Mi
+    #    cpu: 50m
+    #  limits:
+    #    memory: 2048Mi
+    #    cpu: 100m
+  config: ''
+  certificates:
+    existingSecret: {}
+    #   puppetserver:
+    #   puppetdb:
+  puppetdb:
+    overrideHostname: ''
+

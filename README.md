@@ -289,6 +289,16 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `storage.storageClass`| Storage Class |``|
 | `storage.annotations`| Storage annotations |``|
 | `storage.size`| PVCs Storage Size |`400Mi`|
+| `singleCA.enabled`| Enable single CA |`false`|
+| `singleCA.cronJob.schedule`| crl cron job schedule policy |`* 0 * * * *`|
+| `singleCA.extraEnv`| crl additional container env vars |``|
+| `singleCA.resources`| crl container resource limits |``|
+| `singleCA.config`| override the default crl script to retrieve the crl.pem |`see values.yaml`|
+| `singleCA.crl.url`| set the url where crl.pem is located (MANDATORY) |``|
+| `singleCA.crl.credential.existingSecret`| set credential of `crl.url` if needed |``|
+| `singleCA.puppetdb.overrideHostname`| override the puppetdb hostname, needed when using CA where you can't add private SAN name |``|
+| `singleCA.certificates.existingSecret.puppetserver`| existing k8s secret that holds `ca.pem`, `puppet.pem` & `puppet.key` |``|
+| `singleCA.certificates.existingSecret.puppetdb`| existing k8s secret that holds `ca.pem`, `puppetdb.pem` & `puppetdb.key` |``|
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

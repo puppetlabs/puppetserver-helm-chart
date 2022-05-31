@@ -1,0 +1,60 @@
+{{- if .Values.singleCA.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: crl-config
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-delete-policy: before-hook-creation
+    helm.sh/hook-weight: "-10"
+data:
+  crl.sh: |-
+    {{- if .Values.singleCA.config }}
+    {{ .Values.singleCA.config | nindent 6 }}
+    {{- else }}
+    #!/usr/bin/env sh
+    url={{ required "A valid .Values.singleCA.crl.url required!" .Values.singleCA.crl.url }}
+    cred="-u {{- if .Values.singleCA.crl.credential }}$CRL_CREDS_USERNAME:$CRL_CREDS_PASSWORD{{- end }}"
+    
+    curl $cred -s -O $url
+    retVal=$?
+
+    mv crl.pem $SSL_PATH/crl.pem
+    grep -q "BEGIN X509 CRL" "$SSL_PATH/crl.pem" > /dev/null 2>&1
+    grepVal=$?
+
+    if [[ "$retVal" -ne "0" || "$grepVal" -ne "0" ]]; then
+      rm ~/.crl_cronjob.success > /dev/null 2>&1
+      retVal=1
+    else
+      touch ~/.crl_cronjob.success > /dev/null 2>&1
+    fi
+
+    exit $retVal
+    {{- end }}
+    
+  crl_cronjob.sh: |
+    #!/usr/bin/env sh
+    $SSL_PATH/crl.sh > ~/.crl_cronjob.out 2>&1
+    retVal=$?
+    if [ "$retVal" -eq "0" ]; then
+      touch ~/.crl_cronjob.success > /dev/null 2>&1
+    else
+      rm ~/.crl_cronjob.success > /dev/null 2>&1
+    fi
+
+    exit $retVal
+
+  crl_entrypoint.sh: |
+    #!/usr/bin/env sh
+    set -e
+    if [ ! -f $SSL_PATH/crl.pem ]; then
+      /bin/sh -c $SSL_PATH/crl_cronjob.sh
+    fi
+    cat > ~/.crl_crontab <<'EOF'
+    {{ .Values.singleCA.cronJob.schedule }} /bin/sh -c $SSL_PATH/crl_cronjob.sh
+    EOF
+    # tail -Fq ~/.crl_cronjob.out &
+    touch ~/.crl_cronjob.success > /dev/null 2>&1
+    exec supercronic ~/.crl_crontab
+{{- end }}

@@ -1,4 +1,4 @@
-{{- if .Values.puppetserver.preGeneratedCertsJob.enabled }}
+{{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -18,6 +18,9 @@ spec:
         {{- include "puppetserver.puppet.labels" . | nindent 8 }}
     spec:
       restartPolicy: Never
+      {{- if .Values.puppetserver.serviceAccount.enabled }}
+      serviceAccountName: {{ include "puppetserver.puppetserver.serviceAccount.name" . }}
+      {{- end }}
       containers:
         - name: copy-ro-puppetserver-certs
           image: "{{.Values.puppetserver.image}}:{{.Values.puppetserver.tag}}"
@@ -25,26 +28,61 @@ spec:
           command: [ "sh", "-c" ]
           args:
             - mkdir -p /etc/puppetlabs/puppet/ssl;
+              {{- if .Values.singleCA.enabled }}
+              mkdir -p /etc/puppetlabs/puppet/ssl/certs/;
+              mkdir -p /etc/puppetlabs/puppet/ssl/private_keys/;
+              cp /puppet-certs/puppetserver/ca.pem /etc/puppetlabs/puppet/ssl/certs/ca.pem;
+              cp /puppet-certs/puppetserver/{{ template "puppetserver.puppetserver-masters.serviceName" . }}.pem /etc/puppetlabs/puppet/ssl/certs/{{ template "puppetserver.puppetserver-masters.serviceName" . }}.pem;
+              cp /puppet-certs/puppetserver/{{ template "puppetserver.puppetserver-masters.serviceName" . }}.key /etc/puppetlabs/puppet/ssl/private_keys/{{ template "puppetserver.puppetserver-masters.serviceName" . }}.pem;
+              ls /puppet-certs/crl/;
+              cp /puppet-certs/crl/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh;
+              cp /puppet-certs/crl/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh;
+              cp /puppet-certs/crl/crl.sh /etc/puppetlabs/puppet/ssl/crl.sh;
+              chown puppet:puppet /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl.sh;
+              chmod +x /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl.sh;
+              {{- else }}
               CERTS_FILE=`ls /puppet-certs/puppetserver`;
               tar xf /puppet-certs/puppetserver/"$CERTS_FILE" -C /etc/puppetlabs/puppet/ssl;
+              {{- end }}
           volumeMounts:
             - name: puppetserver-certs
               mountPath: /puppet-certs/puppetserver
             - name: puppet-puppet-storage
               mountPath: /etc/puppetlabs/puppet/
+            {{- if .Values.singleCA.enabled }}
+            - name: crl-volume
+              mountPath: /puppet-certs/crl
+            {{- end }}
         - name: copy-ro-puppetdb-certs
           image: "{{.Values.puppetdb.image}}:{{.Values.puppetdb.tag}}"
           imagePullPolicy: "{{.Values.puppetdb.pullPolicy}}"
           command: [ "sh", "-c" ]
           args:
             - mkdir -p /opt/puppetlabs/server/data/puppetdb/certs;
+              {{- if .Values.singleCA.enabled }}
+              mkdir -p /opt/puppetlabs/server/data/puppetdb/certs/certs/;
+              mkdir -p /opt/puppetlabs/server/data/puppetdb/certs/private_keys/;
+              cp /puppet-certs/puppetdb/ca.pem /opt/puppetlabs/server/data/puppetdb/certs/certs/ca.pem;
+              cp /puppet-certs/puppetdb/puppetdb.pem /opt/puppetlabs/server/data/puppetdb/certs/certs/puppetdb.pem;
+              cp /puppet-certs/puppetdb/puppetdb.key /opt/puppetlabs/server/data/puppetdb/certs/private_keys/puppetdb.pem;
+              cp /puppet-crl/puppetdb/crl_entrypoint.sh /opt/puppetlabs/server/data/puppetdb/certs/crl_entrypoint.sh;
+              cp /puppet-crl/puppetdb/crl_cronjob.sh /opt/puppetlabs/server/data/puppetdb/certs/crl_cronjob.sh;
+              cp /puppet-crl/puppetdb/crl.sh /opt/puppetlabs/server/data/puppetdb/certs/crl.sh;
+              chown puppetdb:puppetdb /opt/puppetlabs/server/data/puppetdb/certs/crl_entrypoint.sh /opt/puppetlabs/server/data/puppetdb/certs/crl_cronjob.sh /opt/puppetlabs/server/data/puppetdb/certs/crl.sh;
+              chmod +x /opt/puppetlabs/server/data/puppetdb/certs/crl_entrypoint.sh /opt/puppetlabs/server/data/puppetdb/certs/crl_cronjob.sh /opt/puppetlabs/server/data/puppetdb/certs/crl.sh;
+              {{- else }}
               CERTS_FILE=`ls /puppet-certs/puppetdb`;
               tar xf /puppet-certs/puppetdb/"$CERTS_FILE" -C /opt/puppetlabs/server/data/puppetdb/certs --strip-components 1;
+              {{- end }}
           volumeMounts:
             - name: puppetdb-certs
               mountPath: /puppet-certs/puppetdb
             - name: puppetdb-storage
               mountPath: /opt/puppetlabs/server/data/puppetdb/certs
+            {{- if .Values.singleCA.enabled }}
+            - name: crl-volume
+              mountPath: /puppet-crl/puppetdb
+            {{- end }}
       volumes:
         - name: puppet-puppet-storage
         {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.puppet.enable }}
@@ -55,15 +93,30 @@ spec:
         {{- end }}
         - name: puppetdb-storage
         {{- if .Values.puppetdb.customPersistentVolumeClaim.storage.enable }}
-          {{- toYaml .Values.puppetserver.puppetdb.customPersistentVolumeClaim.storage.config | nindent 10 }}
+          {{- toYaml .Values.puppetdb.customPersistentVolumeClaim.storage.config | nindent 10 }}
         {{- else }}
           persistentVolumeClaim:
             claimName: puppetdb-claim
         {{- end }}
         - name: puppetserver-certs
+        {{- if not .Values.singleCA.enabled }}
           configMap:
             name: "{{ template "puppetserver.name" . }}-puppetserver-preinstall"
+        {{- else }}
+          secret:
+            secretName: {{ .Values.singleCA.certificates.existingSecret.puppetserver }}
+        {{- end }}
         - name: puppetdb-certs
+        {{- if not .Values.singleCA.enabled }}
           configMap:
             name: "{{ template "puppetserver.name" . }}-puppetdb-preinstall"
+        {{- else }}
+          secret:
+            secretName: {{ .Values.singleCA.certificates.existingSecret.puppetdb }}
+        {{- end }}
+        {{- if .Values.singleCA.enabled }}
+        - name: crl-volume
+          configMap:
+            name: crl-config
+        {{- end }}
 {{- end }}
