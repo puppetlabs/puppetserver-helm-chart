@@ -215,6 +215,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.tag` | r10k img tag | `3.5.1`|
 | `r10k.pullPolicy` | r10k img pull policy | `IfNotPresent`|
 | `r10k.code.resources` | r10k control repo resource limits |``|
+| `r10k.code.cronJob.enabled` | enable or disable r10k control repo cron job schedule policy | `true`|
 | `r10k.code.cronJob.schedule` | r10k control repo cron job schedule policy | `*/15 * * * *`|
 | `r10k.code.extraArgs` | r10k control repo additional container env args |``|
 | `r10k.code.extraEnv` | r10k control repo additional container env vars |``|
@@ -222,6 +223,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.code.viaSsh.credentials.known_hosts.value`| r10k control repo ssh known hosts file |``|
 | `r10k.code.viaSsh.credentials.existingSecret`| r10k control repo ssh secret that holds ssh key and known hosts files |``|
 | `r10k.hiera.resources` | r10k hiera data resource limits |``|
+| `r10k.hiera.cronJob.enabled` | enable or disable r10k hiera data cron job schedule policy | `true`|
 | `r10k.hiera.cronJob.schedule` | r10k hiera data cron job schedule policy | `*/2 * * * *`|
 | `r10k.hiera.extraArgs` | r10k hiera data additional container env args |``|
 | `r10k.hiera.extraEnv` | r10k hiera data additional container env vars |``|
@@ -350,6 +352,7 @@ kill %[job_numbers_above]
 * [Morgan Rhodes](mailto:morgan@puppet.com), Maintainer
 * [Sean Conley](https://www.linkedin.com/in/seanconley/), Maintainer
 * [Raphaël Pinson](https://github.com/raphink), Maintainer
+* [David Phayanouvong](https://github.com/davidphay), Maintainer
 * [Scott Cressi](https://www.linkedin.com/in/scottcressi/), Co-Author
 * [Kai Sisterhenn](https://www.sistason.de/), Contributor
 * [chwehrli](https://github.com/chwehrli), Contributor
@@ -361,4 +364,3 @@ kill %[job_numbers_above]
 * [Manasseh MMadu](https://github.com/mensaah), Contributor
 * [Aidan](https://github.com/artificial-aidan), Contributor
 * [Aurélien Le Clainche](https://www.linkedin.com/in/aurelien-le-clainche/), Contributor
-* [David Phayanouvong](https://github.com/davidphayanouvong), Contributor
