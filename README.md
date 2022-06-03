@@ -36,6 +36,23 @@ If you prefer not to auto-sign or manually sign the Puppet Agents' CSRs - you ca
 
 > **NOTE**: For more information please check - [README.md](init/README.md). For more general knowledge on the matter you can also read the article - <https://puppet.com/docs/puppet/5.5/ssl_regenerate_certificates.html.>
 
+## Using Single CA
+
+If you prefer, you can use a single externally issued CA - <https://puppet.com/docs/puppet/7/config_ssl_external_ca.html>.  
+Enable it with `.Values.singleCA.enable`, add the crl.pem url with `.Values.singleCA.crl.url`, optionnally you can pass credential using `.Values.singleCA.crl.credential.existingSecret`. 
+
+Generate puppet & puppetdb secret (must be name `puppet.pem` & `puppetdb.pem`):
+```
+kubectl create secret generic puppet-certificate --from-file=puppet.pem --from-file=puppet.key --from-file=ca.pem
+kubectl create secret generic puppetdb-certificate --from-file=puppetdb.pem --from-file=puppetdb.key --from-file=ca.pem
+```
+finally set `.Values.singleCA.certificates.existingSecret.puppetserver` and `.Values.singleCA.certificates.existingSecret.puppetdb`.
+
+Additionnaly, if you use a public certificate authority, you can't use private SAN name, so you have to override puppetdb name with `.Values.singleCA.puppetdb.overrideHostname` (with the full name ie: puppetdb.my.domain) and it's a workaround for now but you have to update the DNS config, for CoreDNS add the following line in the configMap:
+```
+rewrite name puppetdb.my.domain puppetdb.<namespace>.svc.cluster.local
+```
+
 ## Horizontal Scaling
 
 To achieve better availability and higher throughput of Puppet Infrastructure, you'll need to scale out Puppet Masters and/or Puppet Compilers.
