@@ -5,7 +5,7 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v5.21.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.21.0) (2022-06-01)
+## [v6.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.0.0) (2022-06-01)
 
 - feat: Single CA support (https://puppet.com/docs/puppet/7/config_ssl_external_ca.html)
 - fix: define podsecuritypolicy.apiVersion
