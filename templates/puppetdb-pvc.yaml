@@ -6,10 +6,10 @@ metadata:
   name: puppetdb-claim
   labels:
     {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
-  {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.storage.annotations) }}
+  {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) (.Values.storage.annotations) }}
   annotations:
   {{- end }}
-    {{- if .Values.puppetserver.preGeneratedCertsJob.enabled }}
+    {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) }}
     "helm.sh/hook": "pre-install"
     "helm.sh/hook-weight": "0"
     "helm.sh/hook-delete-policy": "before-hook-creation"

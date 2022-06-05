@@ -27,12 +27,13 @@ spec:
         {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 8 }}
       annotations:
         checksum/hiera-configmap: {{ include (print $.Template.BasePath "/hiera-configmap.yaml") . | sha256sum }}
+        checksum/crl-config: {{ include (print $.Template.BasePath "/update-crl-configmap.yaml") . | sha256sum }}
         {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
     spec:
       {{- if .Values.puppetserver.serviceAccount.enabled }}
-      serviceAccountName: {{ .Values.puppetserver.serviceAccount.accountName }}
+      serviceAccountName: {{ include "puppetserver.puppetserver.serviceAccount.name" . }}
       {{- end }}
       initContainers:
         - name: perms-and-dirs
@@ -72,11 +73,23 @@ spec:
               {{- end }}
               cp /etc/puppetlabs/puppet/configmap/site.pp /etc/puppetlabs/puppet/manifests/site.pp;
               chown puppet:puppet /etc/puppetlabs/puppet/manifests/site.pp;
-              {{- if or (.Values.hiera.eyaml.public_key) (.Values.hiera.eyaml.private_key) (.Values.hiera.eyaml.existingMap) -}}
+              {{- if or (.Values.hiera.eyaml.public_key) (.Values.hiera.eyaml.private_key) (.Values.hiera.eyaml.existingMap) (.Values.hiera.eyaml.existingSecret) }}
               cp /etc/puppetlabs/puppet/configmap/eyaml/*private_key.pkcs7.pem /etc/puppetlabs/puppet/eyaml/keys/;
               chown puppet:puppet /etc/puppetlabs/puppet/eyaml/keys/*private_key.pkcs7.pem;
               cp /etc/puppetlabs/puppet/configmap/eyaml/*public_key.pkcs7.pem /etc/puppetlabs/puppet/eyaml/keys/;
               chown puppet:puppet /etc/puppetlabs/puppet/eyaml/keys/*public_key.pkcs7.pem;
+              {{- end }}
+              {{- if .Values.singleCA.enabled }}
+              mkdir -p /etc/puppetlabs/puppet/ssl/certs/;
+              mkdir -p /etc/puppetlabs/puppet/ssl/private_keys/;
+              cp /puppet-certs/puppetserver/ca.pem /etc/puppetlabs/puppet/ssl/certs/ca.pem;
+              cp /puppet-certs/puppetserver/{{ template "puppetserver.puppetserver-masters.serviceName" . }}.pem /etc/puppetlabs/puppet/ssl/certs/{{ template "puppetserver.puppetserver-masters.serviceName" . }}.pem;
+              cp /puppet-certs/puppetserver/{{ template "puppetserver.puppetserver-masters.serviceName" . }}.key /etc/puppetlabs/puppet/ssl/private_keys/{{ template "puppetserver.puppetserver-masters.serviceName" . }}.pem;
+              cp /etc/puppetlabs/puppet/configmap/crl/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh;
+              cp /etc/puppetlabs/puppet/configmap/crl/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh;
+              cp /etc/puppetlabs/puppet/configmap/crl/crl.sh /etc/puppetlabs/puppet/ssl/crl.sh;
+              chown puppet:puppet /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl.sh;
+              chmod +x /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl.sh;
               {{- end }}
           securityContext:
             runAsUser: 0
@@ -117,7 +130,7 @@ spec:
             - name: manifests-volume
               mountPath: /etc/puppetlabs/puppet/configmap/site.pp
               subPath: site.pp
-            {{- if and (.Values.hiera.eyaml.existingMap) (not .Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingSecret) }}
+            {{- if and ( or (.Values.hiera.eyaml.existingMap) (.Values.hiera.eyaml.existingSecret)) (not .Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.private_key) }}
             - name: eyaml-volume
               mountPath: /etc/puppetlabs/puppet/configmap/eyaml
             {{- end }}
@@ -128,6 +141,12 @@ spec:
             - name: eyamlpriv-volume
               mountPath: /etc/puppetlabs/puppet/configmap/eyaml/private_key.pkcs7.pem
               subPath: private_key.pkcs7.pem
+            {{- end }}
+            {{- if .Values.singleCA.enabled }}
+            - name: crl-volume
+              mountPath: /etc/puppetlabs/puppet/configmap/crl
+            - name: puppetserver-certs
+              mountPath: /puppet-certs/puppetserver
             {{- end }}
       containers:
         - name: {{ template "puppetserver.fullname" . }}
@@ -143,15 +162,19 @@ spec:
             # necessary to set certname and server in puppet.conf, required by
             # puppetserver ca cli application
             - name: PUPPETSERVER_HOSTNAME
+              {{- if .Values.singleCA.enabled }}
+              value: {{ (include "puppetserver.puppetserver-masters.serviceName" . | quote ) }}
+              {{- else }}
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+              {{- end }}
             - name: PUPPET_MASTERPORT
               value: "{{ template "puppetserver.puppetserver-compilers.port" . }}"
             - name: DNS_ALT_NAMES
               value: "{{ template "puppetserver.puppetserver-compilers.serviceName" . }},{{.Values.puppetserver.compilers.fqdns.alternateServerNames}}"
             - name: PUPPETDB_SERVER_URLS
-              value: "https://puppetdb:8081"
+              value: "https://{{ default "puppetdb" .Values.singleCA.puppetdb.overrideHostname }}:8081"
             - name: CA_ENABLED
               value: "false"
             - name: CA_HOSTNAME
@@ -269,6 +292,48 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
         {{- end }}
+        {{- if .Values.singleCA.enabled }}
+        # singleCA crl script update Sidecar
+        - name: update-crl
+          image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
+          imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
+          resources:
+            {{- toYaml .Values.singleCA.resources | nindent 12 }}
+          env:
+          - name: SSL_PATH
+            value: /etc/puppetlabs/puppet/ssl
+          {{- if .Values.singleCA.crl.credential }}
+          - name: CRL_CREDS_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.singleCA.crl.credential.existingSecret }}
+                key: username
+          - name: CRL_CREDS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.singleCA.crl.credential.existingSecret }}
+                key: password
+          {{- end }}
+          {{- range $key, $value := .Values.singleCA.extraEnv }}
+          - name: {{ $key }}
+            value: "{{ $value }}"
+          {{- end }}
+          command: ["sh", "-c", "/etc/puppetlabs/puppet/ssl/crl_entrypoint.sh" ]
+          securityContext:
+            runAsUser: 999   # "puppet" UID
+            runAsGroup: 999 # "puppet" GID
+          volumeMounts:
+          - name: puppet-puppet-volume
+            mountPath: /etc/puppetlabs/puppet/
+          readinessProbe:
+            exec:
+              command: ["/bin/sh", "-ec", "test -f ~/.crl_cronjob.success"]
+            failureThreshold: 2
+            initialDelaySeconds: 5
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 5
+        {{- end }}
       securityContext:
         fsGroup: 999   # "puppet" GID
       volumes:
@@ -276,6 +341,19 @@ spec:
         - name: hiera-volume
           configMap:
             name: hiera-config
+        {{- end }}
+        {{- if .Values.singleCA.enabled }}
+        - name: crl-volume
+          configMap:
+            name: crl-config
+        - name: puppetserver-certs
+        {{- if not .Values.singleCA.enabled }}
+          configMap:
+            name: "{{ template "puppetserver.name" . }}-puppetserver-preinstall"
+        {{- else }}
+          secret:
+            secretName: {{ .Values.singleCA.certificates.existingSecret.puppetserver }}
+        {{- end }}
         {{- end }}
         - name: manifests-volume
           configMap:

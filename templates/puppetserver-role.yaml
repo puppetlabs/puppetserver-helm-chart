@@ -4,10 +4,17 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ default "puppetserver" .Values.puppetserver.serviceAccount.accountName }}-role
   namespace: {{ .Release.Namespace }}
+  {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) (.Values.storage.annotations) }}
   annotations:
+  {{- end }}
+    {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) }}
     helm.sh/hook: pre-install
     helm.sh/hook-delete-policy: before-hook-creation
     helm.sh/hook-weight: "-10"
+    {{- end }}
+    {{- if .Values.storage.annotations }}
+    {{ toYaml .Values.storage.annotations }}
+    {{- end }}
 rules:
   {{- if .Values.puppetserver.psp.create }}
   - apiGroups: ["extensions"]

@@ -371,6 +371,32 @@ Create the name for the hiera eyaml public cert Secrets.
   eyamlpub-secret
 {{- end -}}
 
+{{/*
+Return the appropriate apiVersion for podsecuritypolicy.
+*/}}
+{{- define "podsecuritypolicy.apiVersion" -}}
+{{- if semverCompare "<1.10-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "policy/v1beta1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Define puppetserver service Account name
+*/}}
+{{- define "puppetserver.puppetserver.serviceAccount.name" -}}
+{{ default "puppetserver" .Values.puppetserver.serviceAccount.accountName }}
+{{- end -}} 
+
+{{/*
+Define puppetdb service Account name
+*/}}
+{{- define "puppetserver.puppetdb.serviceAccount.name" -}}
+{{ default "puppetdb" .Values.puppetdb.serviceAccount.accountName }}
+{{- end -}}
+
+
 {{/* *************************************************************************************
 The following definitions were more complex and necessary during part of this development.
 Now they are essentially just stubs but left here in case they might be needed again soon.

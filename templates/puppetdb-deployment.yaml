@@ -22,7 +22,7 @@ spec:
     spec:
       hostname: puppetdb
       {{- if .Values.puppetdb.serviceAccount.enabled }}
-      serviceAccountName: {{ .Values.puppetdb.serviceAccount.accountName }}
+      serviceAccountName: {{ include "puppetserver.puppetdb.serviceAccount.name" . }}
       {{- end }}
       containers:
         {{- with .Values.puppetdb.extraContainers }}
@@ -80,7 +80,7 @@ spec:
             {{- toYaml .Values.puppetboard.resources | nindent 12 }}
           env:
             - name: PUPPETDB_HOST
-              value: "puppetdb"
+              value: "{{ .Values.singleCA.puppetdb.overrideHostname | default "puppetdb"  }}"
             - name: PUPPETDB_PORT
               value: "8081"
             - name: PUPPETDB_SSL_VERIFY
@@ -105,6 +105,48 @@ spec:
           volumeMounts:
             - name: puppetdb-storage
               mountPath: /opt/puppetlabs/server/data/puppetdb/certs
+        {{- end }}
+        {{- if .Values.singleCA.enabled }}
+        # singleCA crl script update Sidecar
+        - name: update-crl
+          image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
+          imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
+          resources:
+            {{- toYaml .Values.singleCA.resources | nindent 12 }}
+          env:
+          - name: SSL_PATH
+            value: /opt/puppetlabs/server/data/puppetdb/certs
+          {{- if .Values.singleCA.crl.credential }}
+          - name: CRL_CREDS_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.singleCA.crl.credential.existingSecret }}
+                key: username
+          - name: CRL_CREDS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.singleCA.crl.credential.existingSecret }}
+                key: password
+          {{- end }}
+          {{- range $key, $value := .Values.singleCA.extraEnv }}
+          - name: {{ $key }}
+            value: "{{ $value }}"
+          {{- end }}
+          command: ["sh", "-c", "/opt/puppetlabs/server/data/puppetdb/certs/crl_entrypoint.sh" ]
+          securityContext:
+            runAsUser: 999   # "puppet" UID
+            runAsGroup: 999 # "puppet" GID
+          volumeMounts:
+          - name: puppetdb-storage
+            mountPath: /opt/puppetlabs/server/data/puppetdb/certs
+          readinessProbe:
+            exec:
+              command: ["/bin/sh", "-ec", "test -f ~/.crl_cronjob.success"]
+            failureThreshold: 2
+            initialDelaySeconds: 5
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 5
         {{- end }}
       volumes:
         - name: puppetdb-storage

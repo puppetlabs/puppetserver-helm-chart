@@ -5,6 +5,14 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v6.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.0.0) (2022-06-01)
+
+- feat: Single CA support (https://puppet.com/docs/puppet/7/config_ssl_external_ca.html)
+- fix: define podsecuritypolicy.apiVersion
+- fix copy issue with eyaml keys when use `existingSecret`
+- fix puppetdb volume issue when use `customPersistentVolumeClaim`
+- refactoring serviceAccount name
+
 ## [v5.20.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v5.20.0) (2022-05-31)
 
 - Allow r10k cron jobs to be disabled

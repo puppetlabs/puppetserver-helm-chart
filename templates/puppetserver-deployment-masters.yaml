@@ -22,13 +22,14 @@ spec:
         {{- include "puppetserver.puppetserver.labels" . | nindent 8 }}
       annotations:
         checksum/hiera-configmap: {{ include (print $.Template.BasePath "/hiera-configmap.yaml") . | sha256sum }}
+        checksum/crl-config: {{ include (print $.Template.BasePath "/update-crl-configmap.yaml") . | sha256sum }}
         {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
     spec:
       hostname: {{ template "puppetserver.puppetserver-masters.serviceName" . }}
       {{- if .Values.puppetserver.serviceAccount.enabled }}
-      serviceAccountName: {{ .Values.puppetserver.serviceAccount.accountName }}
+      serviceAccountName: {{ include "puppetserver.puppetserver.serviceAccount.name" . }}
       {{- end }}
       initContainers:
         - name: perms-and-dirs
@@ -46,7 +47,7 @@ spec:
             - name: PUPPET_DATA_DIR
               value: "/etc/puppetlabs/code/environments"
             - name: PUPPET_SSL_CERT_PEM
-              value: "/etc/puppetlabs/puppet/ssl/certs/{{ template "puppetserver.puppetserver-masters.serviceName" . }}.pem"
+              value: "/etc/puppetlabs/puppet/ssl/certs/{{ (include "puppetserver.puppetserver-masters.serviceName" . ) }}.pem"
           {{- end }}
           command: [ "sh", "-c" ]
           args:
@@ -81,11 +82,18 @@ spec:
               {{- end }}
               cp /etc/puppetlabs/puppet/configmap/site.pp /etc/puppetlabs/puppet/manifests/site.pp;
               chown puppet:puppet /etc/puppetlabs/puppet/manifests/site.pp;
-              {{- if or (.Values.hiera.eyaml.public_key) (.Values.hiera.eyaml.private_key) (.Values.hiera.eyaml.existingMap) -}}
+              {{- if or (.Values.hiera.eyaml.public_key) (.Values.hiera.eyaml.private_key) (.Values.hiera.eyaml.existingMap) (.Values.hiera.eyaml.existingSecret) }}
               cp /etc/puppetlabs/puppet/configmap/eyaml/*private_key.pkcs7.pem /etc/puppetlabs/puppet/eyaml/keys/;
               chown puppet:puppet /etc/puppetlabs/puppet/eyaml/keys/*private_key.pkcs7.pem;
               cp /etc/puppetlabs/puppet/configmap/eyaml/*public_key.pkcs7.pem /etc/puppetlabs/puppet/eyaml/keys/;
               chown puppet:puppet /etc/puppetlabs/puppet/eyaml/keys/*public_key.pkcs7.pem;
+              {{- end }}
+              {{- if .Values.singleCA.enabled }}
+              cp /etc/puppetlabs/puppet/configmap/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh;
+              cp /etc/puppetlabs/puppet/configmap/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh;
+              cp /etc/puppetlabs/puppet/configmap/crl.sh /etc/puppetlabs/puppet/ssl/crl.sh;
+              chown puppet:puppet /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl.sh;
+              chmod +x /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl.sh;
               {{- end }}
           securityContext:
             runAsUser: 0
@@ -131,7 +139,7 @@ spec:
             - name: manifests-volume
               mountPath: /etc/puppetlabs/puppet/configmap/site.pp
               subPath: site.pp
-            {{- if and (.Values.hiera.eyaml.existingMap) (not .Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.private_key) (not .Values.hiera.eyaml.existingSecret) }}
+            {{- if and (or (.Values.hiera.eyaml.existingMap) (.Values.hiera.eyaml.existingSecret)) (not .Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.private_key)  }}
             - name: eyaml-volume
               mountPath: /etc/puppetlabs/puppet/configmap/eyaml
             {{- end }}
@@ -142,6 +150,17 @@ spec:
             - name: eyamlpriv-volume
               mountPath: /etc/puppetlabs/puppet/configmap/eyaml/private_key.pkcs7.pem
               subPath: private_key.pkcs7.pem
+            {{- end }}
+            {{- if .Values.singleCA.enabled }}
+            - name: crl-volume
+              mountPath: /etc/puppetlabs/puppet/configmap/crl_entrypoint.sh
+              subPath: crl_entrypoint.sh
+            - name: crl-volume
+              mountPath: /etc/puppetlabs/puppet/configmap/crl_cronjob.sh
+              subPath: crl_cronjob.sh
+            - name: crl-volume
+              mountPath: /etc/puppetlabs/puppet/configmap/crl.sh
+              subPath: crl.sh
             {{- end }}
       containers:
         - name: {{ template "puppetserver.fullname" . }}
@@ -156,14 +175,18 @@ spec:
             {{- end }}
             # necessary to set certname and server in puppet.conf, required by
             # puppetserver ca cli application
+            {{- if .Values.singleCA.enabled }}
+            - name: CA_ENABLED
+              value: "false"
+            {{- end }}
             - name: PUPPETSERVER_HOSTNAME
-              value: "{{ template "puppetserver.puppetserver-masters.serviceName" . }}"
+              value: {{ (include "puppetserver.puppetserver-masters.serviceName" . | quote ) }}
             - name: PUPPET_MASTERPORT
               value: "{{ template "puppetserver.puppetserver-masters.port" . }}"
             - name: DNS_ALT_NAMES
               value: "{{ if .Values.puppetserver.compilers.fqdns.alternateServerNames }}{{ template "puppetserver.compilers.hostnames" . }},{{ template "puppetserver.puppetserver-compilers.serviceName" . }},{{.Values.puppetserver.compilers.fqdns.alternateServerNames}},{{ end }}{{ template "puppetserver.puppetserver.agents-to-masters.serviceName" . }},{{.Values.puppetserver.masters.fqdns.alternateServerNames}}"
             - name: PUPPETDB_SERVER_URLS
-              value: "https://puppetdb:8081"
+              value: "https://{{ default "puppetdb" .Values.singleCA.puppetdb.overrideHostname }}:8081"
             - name: CA_ALLOW_SUBJECT_ALT_NAMES
               value: "true"
           readinessProbe:
@@ -281,6 +304,48 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
         {{- end }}
+        {{- if .Values.singleCA.enabled }}
+        # singleCA crl script update Sidecar
+        - name: update-crl
+          image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
+          imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
+          resources:
+            {{- toYaml .Values.singleCA.resources | nindent 12 }}
+          env:
+          - name: SSL_PATH
+            value: /etc/puppetlabs/puppet/ssl
+          {{- if .Values.singleCA.crl.credential }}
+          - name: CRL_CREDS_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.singleCA.crl.credential.existingSecret }}
+                key: username
+          - name: CRL_CREDS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.singleCA.crl.credential.existingSecret }}
+                key: password
+          {{- end }}
+          {{- range $key, $value := .Values.singleCA.extraEnv }}
+          - name: {{ $key }}
+            value: "{{ $value }}"
+          {{- end }}
+          command: ["sh", "-c", "/etc/puppetlabs/puppet/ssl/crl_entrypoint.sh" ]
+          securityContext:
+            runAsUser: 999   # "puppet" UID
+            runAsGroup: 999 # "puppet" GID
+          volumeMounts:
+          - name: puppet-puppet-storage
+            mountPath: /etc/puppetlabs/puppet/
+          readinessProbe:
+            exec:
+              command: ["/bin/sh", "-ec", "test -f ~/.crl_cronjob.success"]
+            failureThreshold: 2
+            initialDelaySeconds: 5
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 5
+        {{- end }}
       securityContext:
         fsGroup: 999   # "puppet" GID
       volumes:
@@ -304,6 +369,11 @@ spec:
         {{- else }}
           persistentVolumeClaim:
             claimName: puppet-puppet-claim
+        {{- end }}
+        {{- if .Values.singleCA.enabled }}
+        - name: crl-volume
+          configMap:
+            name: crl-config
         {{- end }}
         - name: puppet-serverdata-storage
         {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.serverdata.enable }}
