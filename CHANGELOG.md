@@ -5,6 +5,13 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v6.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.1.0) (2022-06-07)
+
+- fix: postgresql dependency. bump from `10.4.*` to `10.16.*` (https://github.com/bitnami/charts/issues/10539)
+- feat: drop Helm chart v2 support
+- feat: improve puppetserver (master & compiler) startup with `startupProbe`
+- feat: allow overriding harcoded variables
+
 ## [v6.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.0.0) (2022-06-01)
 
 - feat: Single CA support (https://puppet.com/docs/puppet/7/config_ssl_external_ca.html)

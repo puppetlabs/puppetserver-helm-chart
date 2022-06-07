@@ -169,10 +169,6 @@ spec:
           resources:
             {{- toYaml .Values.puppetserver.masters.resources | nindent 12 }}
           env:
-            {{- range $key, $value := .Values.puppetserver.masters.extraEnv }}
-            - name: {{ $key }}
-              value: "{{ $value }}"
-            {{- end }}
             # necessary to set certname and server in puppet.conf, required by
             # puppetserver ca cli application
             {{- if .Values.singleCA.enabled }}
@@ -189,12 +185,15 @@ spec:
               value: "https://{{ default "puppetdb" .Values.singleCA.puppetdb.overrideHostname }}:8081"
             - name: CA_ALLOW_SUBJECT_ALT_NAMES
               value: "true"
+            {{- range $key, $value := .Values.puppetserver.masters.extraEnv }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
           readinessProbe:
             httpGet:
               path: /status/v1/simple
               port: {{ template "puppetserver.puppetserver-masters.port" .}}
               scheme: HTTPS
-            initialDelaySeconds: {{ .Values.puppetserver.masters.readinessProbeInitialDelay }}
             periodSeconds: {{ .Values.puppetserver.masters.readinessProbePeriodSeconds }}
             timeoutSeconds: {{ .Values.puppetserver.masters.readinessProbeTimeout }}
             failureThreshold: {{ .Values.puppetserver.masters.readinessProbeFailureThreshold }}
@@ -202,11 +201,15 @@ spec:
           livenessProbe:
             tcpSocket:
               port: {{ template "puppetserver.puppetserver-masters.port" .}}
-            initialDelaySeconds: {{ .Values.puppetserver.masters.livenessProbeInitialDelay }}
             periodSeconds: {{ .Values.puppetserver.masters.livenessProbePeriodSeconds }}
             timeoutSeconds: {{ .Values.puppetserver.masters.livenessProbeTimeout }}
             failureThreshold: {{ .Values.puppetserver.masters.livenessProbeFailureThreshold }}
             successThreshold: {{ .Values.puppetserver.masters.livenessProbeSuccessThreshold }}
+          startupProbe:
+            tcpSocket:
+              port: {{ template "puppetserver.puppetserver-masters.port" .}}
+            periodSeconds: {{ .Values.puppetserver.masters.startupProbePeriodSeconds }}
+            failureThreshold: {{ .Values.puppetserver.masters.startupProbeFailureThreshold }}
           ports:
             - containerPort: {{ template "puppetserver.puppetserver-masters.port" .}}
           volumeMounts:
