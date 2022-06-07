@@ -36,16 +36,17 @@ puppetserver:
     ## Puppet Server Master readiness and liveness probe initial delays and timeouts
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
     ##
-    readinessProbeInitialDelay: 180
     readinessProbePeriodSeconds: 60
     readinessProbeTimeout: 20
     readinessProbeFailureThreshold: 3
     readinessProbeSuccessThreshold: 1
-    livenessProbeInitialDelay: 420
     livenessProbePeriodSeconds: 30
     livenessProbeTimeout: 10
     livenessProbeFailureThreshold: 3
     livenessProbeSuccessThreshold: 1
+    startupProbePeriodSeconds: 15
+    startupProbeFailureThreshold: 30
+
 
     ## Fully qualified domain names (FQDN's) to register
     ## the Puppet Server Masters to be internally reachable via DNS.
@@ -180,16 +181,16 @@ puppetserver:
     ## Puppet Server Compiler readiness and liveness probe initial delays and timeouts
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
     ##
-    readinessProbeInitialDelay: 180
     readinessProbePeriodSeconds: 60
     readinessProbeTimeout: 20
     readinessProbeFailureThreshold: 3
     readinessProbeSuccessThreshold: 1
-    livenessProbeInitialDelay: 420
     livenessProbePeriodSeconds: 30
     livenessProbeTimeout: 10
     livenessProbeFailureThreshold: 3
     livenessProbeSuccessThreshold: 1
+    startupProbePeriodSeconds: 15
+    startupProbeFailureThreshold: 30
 
     ## Horizontal Pod Manual Scaling for Puppet Server Compilers
     ## Set the desired number of Puppet Server Compilers

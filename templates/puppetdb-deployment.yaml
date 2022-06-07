@@ -34,10 +34,6 @@ spec:
           resources:
             {{- toYaml .Values.puppetdb.resources | nindent 12 }}
           env:
-            {{- range $key, $value := .Values.puppetdb.extraEnv }}
-            - name: {{ $key }}
-              value: "{{ $value }}"
-            {{- end }}
             - name: PUPPETSERVER_HOSTNAME
               value: "puppet"
             - name: PUPPETSERVER_PORT
@@ -56,6 +52,10 @@ spec:
                 secretKeyRef:
                   name: {{ template "puppetdb.secret" . }}
                   key: username
+            {{- range $key, $value := .Values.puppetdb.extraEnv }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
           ports:
             - name: pdb-http
               containerPort: 8080
