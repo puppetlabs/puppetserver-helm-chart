@@ -4,6 +4,9 @@ metadata:
   name: {{ template "puppetserver.name" . }}-puppetserver-master
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+    {{- with .Values.puppetserver.masters.extraLabels }}
+    {{ toYaml . | indent 6 }}
+    {{- end }}
 spec:
   {{- if .Values.puppetserver.masters.multiMasters.enabled }}
   {{- if not (.Values.puppetserver.masters.multiMasters.autoScaling.enabled) }}

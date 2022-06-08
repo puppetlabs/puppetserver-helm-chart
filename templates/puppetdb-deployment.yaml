@@ -4,6 +4,9 @@ metadata:
   name: {{ template "puppetserver.name" . }}-puppetdb
   labels:
     {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
+    {{- with .Values.puppetdb.extraLabels }}
+    {{ toYaml . | indent 6 }}
+    {{- end }}
 spec:
   selector:
     matchLabels:

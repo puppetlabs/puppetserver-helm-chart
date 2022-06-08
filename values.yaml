@@ -27,6 +27,11 @@ puppetserver:
     ##
     extraEnv: {}
 
+    ## Additional Masters' container labels
+    ##
+    extraLabels: {}
+
+
     updateStrategy:
       type: RollingUpdate
       rollingUpdate:
@@ -174,6 +179,11 @@ puppetserver:
     ## Additional Compilers' container environment variables
     ##
     extraEnv: {}
+
+    ## Additional Compilers' container labels
+    ##
+    extraLabels: {}
+
 
     updateStrategy:
       type: RollingUpdate
@@ -415,6 +425,10 @@ puppetdb:
   extraContainers: []
   ## Additional puppetdb container environment variables
   extraEnv: {}
+
+  ## Additional puppetdb container labels
+  ##
+  extraLabels: {}
 
   updateStrategy:
     type: Recreate
