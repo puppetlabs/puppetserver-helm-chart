@@ -293,6 +293,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `hiera.config`| hieradata yaml config |``|
 | `hiera.eyaml.private_key`| hiera eyaml private key |``|
 | `hiera.eyaml.public_key`| hiera eyaml public key |``|
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | [] |
 | `global.credentials.username`| puppetdb and postgresql username |`puppetdb`|
 | `global.credentials.password`| puppetdb and postgresql password |`unbreakablePassword`|
 | `global.credentials.existingSecret`| existing k8s secret that holds puppetdb and postgresql username and password |``|

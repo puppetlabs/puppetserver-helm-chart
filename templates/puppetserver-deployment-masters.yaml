@@ -352,6 +352,10 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
         {{- end }}
+      imagePullSecrets:
+      {{- with .Values.global.imagePullSecrets }}
+      {{ toYaml . }}
+      {{- end }}
       securityContext:
         fsGroup: 999   # "puppet" GID
       volumes:
