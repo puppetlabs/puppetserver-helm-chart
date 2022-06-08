@@ -48,7 +48,10 @@ kubectl create secret generic puppetdb-certificate --from-file=puppetdb.pem --fr
 ```
 finally set `.Values.singleCA.certificates.existingSecret.puppetserver` and `.Values.singleCA.certificates.existingSecret.puppetdb`.
 
-Additionnaly, if you use a public certificate authority, you can't use private SAN name, so you have to override puppetdb name with `.Values.singleCA.puppetdb.overrideHostname` (with the full name ie: puppetdb.my.domain) and it's a workaround for now but you have to update the DNS config, for CoreDNS add the following line in the configMap:
+Additionnaly, if you use a public certificate authority, you can't use private SAN name, so you have to override puppetdb name with `.Values.singleCA.puppetdb.overrideHostname` (with the full name ie: puppetdb.my.domain) 
+define a `ClusterIP` on `.Values.puppetdb.service.clusterIP` & `.values.singleCA.hostAliases` with the same IP
+
+and it's a workaround for now but you have to update the DNS config, for CoreDNS add the following line in the configMap:
 ```
 rewrite name puppetdb.my.domain puppetdb.<namespace>.svc.cluster.local
 ```
@@ -265,6 +268,12 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
+| `puppetdb.extraLabels` | puppetdb additional labels |``|
+| `puppetdb.service.type` | define `spec.type` for the puppetdb service |`ClusterIP`|
+| `puppetdb.service.annotations` | puppetdb service annotations |``|
+| `puppetdb.service.labels` | puppetdb service labels |``|
+| `puppetdb.service.loadBalancerIP` | define a fixed IP for the loadBalancerIP service |``|
+| `puppetdb.service.clusterIP` | define a fixed IP for the ClusterIP service |``|
 | `puppetdb.updateStrategy` | puppetdb update strategy |`Recreate`|
 | `puppetdb.metrics.enabled` | puppetdb metrics enable/disable flag |`false`|
 | `puppetdb.customPersistentVolumeClaim.storage.enable`| If true, use custom PVC for storage |``|
@@ -317,6 +326,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `singleCA.puppetdb.overrideHostname`| override the puppetdb hostname, needed when using CA where you can't add private SAN name |``|
 | `singleCA.certificates.existingSecret.puppetserver`| existing k8s secret that holds `ca.pem`, `puppet.pem` & `puppet.key` |``|
 | `singleCA.certificates.existingSecret.puppetdb`| existing k8s secret that holds `ca.pem`, `puppetdb.pem` & `puppetdb.key` |``|
+| `singleCA.hostAliases`| add additional entries with hostAliases (usefull with public CA where you can't add private SAN), see <https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/> |``|
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

@@ -340,6 +340,12 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
         {{- end }}
+      {{- if .Values.singleCA.puppetdb.overrideHostname }}
+      hostAliases:
+        - ip: {{ required "A valid .Values.puppetdb.service.clusterIP required!" .Values.puppetdb.service.clusterIP }}
+          hostnames:
+          - {{ .Values.singleCA.puppetdb.overrideHostname }}
+      {{- end }}
       imagePullSecrets:
       {{- with .Values.global.imagePullSecrets }}
       {{ toYaml . }}

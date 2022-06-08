@@ -446,6 +446,7 @@ puppetdb:
     #  service.kubernetes.io/ibm-load-balancer-cloud-provider-ip-type: "private"
     labels: {}
     loadBalancerIP: ""
+    clusterIP: ""
 
   ## puppetdb metrics enable/disable flag
   metrics:
@@ -723,4 +724,3 @@ singleCA:
     #   puppetdb:
   puppetdb:
     overrideHostname: ''
-

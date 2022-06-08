@@ -24,6 +24,9 @@ spec:
       port: {{ .Values.puppetboard.port }}
       targetPort: {{ .Values.puppetboard.service.targetPort }}
     {{- end }}
+  {{- if eq .Values.puppetdb.service.type "ClusterIP" }}
+  clusterIP: {{ .Values.puppetdb.service.clusterIP  }}
+  {{- end }}
   selector:
     {{- include "puppetserver.puppetdb.matchLabels" . | nindent 4 }}
   type: {{ .Values.puppetdb.service.type }}
