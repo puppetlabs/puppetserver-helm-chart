@@ -5,6 +5,15 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v6.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.2.0) (2022-06-08)
+
+- feat: update labels (match with Well-Known Labels) & add `extraLabels`
+- feat: move dependencies charts in `Charts.yaml`
+- feat: add `imagePullSecrets` param on all `Deployment`, `StatefulSet` and `Job`
+- feat: restart puppet master & compiler when r10k configs are updated
+- fix: DNS workaround with single CA mode & public CA
+- fix: update documentation for `puppetdb.service`
+
 ## [v6.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.1.0) (2022-06-07)
 
 - fix: postgresql dependency. bump from `10.4.*` to `10.16.*` (https://github.com/bitnami/charts/issues/10539)
