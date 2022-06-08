@@ -13,6 +13,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - feat: restart puppet master & compiler when r10k configs are updated
 - fix: DNS workaround with single CA mode & public CA
 - fix: update documentation for `puppetdb.service`
+- fix: puppetdb `update-crl` sidecar crash on some restart
 
 ## [v6.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.1.0) (2022-06-07)
 
