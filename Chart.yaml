@@ -19,6 +19,8 @@ maintainers:
     email: slconley@gmail.com
   - name: raphink
     email: raphael.pinson@camptocamp.com
+  - name: davidphay
+    email: david.phayanouvong@gmail.com
   - name: Pupperware Team
     email: pupperware@puppet.com
 engine: gotpl
