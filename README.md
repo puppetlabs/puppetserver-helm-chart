@@ -151,6 +151,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`|
 | `puppetserver.masters.resources` | puppetserver masters resource limits | ``|
 | `puppetserver.masters.extraEnv` | puppetserver masters additional container env vars |``|
+| `puppetserver.masters.extraLabels` | puppetserver masters additional labels |``|
 | `puppetserver.masters.updateStrategy` | puppetserver masters update strategy |`RollingUpdate`|
 | `puppetserver.masters.readinessProbeInitialDelay` | the initial delay for the puppetserver masters readiness probe | `180`|
 | `puppetserver.masters.readinessProbePeriodSeconds` | how often (in seconds) to perform the puppetserver masters readiness probe | `60`|
@@ -191,6 +192,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.compilers.podAntiAffinity` | puppetserver compilers pod affinity constraints |`false`|
 | `puppetserver.compilers.annotations`| puppetserver compilers statefulset annotations |``|
 | `puppetserver.compilers.extraEnv` | puppetserver compilers additional container env vars |``|
+| `puppetserver.compilers.extraLabels` | puppetserver compilers additional labels |``|
 | `puppetserver.compilers.updateStrategy` | puppetserver compilers update strategy |`RollingUpdate`|
 | `puppetserver.compilers.readinessProbeInitialDelay` | the initial delay for the puppetserver masters readiness probe | `180`|
 | `puppetserver.compilers.readinessProbePeriodSeconds` | how often (in seconds) to perform the puppetserver masters readiness probe | `60`|
