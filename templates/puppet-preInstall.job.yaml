@@ -83,6 +83,10 @@ spec:
             - name: crl-volume
               mountPath: /puppet-crl/puppetdb
             {{- end }}
+      imagePullSecrets:
+      {{- with .Values.global.imagePullSecrets }}
+      {{ toYaml . }}
+      {{- end }}
       volumes:
         - name: puppet-puppet-storage
         {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.puppet.enable }}

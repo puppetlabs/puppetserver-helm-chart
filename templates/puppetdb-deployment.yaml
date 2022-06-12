@@ -4,6 +4,9 @@ metadata:
   name: {{ template "puppetserver.name" . }}-puppetdb
   labels:
     {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
+    {{- with .Values.puppetdb.extraLabels }}
+    {{ toYaml . | indent 6 }}
+    {{- end }}
 spec:
   selector:
     matchLabels:
@@ -132,7 +135,10 @@ spec:
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
-          command: ["sh", "-c", "/opt/puppetlabs/server/data/puppetdb/certs/crl_entrypoint.sh" ]
+          command: ["sh", "-c"]
+          args:
+            - 'chmod +x /opt/puppetlabs/server/data/puppetdb/certs/crl_entrypoint.sh &&'
+            - '/opt/puppetlabs/server/data/puppetdb/certs/crl_entrypoint.sh'
           securityContext:
             runAsUser: 999   # "puppet" UID
             runAsGroup: 999 # "puppet" GID
@@ -148,6 +154,16 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
         {{- end }}
+      {{- if .Values.singleCA.puppetdb.overrideHostname }}
+      hostAliases:
+        - ip: {{ required "A valid .Values.puppetdb.service.clusterIP required!" .Values.puppetdb.service.clusterIP }}
+          hostnames:
+          - {{ .Values.singleCA.puppetdb.overrideHostname }}
+      {{- end }}
+      imagePullSecrets:
+      {{- with .Values.global.imagePullSecrets }}
+      {{ toYaml . }}
+      {{- end }}
       volumes:
         - name: puppetdb-storage
         {{- if .Values.puppetdb.customPersistentVolumeClaim.storage.enable }}
