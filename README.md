@@ -48,7 +48,10 @@ kubectl create secret generic puppetdb-certificate --from-file=puppetdb.pem --fr
 ```
 finally set `.Values.singleCA.certificates.existingSecret.puppetserver` and `.Values.singleCA.certificates.existingSecret.puppetdb`.
 
-Additionnaly, if you use a public certificate authority, you can't use private SAN name, so you have to override puppetdb name with `.Values.singleCA.puppetdb.overrideHostname` (with the full name ie: puppetdb.my.domain) and it's a workaround for now but you have to update the DNS config, for CoreDNS add the following line in the configMap:
+Additionnaly, if you use a public certificate authority, you can't use private SAN name, so you have to override puppetdb name with `.Values.singleCA.puppetdb.overrideHostname` (with the full name ie: puppetdb.my.domain) 
+define a `ClusterIP` on `.Values.puppetdb.service.clusterIP` & `.values.singleCA.hostAliases` with the same IP
+
+and it's a workaround for now but you have to update the DNS config, for CoreDNS add the following line in the configMap:
 ```
 rewrite name puppetdb.my.domain puppetdb.<namespace>.svc.cluster.local
 ```
@@ -148,6 +151,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`|
 | `puppetserver.masters.resources` | puppetserver masters resource limits | ``|
 | `puppetserver.masters.extraEnv` | puppetserver masters additional container env vars |``|
+| `puppetserver.masters.extraLabels` | puppetserver masters additional labels |``|
 | `puppetserver.masters.updateStrategy` | puppetserver masters update strategy |`RollingUpdate`|
 | `puppetserver.masters.readinessProbeInitialDelay` | the initial delay for the puppetserver masters readiness probe | `180`|
 | `puppetserver.masters.readinessProbePeriodSeconds` | how often (in seconds) to perform the puppetserver masters readiness probe | `60`|
@@ -188,6 +192,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.compilers.podAntiAffinity` | puppetserver compilers pod affinity constraints |`false`|
 | `puppetserver.compilers.annotations`| puppetserver compilers statefulset annotations |``|
 | `puppetserver.compilers.extraEnv` | puppetserver compilers additional container env vars |``|
+| `puppetserver.compilers.extraLabels` | puppetserver compilers additional labels |``|
 | `puppetserver.compilers.updateStrategy` | puppetserver compilers update strategy |`RollingUpdate`|
 | `puppetserver.compilers.readinessProbeInitialDelay` | the initial delay for the puppetserver masters readiness probe | `180`|
 | `puppetserver.compilers.readinessProbePeriodSeconds` | how often (in seconds) to perform the puppetserver masters readiness probe | `60`|
@@ -265,6 +270,12 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
+| `puppetdb.extraLabels` | puppetdb additional labels |``|
+| `puppetdb.service.type` | define `spec.type` for the puppetdb service |`ClusterIP`|
+| `puppetdb.service.annotations` | puppetdb service annotations |``|
+| `puppetdb.service.labels` | puppetdb service labels |``|
+| `puppetdb.service.loadBalancerIP` | define a fixed IP for the loadBalancerIP service |``|
+| `puppetdb.service.clusterIP` | define a fixed IP for the ClusterIP service |``|
 | `puppetdb.updateStrategy` | puppetdb update strategy |`Recreate`|
 | `puppetdb.metrics.enabled` | puppetdb metrics enable/disable flag |`false`|
 | `puppetdb.customPersistentVolumeClaim.storage.enable`| If true, use custom PVC for storage |``|
@@ -293,6 +304,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `hiera.config`| hieradata yaml config |``|
 | `hiera.eyaml.private_key`| hiera eyaml private key |``|
 | `hiera.eyaml.public_key`| hiera eyaml public key |``|
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | [] |
 | `global.credentials.username`| puppetdb and postgresql username |`puppetdb`|
 | `global.credentials.password`| puppetdb and postgresql password |`unbreakablePassword`|
 | `global.credentials.existingSecret`| existing k8s secret that holds puppetdb and postgresql username and password |``|
@@ -316,6 +328,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `singleCA.puppetdb.overrideHostname`| override the puppetdb hostname, needed when using CA where you can't add private SAN name |``|
 | `singleCA.certificates.existingSecret.puppetserver`| existing k8s secret that holds `ca.pem`, `puppet.pem` & `puppet.key` |``|
 | `singleCA.certificates.existingSecret.puppetdb`| existing k8s secret that holds `ca.pem`, `puppetdb.pem` & `puppetdb.key` |``|
+| `singleCA.hostAliases`| add additional entries with hostAliases (usefull with public CA where you can't add private SAN), see <https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/> |``|
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
