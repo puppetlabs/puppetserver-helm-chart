@@ -33,7 +33,7 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
       - name: Set the version
         run: |
-          echo "version=$(grep 'version:' Chart.yaml| awk '{print $2}')" >> $GITHUB_ENV
+          echo "version=$(grep '^version:' Chart.yaml| awk '{print $2}')" >> $GITHUB_ENV
       - name: Package the chart
         run: |
           helm package . --destination .release-packages --dependency-update
