@@ -337,6 +337,7 @@ r10k:
     cronJob:
       enabled: true
       schedule: "*/5 * * * *"
+      successFile: ~/.r10k_code_cronjob.success
     ## Additional r10k code container arguments
     extraArgs: []
     #   - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2
@@ -380,6 +381,7 @@ r10k:
     cronJob:
       enabled: true
       schedule: "*/4 * * * *"
+      successFile: ~/.r10k_hiera_cronjob.success
     ## Additional r10k hiera container environment variables
     extraArgs: []
     #   - --verbose=debug2   # error, warn, notice, info, debug, debug1, debug2

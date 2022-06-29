@@ -24,9 +24,9 @@ data:
     --puppetfile {{ template "r10k.code.args" . }} > ~/.r10k_code_cronjob.out 2>&1
     retVal=$?
     if [ "$retVal" -eq "0" ]; then
-      touch ~/.r10k_code_cronjob.success > /dev/null 2>&1
+      touch {{ .Values.r10k.code.cronJob.successFile }} > /dev/null 2>&1
     else
-      rm ~/.r10k_code_cronjob.success > /dev/null 2>&1
+      rm {{ .Values.r10k.code.cronJob.successFile }} > /dev/null 2>&1
     fi
     exit $retVal
 
@@ -39,7 +39,7 @@ data:
     EOF
     tail -Fq ~/.r10k_code_cronjob.out &
     {{- end }}
-    touch ~/.r10k_code_cronjob.success > /dev/null 2>&1
+    touch {{ .Values.r10k.code.cronJob.successFile }} > /dev/null 2>&1
     {{- if .Values.r10k.code.cronJob.enabled }}
     exec supercronic ~/.r10k_code_crontab
     {{- else}}

@@ -29,9 +29,9 @@ data:
     --puppetfile {{ template "r10k.hiera.args" . }} > ~/.r10k_hiera_cronjob.out 2>&1
     retVal=$?
     if [ "$retVal" -eq "0" ]; then
-      touch ~/.r10k_hiera_cronjob.success > /dev/null 2>&1
+      touch {{ .Values.r10k.hiera.cronJob.successFile }} > /dev/null 2>&1
     else
-      rm ~/.r10k_hiera_cronjob.success > /dev/null 2>&1
+      rm {{ .Values.r10k.hiera.cronJob.successFile }} > /dev/null 2>&1
     fi
     exit $retVal
 
@@ -44,7 +44,7 @@ data:
     EOF
     tail -Fq ~/.r10k_hiera_cronjob.out &
     {{- end }}
-    touch ~/.r10k_hiera_cronjob.success > /dev/null 2>&1
+    touch {{ .Values.r10k.hiera.cronJob.successFile }} > /dev/null 2>&1
     {{- if .Values.r10k.hiera.cronJob.enabled }}
     exec supercronic ~/.r10k_hiera_crontab
     {{- else}}

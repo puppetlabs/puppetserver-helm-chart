@@ -241,6 +241,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.code.resources` | r10k control repo resource limits |``|
 | `r10k.code.cronJob.enabled` | enable or disable r10k control repo cron job schedule policy | `true`|
 | `r10k.code.cronJob.schedule` | r10k control repo cron job schedule policy | `*/15 * * * *`|
+| `r10k.code.cronJob.successFile` | path to file reflecting success of r10k control repo cron job | `~/.r10k_code_cronjob.success`|
 | `r10k.code.extraArgs` | r10k control repo additional container env args |``|
 | `r10k.code.extraEnv` | r10k control repo additional container env vars |``|
 | `r10k.code.viaSsh.credentials.ssh.value`| r10k control repo ssh key file |``|
@@ -249,6 +250,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.hiera.resources` | r10k hiera data resource limits |``|
 | `r10k.hiera.cronJob.enabled` | enable or disable r10k hiera data cron job schedule policy | `true`|
 | `r10k.hiera.cronJob.schedule` | r10k hiera data cron job schedule policy | `*/2 * * * *`|
+| `r10k.hiera.cronJob.successFile` | path to file reflecting success of r10k hiera data cron job | `~/.r10k_hiera_cronjob.success`|
 | `r10k.hiera.extraArgs` | r10k hiera data additional container env args |``|
 | `r10k.hiera.extraEnv` | r10k hiera data additional container env vars |``|
 | `r10k.hiera.viaSsh.credentials.ssh.value`| r10k hiera data ssh key file |``|
