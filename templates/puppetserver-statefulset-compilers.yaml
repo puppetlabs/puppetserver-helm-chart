@@ -250,7 +250,7 @@ spec:
             mountPath: /etc/puppetlabs/puppet/
           readinessProbe:
             exec:
-              command: ["/bin/sh", "-ec", "test -f ~/.r10k_code_cronjob.success"]
+              command: ["/bin/sh", "-ec", "test -f {{ .Values.r10k.code.cronJob.successFile }}"]
             failureThreshold: 2
             initialDelaySeconds: 5
             periodSeconds: 20
@@ -293,7 +293,7 @@ spec:
             mountPath: /etc/puppetlabs/puppet/
           readinessProbe:
             exec:
-              command: ["/bin/sh", "-ec", "test -f ~/.r10k_hiera_cronjob.success"]
+              command: ["/bin/sh", "-ec", "test -f {{ .Values.r10k.hiera.cronJob.successFile }}"]
             failureThreshold: 2
             initialDelaySeconds: 5
             periodSeconds: 20
