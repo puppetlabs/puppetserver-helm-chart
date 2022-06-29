@@ -23,6 +23,9 @@ puppetserver:
     #    memory: 2048Mi
     #    cpu: 1500m
 
+    ## Extra containers to inject into the Masters pod
+    extraContainers: []
+
     ## Additional Masters' container environment variables
     ##
     extraEnv: {}
@@ -175,6 +178,9 @@ puppetserver:
     ## Puppetserver Compilers' StatefulSet annotations
     ##
     annotations: {}
+
+    ## Extra containers to inject into the Compiler pod
+    extraContainers: []
 
     ## Additional Compilers' container environment variables
     ##
