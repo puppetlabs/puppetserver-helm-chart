@@ -342,6 +342,9 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
         {{- end }}
+        {{- with .Values.puppetserver.compilers.extraContainers }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- if .Values.singleCA.puppetdb.overrideHostname }}
       hostAliases:
         - ip: {{ required "A valid .Values.puppetdb.service.clusterIP required!" .Values.puppetdb.service.clusterIP }}

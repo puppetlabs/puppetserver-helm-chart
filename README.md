@@ -150,6 +150,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.tag` | puppetserver img tag | `6.12.1`|
 | `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`|
 | `puppetserver.masters.resources` | puppetserver masters resource limits | ``|
+| `puppetserver.masters.extraContainers`| Extra containers to inject into the master pod |``|
 | `puppetserver.masters.extraEnv` | puppetserver masters additional container env vars |``|
 | `puppetserver.masters.extraLabels` | puppetserver masters additional labels |``|
 | `puppetserver.masters.updateStrategy` | puppetserver masters update strategy |`RollingUpdate`|
@@ -191,6 +192,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.compilers.resources` | puppetserver compilers resource limits |``|
 | `puppetserver.compilers.podAntiAffinity` | puppetserver compilers pod affinity constraints |`false`|
 | `puppetserver.compilers.annotations`| puppetserver compilers statefulset annotations |``|
+| `puppetserver.compilers.extraContainers`| Extra containers to inject into the compiler pod |``|
 | `puppetserver.compilers.extraEnv` | puppetserver compilers additional container env vars |``|
 | `puppetserver.compilers.extraLabels` | puppetserver compilers additional labels |``|
 | `puppetserver.compilers.updateStrategy` | puppetserver compilers update strategy |`RollingUpdate`|
