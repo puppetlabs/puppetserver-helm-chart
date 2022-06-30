@@ -1,6 +1,6 @@
 apiVersion: v2
 name: puppetserver
-version: 6.3.0
+version: 6.4.0
 appVersion: 7.4.2
 description: Puppet automates the delivery and operation of software.
 keywords: ["puppet", "puppetserver", "automation", "iac", "infrastructure", "cm", "ci", "cd"]
@@ -26,6 +26,8 @@ maintainers:
     email: raphael.pinson@camptocamp.com
   - name: davidphay
     email: david.phayanouvong@gmail.com
+  - name: skoef
+    email: reinier@skoef.nl
   - name: Pupperware Team
     email: pupperware@puppet.com
 engine: gotpl
