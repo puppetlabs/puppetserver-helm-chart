@@ -5,6 +5,10 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v6.4.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.4.0) (2022-06-30)
+
+- feat: add r10k cron job `splay`, `splayLimit` and `timeout` params
+
 ## [v6.3.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.3.0) (2022-06-29)
 
 - feat: add `extraContainers` to both masters and compilers

@@ -337,6 +337,9 @@ r10k:
     cronJob:
       enabled: true
       schedule: "*/5 * * * *"
+      splay: false
+      splayLimit: 60
+      # timeout: 60
       successFile: ~/.r10k_code_cronjob.success
     ## Additional r10k code container arguments
     extraArgs: []
@@ -381,6 +384,9 @@ r10k:
     cronJob:
       enabled: true
       schedule: "*/4 * * * *"
+      splay: false
+      splayLimit: 60
+      # timeout: 60
       successFile: ~/.r10k_hiera_cronjob.success
     ## Additional r10k hiera container environment variables
     extraArgs: []

@@ -241,6 +241,9 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.code.resources` | r10k control repo resource limits |``|
 | `r10k.code.cronJob.enabled` | enable or disable r10k control repo cron job schedule policy | `true`|
 | `r10k.code.cronJob.schedule` | r10k control repo cron job schedule policy | `*/15 * * * *`|
+| `r10k.code.cronJob.splay` | apply random sleep before running r10k control repo cron job | `true`|
+| `r10k.code.cronJob.splayLimit` | maximum splay in seconds applied before running r10k control repo cron job | `60`|
+| `r10k.code.cronJob.timeout` | timeout in seconds to apply when running r10k control repo cron job takes too long | ``|
 | `r10k.code.cronJob.successFile` | path to file reflecting success of r10k control repo cron job | `~/.r10k_code_cronjob.success`|
 | `r10k.code.extraArgs` | r10k control repo additional container env args |``|
 | `r10k.code.extraEnv` | r10k control repo additional container env vars |``|
@@ -250,6 +253,9 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.hiera.resources` | r10k hiera data resource limits |``|
 | `r10k.hiera.cronJob.enabled` | enable or disable r10k hiera data cron job schedule policy | `true`|
 | `r10k.hiera.cronJob.schedule` | r10k hiera data cron job schedule policy | `*/2 * * * *`|
+| `r10k.hiera.cronJob.splay` | apply random sleep before running r10k hiera data cron job | `true`|
+| `r10k.hiera.cronJob.splayLimit` | maximum splay in seconds applied before running r10k hiera data cron job | `60`|
+| `r10k.hiera.cronJob.timeout` | timeout in seconds to apply when running r10k hiera data cron job takes too long | ``|
 | `r10k.hiera.cronJob.successFile` | path to file reflecting success of r10k hiera data cron job | `~/.r10k_hiera_cronjob.success`|
 | `r10k.hiera.extraArgs` | r10k hiera data additional container env args |``|
 | `r10k.hiera.extraEnv` | r10k hiera data additional container env vars |``|
@@ -398,6 +404,7 @@ kill %[job_numbers_above]
 * [Sean Conley](https://www.linkedin.com/in/seanconley/), Maintainer
 * [Raphaël Pinson](https://github.com/raphink), Maintainer
 * [David Phayanouvong](https://github.com/davidphay), Maintainer
+* [Reinier Schoof](https://github.com/skoef), Maintainer
 * [Scott Cressi](https://www.linkedin.com/in/scottcressi/), Co-Author
 * [Kai Sisterhenn](https://www.sistason.de/), Contributor
 * [chwehrli](https://github.com/chwehrli), Contributor
@@ -405,7 +412,6 @@ kill %[job_numbers_above]
 * [Hryhorii Didenko](https://github.com/HryhoriiDidenko), Contributor
 * [John Stewart](https://github.com/jstewart612), Contributor
 * [Erlon Pinheiro](https://github.com/erlonpinheiro), Contributor
-* [Reinier Schoof](https://github.com/skoef), Contributor
 * [Manasseh MMadu](https://github.com/mensaah), Contributor
 * [Aidan](https://github.com/artificial-aidan), Contributor
 * [Aurélien Le Clainche](https://www.linkedin.com/in/aurelien-le-clainche/), Contributor
