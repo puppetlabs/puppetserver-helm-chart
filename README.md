@@ -234,6 +234,12 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.serviceAccount.create`| puppetserver additional masters svc labels |`false`|
 | `puppetserver.rbac.create`| Enable PodSecurityPolicy's RBAC rules |`false`|
 | `puppetserver.psp.create`| Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later |`false`|
+| `puppetserver.customconfigs.enabled`| puppetserver additional config map enabled |`false`|
+| `puppetserver.customconfigs.configmaps`| puppetserver additional config maps which will be mounted in /etc/puppetlab/puppetserver/conf.d/ |``|
+| `puppetserver.customentrypoints.enabled`| puppetserver additional entrypoint scripts. will be executed before puppetserver launch |`false`|
+| `puppetserver.customentrypoints.configmaps`| puppetserver additional configmaps |``|
+| `puppetserver.extraSecrets`| puppetserver additional secret which will be mounted in pod |``|
+| `puppetserver.extraInitArgs`| puppetserver additional initArgs |``|
 | `r10k.name` | r10k component label | `r10k`|
 | `r10k.image` | r10k img | `puppet/r10k`|
 | `r10k.tag` | r10k img tag | `3.5.1`|
@@ -274,6 +280,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `postgresql.persistence.annotations` | postgres persistence resource policy via annotations |`keep`|
 | `postgresql.replication.enabled` | postgres replication availability |`false`|
 | `postgresql.replication.slaveReplicas` | postgres replication slave replicas |`1`|
+| `puppetdb.enabled` | puppetdb component enabled |`true`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
 | `puppetdb.image` | puppetdb img | `puppet/puppetdb`|
 | `puppetdb.tag` | puppetdb img tag | `6.12.0`|
@@ -415,3 +422,4 @@ kill %[job_numbers_above]
 * [Manasseh MMadu](https://github.com/mensaah), Contributor
 * [Aidan](https://github.com/artificial-aidan), Contributor
 * [Aurélien Le Clainche](https://www.linkedin.com/in/aurelien-le-clainche/), Contributor
+* [Simon Fuhrer](https://github.com/simonfuhrer), Contributor

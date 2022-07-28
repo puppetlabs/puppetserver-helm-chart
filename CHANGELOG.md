@@ -5,6 +5,17 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v6.5.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.5.0) (2022-07-29)
+
+- feat: optional deployment of the puppetdb component (default true)
+- feat: remove privileged from securityContext (I do not understand why it was used/needed??)
+- feat: inject custom entrypoints which will be exuected during puppetserver startup
+- feat: inject custom configmaps to configure puppetserver itself (configmaps mounted in /etc/puppetlabs/puppetserver/conf.d)
+- feat: support extra r10k hiera & code repositories
+- fix: use r10k code & hiera extrasettings as map (global r10k configuration can be injected this way)
+- fix: puppet service configured as ClusterIP only.
+- fix: if compilers are deployed remove r10k container & code volumes from masters
+
 ## [v6.4.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.4.0) (2022-06-30)
 
 - feat: add r10k cron job `splay`, `splayLimit` and `timeout` params

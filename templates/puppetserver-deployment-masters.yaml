@@ -28,6 +28,12 @@ spec:
         checksum/r10k-code.configmap: {{ include (print $.Template.BasePath "/r10k-code.configmap.yaml") . | sha256sum }}
         checksum/r10k-hiera.configmap: {{ include (print $.Template.BasePath "/r10k-hiera.configmap.yaml") . | sha256sum }}
         checksum/crl-config: {{ include (print $.Template.BasePath "/update-crl-configmap.yaml") . | sha256sum }}
+        {{- if .Values.puppetserver.customconfigs.enabled }}
+        checksum/custom-configs.configmap: {{ include (print $.Template.BasePath "/puppetserver-customconfigs-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.puppetserver.customentrypoints.enabled }}
+        checksum/custom-entrypoints.configmap: {{ include (print $.Template.BasePath "/puppetserver-custom-entrypoints-configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
@@ -67,6 +73,7 @@ spec:
               mkdir -p /etc/puppetlabs/puppet/manifests;
               mkdir -p /etc/puppetlabs/code/r10k_cache;
               chown -R puppet:puppet /etc/puppetlabs;
+              {{- if (not .Values.puppetserver.compilers.enabled) }}
               {{- if .Values.puppetserver.puppeturl }}
               cp /etc/puppetlabs/puppet/configmap/r10k_code_entrypoint.sh /etc/puppetlabs/puppet/r10k_code_entrypoint.sh;
               cp /etc/puppetlabs/puppet/configmap/r10k_code_cronjob.sh /etc/puppetlabs/puppet/r10k_code_cronjob.sh;
@@ -93,6 +100,7 @@ spec:
               cp /etc/puppetlabs/puppet/configmap/eyaml/*public_key.pkcs7.pem /etc/puppetlabs/puppet/eyaml/keys/;
               chown puppet:puppet /etc/puppetlabs/puppet/eyaml/keys/*public_key.pkcs7.pem;
               {{- end }}
+              {{- end }}
               {{- if .Values.singleCA.enabled }}
               cp /etc/puppetlabs/puppet/configmap/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh;
               cp /etc/puppetlabs/puppet/configmap/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh;
@@ -100,16 +108,18 @@ spec:
               chown puppet:puppet /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl.sh;
               chmod +x /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl.sh;
               {{- end }}
+              {{- if .Values.puppetserver.extraInitArgs }}
+              {{- .Values.puppetserver.extraInitArgs | nindent 14 }}
+              {{- end }}
           securityContext:
             runAsUser: 0
             runAsNonRoot: false
-            privileged: true
           volumeMounts:
-            - name: puppet-code-storage
-              mountPath: /etc/puppetlabs/code/
             - name: puppet-puppet-storage
               mountPath: /etc/puppetlabs/puppet/
-            {{- if .Values.puppetserver.puppeturl }}
+            {{- if and .Values.puppetserver.puppeturl (not .Values.puppetserver.compilers.enabled) }}
+            - name: puppet-code-storage
+              mountPath: /etc/puppetlabs/code/
             - name: r10k-code-volume
               mountPath: /etc/puppetlabs/puppet/configmap/r10k_code_entrypoint.sh
               subPath: r10k_code_entrypoint.sh
@@ -119,7 +129,6 @@ spec:
             - name: r10k-code-volume
               mountPath: /etc/puppetlabs/puppet/configmap/r10k_code.yaml
               subPath: r10k_code.yaml
-            {{- end }}
             {{- if (include "hiera.enable" .) }}
             - name: r10k-hiera-volume
               mountPath: /etc/puppetlabs/puppet/configmap/r10k_hiera_entrypoint.sh
@@ -131,19 +140,11 @@ spec:
               mountPath: /etc/puppetlabs/puppet/configmap/r10k_hiera.yaml
               subPath: r10k_hiera.yaml
             {{- end }}
-            {{- if .Values.puppetserver.masters.multiMasters.enabled }}
-            - name: init-masters-volume
-              mountPath: /etc/puppetlabs/puppet/configmap/check_for_masters.sh
-              subPath: check_for_masters.sh
-            {{- end }}
             {{- if .Values.hiera.config }}
             - name: hiera-volume
               mountPath: /etc/puppetlabs/puppet/configmap/hiera.yaml
               subPath: hiera.yaml
             {{- end }}
-            - name: manifests-volume
-              mountPath: /etc/puppetlabs/puppet/configmap/site.pp
-              subPath: site.pp
             {{- if and (or (.Values.hiera.eyaml.existingMap) (.Values.hiera.eyaml.existingSecret)) (not .Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.private_key)  }}
             - name: eyaml-volume
               mountPath: /etc/puppetlabs/puppet/configmap/eyaml
@@ -156,6 +157,15 @@ spec:
               mountPath: /etc/puppetlabs/puppet/configmap/eyaml/private_key.pkcs7.pem
               subPath: private_key.pkcs7.pem
             {{- end }}
+            {{- end }}
+            {{- if .Values.puppetserver.masters.multiMasters.enabled }}
+            - name: init-masters-volume
+              mountPath: /etc/puppetlabs/puppet/configmap/check_for_masters.sh
+              subPath: check_for_masters.sh
+            {{- end }}
+            - name: manifests-volume
+              mountPath: /etc/puppetlabs/puppet/configmap/site.pp
+              subPath: site.pp
             {{- if .Values.singleCA.enabled }}
             - name: crl-volume
               mountPath: /etc/puppetlabs/puppet/configmap/crl_entrypoint.sh
@@ -218,15 +228,27 @@ spec:
           ports:
             - containerPort: {{ template "puppetserver.puppetserver-masters.port" .}}
           volumeMounts:
+            {{- if (not .Values.puppetserver.compilers.enabled) }}
             - name: puppet-code-storage
               mountPath: /etc/puppetlabs/code/
+            {{- end }}
             - name: puppet-puppet-storage
               mountPath: /etc/puppetlabs/puppet/
             - name: puppet-serverdata-storage
               mountPath: /opt/puppetlabs/server/data/puppetserver/
             - name: puppet-ca-storage
               mountPath: /etc/puppetlabs/puppetserver/ca/
-        {{- if .Values.puppetserver.puppeturl }}
+            {{- range $key, $value := .Values.puppetserver.customconfigs.configmaps }}
+            - name: puppetserver-custom-configs
+              mountPath: /etc/puppetlabs/puppetserver/conf.d/{{ $key }}
+              subPath: {{ $key }}
+            {{- end }}
+            {{- range $key, $value := .Values.puppetserver.customentrypoints.configmaps }}
+            - name: puppetserver-customentrypoints
+              mountPath: /docker-custom-entrypoint.d/{{ $key }}
+              subPath: {{ $key }}
+            {{- end }}
+        {{- if and .Values.puppetserver.puppeturl (not .Values.puppetserver.compilers.enabled) }}
         # r10k Code Sidecar
         - name: r10k-code
           image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
@@ -269,7 +291,7 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
         {{- end }}
-        {{- if (include "hiera.enable" .) }}
+        {{- if and (include "hiera.enable" .) (not .Values.puppetserver.compilers.enabled) }}
         # r10k Hiera Sidecar
         - name: r10k-hiera
           image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
@@ -370,12 +392,14 @@ spec:
       securityContext:
         fsGroup: 999   # "puppet" GID
       volumes:
+        {{- if (not .Values.puppetserver.compilers.enabled) }}
         - name: puppet-code-storage
         {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.code.enable }}
           {{- toYaml .Values.puppetserver.masters.customPersistentVolumeClaim.code.config | nindent 10 }}
         {{- else }}
           persistentVolumeClaim:
             claimName: puppet-code-claim
+        {{- end }}
         {{- end }}
         - name: puppet-ca-storage
         {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.ca.enable }}
@@ -408,14 +432,26 @@ spec:
           configMap:
             name: init-masters-config
         {{- end }}
+        {{- if .Values.puppetserver.customconfigs.enabled }}
+        - name: puppetserver-custom-configs
+          configMap:
+            name: puppetserver-custom-configs
+        {{- end }}
+        {{- if .Values.puppetserver.customentrypoints.enabled }}
+        - name: puppetserver-customentrypoints
+          configMap:
+            name: puppetserver-customentrypoints
+            defaultMode: 0777
+        {{- end }}
+        - name: manifests-volume
+          configMap:
+            name: manifests-config
+        {{- if (not .Values.puppetserver.compilers.enabled) }}
         {{- if .Values.hiera.config }}
         - name: hiera-volume
           configMap:
             name: hiera-config
         {{- end }}
-        - name: manifests-volume
-          configMap:
-            name: manifests-config
         {{- if .Values.hiera.eyaml.existingSecret }}
         - name: eyaml-volume
           secret:
@@ -481,6 +517,12 @@ spec:
             items:
               - key: netrc
                 path: .netrc
+        {{- end }}
+        {{- end }}
+        {{- range $extraSecret := .Values.puppetserver.extraSecrets }}
+        - name: {{ $extraSecret.name }}
+          secret:
+            secretName: {{ $extraSecret.name }}
         {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector:

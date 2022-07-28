@@ -1,3 +1,4 @@
+{{- if (not .Values.puppetserver.compilers.enabled) }}
 {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.code.enable }}
 {{- else }}
 apiVersion: v1
@@ -23,4 +24,5 @@ spec:
   storageClassName: "{{ .Values.storage.storageClass }}"
   {{- end }}
   {{- end }}
+{{- end }}
 {{- end }}

@@ -1,3 +1,4 @@
+{{- if .Values.puppetdb.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -33,3 +34,4 @@ spec:
   {{- if (and (eq .Values.puppetdb.service.type "LoadBalancer") (not (empty .Values.puppetdb.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.puppetdb.service.loadBalancerIP }}
   {{- end }}
+{{- end }}

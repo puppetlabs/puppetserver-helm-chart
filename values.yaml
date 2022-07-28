@@ -37,9 +37,9 @@ puppetserver:
 
     updateStrategy:
       type: RollingUpdate
-      rollingUpdate:
-        maxSurge: 20%
-        maxUnavailable: 0%
+    # rollingUpdate:
+    #   maxSurge: 20%
+    #   maxUnavailable: 0%
 
     ## Puppet Server Master readiness and liveness probe initial delays and timeouts
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
@@ -300,6 +300,31 @@ puppetserver:
     enabled: false
     jobDeadline: 300
 
+  ## Custom puppetserver conf.d configs
+  ##
+  customconfigs:
+    enabled: false
+    configmaps: {}
+    #  auth.conf: |-
+    #    {}
+
+  ## Custom puppetserver entrypoints
+  ##
+  customentrypoints:
+    enabled: false
+    configmaps: {}
+    #  entry1.sh: |-
+    #    #!/bin/sh
+    #    echo hi
+
+  ## Optional Secrets to mount in puppetserver container
+  ##
+  extraSecrets: []
+
+  ## Optional init arguments
+  extraInitArgs: |-
+    ""
+
   ## Optional configure serviceAccount & rbac
   serviceAccount:
     enabled: false
@@ -318,6 +343,7 @@ puppetserver:
   ## A separate Hieradata Repo can be included in the "hiera" section in this file.
   ##
   puppeturl: ""   #  git@github.com:$SOMEUSER/puppet.git
+  puppetbasedir: /etc/puppetlabs/code/environments
 
 ## r10k Repo Configuration
 ##
@@ -348,7 +374,9 @@ r10k:
     #   - --color
     ## Additional r10k code container environment variables
     extraEnv: {}
-    extraSettings: ""
+    extraSettings: {}
+    extraRepos: {}
+
     viaHttps:
       credentials:
         netrc:
@@ -395,7 +423,8 @@ r10k:
     #   - --color
     ## Additional puppetserver hiera container environment variables
     extraEnv: {}
-    extraSettings: ""
+    extraSettings: {}
+    extraRepos: {}
     viaHttps:
       credentials:
         netrc:
@@ -424,6 +453,7 @@ r10k:
 ## PuppetDB Configuration
 ##
 puppetdb:
+  enabled: true
   name: puppetdb
   image: puppet/puppetdb
   tag: 7.7.1

@@ -10,13 +10,14 @@ data:
     # The location to use for storing cached Git repos
     :cachedir: '/etc/puppetlabs/code/r10k_cache'
     # A list of git repositories to create
+    {{- toYaml .Values.r10k.code.extraSettings | nindent 4 }}
     :sources:
       # This will clone the git repository and instantiate an environment per
       # branch in '/etc/puppetlabs/code/environments'
       :puppet_repo:
         remote: '{{.Values.puppetserver.puppeturl}}'
-        basedir: '/etc/puppetlabs/code/environments'
-    {{ .Values.r10k.code.extraSettings | nindent 4 }}
+        basedir: '{{.Values.puppetserver.puppetbasedir}}'
+    {{- toYaml .Values.r10k.code.extraRepos | nindent 6 }}
 
   r10k_code_cronjob.sh: |
     #!/usr/bin/env sh
