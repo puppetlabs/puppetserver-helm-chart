@@ -155,6 +155,33 @@ puppetserver:
         enable: false
         config: {}
 
+    ## enable if a kubernetes CronJob should be backup the puppetserver master pv's
+    #
+    backup:
+      enabled: false
+      resources: {}
+      #  requests:
+      #    memory: 256Mi
+      #    cpu: 750m
+      #  limits:
+      #    memory: 512Mi
+      #    cpu: 1000m
+
+      failedJobsHistoryLimit: 5
+      successfulJobsHistoryLimit: 2
+
+      schedule: "@every 12h"
+      image: restic/restic
+      tag: 0.13.1
+      pullPolicy: IfNotPresent
+
+      restic:
+        keep_last: 90 # days
+        repository: "" # "s3:https://s3.minio.xx/backups/"
+        access_key_id: "" # s3 access key
+        secret_access_key: "" # s3 secret access key
+        password: "" # restic encryption password
+
   ## Optional StatefulSet of Puppet Server Compiler/s
   ##
   compilers:

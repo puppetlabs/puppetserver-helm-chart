@@ -188,6 +188,19 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.masters.customPersistentVolumeClaim.code.config`| Configuration for custom PVC for code |``|
 | `puppetserver.masters.customPersistentVolumeClaim.serverdata.enable`| If true, use custom PVC for serverdata  |``|
 | `puppetserver.masters.customPersistentVolumeClaim.serverdata.config`| Configuration for custom PVC for serverdata |``|
+| `puppetserver.masters.backup.enabled` | If true, enable master backup with a kubernetes CronJob and restic | `false`|
+| `puppetserver.masters.backup.resources` | puppetserver restic backup CronJob resource limits | ``|
+| `puppetserver.masters.backup.failedJobsHistoryLimit` | puppetserver restic backup CronJob failedJobsHistoryLimit | `5`|
+| `puppetserver.masters.backup.successfulJobsHistoryLimit` | puppetserver restic backup CronJob successfulJobsHistoryLimit | `2`|
+| `puppetserver.masters.backup.schedule` | puppetserver restic backup CronJob schedule | `@every 12h`|
+| `puppetserver.masters.backup.image` | puppetserver restic backup CronJob image | `restic/restic`|
+| `puppetserver.masters.backup.tag` | puppetserver restic backup CronJob image tag | `0.13.1`|
+| `puppetserver.masters.backup.pullPolicy` | puppetserver restic backup CronJob image pullPolicy | `IfNotPresent`|
+| `puppetserver.masters.backup.restic.keep_last` | puppetserver restic backup CronJob keep last n days | `90`|
+| `puppetserver.masters.backup.restic.repository` | puppetserver restic backup CronJob s3 compatible repository | ``|
+| `puppetserver.masters.backup.restic.access_key_id` | puppetserver restic backup CronJob s3 access_key_id | ``|
+| `puppetserver.masters.backup.restic.secret_access_key` | puppetserver restic backup CronJob s3 secret_access_key | ``|
+| `puppetserver.masters.backup.restic.password` | puppetserver restic backup CronJob encryption password  | ``|
 | `puppetserver.compilers.enabled` | If true, creates Puppetserver compilers | `false`|
 | `puppetserver.compilers.resources` | puppetserver compilers resource limits |``|
 | `puppetserver.compilers.podAntiAffinity` | puppetserver compilers pod affinity constraints |`false`|

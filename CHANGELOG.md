@@ -12,6 +12,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - feat: inject custom entrypoints which will be exuected during puppetserver startup
 - feat: inject custom configmaps to configure puppetserver itself (configmaps mounted in /etc/puppetlabs/puppetserver/conf.d)
 - feat: support extra r10k hiera & code repositories
+- feat: add a restic backup Cronjob to backup our puppetserver master pv's
 - fix: use r10k code & hiera extrasettings as map (global r10k configuration can be injected this way)
 - fix: puppet service configured as ClusterIP only.
 - fix: if compilers are deployed remove r10k container & code volumes from masters
