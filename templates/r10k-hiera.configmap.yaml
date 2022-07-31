@@ -9,6 +9,7 @@ data:
   r10k_hiera.yaml: |
     # The location to use for storing cached Git repos
     :cachedir: '/etc/puppetlabs/code/r10k_cache'
+    {{- toYaml .Values.r10k.hiera.extraSettings | nindent 4 }}
     # A list of git repositories to create
     :sources:
       {{- if .Values.hiera.hieradataurl }}
@@ -17,11 +18,8 @@ data:
       :hiera_repo:
         remote: '{{.Values.hiera.hieradataurl}}'
         basedir: '/etc/puppetlabs/code/hiera-data'
+    {{- toYaml .Values.r10k.hiera.extraRepos | nindent 6 }}
       {{- end }}
-      {{- with .Values.r10k.hiera.extraRepository }}
-      {{- toYaml . | nindent 6 }}
-      {{- end }}
-    {{ .Values.r10k.hiera.extraSettings | indent 4 }}
 
   r10k_hiera_cronjob.sh: |
     #!/usr/bin/env sh

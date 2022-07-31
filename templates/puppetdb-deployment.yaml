@@ -1,3 +1,4 @@
+{{- if and .Values.puppetdb.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -104,7 +105,6 @@ spec:
           securityContext:
             runAsUser: 0
             runAsNonRoot: false
-            privileged: true
           volumeMounts:
             - name: puppetdb-storage
               mountPath: /opt/puppetlabs/server/data/puppetdb/certs
@@ -192,3 +192,4 @@ spec:
       {{- if and (.Capabilities.APIVersions.Has "scheduling.k8s.io/v1beta1") (.Values.priorityClassName) }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
+{{- end }}

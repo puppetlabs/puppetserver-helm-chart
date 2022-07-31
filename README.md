@@ -188,6 +188,19 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.masters.customPersistentVolumeClaim.code.config`| Configuration for custom PVC for code |``|
 | `puppetserver.masters.customPersistentVolumeClaim.serverdata.enable`| If true, use custom PVC for serverdata  |``|
 | `puppetserver.masters.customPersistentVolumeClaim.serverdata.config`| Configuration for custom PVC for serverdata |``|
+| `puppetserver.masters.backup.enabled` | If true, enable master backup with a kubernetes CronJob and restic | `false`|
+| `puppetserver.masters.backup.resources` | puppetserver restic backup CronJob resource limits | ``|
+| `puppetserver.masters.backup.failedJobsHistoryLimit` | puppetserver restic backup CronJob failedJobsHistoryLimit | `5`|
+| `puppetserver.masters.backup.successfulJobsHistoryLimit` | puppetserver restic backup CronJob successfulJobsHistoryLimit | `2`|
+| `puppetserver.masters.backup.schedule` | puppetserver restic backup CronJob schedule | `@every 12h`|
+| `puppetserver.masters.backup.image` | puppetserver restic backup CronJob image | `restic/restic`|
+| `puppetserver.masters.backup.tag` | puppetserver restic backup CronJob image tag | `0.13.1`|
+| `puppetserver.masters.backup.pullPolicy` | puppetserver restic backup CronJob image pullPolicy | `IfNotPresent`|
+| `puppetserver.masters.backup.restic.keep_last` | puppetserver restic backup CronJob keep last n days | `90`|
+| `puppetserver.masters.backup.restic.repository` | puppetserver restic backup CronJob s3 compatible repository | ``|
+| `puppetserver.masters.backup.restic.access_key_id` | puppetserver restic backup CronJob s3 access_key_id | ``|
+| `puppetserver.masters.backup.restic.secret_access_key` | puppetserver restic backup CronJob s3 secret_access_key | ``|
+| `puppetserver.masters.backup.restic.password` | puppetserver restic backup CronJob encryption password  | ``|
 | `puppetserver.compilers.enabled` | If true, creates Puppetserver compilers | `false`|
 | `puppetserver.compilers.resources` | puppetserver compilers resource limits |``|
 | `puppetserver.compilers.podAntiAffinity` | puppetserver compilers pod affinity constraints |`false`|
@@ -234,6 +247,12 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.serviceAccount.create`| puppetserver additional masters svc labels |`false`|
 | `puppetserver.rbac.create`| Enable PodSecurityPolicy's RBAC rules |`false`|
 | `puppetserver.psp.create`| Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later |`false`|
+| `puppetserver.customconfigs.enabled`| puppetserver additional config map enabled |`false`|
+| `puppetserver.customconfigs.configmaps`| puppetserver additional config maps which will be mounted in /etc/puppetlab/puppetserver/conf.d/ |``|
+| `puppetserver.customentrypoints.enabled`| puppetserver additional entrypoint scripts. will be executed before puppetserver launch |`false`|
+| `puppetserver.customentrypoints.configmaps`| puppetserver additional configmaps |``|
+| `puppetserver.extraSecrets`| puppetserver additional secret which will be mounted in pod |``|
+| `puppetserver.extraInitArgs`| puppetserver additional initArgs |``|
 | `r10k.name` | r10k component label | `r10k`|
 | `r10k.image` | r10k img | `puppet/r10k`|
 | `r10k.tag` | r10k img tag | `3.5.1`|
@@ -274,6 +293,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `postgresql.persistence.annotations` | postgres persistence resource policy via annotations |`keep`|
 | `postgresql.replication.enabled` | postgres replication availability |`false`|
 | `postgresql.replication.slaveReplicas` | postgres replication slave replicas |`1`|
+| `puppetdb.enabled` | puppetdb component enabled |`true`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
 | `puppetdb.image` | puppetdb img | `puppet/puppetdb`|
 | `puppetdb.tag` | puppetdb img tag | `6.12.0`|
@@ -415,3 +435,4 @@ kill %[job_numbers_above]
 * [Manasseh MMadu](https://github.com/mensaah), Contributor
 * [Aidan](https://github.com/artificial-aidan), Contributor
 * [Aurélien Le Clainche](https://www.linkedin.com/in/aurelien-le-clainche/), Contributor
+* [Simon Fuhrer](https://github.com/simonfuhrer), Contributor

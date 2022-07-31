@@ -1,4 +1,4 @@
-{{- if .Values.puppetdb.psp.create }}
+{{- if and (.Values.puppetdb.enabled) (.Values.puppetdb.psp.create) }}
 apiVersion: {{ include "podsecuritypolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
