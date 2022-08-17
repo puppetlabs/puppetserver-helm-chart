@@ -5,6 +5,10 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v6.5.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.5.1) (2022-08-17)
+
+- fix: added -t flag to timeout for r10k:3.14.0 and below
+
 ## [v6.5.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.5.0) (2022-07-29)
 
 - feat: optional deployment of the puppetdb component (default true)
