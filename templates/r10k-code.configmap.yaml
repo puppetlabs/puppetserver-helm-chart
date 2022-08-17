@@ -24,7 +24,7 @@ data:
     {{- if .Values.r10k.code.cronJob.splay }}
     sleep $(( RANDOM % {{ int .Values.r10k.code.cronJob.splayLimit }} ))
     {{- end }}
-    {{ with .Values.r10k.code.cronJob.timeout }}timeout -s 9 {{ int . }} {{ end }}/docker-entrypoint.sh deploy environment --config /etc/puppetlabs/puppet/r10k_code.yaml \
+    {{ with .Values.r10k.code.cronJob.timeout }}timeout -s 9 -t {{ int . }} {{ end }}/docker-entrypoint.sh deploy environment --config /etc/puppetlabs/puppet/r10k_code.yaml \
     --puppetfile {{ template "r10k.code.args" . }} > ~/.r10k_code_cronjob.out 2>&1
     retVal=$?
     if [ "$retVal" -eq "0" ]; then
