@@ -349,8 +349,7 @@ puppetserver:
   extraSecrets: []
 
   ## Optional init arguments
-  extraInitArgs: |-
-    ""
+  extraInitArgs: ""
 
   ## Optional configure serviceAccount & rbac
   serviceAccount:
