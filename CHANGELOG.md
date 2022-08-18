@@ -5,6 +5,10 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v6.5.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.5.2) (2022-08-18)
+
+- fix: Prevent errors when not specifying r10k.code.extraSettings or r10k.code.extraRepos
+
 ## [v6.5.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.5.2) (2022-08-18)
 
 - fix: Prevent errors when not specifying extraInitArgs
