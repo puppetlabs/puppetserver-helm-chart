@@ -437,3 +437,4 @@ kill %[job_numbers_above]
 * [Aurélien Le Clainche](https://www.linkedin.com/in/aurelien-le-clainche/), Contributor
 * [Simon Fuhrer](https://github.com/simonfuhrer), Contributor
 * [Kevin Harrington](https://github.com/ke5C2Fin), Contributor
+* [Grégoire Menuel](https://github.com/gmenuel), Contributor
