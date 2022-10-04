@@ -19,4 +19,11 @@ spec:
     {{- end }}
   selector:
     {{- include "puppetserver.puppetserver.matchLabels" . | nindent 4 }}
+{{- if .Values.puppetserver.compilers.enabled }}
   type: ClusterIP
+{{- else }}
+  type: {{ .Values.puppetserver.masters.service.type }}
+  {{- if (and (eq .Values.puppetserver.masters.service.type "LoadBalancer") (not (empty .Values.puppetserver.masters.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.puppetserver.masters.service.loadBalancerIP }}
+  {{- end }}
+{{- end }}

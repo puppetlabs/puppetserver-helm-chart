@@ -5,7 +5,11 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v6.5.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.5.2) (2022-08-18)
+## [v6.6.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.6.0) (2022-10-04)
+
+- feat: Allow to change load balancer type for puppet master if compilers are not used
+
+## [v6.5.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.5.3) (2022-08-19)
 
 - fix: Prevent errors when not specifying r10k.code.extraSettings or r10k.code.extraRepos
 
