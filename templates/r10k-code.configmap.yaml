@@ -17,8 +17,11 @@ data:
       # This will clone the git repository and instantiate an environment per
       # branch in '/etc/puppetlabs/code/environments'
       :puppet_repo:
-        remote: '{{.Values.puppetserver.puppeturl}}'
-        basedir: '{{.Values.puppetserver.puppetbasedir}}'
+        remote: '{{ .Values.puppetserver.puppeturl }}'
+        basedir: '{{ .Values.puppetserver.puppetbasedir }}'
+        {{- if .Values.r10k.defaultRepoExtraConf }}
+        {{- toYaml .Values.r10k.defaultRepoExtraConf | nindent 8 }}
+        {{- end }}
     {{- if .Values.r10k.code.extraRepos }}
     {{- toYaml .Values.r10k.code.extraRepos | nindent 6 }}
     {{- end }}

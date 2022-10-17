@@ -5,6 +5,11 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v6.7.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.7.0) (2022-10-17)
+
+- fix: have r10k-hiera extraSettings and extraRepos act like r10k-code and not print empty {} in r10k_hiera.yaml
+- feat: add .Values.r10k.defaultRepoExtraConf to pass in yaml config for r10k-code and r10k-hiera config
+
 ## [v6.6.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.6.0) (2022-10-04)
 
 - feat: Allow to change load balancer type for puppet master if compilers are not used
