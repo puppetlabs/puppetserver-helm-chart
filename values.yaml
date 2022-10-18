@@ -378,7 +378,6 @@ r10k:
   image: puppet/r10k
   tag: 3.13.0
   pullPolicy: IfNotPresent
-  defaultRepoExtraConf: {}
   code:
     resources: {}
     #  requests:
@@ -403,7 +402,7 @@ r10k:
     extraEnv: {}
     extraSettings: {}
     extraRepos: {}
-
+    defaultRepoExtraConf: {}
     viaHttps:
       credentials:
         netrc:
@@ -452,6 +451,7 @@ r10k:
     extraEnv: {}
     extraSettings: {}
     extraRepos: {}
+    defaultRepoExtraConf: {}
     viaHttps:
       credentials:
         netrc:

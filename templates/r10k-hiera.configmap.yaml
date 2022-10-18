@@ -20,8 +20,8 @@ data:
       :hiera_repo:
         remote: '{{ .Values.hiera.hieradataurl }}'
         basedir: '/etc/puppetlabs/code/hiera-data'
-        {{- if .Values.r10k.defaultRepoExtraConf }}
-        {{- toYaml .Values.r10k.defaultRepoExtraConf | nindent 8 }}
+        {{- if .Values.r10k.hiera.defaultRepoExtraConf }}
+        {{- toYaml .Values.r10k.hiera.defaultRepoExtraConf | nindent 8 }}
         {{- end }}
       {{- end }}
       {{- if .Values.r10k.hiera.extraRepos }}
