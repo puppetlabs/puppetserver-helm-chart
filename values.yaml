@@ -402,7 +402,7 @@ r10k:
     extraEnv: {}
     extraSettings: {}
     extraRepos: {}
-
+    defaultRepoExtraConf: {}
     viaHttps:
       credentials:
         netrc:
@@ -451,6 +451,7 @@ r10k:
     extraEnv: {}
     extraSettings: {}
     extraRepos: {}
+    defaultRepoExtraConf: {}
     viaHttps:
       credentials:
         netrc:
