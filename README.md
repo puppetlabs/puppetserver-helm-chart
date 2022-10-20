@@ -264,6 +264,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.code.cronJob.splayLimit` | maximum splay in seconds applied before running r10k control repo cron job | `60`|
 | `r10k.code.cronJob.timeout` | timeout in seconds to apply when running r10k control repo cron job takes too long | ``|
 | `r10k.code.cronJob.successFile` | path to file reflecting success of r10k control repo cron job | `~/.r10k_code_cronjob.success`|
+| `r10k.code.defaultRepoExtraConf` | yaml to be added to the default repo in r10k_code.yaml |``|
 | `r10k.code.extraArgs` | r10k control repo additional container env args |``|
 | `r10k.code.extraEnv` | r10k control repo additional container env vars |``|
 | `r10k.code.viaSsh.credentials.ssh.value`| r10k control repo ssh key file |``|
@@ -276,6 +277,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.hiera.cronJob.splayLimit` | maximum splay in seconds applied before running r10k hiera data cron job | `60`|
 | `r10k.hiera.cronJob.timeout` | timeout in seconds to apply when running r10k hiera data cron job takes too long | ``|
 | `r10k.hiera.cronJob.successFile` | path to file reflecting success of r10k hiera data cron job | `~/.r10k_hiera_cronjob.success`|
+| `r10k.hiera.defaultRepoExtraConf` | yaml to be added to the default repo in r10k_hiera.yaml |``|
 | `r10k.hiera.extraArgs` | r10k hiera data additional container env args |``|
 | `r10k.hiera.extraEnv` | r10k hiera data additional container env vars |``|
 | `r10k.hiera.viaSsh.credentials.ssh.value`| r10k hiera data ssh key file |``|
