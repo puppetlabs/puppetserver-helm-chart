@@ -15,8 +15,8 @@ data:
     #!/usr/bin/env sh
     url={{ required "A valid .Values.singleCA.crl.url required!" .Values.singleCA.crl.url }}
     cred="-u {{- if .Values.singleCA.crl.credential }}$CRL_CREDS_USERNAME:$CRL_CREDS_PASSWORD{{- end }}"
-    
-    curl $cred -s -O $url
+
+    curl $cred -s -o crl.pem $url
     retVal=$?
 
     mv crl.pem $SSL_PATH/crl.pem
