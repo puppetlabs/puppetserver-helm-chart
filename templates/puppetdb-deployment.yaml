@@ -5,8 +5,8 @@ metadata:
   name: {{ template "puppetserver.name" . }}-puppetdb
   labels:
     {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
-    {{- with .Values.puppetdb.extraLabels }}
-    {{ toYaml . | indent 6 }}
+    {{- with .Values.puppetdb.extraLabels -}}
+    {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
   selector:
@@ -19,6 +19,9 @@ spec:
     metadata:
       labels:
         {{- include "puppetserver.puppetdb.labels" . | nindent 8 }}
+        {{- with .Values.puppetdb.extraLabels -}}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
       {{- if .Values.podAnnotations }}
       annotations:
         {{- toYaml .Values.podAnnotations | nindent 8 }}
