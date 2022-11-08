@@ -1,6 +1,9 @@
 name: Lint and publish puppetserver helm chart
 
 on:
+  push:
+    branches:
+      - '!main'
   workflow_dispatch:
     inputs:
       helmRepoURL:
@@ -24,6 +27,9 @@ jobs:
       - name: Fetch history
         run: git fetch --prune --unshallow
       - uses: azure/setup-helm@v1
+      - name: helm version
+        run: |
+          helm version
       - name: lint
         run: |
           helm lint .
