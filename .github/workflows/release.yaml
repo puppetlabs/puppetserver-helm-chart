@@ -1,9 +1,6 @@
 name: Lint and publish puppetserver helm chart
 
 on:
-  push:
-    branches:
-      - '!main'
   workflow_dispatch:
     inputs:
       helmRepoURL:
@@ -50,33 +47,33 @@ jobs:
           echo "$release_notes" > body.md
           release_name=`echo "$release_notes"| head -1 | sed 's/^- //'`
           echo "release_name=$release_name" >> $GITHUB_ENV
-      - name: Make the release
-        id: create_release
-        uses: actions/create-release@v1
-        with:
-          tag_name: v${{ env.version }}
-          release_name: ${{ env.release_name }}
-          body_path: body.md
-      - name: upload artifacts to the release
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./.release-packages/puppetserver-${{ env.version }}.tgz
-          asset_name: puppetserver-${{ env.version }}.tgz
-          asset_content_type: application/gzip
-      - name: update ghpages
-        run: |
-          gh_pages_worktree=$(mktemp -d)
-          git worktree add "$gh_pages_worktree" gh-pages
-          cp .release-packages/puppetserver-${{ env.version }}.tgz $gh_pages_worktree
-          cp CHANGELOG.md README.md LICENSE CODEOWNERS $gh_pages_worktree
-          find "$gh_pages_worktree" -type f ! -name "puppetserver-${{ env.version }}.tgz" -name 'puppetserver*.tgz' -delete
-          helm repo index $gh_pages_worktree --url $HELM_REPO_URL --merge "$gh_pages_worktree/index.yaml"
-          pushd "$gh_pages_worktree" > /dev/null
-          git add index.yaml puppetserver-${{ env.version }}.tgz
-          git commit --message "puppetserver-${{ env.version }} release"
-          git checkout 'puppetserver*.tgz' # reset the files removed to make the index accurate
-          git commit --all --message "Sync files from master branch" ||:
-          repo_url="https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPO"
-          git push "$repo_url" gh-pages
-          popd > /dev/null
+      # - name: Make the release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   with:
+      #     tag_name: v${{ env.version }}
+      #     release_name: ${{ env.release_name }}
+      #     body_path: body.md
+      # - name: upload artifacts to the release
+      #   uses: actions/upload-release-asset@v1
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./.release-packages/puppetserver-${{ env.version }}.tgz
+      #     asset_name: puppetserver-${{ env.version }}.tgz
+      #     asset_content_type: application/gzip
+      # - name: update ghpages
+      #   run: |
+      #     gh_pages_worktree=$(mktemp -d)
+      #     git worktree add "$gh_pages_worktree" gh-pages
+      #     cp .release-packages/puppetserver-${{ env.version }}.tgz $gh_pages_worktree
+      #     cp CHANGELOG.md README.md LICENSE CODEOWNERS $gh_pages_worktree
+      #     find "$gh_pages_worktree" -type f ! -name "puppetserver-${{ env.version }}.tgz" -name 'puppetserver*.tgz' -delete
+      #     helm repo index $gh_pages_worktree --url $HELM_REPO_URL --merge "$gh_pages_worktree/index.yaml"
+      #     pushd "$gh_pages_worktree" > /dev/null
+      #     git add index.yaml puppetserver-${{ env.version }}.tgz
+      #     git commit --message "puppetserver-${{ env.version }} release"
+      #     git checkout 'puppetserver*.tgz' # reset the files removed to make the index accurate
+      #     git commit --all --message "Sync files from master branch" ||:
+      #     repo_url="https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPO"
+      #     git push "$repo_url" gh-pages
+      #     popd > /dev/null
