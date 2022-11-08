@@ -5,8 +5,8 @@ metadata:
   name: {{ template "puppetserver.name" . }}-puppetserver-compiler
   labels:
     {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 4 }}
-    {{- with .Values.puppetserver.compilers.extraLabels }}
-    {{ toYaml . | indent 6 }}
+    {{- with .Values.puppetserver.compilers.extraLabels -}}
+    {{ toYaml . | nindent 4 }}
     {{- end }}
   {{- if .Values.puppetserver.compilers.annotations }}
   annotations:
@@ -28,6 +28,9 @@ spec:
     metadata:
       labels:
         {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 8 }}
+        {{- with .Values.puppetserver.compilers.extraLabels -}}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/hiera-configmap: {{ include (print $.Template.BasePath "/hiera-configmap.yaml") . | sha256sum }}
         checksum/r10k-code.configmap: {{ include (print $.Template.BasePath "/r10k-code.configmap.yaml") . | sha256sum }}
