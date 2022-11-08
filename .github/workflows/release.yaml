@@ -25,11 +25,16 @@ jobs:
         run: git fetch --prune --unshallow
       - uses: azure/setup-helm@v1
       - name: helm version
+        uses: helm/chart-testing-action@v2.1.0
         run: |
           helm version
-      - name: lint
-        run: |
-          helm lint .
+      # - name: lint
+      #   run: |
+      #     helm lint .
+      - name: Run linter on Helm Charts
+        uses: helm/chart-testing-action@v2.1.0
+        with:
+          command: lint
       - name: Configure Git
         run: |
           git config user.name "$GITHUB_ACTOR"
