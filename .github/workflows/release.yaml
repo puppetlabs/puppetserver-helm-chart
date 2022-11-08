@@ -20,10 +20,10 @@ jobs:
       GITHUB_REPO: ${{ github.event.inputs.githubRepo }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Fetch history
         run: git fetch --prune --unshallow
-      - uses: azure/setup-helm@v1
+      - uses: azure/setup-helm@v3.4
       - name: lint
         run: |
           helm lint .
