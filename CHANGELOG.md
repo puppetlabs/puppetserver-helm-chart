@@ -5,6 +5,10 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v6.8.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.8.0) (2022-10-26)
+
+- fix: Save crl to defined filename
+
 ## [v6.7.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.7.0) (2022-10-17)
 
 - fix: have r10k-hiera extraSettings and extraRepos act like r10k-code and not print empty {} in r10k_hiera.yaml

@@ -440,3 +440,4 @@ kill %[job_numbers_above]
 * [Simon Fuhrer](https://github.com/simonfuhrer), Contributor
 * [Kevin Harrington](https://github.com/ke5C2Fin), Contributor
 * [Grégoire Menuel](https://github.com/gmenuel), Contributor
+* [Jean-François Roche](https://github.com/jfroche), Contributor
