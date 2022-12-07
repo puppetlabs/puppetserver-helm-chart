@@ -1,6 +1,6 @@
 {{- if .Values.puppetserver.compilers.enabled }}
 {{- if .Values.puppetserver.compilers.autoScaling.enabled }}
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "puppetserver.name" . }}-compilers-autoscaler

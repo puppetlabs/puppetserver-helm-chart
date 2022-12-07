@@ -8,7 +8,7 @@ metadata:
 data:
   check_for_masters.sh: |
     #!/usr/bin/env bash
-    if [[ -d "$PUPPET_DATA_DIR" ]]; then
+    if [[ -d "$PUPPET_SSL_DIR" ]]; then
         echo "A Puppetserver master has already started running."
         echo "Waiting to finish the generation of the Puppet SSL certs..."
         sleep 5
