@@ -5,6 +5,12 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v6.8.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.8.1) (2022-12-07)
+
+- fix: change order of scripts in master init or it will error out if compliers are enabled
+- fix: add PUPPET_SSL_DIR env var and change check_for_masters.sh or init would wait indefinitely for ssl generation when running multi master
+- fix: change from deprecated autoscaling/v2beta2 HorizontalPodAutoscaler to autoscaling/v2
+
 ## [v6.8.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.8.0) (2022-10-26)
 
 - fix: Save crl to defined filename
