@@ -545,6 +545,9 @@ puppetdb:
 postgresql:
   enabled: true
   name: postgresql
+  ## Set fullnameOverride to match this chart's name
+  ##
+  fullnameOverride: puppetserver-postgresql
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
