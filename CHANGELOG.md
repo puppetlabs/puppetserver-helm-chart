@@ -5,6 +5,10 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v6.8.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.8.2) (2022-12-31)
+
+- fix: set postgresql.fullnameOverride to match chart name, avoids error when release name is different
+
 ## [v6.8.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.8.1) (2022-12-07)
 
 - fix: change order of scripts in master init or it will error out if compliers are enabled
