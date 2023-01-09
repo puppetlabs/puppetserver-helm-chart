@@ -5,6 +5,17 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v7.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.0.0) (2023-01-05)
+
+- fix: autoscaling apiVersion, `autoscaling/v2` is available since 1.23
+- fix: postgresql dependency (upgrade to the lastest available chart `12.1.6`)
+- feat: add 2 init container on puppetdb deployment to start only when postgresql & puppet master is ready
+- feat: allow custom config on puppetdb
+- feat: bump Puppetserver to `v7.9.2`.
+- feat: bump PuppetDB to `v7.10.0`.
+- feat: bump Puppetboard to `v4.2.4`.
+- fix: move configmap in /tmp to avoid Read Only error in puppetserver init container
+
 ## [v6.8.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v6.8.2) (2022-12-31)
 
 - fix: set postgresql.fullnameOverride to match chart name, avoids error when release name is different
