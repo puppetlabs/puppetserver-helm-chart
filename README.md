@@ -427,10 +427,10 @@ kill %[job_numbers_above]
 * [Raphaël Pinson](https://github.com/raphink), Maintainer
 * [David Phayanouvong](https://github.com/davidphay), Maintainer
 * [Reinier Schoof](https://github.com/skoef), Maintainer
+* [Niels Højen](https://github.com/nielshojen), Maintainer
 * [Scott Cressi](https://www.linkedin.com/in/scottcressi/), Co-Author
 * [Kai Sisterhenn](https://www.sistason.de/), Contributor
 * [chwehrli](https://github.com/chwehrli), Contributor
-* [Niels Højen](https://github.com/nielshojen), Contributor
 * [Hryhorii Didenko](https://github.com/HryhoriiDidenko), Contributor
 * [John Stewart](https://github.com/jstewart612), Contributor
 * [Erlon Pinheiro](https://github.com/erlonpinheiro), Contributor
