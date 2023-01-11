@@ -91,7 +91,7 @@ app.kubernetes.io/component: {{ .Values.r10k.name }}
 {{- end -}}
 
 {{- define "puppetserver.postgresql.matchLabels" -}}
-app.kubernetes.io/component: {{ .Values.postgresql.name }}
+app.kubernetes.io/component: postgresql
 {{ include "puppetserver.common.matchLabels" . }}
 {{- end -}}
 
@@ -215,6 +215,15 @@ Puppet Compilers' port.
   {{- or (eq (include "puppetserver.ingress.isStable" .) "true") (and (eq (include "puppetserver.ingress.apiVersion" .) "networking.k8s.io/v1beta1") (semverCompare ">= 1.18-0" (include "puppetserver.kubeVersion" .))) -}}
 {{- end -}}
 
+{{/* Get autoscaling API Version */}}
+{{- define "puppetserver.autoscaling.apiVersion" -}}
+  {{- if and (semverCompare ">= 1.23-0" (include "puppetserver.kubeVersion" .)) -}}
+      {{- print "autoscaling/v2" -}}
+  {{- else -}}
+    {{- print "autoscaling/v2beta2" -}}
+  {{- end -}}
+{{- end -}}
+
 {{/*
 Set's the affinity for pod placement
 when running with multiple Puppet compilers.
@@ -258,48 +267,11 @@ Calculates the max. number of compilers
 {{- end -}}
 
 {{/*
-Return PostgreSQL username
-*/}}
-{{- define "postgresql.username" -}}
-{{- if .Values.global.credentials.username }}
-  {{- .Values.global.credentials.username -}}
-{{- else -}}
-  {{- .Values.postgresqlUsername -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return PuppetDB and PostgreSQL password
-*/}}
-{{- define "postgresql.password" -}}
-{{- if .Values.global.credentials.password }}
-  {{- .Values.global.credentials.password -}}
-{{- else if .Values.postgresqlPassword -}}
-  {{- .Values.postgresqlPassword -}}
-{{- else -}}
-  unbreakablePassword
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return PuppetDB and PostgreSQL password
-*/}}
-{{- define "postgresql.postgres.password" -}}
-{{- if .Values.global.credentials.password }}
-  {{- .Values.global.credentials.password -}}
-{{- else if .Values.postgresqlPostgresPassword -}}
-    {{- .Values.postgresqlPostgresPassword -}}
-{{- else -}}
-  unbreakablePassword
-{{- end -}}
-{{- end -}}
-
-{{/*
 Create the name for the PuppetDB password secret.
 */}}
 {{- define "puppetdb.secret" -}}
-{{- if .Values.global.credentials.existingSecret -}}
-  {{- .Values.global.credentials.existingSecret -}}
+{{- if .Values.global.postgresql.auth.existingSecret -}}
+  {{- .Values.global.postgresql.auth.existingSecret -}}
 {{- else -}}
   puppetdb-secret
 {{- end -}}
@@ -388,7 +360,7 @@ Define puppetserver service Account name
 */}}
 {{- define "puppetserver.puppetserver.serviceAccount.name" -}}
 {{ default "puppetserver" .Values.puppetserver.serviceAccount.accountName }}
-{{- end -}} 
+{{- end -}}
 
 {{/*
 Define puppetdb service Account name
@@ -397,6 +369,18 @@ Define puppetdb service Account name
 {{ default "puppetdb" .Values.puppetdb.serviceAccount.accountName }}
 {{- end -}}
 
+{{/*
+Return PostgreSQL host name
+*/}}
+{{- define "postgresql.hostname" -}}
+{{- if .Values.postgresql.enabled }}
+{{- if eq .Values.postgresql.architecture "standalone" -}}
+{{- printf "%s-%s" .Release.Name "postgresql-hl" | trimSuffix "-" -}}
+{{- else }}
+{{- printf "%s-%s" .Release.Name "postgresql-primary-hl" | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
 
 {{/* *************************************************************************************
 The following definitions were more complex and necessary during part of this development.

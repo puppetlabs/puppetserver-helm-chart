@@ -32,7 +32,7 @@ data:
 
     exit $retVal
     {{- end }}
-    
+
   crl_cronjob.sh: |
     #!/usr/bin/env sh
     $SSL_PATH/crl.sh > ~/.crl_cronjob.out 2>&1
@@ -57,4 +57,5 @@ data:
     # tail -Fq ~/.crl_cronjob.out &
     touch ~/.crl_cronjob.success > /dev/null 2>&1
     exec supercronic ~/.crl_crontab
+
 {{- end }}

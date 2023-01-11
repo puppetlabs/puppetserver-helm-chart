@@ -101,7 +101,7 @@ spec:
               chown puppet:puppet /etc/puppetlabs/puppet/eyaml/keys/*public_key.pkcs7.pem;
               {{- end }}
               {{- end }}
-              cp /etc/puppetlabs/puppet/configmap/site.pp /etc/puppetlabs/puppet/manifests/site.pp;
+              cp /tmp/puppet/configmap/site.pp /etc/puppetlabs/puppet/manifests/site.pp;
               chown puppet:puppet /etc/puppetlabs/puppet/manifests/site.pp;
               {{- if .Values.singleCA.enabled }}
               cp /etc/puppetlabs/puppet/configmap/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh;
@@ -166,7 +166,7 @@ spec:
               subPath: check_for_masters.sh
             {{- end }}
             - name: manifests-volume
-              mountPath: /etc/puppetlabs/puppet/configmap/site.pp
+              mountPath: /tmp/puppet/configmap/site.pp
               subPath: site.pp
             {{- if .Values.singleCA.enabled }}
             - name: crl-volume

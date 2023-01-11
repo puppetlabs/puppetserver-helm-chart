@@ -70,7 +70,10 @@ To achieve better throughput of Puppet Infrastructure, you can enable and scale 
 
 ### Multiple PostgreSQL Read Replicas
 
-To achieve better throughput of Puppet Infrastructure, you can enable and scale out PostgreSQL cluster using `.Values.postgresql.replication.enabled` and `.Values.postgresql.replication.slaveReplicas`.
+For now it's not available anymore, since bitnami cleanned their old release. for multiple Postgresql we have to use postgresql-ha.  
+Read replica return an error on puppetdb:  
+`ERROR [p.p.c.services] Will retry database connection after temporary failure: java.sql.SQLTransientConnectionException: PDBMigrationsPool: default - Connection is not available, request timed out after 3002ms.`
+
 
 ## Chart Components
 
@@ -145,6 +148,17 @@ The following table lists the configurable parameters of the Puppetserver chart 
 
 | Parameter | Description | Default|
 | --------- | ----------- | -------|
+| `global.curl.image`| curl image |`curlimages/curl`|
+| `global.curl.tag`| curl image tag |`7.87.0`|
+| `global.curl.imagePullPolicy`| curl image pull policy |`IfNotPresent`|
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | [] |
+| `global.pgchecker.image`| pgchecker image |`docker.io/busybox`|
+| `global.pgchecker.tag`| pgchecker image tag |`1.36`|
+| `global.pgchecker.imagePullPolicy`| pgchecker image pull policy |`IfNotPresent`|
+| `global.postgresql.auth.username`| puppetdb and postgresql username |`puppetdb`|
+| `global.postgresql.auth.password`| puppetdb and postgresql password |`unbreakablePassword`|
+| `global.postgresql.auth.existingSecret`| existing k8s secret that holds puppetdb and postgresql username and password |``|
+| `global.postgresql.*`| please refer to https://github.com/bitnami/charts/tree/main/bitnami/postgresql#global-parameters |``|
 | `puppetserver.name` | puppetserver component label | `puppetserver`|
 | `puppetserver.image` | puppetserver image | `puppet/puppetserver`|
 | `puppetserver.tag` | puppetserver img tag | `6.12.1`|
@@ -283,18 +297,12 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.hiera.viaSsh.credentials.ssh.value`| r10k hiera data ssh key file |``|
 | `r10k.hiera.viaSsh.credentials.known_hosts.value`| r10k hiera data ssh known hosts file |``|
 | `r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``|
-| `postgresql.enabled` | postgres deployment as puppetdb backend | `true`|
-| `postgresql.name` | postgres component label | `postgresql`|
-| `postgresql.resources` | postgres resource limits |``|
-| `postgresql.postgresqlDatabase` | postgres database name |`puppetdb`|
-| `postgresql.initdbUser` | postgres username to run initdb scripts at first boot |`postgres`|
-| `postgresql.initdbScriptsConfigMap` | postgres initdb scripts run at first boot |`postgresql-custom-extensions`|
-| `postgresql.persistence.enabled` | postgres database persistence |`true`|
-| `postgresql.persistence.existingClaim` | postgres manually managed pvc |``|
-| `postgresql.persistence.size` | postgres persistence pvc size |`10Gi`|
-| `postgresql.persistence.annotations` | postgres persistence resource policy via annotations |`keep`|
-| `postgresql.replication.enabled` | postgres replication availability |`false`|
-| `postgresql.replication.slaveReplicas` | postgres replication slave replicas |`1`|
+| `postgresql.*`| please refer to https://github.com/bitnami/charts/tree/main/bitnami/postgresql#parameters |``|
+| `postgresql.primary.initdb.scriptsConfigMap` | postgres initdb scripts run at first boot |`postgresql-custom-extensions`|
+| `postgresql.primary.persistence.enabled` | postgres database persistence |`true`|
+| `postgresql.primary.persistence.existingClaim` | postgres manually managed pvc |``|
+| `postgresql.primary.persistence.size` | postgres persistence pvc size |`10Gi`|
+| `postgresql.primary.persistence.annotations` | postgres annotations for the PVC |`helm.sh/resource-policy: keep`|
 | `puppetdb.enabled` | puppetdb component enabled |`true`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
 | `puppetdb.image` | puppetdb img | `puppet/puppetdb`|
@@ -313,7 +321,10 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.customPersistentVolumeClaim.storage.enable`| If true, use custom PVC for storage |``|
 | `puppetdb.customPersistentVolumeClaim.storage.config`| Configuration for custom PVC for storage |``|
 | `puppetdb.extraContainers`| Extra containers to inject into the puppetdb pod |``|
+| `puppetdb.extraInitContainers`| Extra initContainers to inject into the puppetdb pod |``|
 | `puppetdb.serviceAccount.enabled`| Enable service account (Note: Service Account will only be automatically created if `puppetdb.serviceAccount.create` is not set.  |`false`|
+| `puppetdb.customconfigs.enabled`| puppetdb additional config map enabled |`false`|
+
 | `puppetdb.serviceAccount.create`| puppetdb additional masters svc labels |`false`|
 | `puppetdb.rbac.create`| Enable PodSecurityPolicy's RBAC rules |`false`|
 | `puppetdb.psp.create`| Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later |`false`|
@@ -336,10 +347,6 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `hiera.config`| hieradata yaml config |``|
 | `hiera.eyaml.private_key`| hiera eyaml private key |``|
 | `hiera.eyaml.public_key`| hiera eyaml public key |``|
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | [] |
-| `global.credentials.username`| puppetdb and postgresql username |`puppetdb`|
-| `global.credentials.password`| puppetdb and postgresql password |`unbreakablePassword`|
-| `global.credentials.existingSecret`| existing k8s secret that holds puppetdb and postgresql username and password |``|
 | `nameOverride`| puppetserver components name for `component:` labels |``|
 | `nodeSelector`| Node labels for pod assignment |``|
 | `affinity`| Affinity for pod assignment |``|

@@ -21,6 +21,9 @@ spec:
         {{- include "puppetserver.puppetdb.labels" . | nindent 8 }}
       {{- if .Values.podAnnotations }}
       annotations:
+        {{- if .Values.puppetdb.customconfigs.enabled }}
+        checksum/custom-configs.configmap: {{ include (print $.Template.BasePath "/puppetdb-customconfigs-configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- toYaml .Values.podAnnotations | nindent 8 }}
       {{- end }}
     spec:
@@ -28,6 +31,61 @@ spec:
       {{- if .Values.puppetdb.serviceAccount.enabled }}
       serviceAccountName: {{ include "puppetserver.puppetdb.serviceAccount.name" . }}
       {{- end }}
+      initContainers:
+        {{- with .Values.puppetdb.extraInitContainers }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        - name: pgchecker
+          image: "{{.Values.global.pgchecker.image}}:{{.Values.global.pgchecker.tag}}"
+          imagePullPolicy: {{.Values.global.pgchecker.imagePullPolicy}}
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+          command:
+            - sh
+            - -c
+            - |
+              echo 'Waiting for PostgreSQL to become ready...'
+              until printf "." && nc -z -w 2 {{ include "postgresql.hostname" . }} 5432; do
+                  sleep 2;
+              done;
+              echo 'PostgreSQL OK ✓'
+          resources:
+            requests:
+              cpu: 20m
+              memory: 32Mi
+            limits:
+              cpu: 20m
+              memory: 32Mi
+        - name: wait-puppetserver
+          image: "{{.Values.global.curl.image}}:{{.Values.global.curl.tag}}"
+          imagePullPolicy: {{.Values.global.curl.imagePullPolicy}}
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+          command:
+            - sh
+            - -c
+            - |
+              echo 'Waiting for puppetserver to become ready...'
+              until curl --silent --fail --insecure 'https://puppet:{{ template "puppetserver.puppetserver-masters.port" . }}/status/v1/simple' | grep -q '^running$'; do
+                sleep 2;
+              done;
+              echo 'Puppetserver OK ✓'
+          resources:
+            requests:
+              cpu: 20m
+              memory: 32Mi
+            limits:
+              cpu: 20m
+              memory: 32Mi
+        {{- if .Values.puppetdb.extraInitContainers }}
+        {{- toYaml .Values.puppetdb.extraInitContainers | nindent 8 }}
+        {{- end }}
       containers:
         {{- with .Values.puppetdb.extraContainers }}
           {{- toYaml . | nindent 8 }}
@@ -44,7 +102,7 @@ spec:
               value: "{{ template "puppetserver.puppetserver-masters.port" . }}"
             {{- if not (hasKey .Values.puppetdb.extraEnv "PUPPETDB_POSTGRES_HOSTNAME") }}
             - name: PUPPETDB_POSTGRES_HOSTNAME
-              value: "{{ template "puppetserver.name" . }}-postgresql"
+              value: "{{ include "postgresql.hostname" . }}"
             {{- end }}
             - name: PUPPETDB_PASSWORD
               valueFrom:
@@ -76,6 +134,11 @@ spec:
               mountPath: /etc/puppetlabs/puppetdb/conf.d/metrics.conf
               subPath: metrics.conf
             {{- end -}}
+            {{- range $key, $value := .Values.puppetdb.customconfigs.configmaps }}
+            - name: puppetdb-custom-configs
+              mountPath: /etc/puppetlabs/puppetdb/conf.d/{{ $key }}
+              subPath: {{ $key }}
+            {{- end }}
         {{- if .Values.puppetboard.enabled }}
         - name: puppetboard
           image: "{{.Values.puppetboard.image}}:{{.Values.puppetboard.tag}}"
@@ -95,6 +158,11 @@ spec:
               value: "/opt/puppetlabs/server/data/puppetdb/certs/private_keys/puppetdb.pem"
             - name: PUPPETBOARD_PORT
               value: {{ .Values.puppetboard.port | quote }}
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: puppetdb-puppetboard
+                  key: SECRET_KEY
             {{- range $key, $value := .Values.puppetboard.extraEnv }}
             - name: {{ $key }}
               value: "{{ $value }}"
@@ -176,6 +244,11 @@ spec:
         - name: puppetdb-metrics-volume
           configMap:
             name: puppetdb-metrics-config
+        {{- end }}
+        {{- if .Values.puppetdb.customconfigs.enabled }}
+        - name: puppetdb-custom-configs
+          configMap:
+            name: puppetdb-custom-configs
         {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector:

@@ -2,12 +2,40 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+## Global Values
+##
+global:
+  curl:
+    image: curlimages/curl
+    tag: 7.87.0
+    imagePullPolicy: IfNotPresent
+
+  imagePullSecrets:
+
+  pgchecker:
+    image: docker.io/busybox
+    tag: 1.36
+    imagePullPolicy: IfNotPresent
+
+  ## Credentials for PuppetDB and PostgreSQL
+  postgresql:
+    auth:
+      username: puppetdb
+      password: unbreakablePassword
+      postgresPassword: unbreakableAdminPassword
+      database: puppetdb
+
+      existingSecret: ""
+      secretKeys:
+        usernameKey: username
+        userPasswordKey: password
+
 ## Puppet Server Configuration
 ##
 puppetserver:
   name: puppetserver
   image: puppet/puppetserver
-  tag: 7.4.2
+  tag: 7.9.2
   pullPolicy: IfNotPresent
   ## Mandatory Deployment of Puppet Server Master/s
   ##
@@ -483,7 +511,7 @@ puppetdb:
   enabled: true
   name: puppetdb
   image: puppet/puppetdb
-  tag: 7.7.1
+  tag: 7.10.0
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
@@ -494,6 +522,9 @@ puppetdb:
   #    cpu: 1000m
   ## Extra containers to inject into the PuppetDB pod
   extraContainers: []
+
+  ## Extra initContainers to inject into the PuppetDB pod
+  extraInitContainers: []
   ## Additional puppetdb container environment variables
   extraEnv: {}
 
@@ -518,6 +549,14 @@ puppetdb:
     labels: {}
     loadBalancerIP: ""
     clusterIP: ""
+
+  ## Custom puppetdb conf.d configs
+  ##
+  customconfigs:
+    enabled: false
+    configmaps: {}
+    #  auth.conf: |-
+    #    {}
 
   ## puppetdb metrics enable/disable flag
   metrics:
@@ -544,58 +583,22 @@ puppetdb:
 ##
 postgresql:
   enabled: true
-  name: postgresql
-  ## Set fullnameOverride to match this chart's name
-  ##
-  fullnameOverride: puppetserver-postgresql
-  ## Configure resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  # resources:
-  #  requests:
-  #    memory: 512Mi
-  #    cpu: 500m
-  #  limits:
-  #    memory: 1024Mi
-  #    cpu: 1000m
-  ## Create a database
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
-  ##
-  postgresqlDatabase: puppetdb
-  ## Specify the PostgreSQL username and password to execute the initdb scripts
-  ##
-  initdbUser: postgres
-  ## ConfigMap with scripts to be run at first boot
-  ## NOTE: This will override initdbScripts
-  ##
-  initdbScriptsConfigMap: postgresql-custom-extensions
-  ## PostgreSQL data Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  persistence:
-    enabled: true
-    ## A manually managed Persistent Volume and Claim
-    ## If defined, PVC must be created manually before volume will be bound
-    ## The value is evaluated as a template, so, for example, the name can depend on .Release or .Chart
-    ##
-    # existingClaim:
-    size: 10Gi
-    annotations:
-      ## The annotation instructs Helm to skip deleting this resource
-      ## when a helm operation (such as helm uninstall, helm upgrade or helm rollback)
-      ## would result in its deletion.
-      ##
-      helm.sh/resource-policy: keep
-  ## Replication settings
-  ## Please check: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
-  ##
-  replication:
-    enabled: false
-    slaveReplicas: 1
+
+  architecture: standalone
+
+  primary:
+    initdb:
+      scriptsConfigMap: "postgresql-custom-extensions"
+    persistence:
+      enabled: true
+      size: 10Gi
+      annotations:
+        ## The annotation instructs Helm to skip deleting this resource
+        ## when a helm operation (such as helm uninstall, helm upgrade or helm rollback)
+        ## would result in its deletion.
+        ##
+        helm.sh/resource-policy: keep
+
 
 ## Puppetboard Configuration
 ##
@@ -603,7 +606,7 @@ puppetboard:
   enabled: false
   name: puppetboard
   image: ghcr.io/voxpupuli/puppetboard
-  tag: 3.3.0
+  tag: 4.2.4
   port: 9090
   pullPolicy: IfNotPresent
   service:
@@ -706,18 +709,6 @@ hiera:
     public_key:  # |
       #  PUB_KEY CONTENTS
 
-## Global Values
-##
-global:
-  ## Credentials for PuppetDB and PostgreSQL
-  ##
-  credentials:
-    username: puppetdb
-    password: ""
-    ## If used, the following existing secret must contain "username" and "password" keys.
-    ## NOTE: Using this secret supercedes all other credentials settings.
-    ##
-    existingSecret: ""
 
 ## Provide a name in place of Puppet Server components for `app:` labels
 ##
