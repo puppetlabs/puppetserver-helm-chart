@@ -149,21 +149,21 @@ app.kubernetes.io/component: {{ .Values.puppetserver.name }}-serverdata
 Set mandatory Puppet Server Masters' Service name.
 */}}
 {{- define "puppetserver.puppetserver-masters.serviceName" -}}
-puppet
+{{ template "puppetserver.fullname" . }}-puppet
 {{- end -}}
 
 {{/*
 Set secondary Puppet Server Masters' Service name for Puppet Agents.
 */}}
 {{- define "puppetserver.puppetserver.agents-to-masters.serviceName" -}}
-agents-to-puppet
+{{ template "puppetserver.fullname" . }}-agents-to-puppet
 {{- end -}}
 
 {{/*
 Set mandatory Puppet Server Compilers' Service name.
 */}}
 {{- define "puppetserver.puppetserver-compilers.serviceName" -}}
-puppet-compilers
+{{ template "puppetserver.fullname" . }}-puppet-compilers
 {{- end -}}
 
 {{/*
@@ -273,7 +273,7 @@ Create the name for the PuppetDB password secret.
 {{- if .Values.global.postgresql.auth.existingSecret -}}
   {{- .Values.global.postgresql.auth.existingSecret -}}
 {{- else -}}
-  puppetdb-secret
+  {{ template "puppetdb.fullname" . }}-postgresql
 {{- end -}}
 {{- end -}}
 
@@ -284,7 +284,7 @@ Create the name for the r10k.code.viaSsh secret.
 {{- if .Values.r10k.code.viaSsh.credentials.existingSecret -}}
   {{- .Values.r10k.code.viaSsh.credentials.existingSecret -}}
 {{- else -}}
-  r10k-code-creds
+  {{ template "puppetserver.fullname" . }}-r10k-code-creds
 {{- end -}}
 {{- end -}}
 
@@ -295,7 +295,7 @@ Create the name for the r10k.code.viaHttps secret.
 {{- if .Values.r10k.code.viaHttps.credentials.existingSecret -}}
   {{- .Values.r10k.code.viaHttps.credentials.existingSecret -}}
 {{- else -}}
-  r10k-code-creds
+  {{ template "puppetserver.fullname" . }}-r10k-code-creds
 {{- end -}}
 {{- end -}}
 
@@ -306,7 +306,7 @@ Create the name for the r10k.hiera.viaSsh secret.
 {{- if .Values.r10k.hiera.viaSsh.credentials.existingSecret -}}
   {{- .Values.r10k.hiera.viaSsh.credentials.existingSecret -}}
 {{- else -}}
-  r10k-hiera-creds
+  {{ template "puppetserver.fullname" . }}-r10k-hiera-creds
 {{- end -}}
 {{- end -}}
 
@@ -317,7 +317,7 @@ Create the name for the r10k.hiera.viaHttps secret.
 {{- if .Values.r10k.hiera.viaHttps.credentials.existingSecret -}}
   {{- .Values.r10k.hiera.viaHttps.credentials.existingSecret -}}
 {{- else -}}
-  r10k-hiera-creds
+  {{ template "puppetserver.fullname" . }}-r10k-hiera-creds
 {{- end -}}
 {{- end -}}
 
@@ -334,14 +334,14 @@ check if hiera is define
 Create the name for the hiera eyaml private key Secrets.
 */}}
 {{- define "puppetserver.hiera.privateSecret" -}}
-  eyamlpriv-secret
+  {{ template "puppetserver.fullname" . }}-eyamlpriv-secret
 {{- end -}}
 
 {{/*
 Create the name for the hiera eyaml public cert Secrets.
 */}}
 {{- define "puppetserver.hiera.publicSecret" -}}
-  eyamlpub-secret
+  {{ template "puppetserver.fullname" . }}-eyamlpub-secret
 {{- end -}}
 
 {{/*
@@ -358,15 +358,24 @@ Return the appropriate apiVersion for podsecuritypolicy.
 {{/*
 Define puppetserver service Account name
 */}}
-{{- define "puppetserver.puppetserver.serviceAccount.name" -}}
-{{ default "puppetserver" .Values.puppetserver.serviceAccount.accountName }}
+{{- define "puppetserver.serviceAccountName" -}}
+{{ default ( include "puppetserver.fullname" . ) .Values.puppetserver.serviceAccount.accountName }}
+{{- end -}}
+
+{{/*
+Create a default puppetdb fully qualified app name.
+We truncate at 52 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "puppetdb.fullname" -}}
+{{ template "puppetserver.fullname" . }}-puppetdb
 {{- end -}}
 
 {{/*
 Define puppetdb service Account name
 */}}
-{{- define "puppetserver.puppetdb.serviceAccount.name" -}}
-{{ default "puppetdb" .Values.puppetdb.serviceAccount.accountName }}
+{{- define "puppetdb.serviceAccountName" -}}
+{{ default ( include "puppetdb.fullname" . ) .Values.puppetdb.serviceAccount.accountName }}
 {{- end -}}
 
 {{/*
@@ -379,6 +388,25 @@ Return PostgreSQL host name
 {{- else }}
 {{- printf "%s-%s" .Release.Name "postgresql-primary-hl" | trimSuffix "-" -}}
 {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return puppetserver certificate name without extension
+*/}}
+{{- define "singleCA.puppetserver.certname" -}}
+{{- if .Values.singleCA.enabled }}
+{{- printf "%s" .Values.singleCA.certificates.secretKeys.puppetCert | trimSuffix ".pem" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return puppetdb certificate name without extension
+*/}}
+{{- define "singleCA.puppetdb.certname" -}}
+{{- if .Values.singleCA.enabled }}
+{{- printf "%s" .Values.singleCA.certificates.secretKeys.puppetdbCert | trimSuffix ".pem" -}}
+
 {{- end -}}
 {{- end -}}
 

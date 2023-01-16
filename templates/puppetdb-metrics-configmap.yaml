@@ -2,9 +2,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: puppetdb-metrics-config
+  name: {{ template "puppetdb.fullname" . }}-metrics-config
   labels:
-    {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+    {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
+    {{- range $key, $value := .Values.puppetdb.extraLabels }}
+    {{ $key }}: {{ $value }}
+    {{- end }}
 data:
   metrics.conf: |
     metrics: {
@@ -58,21 +61,21 @@ data:
           }
       }
     }
-  
+
   jolokia-access.xml: |
     <?xml version="1.0" encoding="utf-8"?>
     <restrict>
       <remote>
         <host>0.0.0.0/0</host>
       </remote>
-    
+
       <commands>
         <command>read</command>
         <command>list</command>
         <command>version</command>
         <command>search</command>
       </commands>
-    
+
       <mbean>
         <name>puppetlabs.puppetdb.population:name=num-nodes</name>
         <attribute mode="read">Value</attribute>

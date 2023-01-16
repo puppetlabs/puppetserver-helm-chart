@@ -3,14 +3,17 @@
 apiVersion: {{ include "puppetserver.autoscaling.apiVersion" . }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "puppetserver.name" . }}-masters-autoscaler
+  name: {{ template "puppetserver.fullname" . }}-masters-autoscaler
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+    {{- with .Values.puppetserver.masters.extraLabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ template "puppetserver.name" . }}-puppetserver-master
+    name: {{ template "puppetserver.fullname" . }}-puppetserver-master # TODO rename ?
   minReplicas: {{ .Values.puppetserver.masters.multiMasters.autoScaling.minMasters }}
   maxReplicas: {{ .Values.puppetserver.masters.multiMasters.autoScaling.maxMasters }}
   metrics:

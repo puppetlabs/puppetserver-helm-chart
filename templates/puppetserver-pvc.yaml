@@ -1,14 +1,14 @@
-{{- if .Values.puppetserver.masters.customPersistentVolumeClaim.puppet.enable }}
-{{- else }}
+{{- if not .Values.puppetserver.masters.customPersistentVolumeClaim.puppet.enable }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: puppet-puppet-claim
+  name: {{ template "puppetserver.fullname" . }}-puppet-claim
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
-  {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) (.Values.storage.annotations) }}
+    {{- with .Values.puppetserver.masters.extraLabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
   annotations:
-  {{- end }}
     {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) }}
     "helm.sh/hook": "pre-install"
     "helm.sh/hook-weight": "0"

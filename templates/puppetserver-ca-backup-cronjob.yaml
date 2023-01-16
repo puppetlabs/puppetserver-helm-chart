@@ -2,11 +2,11 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ template "puppetserver.name" . }}-puppetserver-master-backup
+  name: {{ template "puppetserver.fullname" . }}-master-backup
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
-    {{- with .Values.puppetserver.masters.extraLabels }}
-    {{ toYaml . | indent 6 }}
+    {{- with .Values.puppetserver.masters.extraLabels -}}
+    {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
   concurrencyPolicy: Forbid
@@ -18,6 +18,9 @@ spec:
     metadata:
       labels:
         {{- include "puppetserver.puppetserver.labels" . | nindent 8 }}
+        {{- with .Values.puppetserver.masters.extraLabels -}}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       template:
         spec:
@@ -39,7 +42,7 @@ spec:
             - |-
               set -euf
               restic snapshots -q || restic init -q
-              restic backup --tag=puppet-ca --host={{ .Values.puppetserver.name }} /backup
+              restic backup --tag=puppet-ca --host={{ template "puppetserver.fullname" . }} /backup
               restic forget --prune --keep-last {{ .Values.puppetserver.masters.backup.restic.keep_last }}
             resources:
               {{- toYaml .Values.puppetserver.masters.backup.resources | nindent 14 }}

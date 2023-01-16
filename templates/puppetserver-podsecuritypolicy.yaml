@@ -2,18 +2,21 @@
 apiVersion: {{ include "podsecuritypolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
-  name: {{ default "puppetserver" .Values.puppetserver.serviceAccount.accountName }}-psp
+  name: {{ template "puppetserver.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) (.Values.storage.annotations) }}
+  labels:
+    {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+    {{- with .Values.puppetserver.masters.extraLabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
   annotations:
-  {{- end }}
     {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) }}
     helm.sh/hook: pre-install
     helm.sh/hook-delete-policy: before-hook-creation
     helm.sh/hook-weight: "-10"
     {{- end }}
-    {{- if .Values.storage.annotations }}
-    {{ toYaml .Values.storage.annotations }}
+     {{- with .Values.puppetserver.psp.annotations -}}
+    {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
   privileged: true

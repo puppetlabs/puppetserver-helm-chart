@@ -2,25 +2,28 @@
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ default "puppetserver" .Values.puppetserver.serviceAccount.accountName }}-rb
+  name: {{ template "puppetserver.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) (.Values.storage.annotations) }}
+  labels:
+    {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+    {{- with .Values.puppetserver.masters.extraLabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
   annotations:
-  {{- end }}
     {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) }}
     helm.sh/hook: pre-install
     helm.sh/hook-delete-policy: before-hook-creation
     helm.sh/hook-weight: "-10"
     {{- end }}
-    {{- if .Values.storage.annotations }}
-    {{ toYaml .Values.storage.annotations }}
+    {{- with .Values.puppetserver.rbac.annotations -}}
+    {{ toYaml . | nindent 4 }}
     {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ default "puppetserver" .Values.puppetserver.serviceAccount.accountName }}-role
+  name: {{ template "puppetserver.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ default "puppetserver" .Values.puppetserver.serviceAccount.accountName }}
+    name: {{ template "puppetserver.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 {{- end }}

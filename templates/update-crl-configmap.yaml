@@ -2,7 +2,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: crl-config
+  name: {{ template "puppetserver.fullname" . }}-crl-config
+  labels:
+    {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+    {{- with .Values.puppetserver.masters.extraLabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
   annotations:
     helm.sh/hook: pre-install
     helm.sh/hook-delete-policy: before-hook-creation
@@ -14,12 +19,11 @@ data:
     {{- else }}
     #!/usr/bin/env sh
     url={{ required "A valid .Values.singleCA.crl.url required!" .Values.singleCA.crl.url }}
-    cred="-u {{- if .Values.singleCA.crl.credential }}$CRL_CREDS_USERNAME:$CRL_CREDS_PASSWORD{{- end }}"
 
-    curl $cred -s -o crl.pem $url
+    curl -s -o /tmp/crl.pem $url
     retVal=$?
 
-    mv crl.pem $SSL_PATH/crl.pem
+    mv /tmp/crl.pem $SSL_PATH/crl.pem
     grep -q "BEGIN X509 CRL" "$SSL_PATH/crl.pem" > /dev/null 2>&1
     grepVal=$?
 
@@ -35,7 +39,7 @@ data:
 
   crl_cronjob.sh: |
     #!/usr/bin/env sh
-    $SSL_PATH/crl.sh > ~/.crl_cronjob.out 2>&1
+    $CRL_SCRIPT_PATH/crl.sh > ~/.crl_cronjob.out 2>&1
     retVal=$?
     if [ "$retVal" -eq "0" ]; then
       touch ~/.crl_cronjob.success > /dev/null 2>&1
@@ -49,10 +53,10 @@ data:
     #!/usr/bin/env sh
     set -e
     if [ ! -f $SSL_PATH/crl.pem ]; then
-      /bin/sh -c $SSL_PATH/crl_cronjob.sh
+      /bin/sh -c $CRL_SCRIPT_PATH/crl_cronjob.sh
     fi
     cat > ~/.crl_crontab <<'EOF'
-    {{ .Values.singleCA.cronJob.schedule }} /bin/sh -c $SSL_PATH/crl_cronjob.sh
+    {{ .Values.singleCA.cronJob.schedule }} /bin/sh -c $CRL_SCRIPT_PATH/crl_cronjob.sh
     EOF
     # tail -Fq ~/.crl_cronjob.out &
     touch ~/.crl_cronjob.success > /dev/null 2>&1

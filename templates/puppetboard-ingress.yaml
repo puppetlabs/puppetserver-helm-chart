@@ -1,6 +1,6 @@
 {{- if and .Values.puppetboard.enabled .Values.puppetboard.ingress.enabled }}
 {{- $releaseName := .Release.Name -}}
-{{- $serviceName := "puppetdb" }}
+{{- $serviceName := ( include "puppetdb.fullname" . ) }}
 {{- $servicePort := .Values.puppetboard.port -}}
 {{- $pathType := .Values.puppetboard.ingress.pathType | default "ImplementationSpecific" -}}
 {{- $apiIsStable := eq (include "puppetserver.ingress.isStable" .) "true" -}}
@@ -13,11 +13,12 @@ metadata:
     {{ toYaml .Values.puppetboard.ingress.annotations | nindent 4 }}
   {{- end }}
   labels:
+  {{- include "puppetserver.puppetdb.matchLabels" . | nindent 4 }}
     {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
     {{- range $key, $value := .Values.puppetboard.ingress.extraLabels }}
     {{ $key }}: {{ $value }}
     {{- end }}
-  name: puppetboard
+  name: {{ template "puppetdb.fullname" . }}-puppetboard
 spec:
   {{- if $apiIsStable }}
   {{- if .Values.puppetboard.ingress.ingressClassName }}
