@@ -5,6 +5,16 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v7.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.0.0) (2023-01-xx)
+- Fix `extraLabels` issue (https://github.com/puppetlabs/puppetserver-helm-chart/issues/135) apply code from PR https://github.com/puppetlabs/puppetserver-helm-chart/pull/137
+- Fix: Rename all kubernetes resource with the release name as prefix
+- Fix: move all configmap in /tmp to avoid Read Only error in puppetserver init container
+- Fix: do not create r10k code credential secret if ssh or https existingSecret
+- Fix: do not create r10k hiera credential secret if ssh or https existingSecret
+- Fix: `r10k_hiera.yaml` templating, call the right variable
+- Fix: crl script execution on puppetdb
+- feat: bump R10k to `v3.15.2`.
+
 ## [v7.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.0.0) (2023-01-05)
 
 - fix: autoscaling apiVersion, `autoscaling/v2` is available since 1.23

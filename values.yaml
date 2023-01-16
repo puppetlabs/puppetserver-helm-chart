@@ -80,7 +80,7 @@ puppetserver:
     livenessProbeTimeout: 10
     livenessProbeFailureThreshold: 3
     livenessProbeSuccessThreshold: 1
-    startupProbePeriodSeconds: 15
+    startupProbePeriodSeconds: 60
     startupProbeFailureThreshold: 30
 
 
@@ -383,12 +383,15 @@ puppetserver:
   serviceAccount:
     enabled: false
     create: false
+    annotations:
 
   rbac:
     create: false
+    annotations:
 
   psp:
     create: false
+    annotations:
 
 
   ## The pattern of managing Hieradata in a separate repository is
@@ -404,7 +407,7 @@ puppetserver:
 r10k:
   name: r10k
   image: puppet/r10k
-  tag: 3.13.0
+  tag: 3.15.2
   pullPolicy: IfNotPresent
   code:
     resources: {}
@@ -571,12 +574,15 @@ puppetdb:
   serviceAccount:
     enabled: false
     create: false
+    annotations:
 
   rbac:
     create: false
+    annotations:
 
   psp:
     create: false
+    annotations:
 
 ## PostgreSQL Sub-Chart Configuration
 ## Please check: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
@@ -764,16 +770,10 @@ storage:
 
 singleCA:
   enabled: false
-  cronJob: 
+  cronJob:
     schedule: "* 0 * * * *"
   crl:
     url:
-    credential:
-      existingSecret:
-  # crl:
-    # url:
-    # credential:
-    #   existingSecret:
   extraEnv: {}
   resources: {}
     #  requests:
@@ -785,7 +785,14 @@ singleCA:
   config: ''
   certificates:
     existingSecret: {}
-    #   puppetserver:
-    #   puppetdb:
+      # puppetserver:
+      # puppetdb:
+
+    secretKeys:
+      puppetCert: puppet.pem
+      puppetKey: puppet.key
+      puppetdbCert: puppetdb.pem
+      puppetdbKey: puppetdb.key
+      crlKey: crl.pem
   puppetdb:
     overrideHostname: ''

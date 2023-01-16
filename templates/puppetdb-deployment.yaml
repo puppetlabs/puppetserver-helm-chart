@@ -2,11 +2,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "puppetserver.name" . }}-puppetdb
+  name: {{ template "puppetdb.fullname" . }}
   labels:
     {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
-    {{- with .Values.puppetdb.extraLabels }}
-    {{ toYaml . | indent 6 }}
+    {{- with .Values.puppetdb.extraLabels -}}
+    {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
   selector:
@@ -19,22 +19,23 @@ spec:
     metadata:
       labels:
         {{- include "puppetserver.puppetdb.labels" . | nindent 8 }}
-      {{- if .Values.podAnnotations }}
+        {{- with .Values.puppetdb.extraLabels -}}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
       annotations:
         {{- if .Values.puppetdb.customconfigs.enabled }}
         checksum/custom-configs.configmap: {{ include (print $.Template.BasePath "/puppetdb-customconfigs-configmap.yaml") . | sha256sum }}
         {{- end }}
+        checksum/crl-config: {{ include (print $.Template.BasePath "/update-crl-configmap.yaml") . | sha256sum }}
+        {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | nindent 8 }}
-      {{- end }}
+        {{- end }}
     spec:
       hostname: puppetdb
       {{- if .Values.puppetdb.serviceAccount.enabled }}
-      serviceAccountName: {{ include "puppetserver.puppetdb.serviceAccount.name" . }}
+      serviceAccountName: {{ include "puppetdb.serviceAccountName" . }}
       {{- end }}
       initContainers:
-        {{- with .Values.puppetdb.extraInitContainers }}
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
         - name: pgchecker
           image: "{{.Values.global.pgchecker.image}}:{{.Values.global.pgchecker.tag}}"
           imagePullPolicy: {{.Values.global.pgchecker.imagePullPolicy}}
@@ -72,7 +73,7 @@ spec:
             - -c
             - |
               echo 'Waiting for puppetserver to become ready...'
-              until curl --silent --fail --insecure 'https://puppet:{{ template "puppetserver.puppetserver-masters.port" . }}/status/v1/simple' | grep -q '^running$'; do
+              until printf "." && curl --silent --fail --insecure 'https://{{ template "puppetserver.puppetserver-masters.serviceName" . }}:{{ template "puppetserver.puppetserver-masters.port" . }}/status/v1/simple' | grep -q '^running$'; do
                 sleep 2;
               done;
               echo 'Puppetserver OK ✓'
@@ -83,8 +84,8 @@ spec:
             limits:
               cpu: 20m
               memory: 32Mi
-        {{- if .Values.puppetdb.extraInitContainers }}
-        {{- toYaml .Values.puppetdb.extraInitContainers | nindent 8 }}
+        {{- with .Values.puppetdb.extraInitContainers }}
+          {{- toYaml . | nindent 8 }}
         {{- end }}
       containers:
         {{- with .Values.puppetdb.extraContainers }}
@@ -97,9 +98,11 @@ spec:
             {{- toYaml .Values.puppetdb.resources | nindent 12 }}
           env:
             - name: PUPPETSERVER_HOSTNAME
-              value: "puppet"
+              value: {{ template "puppetserver.puppetserver-masters.serviceName" . }}
             - name: PUPPETSERVER_PORT
               value: "{{ template "puppetserver.puppetserver-masters.port" . }}"
+            - name: DNS_ALT_NAMES
+              value: {{ template "puppetdb.fullname" . }}
             {{- if not (hasKey .Values.puppetdb.extraEnv "PUPPETDB_POSTGRES_HOSTNAME") }}
             - name: PUPPETDB_POSTGRES_HOSTNAME
               value: "{{ include "postgresql.hostname" . }}"
@@ -114,6 +117,10 @@ spec:
                 secretKeyRef:
                   name: {{ template "puppetdb.secret" . }}
                   key: username
+            {{- range $key, $value := .Values.global.extraEnv }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
             {{- range $key, $value := .Values.puppetdb.extraEnv }}
             - name: {{ $key }}
               value: "{{ $value }}"
@@ -125,7 +132,7 @@ spec:
               containerPort: 8081
           volumeMounts:
             - name: puppetdb-storage
-              mountPath: /opt/puppetlabs/server/data/puppetdb/certs
+              mountPath: /opt/puppetlabs/server/data/puppetdb
             {{- if .Values.puppetdb.metrics.enabled }}
             - name: puppetdb-metrics-volume
               mountPath: /etc/puppetlabs/puppetdb/jolokia-access.xml
@@ -147,7 +154,7 @@ spec:
             {{- toYaml .Values.puppetboard.resources | nindent 12 }}
           env:
             - name: PUPPETDB_HOST
-              value: "{{ .Values.singleCA.puppetdb.overrideHostname | default "puppetdb"  }}"
+              value: {{ .Values.singleCA.puppetdb.overrideHostname | default ( include "puppetdb.fullname" . ) | quote }} # TODO: use templating instead becaus right now if overrideHostname is define but singleCA disable it break the deployment
             - name: PUPPETDB_PORT
               value: "8081"
             - name: PUPPETDB_SSL_VERIFY
@@ -161,8 +168,12 @@ spec:
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: puppetdb-puppetboard
+                  name: {{ template "puppetdb.fullname" . }}-puppetboard
                   key: SECRET_KEY
+            {{- range $key, $value := .Values.global.extraEnv }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
             {{- range $key, $value := .Values.puppetboard.extraEnv }}
             - name: {{ $key }}
               value: "{{ $value }}"
@@ -175,7 +186,7 @@ spec:
             runAsNonRoot: false
           volumeMounts:
             - name: puppetdb-storage
-              mountPath: /opt/puppetlabs/server/data/puppetdb/certs
+              mountPath: /opt/puppetlabs/server/data/puppetdb
         {{- end }}
         {{- if .Values.singleCA.enabled }}
         # singleCA crl script update Sidecar
@@ -187,32 +198,27 @@ spec:
           env:
           - name: SSL_PATH
             value: /opt/puppetlabs/server/data/puppetdb/certs
-          {{- if .Values.singleCA.crl.credential }}
-          - name: CRL_CREDS_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Values.singleCA.crl.credential.existingSecret }}
-                key: username
-          - name: CRL_CREDS_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Values.singleCA.crl.credential.existingSecret }}
-                key: password
+          - name: CRL_SCRIPT_PATH
+            value: /opt/puppetlabs/server/data/puppetdb/scripts
+          {{- range $key, $value := .Values.global.extraEnv }}
+          - name: {{ $key }}
+            value: "{{ $value }}"
           {{- end }}
           {{- range $key, $value := .Values.singleCA.extraEnv }}
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
-          command: ["sh", "-c"]
-          args:
-            - 'chmod +x /opt/puppetlabs/server/data/puppetdb/certs/crl_entrypoint.sh &&'
-            - '/opt/puppetlabs/server/data/puppetdb/certs/crl_entrypoint.sh'
+          {{- range $key, $value := .Values.puppetdb.extraEnv }}
+          - name: {{ $key }}
+            value: "{{ $value }}"
+          {{- end }}
+          command: ["sh", "-c", "/opt/puppetlabs/server/data/puppetdb/scripts/crl_entrypoint.sh" ]
           securityContext:
             runAsUser: 999   # "puppet" UID
             runAsGroup: 999 # "puppet" GID
           volumeMounts:
           - name: puppetdb-storage
-            mountPath: /opt/puppetlabs/server/data/puppetdb/certs
+            mountPath: /opt/puppetlabs/server/data/puppetdb
           readinessProbe:
             exec:
               command: ["/bin/sh", "-ec", "test -f ~/.crl_cronjob.success"]
@@ -238,12 +244,17 @@ spec:
           {{- toYaml .Values.puppetdb.customPersistentVolumeClaim.storage.config | nindent 10 }}
         {{- else }}
           persistentVolumeClaim:
-            claimName: puppetdb-claim
+            claimName: {{ include "puppetdb.fullname" . }}-claim
         {{- end }}
         {{- if .Values.puppetdb.metrics.enabled }}
         - name: puppetdb-metrics-volume
           configMap:
-            name: puppetdb-metrics-config
+            name: {{ include "puppetdb.fullname" . }}-metrics-config
+        {{- end }}
+        {{- if .Values.puppetdb.customconfigs.enabled }}
+        - name: puppetdb-custom-configs
+          configMap:
+            name: {{ include "puppetdb.fullname" . }}-custom-configs
         {{- end }}
         {{- if .Values.puppetdb.customconfigs.enabled }}
         - name: puppetdb-custom-configs

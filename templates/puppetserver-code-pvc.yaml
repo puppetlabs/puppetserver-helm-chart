@@ -4,16 +4,19 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: puppet-code-claim
+  name: {{ template "puppetserver.fullname" . }}-code-claim
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+    {{- with .Values.puppetserver.masters.extraLabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
   {{- if .Values.storage.annotations }}
   annotations:
     {{ toYaml .Values.storage.annotations | nindent 4 }}
   {{- end }}
 spec:
   accessModes:
-    {{- toYaml .Values.storage.accessModes | nindent 4 }} 
+    {{- toYaml .Values.storage.accessModes | nindent 4 }}
   resources:
     requests:
       storage: {{ .Values.storage.size | quote }}

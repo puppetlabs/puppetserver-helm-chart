@@ -4,12 +4,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: puppetdb-claim
+  name: {{ template "puppetdb.fullname" . }}-claim
   labels:
     {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
-  {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) (.Values.storage.annotations) }}
+    {{- range $key, $value := .Values.puppetdb.extraLabels }}
+    {{ $key }}: {{ $value }}
+    {{- end }}
   annotations:
-  {{- end }}
     {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) }}
     "helm.sh/hook": "pre-install"
     "helm.sh/hook-weight": "0"

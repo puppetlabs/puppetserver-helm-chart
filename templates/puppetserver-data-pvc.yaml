@@ -1,11 +1,13 @@
-{{- if .Values.puppetserver.masters.customPersistentVolumeClaim.serverdata.enable }}
-{{- else }}
+{{- if not .Values.puppetserver.masters.customPersistentVolumeClaim.serverdata.enable }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: puppet-serverdata-claim
+  name: {{ template "puppetserver.fullname" . }}-serverdata-claim
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+    {{- with .Values.puppetserver.masters.extraLabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
   {{- if .Values.storage.annotations }}
   annotations:
     {{ toYaml .Values.storage.annotations | nindent 4 }}

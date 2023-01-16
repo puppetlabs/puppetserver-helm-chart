@@ -2,8 +2,17 @@
 apiVersion: {{ include "podsecuritypolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
-  name: {{ default "puppetdb" .Values.puppetdb.serviceAccount.accountName }}-psp
+  name: {{ template "puppetdb.fullname" . }}
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
+    {{- range $key, $value := .Values.puppetdb.extraLabels }}
+    {{ $key }}: {{ $value }}
+    {{- end }}
+  annotations:
+    {{- with .Values.puppetdb.psp.annotations -}}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   privileged: true
   volumes:

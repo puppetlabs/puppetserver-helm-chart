@@ -2,12 +2,16 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: init-masters-config
+  name: {{ template "puppetserver.fullname" . }}-init-masters-config
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+    {{- with .Values.puppetserver.masters.extraLabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
 data:
   check_for_masters.sh: |
     #!/usr/bin/env bash
+    PUPPET_SSL_CERT_PEM=/etc/puppetlabs/puppet/ssl/certs/puppet.pem
     if [[ -d "$PUPPET_SSL_DIR" ]]; then
         echo "A Puppetserver master has already started running."
         echo "Waiting to finish the generation of the Puppet SSL certs..."

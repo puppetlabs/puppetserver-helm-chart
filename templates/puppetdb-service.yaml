@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: puppetdb
+  name: {{ template "puppetdb.fullname" . }}
   labels:
     {{- include "puppetserver.puppetdb.labels" . | nindent 4 }}
     {{- if .Values.puppetdb.service.labels }}

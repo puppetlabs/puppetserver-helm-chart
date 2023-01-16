@@ -1,18 +1,20 @@
-{{- if .Values.puppetserver.masters.customPersistentVolumeClaim.ca.enable }}
-{{- else }}
+{{- if not .Values.puppetserver.masters.customPersistentVolumeClaim.ca.enable }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: puppet-ca-claim
+  name: {{ template "puppetserver.fullname" . }}-ca-claim
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+    {{- with .Values.puppetserver.masters.extraLabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
   {{- if .Values.storage.annotations }}
   annotations:
     {{ toYaml .Values.storage.annotations | nindent 4 }}
   {{- end }}
 spec:
   accessModes:
-    {{- toYaml .Values.storage.accessModes | nindent 4 }} 
+    {{- toYaml .Values.storage.accessModes | nindent 4 }}
   resources:
     requests:
       storage: {{ .Values.storage.size | quote }}

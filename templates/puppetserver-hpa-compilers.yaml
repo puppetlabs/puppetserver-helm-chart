@@ -3,14 +3,17 @@
 apiVersion: {{ include "puppetserver.autoscaling.apiVersion" . }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "puppetserver.name" . }}-compilers-autoscaler
+  name: {{ template "puppetserver.fullname" . }}-compilers-autoscaler
   labels:
     {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 4 }}
+    {{- with .Values.puppetserver.compilers.extraLabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: StatefulSet
-    name: {{ template "puppetserver.name" . }}-puppetserver-compiler
+    name: {{ template "puppetserver.fullname" . }}-puppetserver-compiler
   minReplicas: {{ .Values.puppetserver.compilers.autoScaling.minCompilers }}
   maxReplicas: {{ .Values.puppetserver.compilers.autoScaling.maxCompilers }}
   metrics:
