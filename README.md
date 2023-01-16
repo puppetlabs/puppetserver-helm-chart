@@ -159,6 +159,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `global.postgresql.auth.password`| puppetdb and postgresql password |`unbreakablePassword`|
 | `global.postgresql.auth.existingSecret`| existing k8s secret that holds puppetdb and postgresql username and password |``|
 | `global.postgresql.*`| please refer to https://github.com/bitnami/charts/tree/main/bitnami/postgresql#global-parameters |``|
+| `global.extraEnv.*`| add extra environment variables to all containers |``|
 | `puppetserver.name` | puppetserver component label | `puppetserver`|
 | `puppetserver.image` | puppetserver image | `puppet/puppetserver`|
 | `puppetserver.tag` | puppetserver img tag | `6.12.1`|
@@ -178,6 +179,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.masters.livenessProbeTimeout` | the timeout for the puppetserver masters liveness probe  | `10`|
 | `puppetserver.masters.livenessProbeFailureThreshold` | the failure threshold for the puppetserver masters liveness probe | `3`|
 | `puppetserver.masters.livenessProbeSuccessThreshold` | the success threshold for the puppetserver masters liveness probe | `1`|
+| `puppetserver.masters.startupProbePeriodSeconds` | the timeout for the puppetserver masters startup probe  | `60`|
 | `puppetserver.masters.fqdns.alternateServerNames` | puppetserver masters alternate fqdns |``|
 | `puppetserver.masters.service.type` | puppetserver masters svc type | `ClusterIP`|
 | `puppetserver.masters.service.ports` | puppetserver masters svc exposed ports | `puppetserver`|
@@ -269,7 +271,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.extraInitArgs`| puppetserver additional initArgs |``|
 | `r10k.name` | r10k component label | `r10k`|
 | `r10k.image` | r10k img | `puppet/r10k`|
-| `r10k.tag` | r10k img tag | `3.5.1`|
+| `r10k.tag` | r10k img tag | `3.15.2`|
 | `r10k.pullPolicy` | r10k img pull policy | `IfNotPresent`|
 | `r10k.code.resources` | r10k control repo resource limits |``|
 | `r10k.code.cronJob.enabled` | enable or disable r10k control repo cron job schedule policy | `true`|
@@ -363,7 +365,6 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `singleCA.resources`| crl container resource limits |``|
 | `singleCA.config`| override the default crl script to retrieve the crl.pem |`see values.yaml`|
 | `singleCA.crl.url`| set the url where crl.pem is located (MANDATORY) |``|
-| `singleCA.crl.credential.existingSecret`| set credential of `crl.url` if needed |``|
 | `singleCA.puppetdb.overrideHostname`| override the puppetdb hostname, needed when using CA where you can't add private SAN name |``|
 | `singleCA.certificates.existingSecret.puppetserver`| existing k8s secret that holds `ca.pem`, `puppet.pem` & `puppet.key` |``|
 | `singleCA.certificates.existingSecret.puppetdb`| existing k8s secret that holds `ca.pem`, `puppetdb.pem` & `puppetdb.key` |``|
