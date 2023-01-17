@@ -14,7 +14,7 @@ metadata:
     "helm.sh/hook-weight": "0"
     {{- end }}
     {{- if .Values.storage.annotations }}
-    {{ toYaml .Values.storage.annotations }}
+    {{ toYaml .Values.storage.annotations | indent 4 }}
     {{- end }}
 spec:
   accessModes:
