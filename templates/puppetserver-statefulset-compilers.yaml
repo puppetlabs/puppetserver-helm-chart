@@ -1,8 +1,8 @@
-{{- if .Values.puppetserver.compilers.enabled }}
+{{- if and .Values.puppetserver.compilers.enabled ( eq .Values.puppetserver.compilers.kind "StatefulSet" )}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ template "puppetserver.name" . }}-puppetserver-compiler
+  name: {{ template "puppetserver.fullname" . }}-puppetserver-compiler
   labels:
     {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 4 }}
     {{- with .Values.puppetserver.compilers.extraLabels -}}
@@ -244,8 +244,8 @@ spec:
         {{- if .Values.puppetserver.puppeturl }}
         # r10k Code Sidecar
         - name: r10k-code
-          image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
-          imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
+          image: "{{ tpl .Values.r10k.image . }}:{{ tpl .Values.r10k.tag . }}"
+          imagePullPolicy: {{ tpl .Values.r10k.imagePullPolicy . }}
           resources:
             {{- toYaml .Values.r10k.code.resources | nindent 12 }}
           env:
@@ -259,8 +259,8 @@ spec:
           {{- end }}
           command: [ "sh", "-c", "/etc/puppetlabs/puppet/r10k_code_entrypoint.sh" ]
           securityContext:
-            runAsUser: 999   # "puppet" UID
-            runAsGroup: 999 # "puppet" GID
+            runAsUser: {{ .Values.global.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
           volumeMounts:
           {{- with .Values.r10k.code.viaSsh.credentials }}
           {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
@@ -291,8 +291,8 @@ spec:
         {{- if (include "hiera.enable" .) }}
         # r10k Hiera Sidecar
         - name: r10k-hiera
-          image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
-          imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
+          image: "{{ tpl .Values.r10k.image . }}:{{ tpl .Values.r10k.tag . }}"
+          imagePullPolicy: {{ tpl .Values.r10k.imagePullPolicy . }}
           resources:
             {{- toYaml .Values.r10k.hiera.resources | nindent 12 }}
           env:
@@ -306,8 +306,8 @@ spec:
           {{- end }}
           command: [ "sh", "-c", "/etc/puppetlabs/puppet/r10k_hiera_entrypoint.sh" ]
           securityContext:
-            runAsUser: 999   # "puppet" UID
-            runAsGroup: 999 # "puppet" GID
+            runAsUser: {{ .Values.global.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
           volumeMounts:
           {{- with .Values.r10k.hiera.viaSsh.credentials }}
           {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
@@ -335,13 +335,13 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
         {{- end }}
-        {{- if .Values.singleCA.enabled }}
+        {{- if and .Values.singleCA.enabled}}
         # singleCA crl script update Sidecar
         - name: update-crl
-          image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
-          imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
+          image: "{{ tpl .Values.singleCA.crl.image . }}:{{ tpl .Values.singleCA.crl.tag . }}"
+          imagePullPolicy: {{ tpl .Values.singleCA.crl.imagePullPolicy . }}
           resources:
-            {{- toYaml .Values.singleCA.resources | nindent 12 }}
+            {{- toYaml .Values.singleCA.crl.resources | nindent 12 }}
           env:
           - name: SSL_PATH
             value: /etc/puppetlabs/puppet/ssl
@@ -351,7 +351,7 @@ spec:
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
-          {{- range $key, $value := .Values.singleCA.extraEnv }}
+          {{- range $key, $value := .Values.singleCA.crl.extraEnv }}
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
@@ -361,8 +361,8 @@ spec:
           {{- end }}
           command: ["sh", "-c", "/etc/puppetlabs/puppet/ssl/crl_entrypoint.sh" ] #
           securityContext:
-            runAsUser: 999   # "puppet" UID
-            runAsGroup: 999 # "puppet" GID
+            runAsUser: {{ .Values.global.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
           volumeMounts:
           - name: puppet-puppet-volume
             mountPath: /etc/puppetlabs/puppet/
@@ -412,13 +412,8 @@ spec:
           configMap:
             name: {{ template "puppetserver.fullname" . }}-crl-config
         - name: puppetserver-certs
-        {{- if not .Values.singleCA.enabled }}
-          configMap:
-            name: {{ template "puppetserver.fullname" . }}-preinstall
-        {{- else }}
           secret:
             secretName: {{ .Values.singleCA.certificates.existingSecret.puppetserver }}
-        {{- end }}
         {{- end }}
         - name: manifests-volume
           configMap:

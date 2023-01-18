@@ -9,10 +9,17 @@ metadata:
     {{ toYaml . | nindent 4 }}
     {{- end }}
   annotations:
-    helm.sh/hook: pre-install
-    helm.sh/hook-delete-policy: before-hook-creation
-    helm.sh/hook-weight: "-10"
+    "helm.sh/hook": "pre-install"
+    "helm.sh/hook-weight": "0"
 data:
+  crl_kubernetes_cronjob.sh: |-
+    url={{ required "A valid .Values.singleCA.crl.url required!" .Values.singleCA.crl.url }}
+    curl -o /tmp/crl.pem $url || { echo 'could not retrieve crl.pem' ; exit 1; }
+
+    mv /tmp/crl.pem /crl/crl.pem
+
+    grep -q "BEGIN X509 CRL" "/crl/crl.pem" > /dev/null 2>&1 || { echo 'crl.pem file is not in the right format'; cat /crl/crl.pem ; exit 1; }
+
   crl.sh: |-
     {{- if .Values.singleCA.config }}
     {{ .Values.singleCA.config | nindent 6 }}
@@ -56,7 +63,7 @@ data:
       /bin/sh -c $CRL_SCRIPT_PATH/crl_cronjob.sh
     fi
     cat > ~/.crl_crontab <<'EOF'
-    {{ .Values.singleCA.cronJob.schedule }} /bin/sh -c $CRL_SCRIPT_PATH/crl_cronjob.sh
+    {{ .Values.singleCA.crl.cronJob.schedule }} /bin/sh -c $CRL_SCRIPT_PATH/crl_cronjob.sh
     EOF
     # tail -Fq ~/.crl_cronjob.out &
     touch ~/.crl_cronjob.success > /dev/null 2>&1

@@ -39,7 +39,7 @@ If you prefer not to auto-sign or manually sign the Puppet Agents' CSRs - you ca
 ## Using Single CA
 
 If you prefer, you can use a single externally issued CA - <https://puppet.com/docs/puppet/7/config_ssl_external_ca.html>.  
-Enable it with `.Values.singleCA.enable`, add the crl.pem url with `.Values.singleCA.crl.url`, optionnally you can pass credential using `.Values.singleCA.crl.credential.existingSecret`. 
+Enable it with `.Values.singleCA.enable`, add the crl.pem url with `.Values.singleCA.crl.url`.
 
 Generate puppet & puppetdb secret (must be name `puppet.pem` & `puppetdb.pem`):
 ```
@@ -51,10 +51,8 @@ finally set `.Values.singleCA.certificates.existingSecret.puppetserver` and `.Va
 Additionnaly, if you use a public certificate authority, you can't use private SAN name, so you have to override puppetdb name with `.Values.singleCA.puppetdb.overrideHostname` (with the full name ie: puppetdb.my.domain) 
 define a `ClusterIP` on `.Values.puppetdb.service.clusterIP` & `.values.singleCA.hostAliases` with the same IP
 
-and it's a workaround for now but you have to update the DNS config, for CoreDNS add the following line in the configMap:
-```
-rewrite name puppetdb.my.domain puppetdb.<namespace>.svc.cluster.local
-```
+If you prefer, you can use crl update as cronjob instead of sidecar, if reduce resources utilzation because only 1 pod is running.  
+:warning: but it may not work on cluster with multi zone. that why it's not enable by default
 
 ## Horizontal Scaling
 
@@ -73,6 +71,23 @@ To achieve better throughput of Puppet Infrastructure, you can enable and scale 
 For now it's not available anymore, since bitnami cleanned their old release. for multiple Postgresql we have to use postgresql-ha.  
 Read replica return an error on puppetdb:  
 `ERROR [p.p.c.services] Will retry database connection after temporary failure: java.sql.SQLTransientConnectionException: PDBMigrationsPool: default - Connection is not available, request timed out after 3002ms.`
+
+## Deploy R10K as deployment
+:warning: may not work in multi zone environment. that why it's not enable by default
+
+You can configure r10k to run as deployment instead of sidecar to avoid r10k container multiplication (and avoid r10k run conflict)
+to share r10k data between all componant (master or compiler), change the following values:
+```
+# values.yaml
+
+# change this only if you use compilers
+puppetserver:
+    compilers:
+        kind: Deployment
+
+r10k:
+  asSidecar: false
+```
 
 
 ## Chart Components
@@ -159,11 +174,22 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `global.postgresql.auth.password`| puppetdb and postgresql password |`unbreakablePassword`|
 | `global.postgresql.auth.existingSecret`| existing k8s secret that holds puppetdb and postgresql username and password |``|
 | `global.postgresql.*`| please refer to https://github.com/bitnami/charts/tree/main/bitnami/postgresql#global-parameters |``|
+| `global.r10k.image` | r10k image | `puppet/r10k`|
+| `global.r10k.tag` | r10k img tag | `3.15.2`|
+| `global.r10k.imagePullPolicy`| r10k image pull policy |`IfNotPresent`|
 | `global.extraEnv.*`| add extra environment variables to all containers |``|
 | `puppetserver.name` | puppetserver component label | `puppetserver`|
 | `puppetserver.image` | puppetserver image | `puppet/puppetserver`|
 | `puppetserver.tag` | puppetserver img tag | `6.12.1`|
 | `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`|
+| `puppetserver.customPersistentVolumeClaim.serverdata.enable`| If true, use custom PVC for puppet data |``|
+| `puppetserver.customPersistentVolumeClaim.serverdata.config`| Configuration for custom PVC for puppet data |``|
+| `puppetserver.customPersistentVolumeClaim.puppet.enable`| If true, use custom PVC for puppet |``|
+| `puppetserver.customPersistentVolumeClaim.puppet.config`| Configuration for custom PVC for puppet |``|
+| `puppetserver.customPersistentVolumeClaim.code.enable`| If true, use custom PVC for code  |``|
+| `puppetserver.customPersistentVolumeClaim.code.config`| Configuration for custom PVC for code |``|
+| `puppetserver.customPersistentVolumeClaim.serverdata.enable`| If true, use custom PVC for serverdata  |``|
+| `puppetserver.customPersistentVolumeClaim.serverdata.config`| Configuration for custom PVC for serverdata |``|
 | `puppetserver.masters.resources` | puppetserver masters resource limits | ``|
 | `puppetserver.masters.extraContainers`| Extra containers to inject into the master pod |``|
 | `puppetserver.masters.extraEnv` | puppetserver masters additional container env vars |``|
@@ -198,12 +224,6 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.masters.multiMasters.autoScaling.maxMasters` | If masters autoscaling enabled, this field sets maximum masters count | `3`|
 | `puppetserver.masters.multiMasters.autoScaling.cpuUtilizationPercentage` | Target masters CPU utilization percentage to scale | `75`|
 | `puppetserver.masters.multiMasters.autoScaling.memoryUtilizationPercentage` | Target masters memory utilization percentage to scale | `75`|
-| `puppetserver.masters.customPersistentVolumeClaim.puppet.enable`| If true, use custom PVC for puppet |``|
-| `puppetserver.masters.customPersistentVolumeClaim.puppet.config`| Configuration for custom PVC for puppet |``|
-| `puppetserver.masters.customPersistentVolumeClaim.code.enable`| If true, use custom PVC for code  |``|
-| `puppetserver.masters.customPersistentVolumeClaim.code.config`| Configuration for custom PVC for code |``|
-| `puppetserver.masters.customPersistentVolumeClaim.serverdata.enable`| If true, use custom PVC for serverdata  |``|
-| `puppetserver.masters.customPersistentVolumeClaim.serverdata.config`| Configuration for custom PVC for serverdata |``|
 | `puppetserver.masters.backup.enabled` | If true, enable master backup with a kubernetes CronJob and restic | `false`|
 | `puppetserver.masters.backup.resources` | puppetserver restic backup CronJob resource limits | ``|
 | `puppetserver.masters.backup.failedJobsHistoryLimit` | puppetserver restic backup CronJob failedJobsHistoryLimit | `5`|
@@ -360,11 +380,19 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `storage.annotations`| Storage annotations |``|
 | `storage.size`| PVCs Storage Size |`400Mi`|
 | `singleCA.enabled`| Enable single CA |`false`|
-| `singleCA.cronJob.schedule`| crl cron job schedule policy |`* 0 * * * *`|
-| `singleCA.extraEnv`| crl additional container env vars |``|
-| `singleCA.resources`| crl container resource limits |``|
-| `singleCA.config`| override the default crl script to retrieve the crl.pem |`see values.yaml`|
+| `singleCA.crl.cronJob.schedule`| crl cron job schedule policy |`* 0 * * * *`|
+| `singleCA.crl.extraEnv`| crl additional container env vars |``|
+| `singleCA.crl.resources`| crl container resource limits |``|
+| `singleCA.crl.config`| override the default crl script to retrieve the crl.pem |`see values.yaml`|
 | `singleCA.crl.url`| set the url where crl.pem is located (MANDATORY) |``|
+| `singleCA.crl.asSidecar`| configure crl updater with Kubernetes CronJob instead of pod sidecar (may not work with multi zone) |`false`|
+| `singleCA.crl.cronJob.schedule`| define CronJob schedule |`0 * * * *`|
+| `singleCA.crl.cronJob.failedJobsHistoryLimit`| puppetserver crl  CronJob failedJobsHistoryLimit |`2`|
+| `singleCA.crl.cronJob.successfulJobsHistoryLimit`| puppetserver crl  CronJob successfulJobsHistoryLimit |`2`|
+| `singleCA.crl.image`| crl updater container image |`puppet/r10k`|
+| `singleCA.crl.tag`| crl updater container image tag |`3.15.2`|
+| `singleCA.crl.imagePullPolicy`| crl updater container image pull policy |`IfNotPresent`|
+| `singleCA.crl.resources`| crl updater container ressources |``|
 | `singleCA.puppetdb.overrideHostname`| override the puppetdb hostname, needed when using CA where you can't add private SAN name |``|
 | `singleCA.certificates.existingSecret.puppetserver`| existing k8s secret that holds `ca.pem`, `puppet.pem` & `puppet.key` |``|
 | `singleCA.certificates.existingSecret.puppetdb`| existing k8s secret that holds `ca.pem`, `puppetdb.pem` & `puppetdb.key` |``|

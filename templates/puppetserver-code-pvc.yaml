@@ -1,13 +1,12 @@
-{{- if (not .Values.puppetserver.compilers.enabled) }}
-{{- if .Values.puppetserver.masters.customPersistentVolumeClaim.code.enable }}
-{{- else }}
+{{- if not .Values.puppetserver.customPersistentVolumeClaim.code.enable }}
+{{- if or ( eq .Values.puppetserver.compilers.kind "Deployment" ) ( not .Values.puppetserver.compilers.enabled ) }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ template "puppetserver.fullname" . }}-code-claim
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
-    {{- with .Values.puppetserver.masters.extraLabels }}
+    {{- with .Values.global.extraLabels }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
   {{- if .Values.storage.annotations }}

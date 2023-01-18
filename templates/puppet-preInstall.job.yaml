@@ -2,19 +2,19 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ template "puppetserver.name" . }}-puppet-preinstall"
+  name: "{{ template "puppetserver.fullname" . }}-puppet-preinstall"
   labels:
     {{- include "puppetserver.puppet.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": "pre-install"
     "helm.sh/hook-weight": "2"
     "helm.sh/resource-policy": keep
-    # "helm.sh/hook-delete-policy": "hook-succeeded,hook-failed" #TODO: issue when no pvc is define. pvc is delete at the end of the job because pupeptserver is not started
+    "helm.sh/hook-delete-policy": "hook-succeeded,hook-failed"
 spec:
   activeDeadlineSeconds: {{.Values.puppetserver.preGeneratedCertsJob.jobDeadline}}
   template:
     metadata:
-      name: "{{ template "puppetserver.name" . }}-preinstall"
+      name: "{{ template "puppetserver.fullname" . }}-preinstall"
       labels:
         {{- include "puppetserver.puppet.labels" . | nindent 8 }}
     spec:
@@ -36,15 +36,25 @@ spec:
               cp /tmp/puppetserver/{{ template "singleCA.puppetserver.certname" . }}.pem /etc/puppetlabs/puppet/ssl/certs/puppet.pem;
               cp /tmp/puppetserver/{{ template "singleCA.puppetserver.certname" . }}.key /etc/puppetlabs/puppet/ssl/private_keys/puppet.pem;
               chown puppet:puppet /etc/puppetlabs/puppet/ssl/certs/puppet.pem /etc/puppetlabs/puppet/ssl/private_keys/puppet.pem /etc/puppetlabs/puppet/ssl/certs/ca.pem;
+              {{- if .Values.singleCA.crl.asSidecar }}
               cp /tmp/crl/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh;
               cp /tmp/crl/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh;
               cp /tmp/crl/crl.sh /etc/puppetlabs/puppet/ssl/crl.sh;
               chown puppet:puppet /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl.sh;
               chmod +x /etc/puppetlabs/puppet/ssl/crl_entrypoint.sh /etc/puppetlabs/puppet/ssl/crl_cronjob.sh /etc/puppetlabs/puppet/ssl/crl.sh;
+              {{- else }}
+              /tmp/crl/crl_kubernetes_cronjob.sh;
+              cp -i /crl/crl.pem /etc/puppetlabs/puppet/ssl/crl.pem;
+              {{- end }}
               {{- else if .Values.puppetserver.preGeneratedCertsJob.enabled }}
               CERTS_FILE=`ls /tmp/puppetserver`;
               tar xf /tmp/puppetserver/"$CERTS_FILE" -C /etc/puppetlabs/puppet/ssl;
               {{- end }}
+          env:
+            {{- range $key, $value := .Values.global.extraEnv }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
           volumeMounts:
             - name: puppetserver-certs
               mountPath: /tmp/puppetserver
@@ -53,10 +63,14 @@ spec:
             {{- if .Values.singleCA.enabled }}
             - name: crl-volume
               mountPath: /tmp/crl
+            {{- if not .Values.singleCA.crl.asSidecar }}
+            - name: puppet-crl-storage
+              mountPath: /crl
+            {{- end }}
             {{- end }}
           securityContext:
-            runAsUser: 999   # "puppet" UID
-            runAsGroup: 999 # "puppet" GID
+            runAsUser: {{ .Values.global.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
         - name: copy-ro-puppetdb-certs
           image: "{{.Values.puppetdb.image}}:{{.Values.puppetdb.tag}}"
           imagePullPolicy: "{{.Values.puppetdb.pullPolicy}}"
@@ -71,16 +85,26 @@ spec:
               cp /tmp/puppetdb/{{ template "singleCA.puppetdb.certname" . }}.pem /opt/puppetlabs/server/data/puppetdb/certs/certs/{{ template "singleCA.puppetdb.certname" . }}.pem;
               cp /tmp/puppetdb/{{ template "singleCA.puppetdb.certname" . }}.key /opt/puppetlabs/server/data/puppetdb/certs/private_keys/{{ template "singleCA.puppetdb.certname" . }}.pem;
               chown puppetdb:puppetdb /opt/puppetlabs/server/data/puppetdb/certs/certs/ca.pem /opt/puppetlabs/server/data/puppetdb/certs/certs/{{ template "singleCA.puppetdb.certname" . }}.pem /opt/puppetlabs/server/data/puppetdb/certs/private_keys/{{ template "singleCA.puppetdb.certname" . }}.pem;
+              {{- if .Values.singleCA.crl.asSidecar }}
               cp /tmp/crl/crl_entrypoint.sh /opt/puppetlabs/server/data/puppetdb/scripts/crl_entrypoint.sh;
               cp /tmp/crl/crl_cronjob.sh /opt/puppetlabs/server/data/puppetdb/scripts/crl_cronjob.sh;
               cp /tmp/crl/crl.sh /opt/puppetlabs/server/data/puppetdb/scripts/crl.sh;
               chown -R puppetdb:puppetdb /opt/puppetlabs/server/data/puppetdb/scripts;
               chmod +x /opt/puppetlabs/server/data/puppetdb/scripts/*.sh;
               ls -la /opt/puppetlabs/server/data/puppetdb/scripts/;
+              {{- else }}
+              /tmp/crl/crl_kubernetes_cronjob.sh;
+              cp -i /crl/crl.pem /opt/puppetlabs/server/data/puppetdb/certs/crl.pem;
+              {{- end }}
               {{- else if .Values.puppetserver.preGeneratedCertsJob.enabled }}
               CERTS_FILE=`ls /tmp/puppetdb`;
               tar xf /tmp/puppetdb/"$CERTS_FILE" -C /opt/puppetlabs/server/data/puppetdb/certs --strip-components 1;
               {{- end }}
+          env:
+            {{- range $key, $value := .Values.global.extraEnv }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
           volumeMounts:
             - name: puppetdb-certs
               mountPath: /tmp/puppetdb
@@ -89,18 +113,22 @@ spec:
             {{- if .Values.singleCA.enabled }}
             - name: crl-volume
               mountPath: /tmp/crl
+            {{- if not .Values.singleCA.crl.asSidecar }}
+            - name: puppet-crl-storage
+              mountPath: /crl
+            {{- end }}
             {{- end }}
           securityContext:
-            runAsUser: 999   # "puppetdb" UID
-            runAsGroup: 999 # "puppetdb" GID
+            runAsUser: {{ .Values.global.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
       imagePullSecrets:
       {{- with .Values.global.imagePullSecrets }}
       {{ toYaml . }}
       {{- end }}
       volumes:
         - name: puppet-puppet-storage
-        {{- if .Values.puppetserver.masters.customPersistentVolumeClaim.puppet.enable }}
-          {{- toYaml .Values.puppetserver.masters.customPersistentVolumeClaim.puppet.config | nindent 10 }}
+        {{- if .Values.puppetserver.customPersistentVolumeClaim.puppet.enable }}
+          {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.puppet.config | nindent 10 }}
         {{- else }}
           persistentVolumeClaim:
             claimName: {{ template "puppetserver.fullname" . }}-puppet-claim
@@ -115,7 +143,7 @@ spec:
         - name: puppetserver-certs
         {{- if not .Values.singleCA.enabled }}
           configMap:
-            name: "{{ template "puppetserver.name" . }}-puppetserver-preinstall"
+            name: "{{ template "puppetserver.fullname" . }}-puppetserver-preinstall"
         {{- else }}
           secret:
             secretName: {{ .Values.singleCA.certificates.existingSecret.puppetserver }}
@@ -123,7 +151,7 @@ spec:
         - name: puppetdb-certs
         {{- if not .Values.singleCA.enabled }}
           configMap:
-            name: "{{ template "puppetserver.name" . }}-puppetdb-preinstall"
+            name: "{{ template "puppetserver.fullname" . }}-puppetdb-preinstall"
         {{- else }}
           secret:
             secretName: {{ .Values.singleCA.certificates.existingSecret.puppetdb }}
@@ -132,5 +160,10 @@ spec:
         - name: crl-volume
           configMap:
             name: {{ template "puppetserver.fullname" . }}-crl-config
+            defaultMode: 0550
+        {{- end }}
+        {{- if and .Values.singleCA.enabled ( not .Values.singleCA.crl.asSidecar ) }}
+        - name: puppet-crl-storage
+          emptyDir: {}
         {{- end }}
 {{- end }}
