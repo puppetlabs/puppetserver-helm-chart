@@ -5,12 +5,17 @@
 ## Global Values
 ##
 global:
+  imagePullSecrets:
+
   curl:
     image: curlimages/curl
     tag: 7.87.0
     imagePullPolicy: IfNotPresent
 
-  imagePullSecrets:
+  r10k:
+    image: puppet/r10k
+    tag: 3.15.2
+    imagePullPolicy: IfNotPresent
 
   pgchecker:
     image: docker.io/busybox
@@ -30,6 +35,14 @@ global:
         usernameKey: username
         userPasswordKey: password
 
+  ## Define the security context (not apply to all pod for now)
+  securityContext:
+    runAsUser: 999  # "puppet" UID
+    runAsGroup: 999 # "puppet" GID
+
+  extraLabels: {}
+
+
 ## Puppet Server Configuration
 ##
 puppetserver:
@@ -37,6 +50,26 @@ puppetserver:
   image: puppet/puppetserver
   tag: 7.9.2
   pullPolicy: IfNotPresent
+
+  ## Use custom PVC for the Puppet Server Master
+  customPersistentVolumeClaim:
+    serverdata:
+      enable: false
+      config: {}
+    #  azureDisk:
+    #    kind: Managed
+    #    diskName: myAKSDisk
+    #    diskURI: /subscriptions/<subscriptionID>/resourceGroups/MC_myAKSCluster_myAKSCluster_eastus/providers/Microsoft.Compute/disks/myAKSDisk
+    puppet:
+      enable: false
+      config: {}
+    code:
+      enable: false
+      config: {}
+    ca:
+      enable: false
+      config: {}
+
   ## Mandatory Deployment of Puppet Server Master/s
   ##
   masters:
@@ -164,25 +197,6 @@ puppetserver:
         cpuUtilizationPercentage: 75
         memoryUtilizationPercentage: 75
 
-    ## Use custom PVC for the Puppet Server Master
-    customPersistentVolumeClaim:
-      serverdata:
-        enable: false
-        config: {}
-      #  azureDisk:
-      #    kind: Managed
-      #    diskName: myAKSDisk
-      #    diskURI: /subscriptions/<subscriptionID>/resourceGroups/MC_myAKSCluster_myAKSCluster_eastus/providers/Microsoft.Compute/disks/myAKSDisk
-      puppet:
-        enable: false
-        config: {}
-      code:
-        enable: false
-        config: {}
-      ca:
-        enable: false
-        config: {}
-
     ## enable if a kubernetes CronJob should be backup the puppetserver master pv's
     #
     backup:
@@ -214,6 +228,7 @@ puppetserver:
   ##
   compilers:
     enabled: false
+    kind: StatefulSet
   ## Puppet Server Compiler resource requests and limits
   ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -406,9 +421,12 @@ puppetserver:
 ##
 r10k:
   name: r10k
-  image: puppet/r10k
-  tag: 3.15.2
-  pullPolicy: IfNotPresent
+  image: "{{ .Values.global.r10k.image }}"
+  tag: "{{ .Values.global.r10k.tag }}"
+  imagePullPolicy: "{{ .Values.global.r10k.imagePullPolicy }}"
+  asSidecar: true
+  updateStrategy:
+    type: RollingUpdate
   code:
     resources: {}
     #  requests:
@@ -770,12 +788,20 @@ storage:
 
 singleCA:
   enabled: false
-  cronJob:
-    schedule: "* 0 * * * *"
   crl:
     url:
-  extraEnv: {}
-  resources: {}
+    asSidecar: true
+    image: "{{ .Values.global.r10k.image }}"
+    tag: "{{ .Values.global.r10k.tag }}"
+    imagePullPolicy: "{{ .Values.global.r10k.imagePullPolicy }}"
+    cronJob:
+      schedule: "0 * * * *"
+      failedJobsHistoryLimit: 2
+      successfulJobsHistoryLimit: 1
+
+
+    extraEnv: {}
+    resources: {}
     #  requests:
     #    memory: 128Mi
     #    cpu: 50m

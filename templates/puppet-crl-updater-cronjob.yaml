@@ -1,0 +1,85 @@
+{{- if and ( not .Values.singleCA.crl.asSidecar ) .Values.singleCA.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ template "puppetserver.fullname" . }}-crl-updater
+  labels:
+    {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
+    {{- with .Values.singleCA.crl.extraLabels -}}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  concurrencyPolicy: Forbid
+  suspend: false
+  failedJobsHistoryLimit: {{ .Values.singleCA.crl.cronJob.failedJobsHistoryLimit }}
+  schedule: "{{ .Values.singleCA.crl.cronJob.schedule }}"
+  successfulJobsHistoryLimit: {{ .Values.singleCA.crl.cronJob.successfulJobsHistoryLimit }}
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "puppetserver.puppetserver.labels" . | nindent 8 }}
+        {{- with .Values.singleCA.crl.extraLabels -}}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: crl-updater
+              image: "{{ tpl .Values.singleCA.crl.image . }}:{{ tpl .Values.singleCA.crl.tag . }}"
+              imagePullPolicy: {{ tpl .Values.singleCA.crl.imagePullPolicy . }}
+              command:
+                - /bin/sh
+                - -c
+              args:
+                - /tmp/crl/crl_kubernetes_cronjob.sh;
+                  yes | cp -i /crl/crl.pem /etc/puppetlabs/puppet/ssl/crl.pem;
+                  yes | cp -i /crl/crl.pem /opt/puppetlabs/server/data/puppetdb/certs/crl.pem;
+                  ls -la /etc/puppetlabs/puppet/ssl/crl.pem;
+                  ls -la /opt/puppetlabs/server/data/puppetdb/certs/crl.pem;
+              resources:
+                {{- toYaml .Values.singleCA.crl.resources | nindent 16 }}
+              env:
+                {{- range $key, $value := .Values.global.extraEnv }}
+                - name: {{ $key }}
+                  value: "{{ $value }}"
+                {{- end }}
+                {{- range $key, $value := .Values.singleCA.crl.extraEnv }}
+                - name: {{ $key }}
+                  value: "{{ $value }}"
+                {{- end }}
+              volumeMounts:
+                - name: crl-volume
+                  mountPath: /tmp/crl
+                - name: puppet-crl-storage
+                  mountPath: /crl/
+                - name: puppet-puppet-storage
+                  mountPath: /etc/puppetlabs/puppet/
+                - name: puppetdb-storage
+                  mountPath: /opt/puppetlabs/server/data/puppetdb
+              securityContext:
+                runAsUser: {{ .Values.global.securityContext.runAsUser }}
+                runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+          volumes:
+            - name: crl-volume
+              configMap:
+                name: {{ template "puppetserver.fullname" . }}-crl-config
+                defaultMode: 0550
+            - name: puppet-crl-storage
+              emptyDir: {}
+            - name: puppet-puppet-storage
+            {{- if .Values.puppetserver.customPersistentVolumeClaim.puppet.enable }}
+              {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.puppet.config | nindent 14 }}
+            {{- else }}
+              persistentVolumeClaim:
+                claimName: {{ template "puppetserver.fullname" . }}-puppet-claim
+            {{- end }}
+            - name: puppetdb-storage
+            {{- if .Values.puppetdb.customPersistentVolumeClaim.storage.enable }}
+              {{- toYaml .Values.puppetdb.customPersistentVolumeClaim.storage.config | nindent 14 }}
+            {{- else }}
+              persistentVolumeClaim:
+                claimName: {{ include "puppetdb.fullname" . }}-claim
+            {{- end }}
+{{- end }}

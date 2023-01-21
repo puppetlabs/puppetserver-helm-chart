@@ -26,7 +26,9 @@ spec:
         {{- if .Values.puppetdb.customconfigs.enabled }}
         checksum/custom-configs.configmap: {{ include (print $.Template.BasePath "/puppetdb-customconfigs-configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if and .Values.singleCA.enabled .Values.singleCA.crl.asSidecar }}
         checksum/crl-config: {{ include (print $.Template.BasePath "/update-crl-configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
@@ -154,7 +156,7 @@ spec:
             {{- toYaml .Values.puppetboard.resources | nindent 12 }}
           env:
             - name: PUPPETDB_HOST
-              value: {{ .Values.singleCA.puppetdb.overrideHostname | default ( include "puppetdb.fullname" . ) | quote }} # TODO: use templating instead becaus right now if overrideHostname is define but singleCA disable it break the deployment
+              value: {{ if .Values.singleCA.enabled}}{{.Values.singleCA.puppetdb.overrideHostname}}{{ else }}{{ ( include "puppetdb.fullname" . ) }}{{ end }}
             - name: PUPPETDB_PORT
               value: "8081"
             - name: PUPPETDB_SSL_VERIFY
@@ -188,13 +190,13 @@ spec:
             - name: puppetdb-storage
               mountPath: /opt/puppetlabs/server/data/puppetdb
         {{- end }}
-        {{- if .Values.singleCA.enabled }}
+        {{- if and .Values.singleCA.enabled .Values.singleCA.crl.asSidecar }}
         # singleCA crl script update Sidecar
         - name: update-crl
-          image: "{{.Values.r10k.image}}:{{.Values.r10k.tag}}"
-          imagePullPolicy: "{{.Values.r10k.pullPolicy}}"
+          image: "{{ tpl .Values.singleCA.crl.image . }}:{{ tpl .Values.singleCA.crl.tag . }}"
+          imagePullPolicy: {{ tpl .Values.singleCA.crl.imagePullPolicy . }}
           resources:
-            {{- toYaml .Values.singleCA.resources | nindent 12 }}
+            {{- toYaml .Values.singleCA.crl.resources | nindent 12 }}
           env:
           - name: SSL_PATH
             value: /opt/puppetlabs/server/data/puppetdb/certs
@@ -204,7 +206,7 @@ spec:
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
-          {{- range $key, $value := .Values.singleCA.extraEnv }}
+          {{- range $key, $value := .Values.singleCA.crl.extraEnv }}
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
@@ -214,8 +216,8 @@ spec:
           {{- end }}
           command: ["sh", "-c", "/opt/puppetlabs/server/data/puppetdb/scripts/crl_entrypoint.sh" ]
           securityContext:
-            runAsUser: 999   # "puppet" UID
-            runAsGroup: 999 # "puppet" GID
+            runAsUser: {{ .Values.global.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
           volumeMounts:
           - name: puppetdb-storage
             mountPath: /opt/puppetlabs/server/data/puppetdb
