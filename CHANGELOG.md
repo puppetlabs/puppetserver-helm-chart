@@ -5,7 +5,16 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v7.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.0.0) (2023-01-xx)
+## [v7.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.2.0) (2023-01-18)
+- Fix: puppetdb pvc deletion when preinstall job finnish before puppetdb pod start
+- Feat: Allow crl to be updated as Kubernetes cron job instead of pod side car (share the crl between all deployment)
+- Feat: Allow compilers to run as Deployment
+- Feat: Review pvc creation between masters & compilers
+- Feat: reorganize `singleCA` params
+- Feat: use templating value for r10k image (to avoid duplication)
+- Feat: allow running r10k a pod instead sidecar (share r10k code between all deployment)
+
+## [v7.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.1.0) (2023-01-16)
 - Fix `extraLabels` issue (https://github.com/puppetlabs/puppetserver-helm-chart/issues/135) apply code from PR https://github.com/puppetlabs/puppetserver-helm-chart/pull/137
 - Fix: Rename all kubernetes resource with the release name as prefix
 - Fix: move all configmap in /tmp to avoid Read Only error in puppetserver init container
