@@ -33,7 +33,7 @@ data:
     {{- if .Values.r10k.hiera.cronJob.splay }}
     sleep $(( RANDOM % {{ int .Values.r10k.hiera.cronJob.splayLimit }} ))
     {{- end }}
-    {{ with .Values.r10k.hiera.cronJob.timeout }}timeout -s 9 -t {{ int . }} {{ end }}/docker-entrypoint.sh deploy environment --config /etc/puppetlabs/puppet/r10k_hiera.yaml \
+    {{ with .Values.r10k.hiera.cronJob.timeout }}timeout -s 9 {{ int . }} {{ end }}/docker-entrypoint.sh deploy environment --config /etc/puppetlabs/puppet/r10k_hiera.yaml \
     --puppetfile {{ template "r10k.hiera.args" . }} > ~/.r10k_hiera_cronjob.out 2>&1
     retVal=$?
     if [ "$retVal" -eq "0" ]; then
