@@ -5,6 +5,9 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v7.2.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.2.1) (2023-01-23)
+- Fix: remove `timeout [-t SECS]` change from BusyBox v1.29.3 to BusyBox v1.33.1 `timeout SECS`
+
 ## [v7.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.2.0) (2023-01-18)
 - Fix: puppetdb pvc deletion when preinstall job finnish before puppetdb pod start
 - Feat: Allow crl to be updated as Kubernetes cron job instead of pod side car (share the crl between all deployment)
