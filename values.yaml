@@ -22,6 +22,11 @@ global:
     tag: 1.36
     imagePullPolicy: IfNotPresent
 
+  puppetdbexporter:
+    image: camptocamp/prometheus-puppetdb-exporter
+    tag: 1.1.0
+    imagePullPolicy: IfNotPresent
+
   ## Credentials for PuppetDB and PostgreSQL
   postgresql:
     auth:
@@ -408,7 +413,18 @@ puppetserver:
     create: false
     annotations:
 
-
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - all
+      add:
+        - CAP_CHOWN
+        - CAP_SETUID
+        - CAP_SETGID
+        - CAP_DAC_OVERRIDE
+        - CAP_AUDIT_WRITE
+        - CAP_FOWNER
   ## The pattern of managing Hieradata in a separate repository is
   ## both common and acceptable. Doing so provides the ability to decouple
   ## the management of configuration data from that of the Puppet code base.
@@ -425,6 +441,13 @@ r10k:
   tag: "{{ .Values.global.r10k.tag }}"
   imagePullPolicy: "{{ .Values.global.r10k.imagePullPolicy }}"
   asSidecar: true
+  podSecurityContext:
+    runAsNonRoot: true
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - all
   updateStrategy:
     type: RollingUpdate
   code:
@@ -531,8 +554,8 @@ r10k:
 puppetdb:
   enabled: true
   name: puppetdb
-  image: puppet/puppetdb
-  tag: 7.10.0
+  image: davidphay/puppetdb
+  tag: 7.12.1
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
@@ -542,6 +565,15 @@ puppetdb:
   #    memory: 1024Mi
   #    cpu: 1000m
   ## Extra containers to inject into the PuppetDB pod
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - all
+      add:
+        - CAP_SETUID
+        - CAP_SETGID
+        - CAP_DAC_OVERRIDE
   extraContainers: []
 
   ## Extra initContainers to inject into the PuppetDB pod
@@ -630,7 +662,7 @@ puppetboard:
   enabled: false
   name: puppetboard
   image: ghcr.io/voxpupuli/puppetboard
-  tag: 4.2.4
+  tag: 4.2.5
   port: 9090
   pullPolicy: IfNotPresent
   service:
@@ -649,6 +681,12 @@ puppetboard:
   #  ENABLE_QUERY: True
   #  INVENTORY_FACTS: Hostname,fqdn,IP Address,ipaddress
   #  GRAPH_FACTS: architecture,puppetversion,osfamily
+  securityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - all
   ingress:
     ## If true, Puppetboard Ingress will be created
     ##
@@ -808,6 +846,13 @@ singleCA:
     #  limits:
     #    memory: 2048Mi
     #    cpu: 100m
+
+    securityContext:
+      runAsNonRoot: true
+      capabilities:
+        drop:
+          - all
+
   config: ''
   certificates:
     existingSecret: {}
@@ -822,3 +867,49 @@ singleCA:
       crlKey: crl.pem
   puppetdb:
     overrideHostname: ''
+
+metrics:
+  prometheus:
+    enabled: false
+    image: "{{ .Values.global.puppetdbexporter.image }}"
+    tag: "{{ .Values.global.puppetdbexporter.tag }}"
+    imagePullPolicy: "{{ .Values.global.puppetdbexporter.imagePullPolicy }}"
+    port: 9635
+    resources: {}
+    extraEnv:
+      ## https://github.com/camptocamp/prometheus-puppetdb-exporter
+      # PUPPETDB_VERBOSE: "True"
+      # PUPPETDB_UNREPORTED_NODE: 2h
+      # REPORT_METRICS_CATEGORIES: 'resources,time,changes,events'
+      # PUPPETDB_SSL_SKIP_VERIFY: "True"
+    ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    metricRelabelings: []
+    ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+    relabelings: []
+    jobLabel: puppetdb
+    interval: 30s
+    honorLabels: true
+    # disableAPICheck: true
+    # (Optional)
+    # scrapeTimeout: 5s
+    # honorTimestamps: true
+    # enableHttp2: true
+    # followRedirects: true
+    # additionalLabels:
+    #   foo: bar
+    # namespace: "another-namespace"
+    # namespaceSelector: {}
+
+  # prometheusRule:
+  #   additionalLabels: {}
+  #   namespace: "another-namespace"
+  #   rules:
+  #     - alert: PuppetdbDown
+  #       expr: up{job="puppetdb"} == 0
+  #       for: 5m
+  #       labels:
+  #         context: puppetdb
+  #         severity: warning
+  #       annotations:
+  #         summary: "Puppetdb Down"
+  #         description: "{{ $labels.pod }} on {{ $labels.nodename }} is down"

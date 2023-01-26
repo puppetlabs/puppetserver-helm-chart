@@ -1,0 +1,17 @@
+suite: test puppet data volume creation
+templates:
+  - puppetserver-data-pvc.yaml
+release:
+  name: puppetserver
+  namespace: puppet
+tests:
+  - it: should not create the volume if "customPersistentVolumeClaim.serverdata.enable" is true
+    set:
+      puppetserver.customPersistentVolumeClaim.serverdata.enable: true
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: should create the volume by default
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim

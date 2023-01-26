@@ -25,6 +25,11 @@ spec:
       port: {{ .Values.puppetboard.port }}
       targetPort: {{ .Values.puppetboard.service.targetPort }}
     {{- end }}
+    {{- if .Values.metrics.prometheus.enabled }}
+    - name: metrics
+      port: {{ .Values.metrics.prometheus.port }}
+      targetPort: {{ .Values.metrics.prometheus.port }}
+    {{- end }}
   {{- if eq .Values.puppetdb.service.type "ClusterIP" }}
   clusterIP: {{ .Values.puppetdb.service.clusterIP  }}
   {{- end }}

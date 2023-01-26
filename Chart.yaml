@@ -1,6 +1,6 @@
 apiVersion: v2
 name: puppetserver
-version: 7.2.2
+version: 7.3.0
 appVersion: 7.9.2
 description: Puppet automates the delivery and operation of software.
 keywords: ["puppet", "puppetserver", "automation", "iac", "infrastructure", "cm", "ci", "cd"]
@@ -8,7 +8,7 @@ home: https://puppet.com/
 icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
 dependencies:
 - name: postgresql
-  version: 12.1.6
+  version: 12.1.11
   repository: https://charts.bitnami.com/bitnami
   condition: postgresql.enabled
 sources:

@@ -30,6 +30,10 @@ spec:
         {{- end }}
     spec:
       # restartPolicy: OnFailure
+      securityContext:
+        {{- toYaml .Values.r10k.podSecurityContext | nindent 8 }}
+        runAsUser: {{ .Values.global.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
       containers:
         - name: r10k-code
           image: "{{ tpl .Values.r10k.image . }}:{{ tpl .Values.r10k.tag . }}"
@@ -75,9 +79,6 @@ spec:
           - name: r10k-code-volume
             mountPath: /etc/puppetlabs/puppet/r10k_code.yaml
             subPath: r10k_code.yaml
-          securityContext:
-            runAsUser: {{ .Values.global.securityContext.runAsUser }}
-            runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
           readinessProbe:
             exec:
               command: ["/bin/sh", "-ec", "test -f {{ .Values.r10k.code.cronJob.successFile }}"]
@@ -86,6 +87,8 @@ spec:
             periodSeconds: 20
             successThreshold: 1
             timeoutSeconds: 5
+          securityContext:
+            {{- toYaml .Values.r10k.containerSecurityContext | nindent 12 }}
         - name: r10k-hiera
           image: "{{ tpl .Values.r10k.image . }}:{{ tpl .Values.r10k.tag . }}"
           imagePullPolicy: {{ tpl .Values.r10k.imagePullPolicy . }}
@@ -142,9 +145,6 @@ spec:
               mountPath: /etc/puppetlabs/puppet/eyaml/keys/private_key.pkcs7.pem
               subPath: private_key.pkcs7.pem
             {{- end }}
-          securityContext:
-            runAsUser: {{ .Values.global.securityContext.runAsUser }}
-            runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
           readinessProbe:
             exec:
               command: ["/bin/sh", "-ec", "test -f {{ .Values.r10k.hiera.cronJob.successFile }}"]
@@ -153,6 +153,8 @@ spec:
             periodSeconds: 20
             successThreshold: 1
             timeoutSeconds: 5
+          securityContext:
+            {{- toYaml .Values.r10k.containerSecurityContext | nindent 12 }}
       volumes:
         - name: puppet-code-storage
         {{- if .Values.puppetserver.customPersistentVolumeClaim.code.enable }}

@@ -5,6 +5,15 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v7.3.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.3.0) (2023-01-30)
+- Feat: Add puppetdb exporter (https://github.com/camptocamp/prometheus-puppetdb-exporter)
+- Feat: starting to add unit test with Helm unittest
+- Fix: issue with single master, `env` key was missing and raised an error
+- Fix: unreported agent in puppetboard.
+- Feat: bump postgresql chart version to `12.1.11`
+- Feat: bump puppetboard version to `4.2.5`
+- Feat: Improve pods security
+
 ## [v7.2.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.2.2) (2023-01-xx)
 - Fix `storage.annotations` issue (https://github.com/puppetlabs/puppetserver-helm-chart/issues/148) apply code from PR https://github.com/puppetlabs/puppetserver-helm-chart/pull/149
 

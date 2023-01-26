@@ -20,6 +20,15 @@ metadata:
     {{- end }}
 spec:
   privileged: true
+  requiredDropCapabilities:
+    - all
+  allowedCapabilities:
+    - CAP_CHOWN
+    - CAP_SETUID
+    - CAP_SETGID
+    - CAP_DAC_OVERRIDE
+    - CAP_AUDIT_WRITE
+    - CAP_FOWNER
   volumes:
     - 'configMap'
     - 'secret'
@@ -43,4 +52,4 @@ spec:
       - min: 1
         max: 65535
   readOnlyRootFilesystem: false
-{{- end }} 
+{{- end }}
