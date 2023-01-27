@@ -5,6 +5,9 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v7.2.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.2.2) (2023-01-xx)
+- Fix `storage.annotations` issue (https://github.com/puppetlabs/puppetserver-helm-chart/issues/148) apply code from PR https://github.com/puppetlabs/puppetserver-helm-chart/pull/149
+
 ## [v7.2.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.2.1) (2023-01-23)
 - Fix: remove `timeout [-t SECS]` change from BusyBox v1.29.3 to BusyBox v1.33.1 `timeout SECS`
 
