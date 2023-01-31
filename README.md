@@ -170,6 +170,9 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `global.pgchecker.image`| pgchecker image |`docker.io/busybox`|
 | `global.pgchecker.tag`| pgchecker image tag |`1.36`|
 | `global.pgchecker.imagePullPolicy`| pgchecker image pull policy |`IfNotPresent`|
+| `global.puppetdbexporter.image`| puppetdb exporter image |`camptocamp/prometheus-puppetdb-exporter`|
+| `global.puppetdbexporter.tag`| puppetdb exporter image tag |`1.1.0`|
+| `global.puppetdbexporter.imagePullPolicy`| puppetdb exporter image pull policy |`IfNotPresent`|
 | `global.postgresql.auth.username`| puppetdb and postgresql username |`puppetdb`|
 | `global.postgresql.auth.password`| puppetdb and postgresql password |`unbreakablePassword`|
 | `global.postgresql.auth.existingSecret`| existing k8s secret that holds puppetdb and postgresql username and password |``|
@@ -327,8 +330,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `postgresql.primary.persistence.annotations` | postgres annotations for the PVC |`helm.sh/resource-policy: keep`|
 | `puppetdb.enabled` | puppetdb component enabled |`true`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
-| `puppetdb.image` | puppetdb img | `puppet/puppetdb`|
-| `puppetdb.tag` | puppetdb img tag | `6.12.0`|
+| `puppetdb.image` | puppetdb img | `davidphay/puppetdb`|
+| `puppetdb.tag` | puppetdb img tag | `7.12.1`|
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
@@ -398,6 +401,26 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `singleCA.certificates.existingSecret.puppetdb`| existing k8s secret that holds `ca.pem`, `puppetdb.pem` & `puppetdb.key` |``|
 | `singleCA.hostAliases`| add additional entries with hostAliases (usefull with public CA where you can't add private SAN), see <https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/> |``|
 
+| `metrics.prometheus.enabled` | enable prometheus exporter | `false` |
+| `metrics.prometheus.image` | puppetdb exporter image | `camptocamp/prometheus-puppetdb-exporter` |
+| `metrics.prometheus.tag` | puppetdb exporter tag | `1.1.0` |
+| `metrics.prometheus.imagePullPolicy` | puppetdb exporter pull policy | `IfNotPresent` |
+| `metrics.prometheus.port` | puppetdb exporter svc exposed ports | `9635` |
+| `metrics.prometheus.resources` | puppetdb exporter container resource limits | `` |
+| `metrics.prometheus.extraEnv` | puppetdb exporter additional container env vars | `` |
+| `metrics.prometheus.metricRelabelings` | relabel prometheus metrics | `` |
+| `metrics.prometheus.relabelings` | rewrite the label set of a target before it gets scraped | `` |
+| `metrics.prometheus.jobLabel` | The label to use to retrieve the job name from. | `puppetdb` |
+| `metrics.prometheus.interval` | Interval between consecutive scrapes | `30s` |
+| `metrics.prometheus.honorLabels` | HonorLabels chooses the metric’s labels on collisions with target labels. | `true` |
+| `metrics.prometheus.disableAPICheck` |  | `` |
+| `metrics.prometheus.scrapeTimeout` | Timeout after which the scrape is ended If not specified, the Prometheus global scrape interval is used. | `` |
+| `metrics.prometheus.honorTimestamps` | controls whether Prometheus respects the timestamps present in scraped data. | `` |
+| `metrics.prometheus.enableHttp2` | Whether to enable HTTP2. | `` |
+| `metrics.prometheus.followRedirects` | specifies whether the client should follow HTTP 3xx redirects. | `` |
+| `metrics.prometheus.additionalLabels` | puppetdb exporter additional service monitor labels | `` |
+| `metrics.prometheus.namespace` | puppetdb exporter service monitor if different of puppet namespace | `` |
+| `metrics.prometheus.namespaceSelector` | Selector to select which namespaces the Endpoints objects are discovered from. | `` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -412,6 +435,16 @@ helm install --namespace puppetserver --name puppetserver puppet/puppetserver -f
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+## Testing Helm Chart (in progress)
+https://github.com/quintush/helm-unittest/
+
+It would be great to test all ressources to avoid regression in the future
+
+run test:
+```
+helm unittest . -3
+```
 
 ## Testing the Deployed Chart Resources
 
