@@ -241,6 +241,8 @@ spec:
               mountPath: /docker-custom-entrypoint.d/{{ $key }}
               subPath: {{ $key }}
             {{- end }}
+          securityContext:
+            {{- toYaml .Values.puppetserver.securityContext | nindent 12 }}
         {{- if .Values.puppetserver.puppeturl }}
         # r10k Code Sidecar
         - name: r10k-code
@@ -261,6 +263,8 @@ spec:
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
             runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+            {{- toYaml .Values.r10k.podSecurityContext | nindent 12 }}
+            {{- toYaml .Values.r10k.containerSecurityContext | nindent 12 }}
           volumeMounts:
           {{- with .Values.r10k.code.viaSsh.credentials }}
           {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
@@ -308,6 +312,8 @@ spec:
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
             runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+            {{- toYaml .Values.r10k.podSecurityContext | nindent 12 }}
+            {{- toYaml .Values.r10k.containerSecurityContext | nindent 12 }}
           volumeMounts:
           {{- with .Values.r10k.hiera.viaSsh.credentials }}
           {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
@@ -363,6 +369,7 @@ spec:
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
             runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+            {{- toYaml .Values.singleCA.crl.securityContext | nindent 12 }}
           volumeMounts:
           - name: puppet-puppet-volume
             mountPath: /etc/puppetlabs/puppet/

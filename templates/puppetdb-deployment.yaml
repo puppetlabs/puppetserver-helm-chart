@@ -148,6 +148,8 @@ spec:
               mountPath: /etc/puppetlabs/puppetdb/conf.d/{{ $key }}
               subPath: {{ $key }}
             {{- end }}
+          securityContext:
+            {{- toYaml .Values.puppetdb.securityContext | nindent 12 }}
         {{- if .Values.puppetboard.enabled }}
         - name: puppetboard
           image: "{{.Values.puppetboard.image}}:{{.Values.puppetboard.tag}}"
@@ -184,8 +186,9 @@ spec:
             - name: puppetboard
               containerPort: {{ .Values.puppetboard.port }}
           securityContext:
-            runAsUser: 0
-            runAsNonRoot: false
+            {{- toYaml .Values.puppetboard.securityContext | nindent 12 }}
+            runAsUser: {{ .Values.global.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
           volumeMounts:
             - name: puppetdb-storage
               mountPath: /opt/puppetlabs/server/data/puppetdb
@@ -218,6 +221,7 @@ spec:
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
             runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+            {{- toYaml .Values.singleCA.crl.securityContext | nindent 12 }}
           volumeMounts:
           - name: puppetdb-storage
             mountPath: /opt/puppetlabs/server/data/puppetdb
@@ -229,6 +233,48 @@ spec:
             periodSeconds: 20
             successThreshold: 1
             timeoutSeconds: 5
+        {{- end }}
+        {{- if .Values.metrics.prometheus.enabled  }}
+        - name: puppetdb-exporter
+          image: "{{ tpl .Values.metrics.prometheus.image . }}:{{ tpl .Values.metrics.prometheus.tag . }}"
+          imagePullPolicy: {{ tpl .Values.metrics.prometheus.imagePullPolicy . }}
+          resources:
+            {{- toYaml .Values.metrics.prometheus.resources | nindent 12 }}
+          env:
+            - name: PUPPETDB_URL
+              value: "https://{{ if .Values.singleCA.enabled}}{{.Values.singleCA.puppetdb.overrideHostname}}{{ else }}{{ ( include "puppetdb.fullname" . ) }}{{ end }}:8081/pdb/query"
+            - name: PUPPETDB_CERT_FILE
+              value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/puppetdb.pem"
+            - name: PUPPETDB_KEY_FILE
+              value: "/opt/puppetlabs/server/data/puppetdb/certs/private_keys/puppetdb.pem"
+            - name: PUPPETDB_CA_FILE
+              value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/ca.pem"
+            - name: PUPPETDB_SCRAPE_INTERVAL
+              value: "{{ .Values.metrics.prometheus.interval }}"
+            - name: PUPPETDB_LISTEN_ADDRESS
+              value: "0.0.0.0:{{ .Values.metrics.prometheus.port }}"
+            {{- range $key, $value := .Values.global.extraEnv }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+            {{- range $key, $value := .Values.metrics.prometheus.extraEnv }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metrics.prometheus.port }}
+          securityContext:
+            runAsUser: 999
+            runAsGroup: 999
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+          volumeMounts:
+            - name: puppetdb-storage
+              mountPath: /opt/puppetlabs/server/data/puppetdb
         {{- end }}
       {{- if .Values.singleCA.puppetdb.overrideHostname }}
       hostAliases:

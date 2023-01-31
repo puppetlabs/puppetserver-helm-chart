@@ -61,6 +61,7 @@ spec:
               securityContext:
                 runAsUser: {{ .Values.global.securityContext.runAsUser }}
                 runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+                {{- toYaml .Values.singleCA.crl.securityContext | nindent 16 }}
           volumes:
             - name: crl-volume
               configMap:

@@ -14,7 +14,13 @@ metadata:
     {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  privileged: true
+  privileged: false
+  requiredDropCapabilities:
+    - all
+  allowedCapabilities:
+    - CAP_SETUID
+    - CAP_SETGID
+    - CAP_DAC_OVERRIDE
   volumes:
     - 'configMap'
     - 'secret'

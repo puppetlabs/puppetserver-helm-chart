@@ -51,8 +51,8 @@ spec:
             limits:
               memory: 256Mi
               cpu: 300m
-          {{- if .Values.puppetserver.masters.multiMasters.enabled }}
           env:
+          {{- if .Values.puppetserver.masters.multiMasters.enabled }}
             - name: PUPPET_DATA_DIR
               value: "/etc/puppetlabs/code/environments"
             - name: PUPPET_SSL_DIR
@@ -245,6 +245,8 @@ spec:
               mountPath: /docker-custom-entrypoint.d/{{ $key }}
               subPath: {{ $key }}
             {{- end }}
+          securityContext:
+            {{- toYaml .Values.puppetserver.securityContext | nindent 12 }}
         {{- if and .Values.puppetserver.puppeturl (not .Values.puppetserver.compilers.enabled) .Values.r10k.asSidecar }}
         # r10k Code Sidecar
         - name: r10k-code
@@ -265,6 +267,8 @@ spec:
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
             runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+            {{- toYaml .Values.r10k.podSecurityContext | nindent 12 }}
+            {{- toYaml .Values.r10k.containerSecurityContext | nindent 12 }}
           volumeMounts:
           {{- with .Values.r10k.code.viaSsh.credentials }}
           {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
@@ -312,6 +316,8 @@ spec:
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
             runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+            {{- toYaml .Values.r10k.podSecurityContext | nindent 12 }}
+            {{- toYaml .Values.r10k.containerSecurityContext | nindent 12 }}
           volumeMounts:
           {{- with .Values.r10k.hiera.viaSsh.credentials }}
           {{- if or (.existingSecret) (and (.ssh.value) (.known_hosts.value)) }}
@@ -367,6 +373,7 @@ spec:
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
             runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+            {{- toYaml .Values.singleCA.crl.securityContext | nindent 12 }}
           volumeMounts:
           - name: puppet-puppet-storage
             mountPath: /etc/puppetlabs/puppet/
