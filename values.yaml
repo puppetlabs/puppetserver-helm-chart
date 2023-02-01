@@ -570,12 +570,12 @@ puppetdb:
     capabilities:
       drop:
         - all
-			add:
-				- CAP_FOWNER
-				- CAP_CHOWN
-				- CAP_SETUID
-				- CAP_SETGID
-				- CAP_DAC_OVERRIDE
+      add:
+        - CAP_FOWNER
+        - CAP_CHOWN
+        - CAP_SETUID
+        - CAP_SETGID
+        - CAP_DAC_OVERRIDE
   extraContainers: []
 
   ## Extra initContainers to inject into the PuppetDB pod
