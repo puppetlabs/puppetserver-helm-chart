@@ -11,7 +11,7 @@ metadata:
 data:
   check_for_masters.sh: |
     #!/usr/bin/env bash
-    PUPPET_SSL_CERT_PEM=/etc/puppetlabs/puppet/ssl/certs/puppet.pem
+    PUPPET_SSL_CERT_PEM="/etc/puppetlabs/puppet/ssl/certs/$(puppet config print certname).pem"
     if [[ -d "$PUPPET_SSL_DIR" ]]; then
         echo "A Puppetserver master has already started running."
         echo "Waiting to finish the generation of the Puppet SSL certs..."
