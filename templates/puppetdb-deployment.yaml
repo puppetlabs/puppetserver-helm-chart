@@ -277,8 +277,13 @@ spec:
               mountPath: /opt/puppetlabs/server/data/puppetdb
         {{- end }}
       {{- if .Values.singleCA.puppetdb.overrideHostname }}
+      {{- $service := lookup "v1" "Service" .Release.Namespace  (include "puppetdb.fullname" . ) }}
       hostAliases:
-        - ip: {{ required "A valid .Values.puppetdb.service.clusterIP required!" .Values.puppetdb.service.clusterIP }}
+        {{- if $service }}
+        - ip: {{ $service.spec.clusterIP }}
+        {{- else }}
+        - ip: 127.0.0.1 # this case is just to avoid an error with helm diff
+        {{- end }}
           hostnames:
           - {{ .Values.singleCA.puppetdb.overrideHostname }}
       {{- end }}

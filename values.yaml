@@ -5,6 +5,8 @@
 ## Global Values
 ##
 global:
+  runAsNonRoot: false
+
   imagePullSecrets:
 
   curl:
@@ -74,6 +76,9 @@ puppetserver:
     ca:
       enable: false
       config: {}
+    confd:
+      enable: false
+      config: {}
 
   ## Mandatory Deployment of Puppet Server Master/s
   ##
@@ -88,6 +93,27 @@ puppetserver:
     #  limits:
     #    memory: 2048Mi
     #    cpu: 1500m
+
+    ## Affinity for puppetserver pod assignment
+    ## Schedule compilers on different K8s nodes
+    ##
+    podAntiAffinity: false
+
+    podDisruptionBudget:
+      enabled: false
+      minAvailable: 1
+      #maxUnavailable:
+
+    networkPolicy:
+      enabled:  false
+      policyTypes:
+        - Egress
+        - Ingress
+      additionnalIngressRules:
+        - from:
+          - namespaceSelector: {}
+          ports:
+          - port: 8140
 
     ## Extra containers to inject into the Masters pod
     extraContainers: []
@@ -249,6 +275,24 @@ puppetserver:
     ## Schedule compilers on different K8s nodes
     ##
     podAntiAffinity: false
+
+    podDisruptionBudget:
+      enabled: false
+      minAvailable: 1
+      # maxUnavailable:
+
+    networkPolicy:
+      enabled: false
+      policyTypes:
+        - Egress
+        - Ingress
+      additionnalIngressRules:
+        - from:
+          - namespaceSelector: {}
+          ports:
+          - port: 8140
+
+      additionnalEgressRules: []
 
     ## Puppetserver Compilers' StatefulSet annotations
     ##
@@ -413,6 +457,7 @@ puppetserver:
     create: false
     annotations:
 
+  # only if global.runAsNonRoot is false
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -571,9 +616,24 @@ puppetdb:
       drop:
         - all
       add:
+        - CAP_FOWNER
+        - CAP_CHOWN
         - CAP_SETUID
         - CAP_SETGID
         - CAP_DAC_OVERRIDE
+
+  networkPolicy:
+    enabled: false
+    policyTypes:
+      - Egress
+      - Ingress
+    additionnalIngressRules:
+      - from:
+        - namespaceSelector: {}
+        ports:
+        - port: 9090
+    additionnalEgressRules: []
+
   extraContainers: []
 
   ## Extra initContainers to inject into the PuppetDB pod
@@ -641,6 +701,11 @@ postgresql:
   enabled: true
 
   architecture: standalone
+
+  networkPolicy:
+    enabled: true
+    egressRules:
+      denyConnectionsToExternal: true
 
   primary:
     initdb:
@@ -848,6 +913,7 @@ singleCA:
     #    cpu: 100m
 
     securityContext:
+      allowPrivilegeEscalation: false
       runAsNonRoot: true
       capabilities:
         drop:

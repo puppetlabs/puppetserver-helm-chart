@@ -10,16 +10,16 @@ metadata:
     {{ toYaml . | nindent 4 }}
     {{- end }}
   annotations:
-    {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) }}
+    {{- if or .Values.puppetserver.preGeneratedCertsJob.enabled .Values.singleCA.enabled .Values.global.runAsNonRoot }}
     helm.sh/hook: pre-install
     helm.sh/hook-delete-policy: before-hook-creation
     helm.sh/hook-weight: "-10"
     {{- end }}
-     {{- with .Values.puppetserver.psp.annotations -}}
+    {{- with .Values.puppetserver.psp.annotations -}}
     {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  privileged: true
+  privileged: false
   requiredDropCapabilities:
     - all
   allowedCapabilities:

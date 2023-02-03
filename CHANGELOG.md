@@ -5,6 +5,16 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v7.4.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.4.0) (2023-02-06)
+- Feat: allow to `runAsNonRoot` puppetserver **deployement** (masters & compilers) pods
+- Feat: add `PodDisruptionBudget`
+- Feat: add `networkPolicy`
+- Feat: allow to configure different affinity between masters & compilers
+- Feat: no need to define manually the clusterIP of the puppetdb when using singleCA feature with public certificate authority
+- Fix: Update `PodSecurityPolicy`, add missing `allowedCapabilities`
+- Fix: puppetserver restart issue because of certificate name
+- Fix: error in puppetserver log about `dropsonde`
+
 ## [v7.3.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.3.1) (2023-02-07)
 - Fix: remove duplicate labels on puppetboard ingress
 

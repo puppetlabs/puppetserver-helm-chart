@@ -246,6 +246,27 @@ when running with multiple Puppet compilers.
 {{- end -}}
 
 {{/*
+Set's the affinity for pod placement
+when running with multiple Puppet masters.
+*/}}
+{{- define "puppetserver.masters.affinity" -}}
+    {{- if (or .Values.affinity .Values.puppetserver.masters.podAntiAffinity) }}
+      affinity:
+      {{- if (.Values.affinity) }}
+        {{- toYaml .Values.affinity | nindent 8 }}
+      {{- end }}
+      {{- if (.Values.puppetserver.masters.podAntiAffinity) }}
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  {{- include "puppetserver.puppetserver.matchLabels" . | nindent 18 }}
+              topologyKey: kubernetes.io/hostname
+      {{- end }}
+    {{- end }}
+{{- end -}}
+
+{{/*
 Calculates the max. number of compilers
 */}}
 {{- define "puppetserver.compilers.maxNo" -}}
@@ -360,6 +381,26 @@ Define puppetserver service Account name
 */}}
 {{- define "puppetserver.serviceAccountName" -}}
 {{ default ( include "puppetserver.fullname" . ) .Values.puppetserver.serviceAccount.accountName }}
+{{- end -}}
+
+
+
+
+{{/*
+Define puppetserver alternate SAN
+*/}}
+{{- define "puppetserver.master.san" -}}
+{{- $san := printf "puppet,%s,%s" ( include "puppetserver.puppetserver.agents-to-masters.serviceName" . ) ( include "puppetserver.puppetserver-masters.serviceName" . ) -}}
+{{- if and .Values.puppetserver.compilers.enabled (not .Values.singleCA.enabled) -}}
+{{- $san = print $san "," ( include "puppetserver.puppetserver-compilers.serviceName" . ) -}}
+{{- end -}}
+{{- if .Values.puppetserver.masters.fqdns.alternateServerNames -}}
+{{- $san = print $san "," .Values.puppetserver.masters.fqdns.alternateServerNames -}}
+{{- end -}}
+{{- if .Values.puppetserver.compilers.fqdns.alternateServerNames -}}
+{{- $san = print $san "," .Values.puppetserver.compilers.fqdns.alternateServerNames -}}
+{{- end -}}
+{{- printf "%s" $san -}}
 {{- end -}}
 
 {{/*

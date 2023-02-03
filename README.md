@@ -48,11 +48,10 @@ kubectl create secret generic puppetdb-certificate --from-file=puppetdb.pem --fr
 ```
 finally set `.Values.singleCA.certificates.existingSecret.puppetserver` and `.Values.singleCA.certificates.existingSecret.puppetdb`.
 
-Additionnaly, if you use a public certificate authority, you can't use private SAN name, so you have to override puppetdb name with `.Values.singleCA.puppetdb.overrideHostname` (with the full name ie: puppetdb.my.domain) 
-define a `ClusterIP` on `.Values.puppetdb.service.clusterIP` & `.values.singleCA.hostAliases` with the same IP
+Additionnaly, if you use a public certificate authority, you can't use private SAN name, so you have to override puppetdb name with `.Values.singleCA.puppetdb.overrideHostname` (with the full name ie: puppetdb.my.domain)
 
-If you prefer, you can use crl update as cronjob instead of sidecar, if reduce resources utilzation because only 1 pod is running.  
-:warning: but it may not work on cluster with multi zone. that why it's not enable by default
+If you prefer, you can use crl update as cronjob instead of sidecar, it reduce resources utilization because only 1 pod is running.  
+:warning: it may not work on multi zone cluster. that why it's not enable by default
 
 ## Horizontal Scaling
 
@@ -87,6 +86,19 @@ puppetserver:
 
 r10k:
   asSidecar: false
+```
+
+## Deploy Puppetserver deployment (master & compilers) as non root
+:warning: for now only puppetserver can run as non root, it's not available for the puppetdb
+It will run a pre-install job to configure all repository & permissions for masters & compilers
+
+Benefits:
+- running puppetserver with limited permissions
+- improve puppetserver deployment (because certificate are not regenerated each time)
+
+You can enable it using:
+```
+global.runAsNonRoot: true
 ```
 
 
@@ -163,6 +175,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 
 | Parameter | Description | Default|
 | --------- | ----------- | -------|
+| `global.runAsNonRoot`| run puppetserver as non root |`false`|
 | `global.curl.image`| curl image |`curlimages/curl`|
 | `global.curl.tag`| curl image tag |`7.87.0`|
 | `global.curl.imagePullPolicy`| curl image pull policy |`IfNotPresent`|
@@ -191,9 +204,18 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.customPersistentVolumeClaim.puppet.config`| Configuration for custom PVC for puppet |``|
 | `puppetserver.customPersistentVolumeClaim.code.enable`| If true, use custom PVC for code  |``|
 | `puppetserver.customPersistentVolumeClaim.code.config`| Configuration for custom PVC for code |``|
-| `puppetserver.customPersistentVolumeClaim.serverdata.enable`| If true, use custom PVC for serverdata  |``|
-| `puppetserver.customPersistentVolumeClaim.serverdata.config`| Configuration for custom PVC for serverdata |``|
+| `puppetserver.customPersistentVolumeClaim.ca.enable`| If true, use custom PVC for certificate  |``|
+| `puppetserver.customPersistentVolumeClaim.ca.config`| Configuration for custom PVC for certificate |``|
+| `puppetserver.customPersistentVolumeClaim.confd.enable`| If true, use custom PVC for conf.d  |``|
+| `puppetserver.customPersistentVolumeClaim.confd.config`| Configuration for custom PVC for conf.d |``|
 | `puppetserver.masters.resources` | puppetserver masters resource limits | ``|
+| `puppetserver.masters.podAntiAffinity` | puppetserver masters pod affinity constraints |`false`|
+| `puppetserver.masters.podDisruptionBudget.enabled` | enable PodDisruptionBudget on puppetserver masters | `false`|
+| `puppetserver.masters.podDisruptionBudget.minAvailable` | represents the number of Pods that must be available (integer or percentage) on puppetserver masters | `1`|
+| `puppetserver.masters.podDisruptionBudget.maxUnavailable` | represents the number of Pods that can be unavailable (integer or percentage) on puppetserver masters | ``|
+| `puppetserver.masters.networkPolicy.enabled` | enable `networkPolicy` on  puppetserver masters | `false`|
+| `puppetserver.masters.networkPolicy.policyTypes` | default networkpolicy type n puppetserver masters | `[ Egress, Ingress ]`|
+| `puppetserver.masters.networkPolicy.additionnalIngressRules` | puppetserver masters resource limits | `allow 8140 from everywhere` |
 | `puppetserver.masters.extraContainers`| Extra containers to inject into the master pod |``|
 | `puppetserver.masters.extraEnv` | puppetserver masters additional container env vars |``|
 | `puppetserver.masters.extraLabels` | puppetserver masters additional labels |``|
@@ -243,6 +265,12 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.compilers.enabled` | If true, creates Puppetserver compilers | `false`|
 | `puppetserver.compilers.resources` | puppetserver compilers resource limits |``|
 | `puppetserver.compilers.podAntiAffinity` | puppetserver compilers pod affinity constraints |`false`|
+| `puppetserver.compilers.podDisruptionBudget.enabled` | enable PodDisruptionBudget on puppetserver compilers | `false`|
+| `puppetserver.compilers.podDisruptionBudget.minAvailable` | represents the number of Pods that must be available (integer or percentage) on puppetserver compilers | `1`|
+| `puppetserver.compilers.podDisruptionBudget.maxUnavailable` | represents the number of Pods that can be unavailable (integer or percentage) on puppetserver compilers | ``|
+| `puppetserver.compilers.networkPolicy.enabled` | enable `networkPolicy` on  puppetserver compilers | `false`|
+| `puppetserver.compilers.networkPolicy.policyTypes` | default networkpolicy type on puppetserver compilers  | `[ Egress, Ingress ]`|
+| `puppetserver.compilers.networkPolicy.additionnalIngressRules` | puppetserver compilers resource limits | `allow 8140 from everywhere` |
 | `puppetserver.compilers.annotations`| puppetserver compilers statefulset annotations |``|
 | `puppetserver.compilers.extraContainers`| Extra containers to inject into the compiler pod |``|
 | `puppetserver.compilers.extraEnv` | puppetserver compilers additional container env vars |``|
@@ -328,6 +356,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `postgresql.primary.persistence.existingClaim` | postgres manually managed pvc |``|
 | `postgresql.primary.persistence.size` | postgres persistence pvc size |`10Gi`|
 | `postgresql.primary.persistence.annotations` | postgres annotations for the PVC |`helm.sh/resource-policy: keep`|
+| `postgresql.networkPolicy.enabled` | enable `networkPolicy` on  postgresql | `true`|
 | `puppetdb.enabled` | puppetdb component enabled |`true`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
 | `puppetdb.image` | puppetdb img | `davidphay/puppetdb`|
@@ -345,11 +374,14 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.metrics.enabled` | puppetdb metrics enable/disable flag |`false`|
 | `puppetdb.customPersistentVolumeClaim.storage.enable`| If true, use custom PVC for storage |``|
 | `puppetdb.customPersistentVolumeClaim.storage.config`| Configuration for custom PVC for storage |``|
+| `puppetdb.securityContext` | default puppetdb security context | ``|
+| `puppetdb.networkPolicy.enabled` | enable `networkPolicy` on  puppetdb | `false`|
+| `puppetdb.networkPolicy.policyTypes` | default networkpolicy type on puppetdb  | `[ Egress, Ingress ]`|
+| `puppetdb.networkPolicy.additionnalIngressRules` | puppetdb resource limits | `allow 9090 from everywhere` |
 | `puppetdb.extraContainers`| Extra containers to inject into the puppetdb pod |``|
 | `puppetdb.extraInitContainers`| Extra initContainers to inject into the puppetdb pod |``|
 | `puppetdb.serviceAccount.enabled`| Enable service account (Note: Service Account will only be automatically created if `puppetdb.serviceAccount.create` is not set.  |`false`|
 | `puppetdb.customconfigs.enabled`| puppetdb additional config map enabled |`false`|
-
 | `puppetdb.serviceAccount.create`| puppetdb additional masters svc labels |`false`|
 | `puppetdb.rbac.create`| Enable PodSecurityPolicy's RBAC rules |`false`|
 | `puppetdb.psp.create`| Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later |`false`|
@@ -399,7 +431,6 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `singleCA.puppetdb.overrideHostname`| override the puppetdb hostname, needed when using CA where you can't add private SAN name |``|
 | `singleCA.certificates.existingSecret.puppetserver`| existing k8s secret that holds `ca.pem`, `puppet.pem` & `puppet.key` |``|
 | `singleCA.certificates.existingSecret.puppetdb`| existing k8s secret that holds `ca.pem`, `puppetdb.pem` & `puppetdb.key` |``|
-| `singleCA.hostAliases`| add additional entries with hostAliases (usefull with public CA where you can't add private SAN), see <https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/> |``|
 
 | `metrics.prometheus.enabled` | enable prometheus exporter | `false` |
 | `metrics.prometheus.image` | puppetdb exporter image | `camptocamp/prometheus-puppetdb-exporter` |

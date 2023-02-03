@@ -116,9 +116,22 @@ spec:
               {{- if .Values.puppetserver.extraInitArgs }}
               {{- .Values.puppetserver.extraInitArgs | nindent 14 }}
               {{- end }}
+              mkdir -p /opt/puppetlabs/server/data/puppetserver/dropsonde/bin/;
+              touch /opt/puppetlabs/server/data/puppetserver/dropsonde/bin/dropsonde;
+              chown puppet:puppet -R /opt/puppetlabs/server/data/puppetserver/;
           securityContext:
             runAsUser: 0
             runAsNonRoot: false
+            capabilities:
+              drop:
+                - all
+              add:
+                - CAP_CHOWN
+                - CAP_SETUID
+                - CAP_SETGID
+                - CAP_DAC_OVERRIDE
+                - CAP_AUDIT_WRITE
+                - CAP_FOWNER
           volumeMounts:
             - name: puppet-code-volume
               mountPath: /etc/puppetlabs/code/
@@ -179,10 +192,14 @@ spec:
           resources:
             {{- toYaml .Values.puppetserver.compilers.resources | nindent 12 }}
           env:
-            {{- if .Values.singleCA.enabled }}
             - name: PUPPETSERVER_HOSTNAME
-              value: puppet
-              {{- end }}
+            {{- if .Values.singleCA.enabled }}
+              value: {{ (include "puppetserver.puppetserver-masters.serviceName" . | quote ) }}
+            {{- else }}
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            {{- end }}
             - name: PUPPET_MASTERPORT
               value: "{{ template "puppetserver.puppetserver-compilers.port" . }}"
             - name: DNS_ALT_NAMES
@@ -386,8 +403,13 @@ spec:
           {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- if .Values.singleCA.puppetdb.overrideHostname }}
+      {{- $service := lookup "v1" "Service" .Release.Namespace  (include "puppetdb.fullname" . ) }}
       hostAliases:
-        - ip: {{ required "A valid .Values.puppetdb.service.clusterIP required!" .Values.puppetdb.service.clusterIP }}
+        {{- if $service }}
+        - ip: {{ $service.spec.clusterIP }}
+        {{- else }}
+        - ip: 127.0.0.1 # this case is just to avoid an error with helm diff
+        {{- end }}
           hostnames:
           - {{ .Values.singleCA.puppetdb.overrideHostname }}
       {{- end }}
