@@ -1,0 +1,17 @@
+suite: test puppet puppet volume creation
+templates:
+  - puppetdb-pvc.yaml
+release:
+  name: puppetserver
+  namespace: puppet
+tests:
+  - it: should not create the volume if "puppetdb.enabled" is false
+    set:
+      puppetdb.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: should create the volume by default
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
