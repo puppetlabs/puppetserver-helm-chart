@@ -509,3 +509,4 @@ kill %[job_numbers_above]
 * [Grégoire Menuel](https://github.com/gmenuel), Contributor
 * [Jean-François Roche](https://github.com/jfroche), Contributor
 * [Alexander Kiryushin](https://github.com/akiryushin), Contributor
+* [Ben Feld](https://github.com/rootshellz), Contributor
