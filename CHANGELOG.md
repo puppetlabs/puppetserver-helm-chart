@@ -5,6 +5,9 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v7.3.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.3.1) (2023-02-07)
+- Fix: remove duplicate labels on puppetboard ingress
+
 ## [v7.3.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.3.0) (2023-01-30)
 - Feat: Add puppetdb exporter (https://github.com/camptocamp/prometheus-puppetdb-exporter)
 - Feat: starting to add unit test with Helm unittest
