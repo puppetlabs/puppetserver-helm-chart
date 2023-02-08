@@ -52,6 +52,7 @@ spec:
       {{- if .Values.puppetserver.serviceAccount.enabled }}
       serviceAccountName: {{ include "puppetserver.serviceAccountName" . }}
       {{- end }}
+      {{- if not .Values.global.runAsNonRoot }}
       initContainers:
         - name: perms-and-dirs
           image: "{{.Values.puppetserver.image}}:{{.Values.puppetserver.tag}}"
@@ -110,9 +111,22 @@ spec:
               {{- if .Values.puppetserver.extraInitArgs }}
               {{- .Values.puppetserver.extraInitArgs | nindent 14 }}
               {{- end }}
+              mkdir -p /opt/puppetlabs/server/data/puppetserver/dropsonde/bin/;
+              touch /opt/puppetlabs/server/data/puppetserver/dropsonde/bin/dropsonde;
+              chown puppet:puppet -R /opt/puppetlabs/server/data/puppetserver/;
           securityContext:
             runAsUser: 0
             runAsNonRoot: false
+            capabilities:
+              drop:
+                - all
+              add:
+                - CAP_CHOWN
+                - CAP_SETUID
+                - CAP_SETGID
+                - CAP_DAC_OVERRIDE
+                - CAP_AUDIT_WRITE
+                - CAP_FOWNER
           volumeMounts:
             - name: puppet-puppet-storage
               mountPath: /etc/puppetlabs/puppet/
@@ -162,13 +176,22 @@ spec:
               mountPath: /tmp/puppet/configmap/eyaml/private_key.pkcs7.pem
               subPath: private_key.pkcs7.pem
             {{- end }}
+            - name: puppet-serverdata-storage
+              mountPath: /opt/puppetlabs/server/data/puppetserver/
+      {{- end }}
       containers:
         - name: {{ template "puppetserver.fullname" . }}
           image: "{{.Values.puppetserver.image}}:{{.Values.puppetserver.tag}}"
           imagePullPolicy: "{{.Values.puppetserver.pullPolicy}}"
           resources:
             {{- toYaml .Values.puppetserver.masters.resources | nindent 12 }}
+          {{- if .Values.global.runAsNonRoot }}
+          command: [ "/bin/bash", "-c" ]
+          args:
+            - exec /opt/puppetlabs/bin/puppetserver foreground
+          {{- end }}
           env:
+            {{- if not .Values.global.runAsNonRoot }}
             # necessary to set certname and server in puppet.conf, required by
             # puppetserver ca cli application
             {{- if .Values.singleCA.enabled }}
@@ -179,7 +202,7 @@ spec:
             - name: PUPPET_MASTERPORT
               value: "{{ template "puppetserver.puppetserver-masters.port" . }}"
             - name: DNS_ALT_NAMES
-              value: "{{ template "puppetserver.puppetserver.agents-to-masters.serviceName" . }},{{ template "puppetserver.puppetserver-masters.serviceName" . }},{{.Values.puppetserver.masters.fqdns.alternateServerNames}}"
+              value: "puppet,{{ template "puppetserver.puppetserver.agents-to-masters.serviceName" . }},{{ template "puppetserver.puppetserver-masters.serviceName" . }},{{.Values.puppetserver.masters.fqdns.alternateServerNames}},{{ template "puppetserver.puppetserver-compilers.serviceName" . }},{{.Values.puppetserver.compilers.fqdns.alternateServerNames}}"
             - name: PUPPETDB_SERVER_URLS
               value: "https://{{ default ( include "puppetdb.fullname" . ) .Values.singleCA.puppetdb.overrideHostname }}:8081"
             - name: CA_ENABLED
@@ -190,6 +213,7 @@ spec:
               value: "{{ template "puppetserver.puppetserver-masters.serviceName" . }}"
             - name: CA_MASTERPORT
               value: "{{ template "puppetserver.puppetserver-masters.port" . }}"
+            {{- end }}
             {{- range $key, $value := .Values.global.extraEnv }}
             - name: {{ $key }}
               value: "{{ $value }}"
@@ -226,8 +250,8 @@ spec:
               mountPath: /etc/puppetlabs/code/
             - name: puppet-puppet-storage
               mountPath: /etc/puppetlabs/puppet/
-            # - name: puppet-serverdata-storage
-            #   mountPath: /opt/puppetlabs/server/data/puppetserver/
+            - name: puppet-serverdata-storage
+              mountPath: /opt/puppetlabs/server/data/puppetserver/
             {{- range $key, $value := .Values.puppetserver.customconfigs.configmaps }}
             - name: puppetserver-custom-configs
               mountPath: /etc/puppetlabs/puppetserver/conf.d/{{ $key }}
@@ -238,8 +262,22 @@ spec:
               mountPath: /docker-custom-entrypoint.d/{{ $key }}
               subPath: {{ $key }}
             {{- end }}
+            {{- if .Values.global.runAsNonRoot }}
+            - name: puppet-confd
+              mountPath: /etc/puppetlabs/puppetserver/conf.d/
+            {{- end }}
           securityContext:
+            {{- if .Values.global.runAsNonRoot }}
+            runAsUser: {{ .Values.global.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            {{- else }}
             {{- toYaml .Values.puppetserver.securityContext | nindent 12 }}
+            {{- end }}
         {{- if and .Values.puppetserver.puppeturl .Values.r10k.asSidecar}}
         # r10k Code Sidecar
         - name: r10k-code
@@ -383,8 +421,13 @@ spec:
           {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- if .Values.singleCA.puppetdb.overrideHostname }}
+      {{- $service := lookup "v1" "Service" .Release.Namespace  (include "puppetdb.fullname" . ) }}
       hostAliases:
-        - ip: {{ required "A valid .Values.puppetdb.service.clusterIP required!" .Values.puppetdb.service.clusterIP }}
+        {{- if $service }}
+        - ip: {{ $service.spec.clusterIP }}
+        {{- else }}
+        - ip: 127.0.0.1 # this case is just to avoid an error with helm diff
+        {{- end }}
           hostnames:
           - {{ .Values.singleCA.puppetdb.overrideHostname }}
       {{- end }}
@@ -408,6 +451,13 @@ spec:
         {{- else }}
           persistentVolumeClaim:
             claimName: {{ template "puppetserver.fullname" . }}-puppet-claim
+        {{- end }}
+        - name: puppet-serverdata-storage
+        {{- if .Values.puppetserver.customPersistentVolumeClaim.serverdata.enable }}
+          {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.serverdata.config | nindent 10 }}
+        {{- else }}
+          persistentVolumeClaim:
+            claimName: {{ template "puppetserver.fullname" . }}-serverdata-claim
         {{- end }}
         {{- if .Values.singleCA.enabled }}
         - name: crl-volume
@@ -501,6 +551,11 @@ spec:
           configMap:
             name: {{ .Values.hiera.eyaml.existingMap }}
         {{- end }}
+        {{- if .Values.global.runAsNonRoot }}
+        - name: puppet-confd
+          persistentVolumeClaim:
+            claimName: {{ template "puppetserver.fullname" . }}-confd-claim
+        {{- end }}
         {{- range $extraSecret := .Values.puppetserver.extraSecrets }}
         - name: {{ $extraSecret.name }}
           secret:
@@ -510,10 +565,7 @@ spec:
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 10 }}
       {{- end }}
-      {{- if .Values.affinity }}
-      affinity:
-      {{ toYaml .Values.affinity | nindent 10 }}
-      {{- end }}
+      {{ template "puppetserver.compilers.affinity" . }}
       {{- if .Values.tolerations }}
       tolerations:
         {{ toYaml .Values.tolerations| nindent 10 }}

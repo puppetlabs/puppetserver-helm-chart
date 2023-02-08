@@ -32,6 +32,15 @@ spec:
         checksum/r10k-code.configmap: {{ include (print $.Template.BasePath "/r10k-code.configmap.yaml") . | sha256sum }}
         checksum/r10k-hiera.configmap: {{ include (print $.Template.BasePath "/r10k-hiera.configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if and .Values.singleCA.enabled .Values.singleCA.crl.asSidecar }}
+        checksum/crl-config: {{ include (print $.Template.BasePath "/update-crl-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.puppetserver.customconfigs.enabled }}
+        checksum/custom-configs.configmap: {{ include (print $.Template.BasePath "/puppetserver-customconfigs-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.puppetserver.customentrypoints.enabled }}
+        checksum/custom-entrypoints.configmap: {{ include (print $.Template.BasePath "/puppetserver-custom-entrypoints-configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
@@ -40,6 +49,7 @@ spec:
       {{- if .Values.puppetserver.serviceAccount.enabled }}
       serviceAccountName: {{ include "puppetserver.serviceAccountName" . }}
       {{- end }}
+      {{- if not .Values.global.runAsNonRoot }}
       initContainers:
         - name: perms-and-dirs
           image: "{{.Values.puppetserver.image}}:{{.Values.puppetserver.tag}}"
@@ -112,9 +122,22 @@ spec:
               {{- if .Values.puppetserver.extraInitArgs }}
               {{- .Values.puppetserver.extraInitArgs | nindent 14 }}
               {{- end }}
+              mkdir -p /opt/puppetlabs/server/data/puppetserver/dropsonde/bin/;
+              touch /opt/puppetlabs/server/data/puppetserver/dropsonde/bin/dropsonde;
+              chown puppet:puppet -R /opt/puppetlabs/server/data/puppetserver/;
           securityContext:
             runAsUser: 0
             runAsNonRoot: false
+            capabilities:
+              drop:
+                - all
+              add:
+                - CAP_CHOWN
+                - CAP_SETUID
+                - CAP_SETGID
+                - CAP_DAC_OVERRIDE
+                - CAP_AUDIT_WRITE
+                - CAP_FOWNER
           volumeMounts:
             - name: puppet-puppet-storage
               mountPath: /etc/puppetlabs/puppet/
@@ -169,30 +192,40 @@ spec:
             - name: manifests-volume
               mountPath: /tmp/puppet/configmap/site.pp
               subPath: site.pp
+            - name: puppet-serverdata-storage
+              mountPath: /opt/puppetlabs/server/data/puppetserver/
+      {{- end }}
       containers:
         - name: {{ template "puppetserver.fullname" . }}
           image: "{{.Values.puppetserver.image}}:{{.Values.puppetserver.tag}}"
           imagePullPolicy: "{{.Values.puppetserver.pullPolicy}}"
           resources:
             {{- toYaml .Values.puppetserver.masters.resources | nindent 12 }}
+          {{- if .Values.global.runAsNonRoot }}
+          command: [ "/bin/bash", "-c" ]
+          args:
+            - exec /opt/puppetlabs/bin/puppetserver foreground
+          {{- end }}
           env:
+            {{- if not .Values.global.runAsNonRoot }}
+            - name: PUPPETSERVER_HOSTNAME
+              value: puppet
             # necessary to set certname and server in puppet.conf, required by
             # puppetserver ca cli application
             {{- if .Values.singleCA.enabled }}
             - name: CA_ENABLED
               value: "false"
               # set the hostname to puppet to identify easily the certificate
-            - name: PUPPETSERVER_HOSTNAME
-              value: puppet
             {{- end }}
             - name: PUPPET_MASTERPORT
               value: "{{ template "puppetserver.puppetserver-masters.port" . }}"
             - name: DNS_ALT_NAMES
-              value: "{{ template "puppetserver.puppetserver.agents-to-masters.serviceName" . }},{{ template "puppetserver.puppetserver-masters.serviceName" . }},{{.Values.puppetserver.masters.fqdns.alternateServerNames}}"
+              value: "{{ template "puppetserver.master.san" . }}"
             - name: PUPPETDB_SERVER_URLS
               value: "https://{{ default ( include "puppetdb.fullname" . ) .Values.singleCA.puppetdb.overrideHostname }}:8081"
             - name: CA_ALLOW_SUBJECT_ALT_NAMES
               value: "true"
+            {{- end }}
             {{- range $key, $value := .Values.global.extraEnv }}
             - name: {{ $key }}
               value: "{{ $value }}"
@@ -225,10 +258,6 @@ spec:
           ports:
             - containerPort: {{ template "puppetserver.puppetserver-masters.port" .}}
           volumeMounts:
-            {{- if (not .Values.puppetserver.compilers.enabled) }}
-            - name: puppet-code-storage
-              mountPath: /etc/puppetlabs/code/
-            {{- end }}
             - name: puppet-puppet-storage
               mountPath: /etc/puppetlabs/puppet/
             - name: puppet-serverdata-storage
@@ -245,8 +274,26 @@ spec:
               mountPath: /docker-custom-entrypoint.d/{{ $key }}
               subPath: {{ $key }}
             {{- end }}
+            {{- if .Values.global.runAsNonRoot }}
+            - name: puppet-confd
+              mountPath: /etc/puppetlabs/puppetserver/conf.d/
+            {{- end }}
+            {{- if (not .Values.puppetserver.compilers.enabled) }}
+            - name: puppet-code-storage
+              mountPath: /etc/puppetlabs/code/
+            {{- end }}
           securityContext:
+            {{- if .Values.global.runAsNonRoot }}
+            runAsUser: {{ .Values.global.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            {{- else }}
             {{- toYaml .Values.puppetserver.securityContext | nindent 12 }}
+            {{- end }}
         {{- if and .Values.puppetserver.puppeturl (not .Values.puppetserver.compilers.enabled) .Values.r10k.asSidecar }}
         # r10k Code Sidecar
         - name: r10k-code
@@ -390,8 +437,13 @@ spec:
           {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- if .Values.singleCA.puppetdb.overrideHostname }}
+      {{- $service := lookup "v1" "Service" .Release.Namespace  (include "puppetdb.fullname" . ) }}
       hostAliases:
-        - ip: {{ required "A valid .Values.puppetdb.service.clusterIP required!" .Values.puppetdb.service.clusterIP }}
+        {{- if $service }}
+        - ip: {{ $service.spec.clusterIP }}
+        {{- else }}
+        - ip: 127.0.0.1 # this case is just to avoid an error with helm diff
+        {{- end }}
           hostnames:
           - {{ .Values.singleCA.puppetdb.overrideHostname }}
       {{- end }}
@@ -530,6 +582,11 @@ spec:
                 path: .netrc
         {{- end }}
         {{- end }}
+        {{- end }}
+        {{- if .Values.global.runAsNonRoot }}
+        - name: puppet-confd
+          persistentVolumeClaim:
+            claimName: {{ template "puppetserver.fullname" . }}-confd-claim
         {{- end }}
         {{- range $extraSecret := .Values.puppetserver.extraSecrets }}
         - name: {{ $extraSecret.name }}

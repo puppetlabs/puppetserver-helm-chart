@@ -6,7 +6,7 @@
   {{- end }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
-metadata: 
+metadata:
   name: {{ template "puppetdb.fullname" . }}
   namespace: {{ default .Release.Namespace .Values.metrics.prometheus.namespace | quote }}
   labels:

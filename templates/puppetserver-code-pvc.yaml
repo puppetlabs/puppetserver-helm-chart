@@ -9,10 +9,13 @@ metadata:
     {{- with .Values.global.extraLabels }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
-  {{- if .Values.storage.annotations }}
   annotations:
-    {{ toYaml .Values.storage.annotations | nindent 4 }}
-  {{- end }}
+    {{- if .Values.global.runAsNonRoot }}
+    helm.sh/hook: pre-install
+    {{- end }}
+    {{- with .Values.storage.annotations -}}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   accessModes:
     {{- toYaml .Values.storage.accessModes | nindent 4 }}
