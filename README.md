@@ -520,11 +520,11 @@ kill %[job_numbers_above]
 ## Credits
 
 * [Miroslav Hadzhiev](https://www.linkedin.com/in/mehadzhiev/), Lead Author and Owner
+* [David Phayanouvong](https://github.com/davidphay), Maintainer
 * [Pupperware Team](mailto:pupperware@puppet.com), Co-Author and Owner
 * [Morgan Rhodes](mailto:morgan@puppet.com), Maintainer
 * [Sean Conley](https://www.linkedin.com/in/seanconley/), Maintainer
 * [Raphaël Pinson](https://github.com/raphink), Maintainer
-* [David Phayanouvong](https://github.com/davidphay), Maintainer
 * [Reinier Schoof](https://github.com/skoef), Maintainer
 * [Niels Højen](https://github.com/nielshojen), Maintainer
 * [Scott Cressi](https://www.linkedin.com/in/scottcressi/), Co-Author
