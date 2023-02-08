@@ -431,7 +431,6 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `singleCA.puppetdb.overrideHostname`| override the puppetdb hostname, needed when using CA where you can't add private SAN name |``|
 | `singleCA.certificates.existingSecret.puppetserver`| existing k8s secret that holds `ca.pem`, `puppet.pem` & `puppet.key` |``|
 | `singleCA.certificates.existingSecret.puppetdb`| existing k8s secret that holds `ca.pem`, `puppetdb.pem` & `puppetdb.key` |``|
-
 | `metrics.prometheus.enabled` | enable prometheus exporter | `false` |
 | `metrics.prometheus.image` | puppetdb exporter image | `camptocamp/prometheus-puppetdb-exporter` |
 | `metrics.prometheus.tag` | puppetdb exporter tag | `1.1.0` |
@@ -542,3 +541,4 @@ kill %[job_numbers_above]
 * [Grégoire Menuel](https://github.com/gmenuel), Contributor
 * [Jean-François Roche](https://github.com/jfroche), Contributor
 * [Alexander Kiryushin](https://github.com/akiryushin), Contributor
+* [Ben Feld](https://github.com/rootshellz), Contributor
