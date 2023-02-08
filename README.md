@@ -349,7 +349,6 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.extraInitContainers`| Extra initContainers to inject into the puppetdb pod |``|
 | `puppetdb.serviceAccount.enabled`| Enable service account (Note: Service Account will only be automatically created if `puppetdb.serviceAccount.create` is not set.  |`false`|
 | `puppetdb.customconfigs.enabled`| puppetdb additional config map enabled |`false`|
-
 | `puppetdb.serviceAccount.create`| puppetdb additional masters svc labels |`false`|
 | `puppetdb.rbac.create`| Enable PodSecurityPolicy's RBAC rules |`false`|
 | `puppetdb.psp.create`| Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later |`false`|
@@ -400,7 +399,6 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `singleCA.certificates.existingSecret.puppetserver`| existing k8s secret that holds `ca.pem`, `puppet.pem` & `puppet.key` |``|
 | `singleCA.certificates.existingSecret.puppetdb`| existing k8s secret that holds `ca.pem`, `puppetdb.pem` & `puppetdb.key` |``|
 | `singleCA.hostAliases`| add additional entries with hostAliases (usefull with public CA where you can't add private SAN), see <https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/> |``|
-
 | `metrics.prometheus.enabled` | enable prometheus exporter | `false` |
 | `metrics.prometheus.image` | puppetdb exporter image | `camptocamp/prometheus-puppetdb-exporter` |
 | `metrics.prometheus.tag` | puppetdb exporter tag | `1.1.0` |
@@ -511,3 +509,4 @@ kill %[job_numbers_above]
 * [Grégoire Menuel](https://github.com/gmenuel), Contributor
 * [Jean-François Roche](https://github.com/jfroche), Contributor
 * [Alexander Kiryushin](https://github.com/akiryushin), Contributor
+* [Ben Feld](https://github.com/rootshellz), Contributor
