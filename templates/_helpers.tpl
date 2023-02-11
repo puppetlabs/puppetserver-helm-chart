@@ -429,6 +429,10 @@ Return PostgreSQL host name
 {{- else }}
 {{- printf "%s-%s" .Release.Name "postgresql-primary-hl" | trimSuffix "-" -}}
 {{- end -}}
+{{- else }}
+{{- if .Values.puppetdb.extraEnv.PUPPETDB_POSTGRES_HOSTNAME }}
+{{- printf "%s" .Values.puppetdb.extraEnv.PUPPETDB_POSTGRES_HOSTNAME -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 
