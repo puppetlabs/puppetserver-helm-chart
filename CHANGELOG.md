@@ -5,6 +5,13 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v7.4.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.4.0) (2023-02-17)
+- Fix: Remove r10k & hiera configuration in preinstall job
+- Fix: Preserve the whole tree file under /etc/puppetlabs/puppetserver when using the chart asNonRoot
+- Fix: Add capability compatibility for Azure
+- FIx: Manage hiera config in deployment to reload the pod automatically
+
+
 ## [v7.4.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.4.0) (2023-02-06)
 - Feat: allow to `runAsNonRoot` puppetserver **deployement** (masters & compilers) pods
 - Feat: add `PodDisruptionBudget`
