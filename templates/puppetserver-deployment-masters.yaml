@@ -138,6 +138,12 @@ spec:
                 - CAP_DAC_OVERRIDE
                 - CAP_AUDIT_WRITE
                 - CAP_FOWNER
+                - CHOWN
+                - SETUID
+                - SETGID
+                - DAC_OVERRIDE
+                - AUDIT_WRITE
+                - FOWNER
           volumeMounts:
             - name: puppet-puppet-storage
               mountPath: /etc/puppetlabs/puppet/
@@ -275,12 +281,24 @@ spec:
               subPath: {{ $key }}
             {{- end }}
             {{- if .Values.global.runAsNonRoot }}
+            - name: puppet-puppetserver
+              mountPath: /etc/puppetlabs/puppetserver/
+              {{- else }}
             - name: puppet-confd
               mountPath: /etc/puppetlabs/puppetserver/conf.d/
             {{- end }}
             {{- if (not .Values.puppetserver.compilers.enabled) }}
             - name: puppet-code-storage
               mountPath: /etc/puppetlabs/code/
+            {{- if .Values.hiera.config }}
+            - name: hiera-volume
+              mountPath: /etc/puppetlabs/puppet/hiera.yaml
+              subPath: hiera.yaml
+            {{- if and (or (.Values.hiera.eyaml.existingMap) (.Values.hiera.eyaml.existingSecret)) (not .Values.hiera.eyaml.public_key) (not .Values.hiera.eyaml.private_key)  }}
+            - name: eyaml-volume
+              mountPath: /etc/puppetlabs/puppet/eyaml/keys
+            {{- end }}
+            {{- end }}
             {{- end }}
           securityContext:
             {{- if .Values.global.runAsNonRoot }}
@@ -584,6 +602,10 @@ spec:
         {{- end }}
         {{- end }}
         {{- if .Values.global.runAsNonRoot }}
+        - name: puppet-puppetserver
+          persistentVolumeClaim:
+            claimName: {{ template "puppetserver.fullname" . }}-puppetserver-claim
+        {{- else }}
         - name: puppet-confd
           persistentVolumeClaim:
             claimName: {{ template "puppetserver.fullname" . }}-confd-claim

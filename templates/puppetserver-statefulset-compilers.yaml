@@ -132,6 +132,12 @@ spec:
                 - CAP_DAC_OVERRIDE
                 - CAP_AUDIT_WRITE
                 - CAP_FOWNER
+                - CHOWN
+                - SETUID
+                - SETGID
+                - DAC_OVERRIDE
+                - AUDIT_WRITE
+                - FOWNER
           volumeMounts:
             - name: puppet-code-volume
               mountPath: /etc/puppetlabs/code/

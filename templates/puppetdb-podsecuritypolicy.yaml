@@ -23,6 +23,11 @@ spec:
     - CAP_SETUID
     - CAP_SETGID
     - CAP_DAC_OVERRIDE
+    - FOWNER
+    - CHOWN
+    - SETUID
+    - SETGID
+    - DAC_OVERRIDE
   volumes:
     - 'configMap'
     - 'secret'
