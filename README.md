@@ -208,6 +208,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.customPersistentVolumeClaim.ca.config`| Configuration for custom PVC for certificate |``|
 | `puppetserver.customPersistentVolumeClaim.confd.enable`| If true, use custom PVC for conf.d  |``|
 | `puppetserver.customPersistentVolumeClaim.confd.config`| Configuration for custom PVC for conf.d |``|
+| `puppetserver.customPersistentVolumeClaim.puppetserver.enable`| If true, use custom PVC for puppetserver  |``|
+| `puppetserver.customPersistentVolumeClaim.puppetserver.config`| Configuration for custom PVC for puppetserver |``|
 | `puppetserver.masters.resources` | puppetserver masters resource limits | ``|
 | `puppetserver.masters.podAntiAffinity` | puppetserver masters pod affinity constraints |`false`|
 | `puppetserver.masters.podDisruptionBudget.enabled` | enable PodDisruptionBudget on puppetserver masters | `false`|
