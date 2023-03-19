@@ -125,6 +125,7 @@ spec:
               mkdir -p /opt/puppetlabs/server/data/puppetserver/dropsonde/bin/;
               touch /opt/puppetlabs/server/data/puppetserver/dropsonde/bin/dropsonde;
               chown puppet:puppet -R /opt/puppetlabs/server/data/puppetserver/;
+              cp -rp /etc/puppetlabs/puppetserver/conf.d/* /conf.d/;
           securityContext:
             runAsUser: 0
             runAsNonRoot: false
@@ -145,6 +146,8 @@ spec:
                 - AUDIT_WRITE
                 - FOWNER
           volumeMounts:
+            - name: puppet-confd
+              mountPath: /conf.d/
             - name: puppet-puppet-storage
               mountPath: /etc/puppetlabs/puppet/
             {{- if and .Values.puppetserver.puppeturl (not .Values.puppetserver.compilers.enabled) }}
@@ -283,7 +286,7 @@ spec:
             {{- if .Values.global.runAsNonRoot }}
             - name: puppet-puppetserver
               mountPath: /etc/puppetlabs/puppetserver/
-              {{- else }}
+            {{- else }}
             - name: puppet-confd
               mountPath: /etc/puppetlabs/puppetserver/conf.d/
             {{- end }}
