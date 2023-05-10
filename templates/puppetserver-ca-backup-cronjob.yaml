@@ -52,17 +52,17 @@ spec:
             - name: RESTIC_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: restic-backup-creds
+                  name: {{ template "puppetserver.fullname" . }}-restic-backup-creds
                   key: restic_password
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: restic-backup-creds
+                  name: {{ template "puppetserver.fullname" . }}-restic-backup-creds
                   key: access_key_id
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: restic-backup-creds
+                  name: {{ template "puppetserver.fullname" . }}-restic-backup-creds
                   key: secret_access_key
             volumeMounts:
             - name: puppet-ca-storage
