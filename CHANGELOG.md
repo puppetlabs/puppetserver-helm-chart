@@ -4,6 +4,8 @@ This file documents all notable changes to Puppet Server Helm Chart. The release
 numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
+## [v7.4.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.4.3) (2023-05-10)
+- Fix: puppet ca cronjob pvc claim name
 
 ## [v7.4.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.4.2) (2023-03-14)
 - Fix: puppet master deployment issue when running as root

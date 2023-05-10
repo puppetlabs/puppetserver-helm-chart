@@ -75,13 +75,13 @@ spec:
             {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.ca.config | nindent 10 }}
           {{- else }}
             persistentVolumeClaim:
-              claimName: puppet-ca-claim
+              claimName: {{ template "puppetserver.fullname" . }}-ca-claim
           {{- end }}
           - name: puppet-puppet-storage
           {{- if .Values.puppetserver.customPersistentVolumeClaim.puppet.enable }}
             {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.puppet.config | nindent 10 }}
           {{- else }}
             persistentVolumeClaim:
-              claimName: puppet-puppet-claim
+              claimName: {{ template "puppetserver.fullname" . }}-puppet-claim
           {{- end }}
 {{- end }}
