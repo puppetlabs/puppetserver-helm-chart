@@ -4,6 +4,9 @@ This file documents all notable changes to Puppet Server Helm Chart. The release
 numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
+## [v7.4.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.4.4) (2023-05-31)
+- Fix: pgchecker doesn't work with external database. Added the possibility of setting external postgresql.hostname with .Values.puppetdb.extraEnv.PUPPETDB_POSTGRES_HOSTNAME
+
 ## [v7.4.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.4.3) (2023-05-10)
 - Fix: puppet ca cronjob pvc claim name
 
