@@ -1,8 +1,8 @@
-{{- if and (not .Values.puppetserver.customPersistentVolumeClaim.confd.enable) (not .Values.global.runAsNonRoot) }}
+{{- if and (not .Values.puppetserver.customPersistentVolumeClaim.puppetserver.enable) .Values.global.runAsNonRoot }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ template "puppetserver.fullname" . }}-confd-claim
+  name: {{ template "puppetserver.fullname" . }}-puppetserver-claim
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
     {{- with .Values.global.extraLabels }}

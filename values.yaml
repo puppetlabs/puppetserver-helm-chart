@@ -79,6 +79,9 @@ puppetserver:
     confd:
       enable: false
       config: {}
+    puppetserver:
+      enable: false
+      config: {}
 
   ## Mandatory Deployment of Puppet Server Master/s
   ##
@@ -470,6 +473,12 @@ puppetserver:
         - CAP_DAC_OVERRIDE
         - CAP_AUDIT_WRITE
         - CAP_FOWNER
+        - CHOWN
+        - SETUID
+        - SETGID
+        - DAC_OVERRIDE
+        - AUDIT_WRITE
+        - FOWNER
   ## The pattern of managing Hieradata in a separate repository is
   ## both common and acceptable. Doing so provides the ability to decouple
   ## the management of configuration data from that of the Puppet code base.
@@ -621,6 +630,11 @@ puppetdb:
         - CAP_SETUID
         - CAP_SETGID
         - CAP_DAC_OVERRIDE
+        - FOWNER
+        - CHOWN
+        - SETUID
+        - SETGID
+        - DAC_OVERRIDE
 
   networkPolicy:
     enabled: false

@@ -52,17 +52,17 @@ spec:
             - name: RESTIC_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: restic-backup-creds
+                  name: {{ template "puppetserver.fullname" . }}-restic-backup-creds
                   key: restic_password
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: restic-backup-creds
+                  name: {{ template "puppetserver.fullname" . }}-restic-backup-creds
                   key: access_key_id
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: restic-backup-creds
+                  name: {{ template "puppetserver.fullname" . }}-restic-backup-creds
                   key: secret_access_key
             volumeMounts:
             - name: puppet-ca-storage
@@ -75,13 +75,13 @@ spec:
             {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.ca.config | nindent 10 }}
           {{- else }}
             persistentVolumeClaim:
-              claimName: puppet-ca-claim
+              claimName: {{ template "puppetserver.fullname" . }}-ca-claim
           {{- end }}
           - name: puppet-puppet-storage
           {{- if .Values.puppetserver.customPersistentVolumeClaim.puppet.enable }}
             {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.puppet.config | nindent 10 }}
           {{- else }}
             persistentVolumeClaim:
-              claimName: puppet-puppet-claim
+              claimName: {{ template "puppetserver.fullname" . }}-puppet-claim
           {{- end }}
 {{- end }}
