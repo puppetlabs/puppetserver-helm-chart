@@ -426,8 +426,6 @@ Return PostgreSQL host name
 {{- if .Values.postgresql.enabled }}
 {{- if eq .Values.postgresql.architecture "standalone" -}}
 {{- printf "%s-%s" .Release.Name "postgresql-hl" | trimSuffix "-" -}}
-{{- else if .Values.puppetdb.extraEnv.PUPPETDB_POSTGRES_HOSTNAME -}}
-{{- printf "%s" .Values.puppetdb.extraEnv.PUPPETDB_POSTGRES_HOSTNAME -}}
 {{- else }}
 {{- printf "%s-%s" .Release.Name "postgresql-primary-hl" | trimSuffix "-" -}}
 {{- end -}}
