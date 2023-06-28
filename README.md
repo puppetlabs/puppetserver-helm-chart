@@ -544,3 +544,4 @@ kill %[job_numbers_above]
 * [Jean-François Roche](https://github.com/jfroche), Contributor
 * [Alexander Kiryushin](https://github.com/akiryushin), Contributor
 * [Ben Feld](https://github.com/rootshellz), Contributor
+* [Julien Godin](https://github.com/JGodin-C2C), Contributor
