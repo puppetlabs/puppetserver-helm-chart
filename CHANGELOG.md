@@ -4,6 +4,9 @@ This file documents all notable changes to Puppet Server Helm Chart. The release
 numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
+## [v7.4.5](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.4.5) (2023-06-28)
+- Fix: r10k pod needs a script to run. Added all the needed mountpoint
+
 ## [v7.4.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.4.4) (2023-06-27)
 - Fix: pgchecker doesn't work with external database. Added the possibility of setting external postgresql.hostname with .Values.puppetdb.extraEnv.PUPPETDB_POSTGRES_HOSTNAME
 
