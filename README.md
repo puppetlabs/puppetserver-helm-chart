@@ -169,6 +169,14 @@ NAME                                                                    REFERENC
 horizontalpodautoscaler.autoscaling/puppetserver-compilers-autoscaler   StatefulSet/puppetserver-puppetserver-compilers   33%/75%, 47%/75%               1         3         0          9m25s
 ```
 
+## Upgrading
+
+### from 7.4.5 to TBD
+
+`customPersistentVolumeClaim` was removed instead check `puppetdb.persistence.existingClaim` or `puppetserver.persistence.*.existingClaim` for similar functionnality.
+
+Added support for setting the size and Storage Class of individual Persistent Volume Claims fullfilling most uses of `customPersistentVolumeClaim` check `puppetdb.persistence.size` `puppetdb.persistence.storageClass`, `puppetserver.persistence.*.storageClass` and `puppetserver.persistence.*.size` for more information.
+
 ## Configuration
 
 The following table lists the configurable parameters of the Puppetserver chart and their default values.
