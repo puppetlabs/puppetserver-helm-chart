@@ -293,12 +293,8 @@ spec:
       {{- end }}
       volumes:
         - name: puppetdb-storage
-        {{- if .Values.puppetdb.customPersistentVolumeClaim.storage.enable }}
-          {{- toYaml .Values.puppetdb.customPersistentVolumeClaim.storage.config | nindent 10 }}
-        {{- else }}
           persistentVolumeClaim:
-            claimName: {{ include "puppetdb.fullname" . }}-claim
-        {{- end }}
+            claimName: {{ template "puppetdb.persistence.claimName" . }}
         {{- if .Values.puppetdb.metrics.enabled }}
         - name: puppetdb-metrics-volume
           configMap:

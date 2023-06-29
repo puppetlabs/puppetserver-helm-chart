@@ -299,6 +299,41 @@ Create the name for the PuppetDB password secret.
 {{- end -}}
 
 {{/*
+Create the name for the PuppetDB Persistent Volume Claim.
+*/}}
+{{- define "puppetdb.persistence.claimName" -}}
+{{- if .Values.puppetdb.persistence.existingClaim -}}
+  {{- .Values.puppetdb.persistence.existingClaim -}}
+{{- else -}}
+  {{ template "puppetdb.fullname" . }}-claim
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the annotations for the PuppetDB Persistent Volume Claim.
+*/}}
+{{- define "puppetdb.persistence.annotations" -}}
+{{- if .Values.puppetdb.persistence.annotations -}}
+  {{- .Values.puppetdb.persistence.annotations | toYaml -}}
+{{- else -}}
+  {{- if .Values.storage.annotations -}}
+    {{- .Values.storage.annotations | toYaml -}}
+  {{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the storageClassName for the PuppetDB Persistent Volume Claim.
+*/}}
+{{- define "puppetdb.persistence.storageClass" -}}
+{{- if .Values.puppetdb.persistence.storageClass -}}
+  {{- .Values.puppetdb.persistence.storageClass -}}
+{{- else -}}
+  {{- .Values.storage.storageClass -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create the name for the r10k.code.viaSsh secret.
 */}}
 {{- define "r10k.code.viaSsh.secret" -}}

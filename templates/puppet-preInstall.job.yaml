@@ -369,12 +369,8 @@ spec:
         {{- end }}
         {{- if and ( or .Values.puppetserver.preGeneratedCertsJob.enabled .Values.singleCA.enabled) .Values.puppetdb.enabled}}
         - name: puppetdb-storage
-        {{- if .Values.puppetdb.customPersistentVolumeClaim.storage.enable }}
-          {{- toYaml .Values.puppetdb.customPersistentVolumeClaim.storage.config | nindent 10 }}
-        {{- else }}
           persistentVolumeClaim:
-            claimName: {{ include "puppetdb.fullname" . }}-claim
-        {{- end }}
+            claimName: {{ include "puppetdb.persistence.claimName" . }}
         - name: puppetdb-certs
         {{- if not .Values.singleCA.enabled }}
           configMap:
