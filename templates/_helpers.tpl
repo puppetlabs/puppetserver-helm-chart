@@ -146,6 +146,217 @@ app.kubernetes.io/component: {{ .Values.puppetserver.name }}-serverdata
 {{- end -}}
 
 {{/*
+Create the name for the Puppet Server Puppet Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.puppet.claimName" -}}
+{{- if .Values.puppetserver.persistence.puppet.existingClaim -}}
+  {{- .Values.puppetserver.persistence.puppet.existingClaim -}}
+{{- else -}}
+  {{ template "puppetserver.fullname" . }}-puppet-claim
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the annotations for the Puppet Server Puppet Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.puppet.annotations" -}}
+{{- if .Values.puppetserver.persistence.puppet.annotations -}}
+  {{- .Values.puppetserver.persistence.puppet.annotations | toYaml -}}
+{{- else -}}
+{{- if .Values.storage.annotations -}}
+  {{- .Values.storage.annotations | toYaml -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the storageClassName for the Puppet Server Puppet Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.puppet.storageClass" -}}
+{{- if .Values.puppetserver.persistence.puppet.storageClass -}}
+  {{- .Values.puppetserver.persistence.puppet.storageClass -}}
+{{- else -}}
+  {{- .Values.storage.storageClass -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name for the Puppet Server Code Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.code.claimName" -}}
+{{- if .Values.puppetserver.persistence.code.existingClaim -}}
+  {{- .Values.puppetserver.persistence.code.existingClaim -}}
+{{- else -}}
+  {{ template "puppetserver.fullname" . }}-code-claim
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the annotations for the Puppet Server Code Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.code.annotations" -}}
+{{- if .Values.puppetserver.persistence.code.annotations -}}
+  {{- .Values.puppetserver.persistence.code.annotations | toYaml -}}
+{{- else -}}
+{{- if .Values.storage.annotations -}}
+  {{- .Values.storage.annotations | toYaml -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the storageClassName for the Puppet Server Code Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.code.storageClass" -}}
+{{- if .Values.puppetserver.persistence.code.storageClass -}}
+  {{- .Values.puppetserver.persistence.code.storageClass -}}
+{{- else -}}
+  {{- .Values.storage.storageClass -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name for the Puppet Server Server Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.server.claimName" -}}
+{{- if .Values.puppetserver.persistence.server.existingClaim -}}
+  {{- .Values.puppetserver.persistence.server.existingClaim -}}
+{{- else -}}
+  {{ template "puppetserver.fullname" . }}-puppetserver-claim
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the annotations for the Puppet Server Server Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.server.annotations" -}}
+{{- if .Values.puppetserver.persistence.server.annotations -}}
+  {{- .Values.puppetserver.persistence.server.annotations | toYaml -}}
+{{- else -}}
+{{- if .Values.storage.annotations -}}
+  {{- .Values.storage.annotations | toYaml -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the storageClassName for the Puppet Server Server Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.server.storageClass" -}}
+{{- if .Values.puppetserver.persistence.server.storageClass -}}
+  {{- .Values.puppetserver.persistence.server.storageClass -}}
+{{- else -}}
+  {{- .Values.storage.storageClass -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name for the Puppet Server Data Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.data.claimName" -}}
+{{- if .Values.puppetserver.persistence.data.existingClaim -}}
+  {{- .Values.puppetserver.persistence.data.existingClaim -}}
+{{- else -}}
+  {{ template "puppetserver.fullname" . }}-serverdata-claim
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the annotations for the Puppet Server Data Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.data.annotations" -}}
+{{- if .Values.puppetserver.persistence.data.annotations -}}
+  {{- .Values.puppetserver.persistence.data.annotations | toYaml -}}
+{{- else -}}
+{{- if .Values.storage.annotations -}}
+  {{- .Values.storage.annotations | toYaml -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the storageClassName for the Puppet Server Data Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.data.storageClass" -}}
+{{- if .Values.puppetserver.persistence.data.storageClass -}}
+  {{- .Values.puppetserver.persistence.data.storageClass -}}
+{{- else -}}
+  {{- .Values.storage.storageClass -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name for the Puppet Server CA Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.ca.claimName" -}}
+{{- if .Values.puppetserver.persistence.ca.existingClaim -}}
+  {{- .Values.puppetserver.persistence.ca.existingClaim -}}
+{{- else -}}
+  {{ template "puppetserver.fullname" . }}-ca-claim
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the annotations for the Puppet Server CA Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.ca.annotations" -}}
+{{- if .Values.puppetserver.persistence.ca.annotations -}}
+  {{- .Values.puppetserver.persistence.ca.annotations | toYaml -}}
+{{- else -}}
+{{- if .Values.storage.annotations -}}
+  {{- .Values.storage.annotations | toYaml -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the storageClassName for the Puppet Server CA Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.ca.storageClass" -}}
+{{- if .Values.puppetserver.persistence.ca.storageClass -}}
+  {{- .Values.puppetserver.persistence.ca.storageClass -}}
+{{- else -}}
+  {{- .Values.storage.storageClass -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name for the Puppet Server conf.d Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.confd.claimName" -}}
+{{- if .Values.puppetserver.persistence.confd.existingClaim -}}
+  {{- .Values.puppetserver.persistence.confd.existingClaim -}}
+{{- else -}}
+  {{ template "puppetserver.fullname" . }}-confd-claim
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the annotations for the Puppet Server conf.d Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.confd.annotations" -}}
+{{- if .Values.puppetserver.persistence.confd.annotations -}}
+  {{- .Values.puppetserver.persistence.confd.annotations | toYaml -}}
+{{- else -}}
+{{- if .Values.storage.annotations -}}
+  {{- .Values.storage.annotations | toYaml -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the storageClassName for the Puppet Server conf.d Persistent Volume Claim.
+*/}}
+{{- define "puppetserver.persistence.confd.storageClass" -}}
+{{- if .Values.puppetserver.persistence.confd.storageClass -}}
+  {{- .Values.puppetserver.persistence.confd.storageClass -}}
+{{- else -}}
+  {{- .Values.storage.storageClass -}}
+{{- end -}}
+{{- end -}}
+
+
+{{/*
 Set mandatory Puppet Server Masters' Service name.
 */}}
 {{- define "puppetserver.puppetserver-masters.serviceName" -}}

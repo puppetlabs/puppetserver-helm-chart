@@ -71,17 +71,9 @@ spec:
               mountPath: /backup/etc/puppetlabs/puppet/
           volumes:
           - name: puppet-ca-storage
-          {{- if .Values.puppetserver.customPersistentVolumeClaim.ca.enable }}
-            {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.ca.config | nindent 10 }}
-          {{- else }}
             persistentVolumeClaim:
-              claimName: {{ template "puppetserver.fullname" . }}-ca-claim
-          {{- end }}
+              claimName: {{ template "puppetserver.persitence.ca.claimName" . }}
           - name: puppet-puppet-storage
-          {{- if .Values.puppetserver.customPersistentVolumeClaim.puppet.enable }}
-            {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.puppet.config | nindent 10 }}
-          {{- else }}
             persistentVolumeClaim:
-              claimName: {{ template "puppetserver.fullname" . }}-puppet-claim
-          {{- end }}
+              claimName: {{ template "puppetserver.persistence.puppet.claimName" . }}
 {{- end }}

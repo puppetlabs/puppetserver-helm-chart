@@ -58,30 +58,121 @@ puppetserver:
   tag: 7.9.2
   pullPolicy: IfNotPresent
 
-  ## Use custom PVC for the Puppet Server Master
-  customPersistentVolumeClaim:
-    serverdata:
-      enable: false
-      config: {}
-    #  azureDisk:
-    #    kind: Managed
-    #    diskName: myAKSDisk
-    #    diskURI: /subscriptions/<subscriptionID>/resourceGroups/MC_myAKSCluster_myAKSCluster_eastus/providers/Microsoft.Compute/disks/myAKSDisk
-    puppet:
-      enable: false
-      config: {}
-    code:
-      enable: false
-      config: {}
+  ## Configure persistence for Puppet Server
+  persistence:
     ca:
-      enable: false
-      config: {}
+      ## If an existing Persistent Volume Claim needs to be used, specify the name here.
+      ## If not specified the PVC is created by this chart using the informations below or the `storage` values.
+      existingClaim: ''
+      ## Persistent Volume Access Modes
+      ## Be sure your chosen Storage Class below allows this Access Mode
+      ## If not specified storage.accessModes is taken.
+      accessModes: []
+      ## Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If not specified storage.storageClass is taken. See the documentation of storage.storageClass for more details.
+      storageClass: ""
+      ## Persistent Volume annotations
+      ## If not specified storage.annotations is taken.
+      annotations: {}
+      ## Size request of the Persistent Volume Claim, of not specified storage.storageClass is taken.
+      size: ""
+
+    code:
+      ## If an existing Persistent Volume Claim needs to be used, specify the name here.
+      ## If not specified the PVC is created by this chart using the informations below or the `storage` values.
+      existingClaim: ''
+      ## Persistent Volume Access Modes
+      ## Be sure your chosen Storage Class below allows this Access Mode
+      ## If not specified storage.accessModes is taken.
+      accessModes: []
+      ## Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If not specified storage.storageClass is taken. See the documentation of storage.storageClass for more details.
+      storageClass: ""
+      ## Persistent Volume annotations
+      ## If not specified storage.annotations is taken.
+      annotations: {}
+      ## Size request of the Persistent Volume Claim, of not specified storage.storageClass is taken.
+      size: ""
+
+    data:
+      ## If an existing Persistent Volume Claim needs to be used, specify the name here.
+      ## If not specified the PVC is created by this chart using the informations below or the `storage` values.
+      existingClaim: ''
+      ## Persistent Volume Access Modes
+      ## Be sure your chosen Storage Class below allows this Access Mode
+      ## If not specified storage.accessModes is taken.
+      accessModes: []
+      ## Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If not specified storage.storageClass is taken. See the documentation of storage.storageClass for more details.
+      storageClass: ""
+      ## Persistent Volume annotations
+      ## If not specified storage.annotations is taken.
+      annotations: {}
+      ## Size request of the Persistent Volume Claim, of not specified storage.storageClass is taken.
+      size: ""
+
     confd:
-      enable: false
-      config: {}
-    puppetserver:
-      enable: false
-      config: {}
+      ## If an existing Persistent Volume Claim needs to be used, specify the name here.
+      ## If not specified the PVC is created by this chart using the informations below or the `storage` values.
+      existingClaim: ''
+      ## Persistent Volume Access Modes
+      ## Be sure your chosen Storage Class below allows this Access Mode
+      ## If not specified storage.accessModes is taken.
+      accessModes: []
+      ## Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If not specified storage.storageClass is taken. See the documentation of storage.storageClass for more details.
+      storageClass: ""
+      ## Persistent Volume annotations
+      ## If not specified storage.annotations is taken.
+      annotations: {}
+      ## Size request of the Persistent Volume Claim, of not specified storage.storageClass is taken.
+      size: ""
+
+    puppet:
+      ## If an existing Persistent Volume Claim needs to be used, specify the name here.
+      ## If not specified the PVC is created by this chart using the informations below or the `storage` values.
+      existingClaim: ''
+      ## Persistent Volume Access Modes
+      ## Be sure your chosen Storage Class below allows this Access Mode
+      ## If not specified storage.accessModes is taken.
+      accessModes: []
+      ## Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If not specified storage.storageClass is taken. See the documentation of storage.storageClass for more details.
+      storageClass: ""
+      ## Persistent Volume annotations
+      ## If not specified storage.annotations is taken.
+      annotations: {}
+      ## Size request of the Persistent Volume Claim, of not specified storage.storageClass is taken.
+      size: ""
+
+    server:
+      ## If an existing Persistent Volume Claim needs to be used, specify the name here.
+      ## If not specified the PVC is created by this chart using the informations below or the `storage` values.
+      existingClaim: ''
+      ## Persistent Volume Access Modes
+      ## Be sure your chosen Storage Class below allows this Access Mode
+      ## If not specified storage.accessModes is taken.
+      accessModes: []
+      ## Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If not specified storage.storageClass is taken. See the documentation of storage.storageClass for more details.
+      storageClass: ""
+      ## Persistent Volume annotations
+      ## If not specified storage.annotations is taken.
+      annotations: {}
+      ## Size request of the Persistent Volume Claim, of not specified storage.storageClass is taken.
+      size: ""
 
   ## Mandatory Deployment of Puppet Server Master/s
   ##

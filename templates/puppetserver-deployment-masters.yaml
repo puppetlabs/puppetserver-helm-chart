@@ -486,39 +486,23 @@ spec:
       volumes:
         {{- if (not .Values.puppetserver.compilers.enabled) }}
         - name: puppet-code-storage
-        {{- if .Values.puppetserver.customPersistentVolumeClaim.code.enable }}
-          {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.code.config | nindent 10 }}
-        {{- else }}
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.fullname" . }}-code-claim
-        {{- end }}
+            claimName: {{ template "puppetserver.persistence.code.claimName" . }}
         {{- end }}
         - name: puppet-ca-storage
-        {{- if .Values.puppetserver.customPersistentVolumeClaim.ca.enable }}
-          {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.ca.config | nindent 10 }}
-        {{- else }}
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.fullname" . }}-ca-claim
-        {{- end }}
+            claimName: {{ template "puppetserver.persistence.ca.claimName" . }}
         - name: puppet-puppet-storage
-        {{- if .Values.puppetserver.customPersistentVolumeClaim.puppet.enable }}
-          {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.puppet.config | nindent 10 }}
-        {{- else }}
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.fullname" . }}-puppet-claim
-        {{- end }}
+            claimName: {{ template "puppetserver.persistence.puppet.claimName" . }}
         {{- if .Values.singleCA.enabled }}
         - name: crl-volume
           configMap:
             name: {{ template "puppetserver.fullname" . }}-crl-config
         {{- end }}
         - name: puppet-serverdata-storage
-        {{- if .Values.puppetserver.customPersistentVolumeClaim.serverdata.enable }}
-          {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.serverdata.config | nindent 10 }}
-        {{- else }}
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.fullname" . }}-serverdata-claim
-        {{- end }}
+            claimName: {{ template "puppetserver.persistence.data.claimName" . }}
         {{- if .Values.puppetserver.masters.multiMasters.enabled }}
         - name: init-masters-volume
           configMap:
@@ -617,11 +601,11 @@ spec:
         {{- if .Values.global.runAsNonRoot }}
         - name: puppet-puppetserver
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.fullname" . }}-puppetserver-claim
+            claimName: {{ template "puppetserver.persistence.server.claimName" . }}
         {{- else }}
         - name: puppet-confd
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.fullname" . }}-confd-claim
+            claimName: {{ template "puppetserver.persistence.confd.claimName" . }}
         {{- end }}
         {{- range $extraSecret := .Values.puppetserver.extraSecrets }}
         - name: {{ $extraSecret.name }}

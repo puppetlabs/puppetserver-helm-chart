@@ -297,37 +297,21 @@ spec:
       {{- end }}
       volumes:
         - name: puppet-puppet-storage
-        {{- if .Values.puppetserver.customPersistentVolumeClaim.puppet.enable }}
-          {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.puppet.config | nindent 10 }}
-        {{- else }}
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.fullname" . }}-puppet-claim
-        {{- end }}
+            claimName: {{ template "puppetserver.persistence.puppet.claimName" . }}
         {{- if .Values.global.runAsNonRoot }}
         - name: puppet-puppetserver
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.fullname" . }}-puppetserver-claim
+            claimName: {{ template "puppetserver.persistence.server.claimName" . }}
         - name: puppet-code-storage
-        {{- if .Values.puppetserver.customPersistentVolumeClaim.code.enable }}
-          {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.code.config | nindent 10 }}
-        {{- else }}
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.fullname" . }}-code-claim
-        {{- end }}
+            claimName: {{ template "puppetserver.persistence.code.claimName" . }}
         - name: puppet-ca-storage
-        {{- if .Values.puppetserver.customPersistentVolumeClaim.ca.enable }}
-          {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.ca.config | nindent 10 }}
-        {{- else }}
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.fullname" . }}-ca-claim
-        {{- end }}
+            claimName: {{ template "puppetserver.persistence.ca.claimName" . }}
         - name: puppet-serverdata-storage
-        {{- if .Values.puppetserver.customPersistentVolumeClaim.serverdata.enable }}
-          {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.serverdata.config | nindent 10 }}
-        {{- else }}
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.fullname" . }}-serverdata-claim
-        {{- end }}
+            claimName: {{ template "puppetserver.persistence.data.claimName" . }}
         - name: puppet-docker-entrypoint-config
           configMap:
             name: {{ template "puppetserver.fullname" . }}-docker-entrypoint-config

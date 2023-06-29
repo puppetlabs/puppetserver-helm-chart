@@ -5,9 +5,9 @@ release:
   name: puppetserver
   namespace: puppet
 tests:
-  - it: should not create the volume if "customPersistentVolumeClaim.serverdata.enable" is true
+  - it: should not create the volume if "puppetserver.persistence.data.claimName" is non-empty
     set:
-      puppetserver.customPersistentVolumeClaim.serverdata.enable: true
+      puppetserver.persistence.data.claimName: dummy
     asserts:
       - hasDocuments:
           count: 0

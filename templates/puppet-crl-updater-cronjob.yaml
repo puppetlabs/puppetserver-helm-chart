@@ -70,12 +70,8 @@ spec:
             - name: puppet-crl-storage
               emptyDir: {}
             - name: puppet-puppet-storage
-            {{- if .Values.puppetserver.customPersistentVolumeClaim.puppet.enable }}
-              {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.puppet.config | nindent 14 }}
-            {{- else }}
               persistentVolumeClaim:
-                claimName: {{ template "puppetserver.fullname" . }}-puppet-claim
-            {{- end }}
+                claimName: {{ template "puppetserver.persistence.puppet.claimName" . }}
             - name: puppetdb-storage
               persistentVolumeClaim:
                 claimName: {{ template "puppetdb.persistence.claimName" . }}
