@@ -171,7 +171,7 @@ horizontalpodautoscaler.autoscaling/puppetserver-compilers-autoscaler   Stateful
 
 ## Upgrading
 
-### from 7.4.5 to TBD
+### from 7.x to 8.0
 
 `customPersistentVolumeClaim` was removed instead check `puppetdb.persistence.existingClaim` or `puppetserver.persistence.*.existingClaim` for similar functionnality.
 
