@@ -571,3 +571,4 @@ kill %[job_numbers_above]
 * [Alexander Kiryushin](https://github.com/akiryushin), Contributor
 * [Ben Feld](https://github.com/rootshellz), Contributor
 * [Julien Godin](https://github.com/JGodin-C2C), Contributor
+* [Diego Abelenda](https://github.com/dabelenda), Contributor
