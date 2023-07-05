@@ -169,6 +169,14 @@ NAME                                                                    REFERENC
 horizontalpodautoscaler.autoscaling/puppetserver-compilers-autoscaler   StatefulSet/puppetserver-puppetserver-compilers   33%/75%, 47%/75%               1         3         0          9m25s
 ```
 
+## Upgrading
+
+### from 7.x to 8.0
+
+`customPersistentVolumeClaim` was removed instead check `puppetdb.persistence.existingClaim` or `puppetserver.persistence.*.existingClaim` for similar functionnality.
+
+Added support for setting the size and Storage Class of individual Persistent Volume Claims fullfilling most uses of `customPersistentVolumeClaim` check `puppetdb.persistence.size` `puppetdb.persistence.storageClass`, `puppetserver.persistence.*.storageClass` and `puppetserver.persistence.*.size` for more information.
+
 ## Configuration
 
 The following table lists the configurable parameters of the Puppetserver chart and their default values.
@@ -198,18 +206,36 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.image` | puppetserver image | `puppet/puppetserver`|
 | `puppetserver.tag` | puppetserver img tag | `6.12.1`|
 | `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`|
-| `puppetserver.customPersistentVolumeClaim.serverdata.enable`| If true, use custom PVC for puppet data |``|
-| `puppetserver.customPersistentVolumeClaim.serverdata.config`| Configuration for custom PVC for puppet data |``|
-| `puppetserver.customPersistentVolumeClaim.puppet.enable`| If true, use custom PVC for puppet |``|
-| `puppetserver.customPersistentVolumeClaim.puppet.config`| Configuration for custom PVC for puppet |``|
-| `puppetserver.customPersistentVolumeClaim.code.enable`| If true, use custom PVC for code  |``|
-| `puppetserver.customPersistentVolumeClaim.code.config`| Configuration for custom PVC for code |``|
-| `puppetserver.customPersistentVolumeClaim.ca.enable`| If true, use custom PVC for certificate  |``|
-| `puppetserver.customPersistentVolumeClaim.ca.config`| Configuration for custom PVC for certificate |``|
-| `puppetserver.customPersistentVolumeClaim.confd.enable`| If true, use custom PVC for conf.d  |``|
-| `puppetserver.customPersistentVolumeClaim.confd.config`| Configuration for custom PVC for conf.d |``|
-| `puppetserver.customPersistentVolumeClaim.puppetserver.enable`| If true, use custom PVC for puppetserver  |``|
-| `puppetserver.customPersistentVolumeClaim.puppetserver.config`| Configuration for custom PVC for puppetserver |``|
+| `puppetserver.persistence.data.existingClaim`| If non-empty, use a pre-defined PVC for puppet data |``|
+| `puppetserver.persistence.data.accessModes`| If existingClaim is empty, the accessModes of the PVC created by the chart | the value of `storage.accessModes` |
+| `puppetserver.persistence.data.storageClass`| If existingClaim is empty, the storageClass of the PVC created by the chart | the value of `storage.accessModes` |
+| `puppetserver.persistence.data.annotations`| If existingClaim is empty, the annotations of the PVC created by the chart | the value of `storage.annotations` |
+| `puppetserver.persistence.data.size`| If existingClaim is empty, the size of the PVC created by the chart | the value of `storage.size` |
+| `puppetserver.persistence.puppet.existingClaim`| If non-empty, use a pre-defined PVC for the puppet directory |``|
+| `puppetserver.persistence.puppet.accessModes`| If existingClaim is empty, the accessModes of the PVC created by the chart | the value of `storage.accessModes` |
+| `puppetserver.persistence.puppet.storageClass`| If existingClaim is empty, the storageClass of the PVC created by the chart | the value of `storage.accessModes` |
+| `puppetserver.persistence.puppet.annotations`| If existingClaim is empty, the annotations of the PVC created by the chart | the value of `storage.annotations` |
+| `puppetserver.persistence.puppet.size`| If existingClaim is empty, the size of the PVC created by the chart | the value of `storage.size` |
+| `puppetserver.persistence.code.existingClaim`| If non-empty, use a pre-defined PVC for the puppet code |``|
+| `puppetserver.persistence.code.accessModes`| If existingClaim is empty, the accessModes of the PVC created by the chart | the value of `storage.accessModes` |
+| `puppetserver.persistence.code.storageClass`| If existingClaim is empty, the storageClass of the PVC created by the chart | the value of `storage.accessModes` |
+| `puppetserver.persistence.code.annotations`| If existingClaim is empty, the annotations of the PVC created by the chart | the value of `storage.annotations` |
+| `puppetserver.persistence.code.size`| If existingClaim is empty, the size of the PVC created by the chart | the value of `storage.size` |
+| `puppetserver.persistence.ca.existingClaim`| If non-empty, use a pre-defined PVC for the puppet CA certificates |``|
+| `puppetserver.persistence.ca.accessModes`| If existingClaim is empty, the accessModes of the PVC created by the chart | the value of `storage.accessModes` |
+| `puppetserver.persistence.ca.storageClass`| If existingClaim is empty, the storageClass of the PVC created by the chart | the value of `storage.accessModes` |
+| `puppetserver.persistence.ca.annotations`| If existingClaim is empty, the annotations of the PVC created by the chart | the value of `storage.annotations` |
+| `puppetserver.persistence.ca.size`| If existingClaim is empty, the size of the PVC created by the chart | the value of `storage.size` |
+| `puppetserver.persistence.confd.existingClaim`| If non-empty, use a pre-defined PVC for the puppet conf.d directory |``|
+| `puppetserver.persistence.confd.accessModes`| If existingClaim is empty, the accessModes of the PVC created by the chart | the value of `storage.accessModes` |
+| `puppetserver.persistence.confd.storageClass`| If existingClaim is empty, the storageClass of the PVC created by the chart | the value of `storage.accessModes` |
+| `puppetserver.persistence.confd.annotations`| If existingClaim is empty, the annotations of the PVC created by the chart | the value of `storage.annotations` |
+| `puppetserver.persistence.confd.size`| If existingClaim is empty, the size of the PVC created by the chart | the value of `storage.size` |
+| `puppetserver.persistence.server.existingClaim`| If non-empty, use a pre-defined PVC for the puppetserver |``|
+| `puppetserver.persistence.server.accessModes`| If existingClaim is empty, the accessModes of the PVC created by the chart | the value of `storage.accessModes` |
+| `puppetserver.persistence.server.storageClass`| If existingClaim is empty, the storageClass of the PVC created by the chart | the value of `storage.accessModes` |
+| `puppetserver.persistence.server.annotations`| If existingClaim is empty, the annotations of the PVC created by the chart | the value of `storage.annotations` |
+| `puppetserver.persistence.server.size`| If existingClaim is empty, the size of the PVC created by the chart | the value of `storage.size` |
 | `puppetserver.masters.resources` | puppetserver masters resource limits | ``|
 | `puppetserver.masters.podAntiAffinity` | puppetserver masters pod affinity constraints |`false`|
 | `puppetserver.masters.podDisruptionBudget.enabled` | enable PodDisruptionBudget on puppetserver masters | `false`|
@@ -545,3 +571,4 @@ kill %[job_numbers_above]
 * [Alexander Kiryushin](https://github.com/akiryushin), Contributor
 * [Ben Feld](https://github.com/rootshellz), Contributor
 * [Julien Godin](https://github.com/JGodin-C2C), Contributor
+* [Diego Abelenda](https://github.com/dabelenda), Contributor
