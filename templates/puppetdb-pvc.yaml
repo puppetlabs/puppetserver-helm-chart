@@ -1,6 +1,4 @@
-{{- if and .Values.puppetdb.enabled }}
-{{- if .Values.puppetdb.customPersistentVolumeClaim.storage.enable }}
-{{- else }}
+{{- if and ( .Values.puppetdb.enabled ) ( not .Values.puppetdb.persistence.existingClaim ) }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -12,24 +10,22 @@ metadata:
     {{- end }}
   annotations:
     {{- if or (.Values.puppetserver.preGeneratedCertsJob.enabled) (.Values.singleCA.enabled) }}
-    "helm.sh/hook": "pre-install"
-    "helm.sh/hook-weight": "0"
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "0"
     {{- end }}
-    {{- if .Values.storage.annotations }}
-    {{ toYaml .Values.storage.annotations | nindent 4 }}
-    {{- end }}
+    {{- include "puppetdb.persistence.annotations" . | nindent 4 }}
 spec:
   accessModes:
-    {{- toYaml .Values.storage.accessModes | nindent 4 }}
+    {{- toYaml ( .Values.puppetdb.persistence.accessModes | default .Values.storage.accessModes ) | nindent 4 }}
   resources:
     requests:
-      storage: {{ .Values.storage.size | quote }}
-  {{- if .Values.storage.storageClass }}
-  {{- if (eq "-" .Values.storage.storageClass) }}
+      storage: {{ .Values.puppetdb.persistence.size | default .Values.storage.size | quote }}
+  {{- $storageClass := include "puppetdb.persistence.storageClass" . }}
+  {{- if $storageClass }}
+  {{- if (eq "-" $storageClass) }}
   storageClassName: ""
   {{- else }}
-  storageClassName: "{{ .Values.storage.storageClass }}"
+  storageClassName: "{{ $storageClass }}"
   {{- end }}
   {{- end }}
-{{- end }}
 {{- end }}

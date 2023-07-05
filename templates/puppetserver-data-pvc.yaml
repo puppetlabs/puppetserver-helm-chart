@@ -1,4 +1,4 @@
-{{- if not .Values.puppetserver.customPersistentVolumeClaim.serverdata.enable }}
+{{- if not .Values.puppetserver.persistence.data.existingClaim }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -12,20 +12,19 @@ metadata:
     {{- if .Values.global.runAsNonRoot }}
     helm.sh/hook: pre-install
     {{- end }}
-    {{- with .Values.storage.annotations -}}
-    {{ toYaml . | nindent 4 }}
-    {{- end }}
+    {{- include "puppetserver.persistence.data.annotations" . | nindent 4 }}
 spec:
   accessModes:
-    {{- toYaml .Values.storage.accessModes | nindent 4 }}
+    {{- toYaml ( .Values.puppetserver.persistence.data.accessModes | default .Values.storage.accessModes ) | nindent 4 }}
   resources:
     requests:
-      storage: {{ .Values.storage.size | quote }}
-  {{- if .Values.storage.storageClass }}
-  {{- if (eq "-" .Values.storage.storageClass) }}
+      storage: {{ .Values.puppetserver.persistence.data.size | default .Values.storage.size | quote }}
+  {{- $storageClass := include "puppetserver.persistence.data.storageClass" . }}
+  {{- if $storageClass }}
+  {{- if (eq "-" $storageClass) }}
   storageClassName: ""
   {{- else }}
-  storageClassName: "{{ .Values.storage.storageClass }}"
+  storageClassName: "{{ $storageClass }}"
   {{- end }}
   {{- end }}
 {{- end }}

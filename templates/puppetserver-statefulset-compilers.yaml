@@ -534,40 +534,38 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: puppet-code-volume
-      {{- if .Values.storage.annotations }}
-      annotations:
-        {{- toYaml .Values.storage.annotations | nindent 10 }}
-      {{- end }}
+        annotations:
+          {{- include "puppetserver.persistence.code.annotations" . | nindent 10 }}
       spec:
         accessModes:
-          {{- toYaml .Values.storage.accessModes | nindent 10 }}
+          {{- toYaml ( .Values.puppetserver.persistence.code.accessModes | default .Values.storage.accessModes ) | nindent 10 }}
         resources:
           requests:
-            storage: "{{ .Values.storage.size }}"
-        {{- if .Values.storage.storageClass }}
-        {{- if (eq "-" .Values.storage.storageClass) }}
+            storage: {{ .Values.puppetserver.persistence.code.size | default .Values.storage.size | quote }}
+        {{- $storageClass := include "puppetserver.persistence.code.storageClass" . }}
+        {{- if $storageClass }}
+        {{- if (eq "-" $storageClass) }}
         storageClassName: ""
         {{- else }}
-        storageClassName: "{{ .Values.storage.storageClass }}"
+        storageClassName: "{{ $storageClass }}"
         {{- end }}
         {{- end }}
     - metadata:
         name: puppet-puppet-volume
-      {{- if .Values.storage.annotations }}
-      annotations:
-        {{- toYaml .Values.storage.annotations | nindent 10 }}
-      {{- end }}
+        annotations:
+          {{- include "puppetserver.persistence.puppet.annotations" . | nindent 10 }}
       spec:
         accessModes:
-          {{- toYaml .Values.storage.accessModes | nindent 10 }}
+          {{- toYaml ( .Values.puppetserver.persistence.puppet.accessModes | default .Values.storage.accessModes ) | nindent 10 }}
         resources:
           requests:
             storage: "{{ .Values.storage.size }}"
-        {{- if .Values.storage.storageClass }}
-        {{- if (eq "-" .Values.storage.storageClass) }}
+        {{- $storageClass := include "puppetserver.persistence.puppet.storageClass" . }}
+        {{- if $storageClass }}
+        {{- if (eq "-" $storageClass) }}
         storageClassName: ""
         {{- else }}
-        storageClassName: "{{ .Values.storage.storageClass }}"
+        storageClassName: "{{ $storageClass }}"
         {{- end }}
         {{- end }}
 {{- end }}

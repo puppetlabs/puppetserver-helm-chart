@@ -157,12 +157,8 @@ spec:
             {{- toYaml .Values.r10k.containerSecurityContext | nindent 12 }}
       volumes:
         - name: puppet-code-storage
-        {{- if .Values.puppetserver.customPersistentVolumeClaim.code.enable }}
-          {{- toYaml .Values.puppetserver.customPersistentVolumeClaim.code.config | nindent 10 }}
-        {{- else }}
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.fullname" . }}-code-claim
-        {{- end }}
+            claimName: {{ template "puppetserver.persistence.code.claimName" . }}
         - name: r10k-code-volume
           configMap:
             name: {{ template "puppetserver.fullname" . }}-r10k-code-config
