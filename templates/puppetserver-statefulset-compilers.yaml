@@ -282,7 +282,14 @@ spec:
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
-          command: [ "sh", "-c", "/etc/puppetlabs/puppet/r10k_code_entrypoint.sh" ]
+          command:
+            {{- range .Values.r10k.code.command }}
+            - {{ . | quote }}
+            {{- end}}
+          args:
+            {{- range .Values.r10k.code.args }}
+            - {{ . | quote }}
+            {{- end }}
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
             runAsGroup: {{ .Values.global.securityContext.runAsGroup }}

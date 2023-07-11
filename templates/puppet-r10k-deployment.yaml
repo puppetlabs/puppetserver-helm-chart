@@ -39,10 +39,13 @@ spec:
           image: "{{ tpl .Values.r10k.image . }}:{{ tpl .Values.r10k.tag . }}"
           imagePullPolicy: {{ tpl .Values.r10k.imagePullPolicy . }}
           command:
-            - /bin/sh
-            - -c
+            {{- range .Values.r10k.code.command }}
+            - {{ . | quote }}
+            {{- end}}
           args:
-            - /etc/puppetlabs/puppet/r10k_code_entrypoint.sh;
+            {{- range .Values.r10k.code.args }}
+            - {{ . | quote }}
+            {{- end }}
           resources:
             {{- toYaml .Values.r10k.code.resources | nindent 12 }}
           env:
@@ -81,7 +84,10 @@ spec:
             subPath: r10k_code.yaml
           readinessProbe:
             exec:
-              command: ["/bin/sh", "-ec", "test -f {{ .Values.r10k.code.cronJob.successFile }}"]
+              command:
+              {{- range .values.r10k.code.readinessprobe }}
+              - {{ . | quote }}
+              {{- end}}
             failureThreshold: 2
             initialDelaySeconds: 5
             periodSeconds: 20
@@ -89,6 +95,7 @@ spec:
             timeoutSeconds: 5
           securityContext:
             {{- toYaml .Values.r10k.containerSecurityContext | nindent 12 }}
+        {{- if (include "hiera.enable" .) }}
         - name: r10k-hiera
           image: "{{ tpl .Values.r10k.image . }}:{{ tpl .Values.r10k.tag . }}"
           imagePullPolicy: {{ tpl .Values.r10k.imagePullPolicy . }}
@@ -155,6 +162,7 @@ spec:
             timeoutSeconds: 5
           securityContext:
             {{- toYaml .Values.r10k.containerSecurityContext | nindent 12 }}
+        {{- end }}
       volumes:
         - name: puppet-code-storage
           persistentVolumeClaim:
