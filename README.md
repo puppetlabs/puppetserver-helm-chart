@@ -353,6 +353,9 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.tag` | r10k img tag | `3.15.2`|
 | `r10k.pullPolicy` | r10k img pull policy | `IfNotPresent`|
 | `r10k.code.resources` | r10k control repo resource limits |``|
+| `r10k.code.command` | r10k entrypoint command | [`/bin/sh`,`-c`]|
+| `r10k.code.args` | r10k entrypoint command argument |[`/etc/puppetlabs/puppet/r10k_code_entrypoint.sh;`]|
+| `r10k.code.readinessProbe` | r10k entrypoint |[`/bin/sh`, `-ec`, `test -f {{ .Values.r10k.code.cronJob.successFile }}`] |
 | `r10k.code.cronJob.enabled` | enable or disable r10k control repo cron job schedule policy | `true`|
 | `r10k.code.cronJob.schedule` | r10k control repo cron job schedule policy | `*/15 * * * *`|
 | `r10k.code.cronJob.splay` | apply random sleep before running r10k control repo cron job | `true`|
