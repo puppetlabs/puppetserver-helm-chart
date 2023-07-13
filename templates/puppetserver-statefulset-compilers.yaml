@@ -315,7 +315,8 @@ spec:
             mountPath: /etc/puppetlabs/puppet/
           readinessProbe:
             exec:
-              command: ["/bin/sh", "-ec", "test -f {{ .Values.r10k.code.cronJob.successFile }}"]
+              command: 
+              {{- include "r10k.code.readinessProbe" .  | nindent 16 }}
             failureThreshold: 2
             initialDelaySeconds: 5
             periodSeconds: 20
