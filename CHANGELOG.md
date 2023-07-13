@@ -4,6 +4,9 @@ This file documents all notable changes to Puppet Server Helm Chart. The release
 numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
+## [v8.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.0) (2023-07-12)
+- Feat: allows parametrized r10k code entrypoints
+
 ## [v7.4.5](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v7.4.5) (2023-06-28)
 - Fix: r10k pod needs a script to run. Added all the needed mountpoint
 
