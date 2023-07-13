@@ -331,7 +331,14 @@ spec:
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
-          command: [ "sh", "-c", "/etc/puppetlabs/puppet/r10k_code_entrypoint.sh" ]
+          command:
+            {{- range .Values.r10k.code.command }}
+            - {{ . | quote }}
+            {{- end}}
+          args:
+            {{- range .Values.r10k.code.args }}
+            - {{ . | quote }}
+            {{- end }}
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
             runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
@@ -366,7 +373,10 @@ spec:
             subPath: r10k_code.yaml
           readinessProbe:
             exec:
-              command: ["/bin/sh", "-ec", "test -f {{ .Values.r10k.code.cronJob.successFile }}"]
+              command:
+              {{- range .Values.r10k.code.readinessProbe }}
+              - {{ . | quote }}
+              {{- end}}
             failureThreshold: 2
             initialDelaySeconds: 5
             periodSeconds: 20

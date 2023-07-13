@@ -312,7 +312,14 @@ spec:
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
-          command: [ "sh", "-c", "/etc/puppetlabs/puppet/r10k_code_entrypoint.sh" ]
+          command:
+            {{- range .Values.r10k.code.command }}
+            - {{ . | quote }}
+            {{- end}}
+          args:
+            {{- range .Values.r10k.code.args }}
+            - {{ . | quote }}
+            {{- end }}
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
             runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
@@ -336,9 +343,13 @@ spec:
             mountPath: /etc/puppetlabs/code/
           - name: puppet-puppet-storage
             mountPath: /etc/puppetlabs/puppet/
+
           readinessProbe:
             exec:
-              command: ["/bin/sh", "-ec", "test -f {{ .Values.r10k.code.cronJob.successFile }}"]
+              command:
+              {{- range .values.r10k.code.readinessprobe }}
+              - {{ . | quote }}
+              {{- end}}
             failureThreshold: 2
             initialDelaySeconds: 5
             periodSeconds: 20
@@ -386,7 +397,7 @@ spec:
           - name: puppet-puppet-storage
             mountPath: /etc/puppetlabs/puppet/
           readinessProbe:
-            exec:
+            exec: 
               command: ["/bin/sh", "-ec", "test -f {{ .Values.r10k.hiera.cronJob.successFile }}"]
             failureThreshold: 2
             initialDelaySeconds: 5
