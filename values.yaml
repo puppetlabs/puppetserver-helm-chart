@@ -607,8 +607,6 @@ r10k:
       - "-c"
     args:
       - /etc/puppetlabs/puppet/r10k_code_entrypoint.sh;
-    readinessProbe:
-      ["/bin/sh", "-ec", "test -f {{ .Values.r10k.code.cronJob.successFile }}"]
     cronJob:
       enabled: true
       schedule: "*/5 * * * *"

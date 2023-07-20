@@ -4,6 +4,9 @@ This file documents all notable changes to Puppet Server Helm Chart. The release
 numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
+## [v8.1.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.1) (2034-07-13)
+- Fix: correct readinessprobe syntax
+
 ## [v8.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.0) (2023-07-12)
 - Feat: allows parametrized r10k code entrypoints
 

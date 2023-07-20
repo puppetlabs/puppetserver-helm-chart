@@ -192,6 +192,18 @@ Create the name for the Puppet Server Code Persistent Volume Claim.
 {{- end -}}
 
 {{/*
+Create a readinessProbe
+*/}}
+{{- define "r10k.code.readinessProbe" -}}
+{{- if .Values.r10k.code.readinessProbe -}}
+  {{- .Values.r10k.code.readinessProbe | toYaml  -}}
+{{- else -}}
+  {{- $list := list "/bin/sh" "-ec" ( printf "test -f %s" .Values.r10k.code.cronJob.successFile ) }}
+  {{- $list | toYaml -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create the annotations for the Puppet Server Code Persistent Volume Claim.
 */}}
 {{- define "puppetserver.persistence.code.annotations" -}}
