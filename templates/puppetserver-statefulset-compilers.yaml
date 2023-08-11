@@ -230,7 +230,7 @@ spec:
             httpGet:
               path: /status/v1/simple
               port: {{ template "puppetserver.puppetserver-compilers.port" . }}
-              scheme: HTTPS
+              scheme: {{ .Values.puppetserver.compilers.readinessProbePeScheme }}
             periodSeconds: {{ .Values.puppetserver.compilers.readinessProbePeriodSeconds }}
             timeoutSeconds: {{ .Values.puppetserver.compilers.readinessProbeTimeout }}
             failureThreshold: {{ .Values.puppetserver.compilers.readinessProbeFailureThreshold }}
@@ -283,9 +283,7 @@ spec:
             value: "{{ $value }}"
           {{- end }}
           command:
-            {{- range .Values.r10k.code.command }}
-            - {{ . | quote }}
-            {{- end}}
+            {{- include "r10k.code.readinessProbe" . | nindent 16 }}
           args:
             {{- range .Values.r10k.code.args }}
             - {{ . | quote }}
@@ -315,7 +313,7 @@ spec:
             mountPath: /etc/puppetlabs/puppet/
           readinessProbe:
             exec:
-              command: 
+              command:
               {{- include "r10k.code.readinessProbe" .  | nindent 16 }}
             failureThreshold: 2
             initialDelaySeconds: 5

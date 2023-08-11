@@ -4,6 +4,7 @@
 
 ## Global Values
 ##
+---
 global:
   runAsNonRoot: false
 
@@ -239,6 +240,7 @@ puppetserver:
     livenessProbeSuccessThreshold: 1
     startupProbePeriodSeconds: 60
     startupProbeFailureThreshold: 30
+    readinessProbeScheme: HTTPS
 
 
     ## Fully qualified domain names (FQDN's) to register
@@ -409,6 +411,7 @@ puppetserver:
     ## Puppet Server Compiler readiness and liveness probe initial delays and timeouts
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
     ##
+    readinessProbeScheme: HTTPS
     readinessProbePeriodSeconds: 60
     readinessProbeTimeout: 20
     readinessProbeFailureThreshold: 3
