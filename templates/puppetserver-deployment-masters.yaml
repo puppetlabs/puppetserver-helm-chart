@@ -247,7 +247,7 @@ spec:
             httpGet:
               path: /status/v1/simple
               port: {{ template "puppetserver.puppetserver-masters.port" .}}
-              scheme: HTTPS
+              scheme: {{ .Values.puppetserver.masters.readinessProbeScheme }} 
             periodSeconds: {{ .Values.puppetserver.masters.readinessProbePeriodSeconds }}
             timeoutSeconds: {{ .Values.puppetserver.masters.readinessProbeTimeout }}
             failureThreshold: {{ .Values.puppetserver.masters.readinessProbeFailureThreshold }}
