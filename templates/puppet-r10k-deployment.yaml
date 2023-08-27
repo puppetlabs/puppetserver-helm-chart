@@ -170,12 +170,12 @@ spec:
         - name: r10k-code-volume
           configMap:
             name: {{ template "puppetserver.fullname" . }}-r10k-code-config
-            defaultMode: 0550
+            defaultMode: 0777
         {{- if or (.Values.r10k.code.viaSsh.credentials.existingSecret) (and (.Values.r10k.code.viaSsh.credentials.ssh.value) (.Values.r10k.code.viaSsh.credentials.known_hosts.value)) }}
         - name: r10k-code-ssh
           secret:
             secretName: {{ template "r10k.code.viaSsh.secret" . }}
-            defaultMode: 288 # = mode 0440
+            defaultMode: 292 # = mode 0440
             items:
               - key: id_rsa
                 path: id_rsa
