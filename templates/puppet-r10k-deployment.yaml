@@ -85,7 +85,7 @@ spec:
           readinessProbe:
             exec:
               command:
-              {{- range .values.r10k.code.readinessProbe }}
+              {{- range .Values.r10k.code.readinessProbe }}
               - {{ . | quote }}
               {{- end}}
             failureThreshold: 2
