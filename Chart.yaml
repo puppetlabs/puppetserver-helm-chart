@@ -1,6 +1,6 @@
 apiVersion: v2
 name: puppetserver
-version: 8.1.2
+version: 8.1.3
 appVersion: 7.9.2
 description: Puppet automates the delivery and operation of software.
 keywords: ["puppet", "puppetserver", "automation", "iac", "infrastructure", "cm", "ci", "cd"]
