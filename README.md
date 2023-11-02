@@ -253,6 +253,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.masters.readinessProbeTimeout` | the timeout for the puppetserver masters readiness probe | `20`|
 | `puppetserver.masters.readinessProbeFailureThreshold` | the failure threshold for the puppetserver masters readiness probe | `3`|
 | `puppetserver.masters.readinessProbeSuccessThreshold` | the success threshold for the puppetserver masters readiness probe | `1`|
+| `puppetserver.masters.readinessProbeScheme` | the readiness probe scheme to be used | `HTTPS`|
 | `puppetserver.masters.livenessProbeInitialDelay` | the initial delay for the puppetserver masters liveness probe | `420`|
 | `puppetserver.masters.livenessProbePeriodSeconds` | how often (in seconds) to perform the puppetserver masters liveness probe | `30`|
 | `puppetserver.masters.livenessProbeTimeout` | the timeout for the puppetserver masters liveness probe  | `10`|
@@ -309,6 +310,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.compilers.readinessProbeTimeout` | the timeout for the puppetserver masters readiness probe | `20`|
 | `puppetserver.compilers.readinessProbeFailureThreshold` | the failure threshold for the puppetserver masters readiness probe | `3`|
 | `puppetserver.compilers.readinessProbeSuccessThreshold` | the success threshold for the puppetserver masters readiness probe | `1`|
+| `puppetserver.compilers.readinessScheme` | the readiness probe scheme to be used | `HTTPS`|
 | `puppetserver.compilers.livenessProbeInitialDelay` | the initial delay for the puppetserver masters liveness probe | `420`|
 | `puppetserver.compilers.livenessProbePeriodSeconds` | how often (in seconds) to perform the puppetserver masters liveness probe | `30`|
 | `puppetserver.compilers.livenessProbeTimeout` | the timeout for the puppetserver masters liveness probe  | `10`|
