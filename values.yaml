@@ -54,8 +54,8 @@ global:
 ##
 puppetserver:
   name: puppetserver
-  image: puppet/puppetserver
-  tag: 7.9.2
+  image: voxpupuli/container-puppetserver
+  tag: 7.13.0
   pullPolicy: IfNotPresent
 
   ## Configure persistence for Puppet Server
@@ -706,8 +706,8 @@ r10k:
 puppetdb:
   enabled: true
   name: puppetdb
-  image: davidphay/puppetdb
-  tag: 7.12.1
+  image: voxpupuli/container-puppetdb
+  tag: 7.14.0
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
