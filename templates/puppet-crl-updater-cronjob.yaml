@@ -33,7 +33,7 @@ spec:
                 - /bin/sh
                 - -c
               args:
-                - /tmp/crl/crl_kubernetes_cronjob.sh;
+                - /tmp/crl/crl_kubernetes_cronjob.sh
                   yes | cp -i /crl/crl.pem /etc/puppetlabs/puppet/ssl/crl.pem;
                   yes | cp -i /crl/crl.pem /opt/puppetlabs/server/data/puppetdb/certs/crl.pem;
                   ls -la /etc/puppetlabs/puppet/ssl/crl.pem;

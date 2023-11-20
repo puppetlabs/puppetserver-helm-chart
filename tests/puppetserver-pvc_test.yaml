@@ -5,9 +5,9 @@ release:
   name: puppetserver
   namespace: puppet
 tests:
-  - it: should not create the volume if "puppetserver.persistence.puppet.claimName" is non-empty
+  - it: should not create the volume if "puppetserver.persistence.puppet.existingClaim" is non-empty
     set:
-      puppetserver.persistence.puppet.claimName: dummy
+      puppetserver.persistence.puppet.existingClaim: dummy
     asserts:
       - hasDocuments:
           count: 0
