@@ -40,6 +40,7 @@ jobs:
       
       - name: Run helm unit tests
         run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
           helm plugin install https://github.com/helm-unittest/helm-unittest.git
           helm unittest ./
         
