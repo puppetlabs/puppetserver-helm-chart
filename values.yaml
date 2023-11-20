@@ -47,6 +47,8 @@ global:
     runAsUser: 999  # "puppet" UID
     runAsGroup: 999 # "puppet" GID
 
+  extraEnv: {}
+  extraEnvSecret: ""
   extraLabels: {}
 
 
@@ -215,6 +217,8 @@ puppetserver:
     ## Additional Masters' container environment variables
     ##
     extraEnv: {}
+    ## Additional Masters' container environment variables from a pre-existing K8s secret
+    extraEnvSecret: ""
 
     ## Additional Masters' container labels
     ##
@@ -399,6 +403,8 @@ puppetserver:
     ## Additional Compilers' container environment variables
     ##
     extraEnv: {}
+    ## Additional Compilers' container environment variables from a pre-existing K8s secret
+    extraEnvSecret: ""
 
     ## Additional Compilers' container labels
     ##
@@ -624,6 +630,8 @@ r10k:
     #   - --color
     ## Additional r10k code container environment variables
     extraEnv: {}
+     ## Additional r10k code container environment variables from a pre-existing K8s secret
+    extraEnvSecret: ""
     extraSettings: {}
     extraRepos: {}
     defaultRepoExtraConf: {}
@@ -673,6 +681,8 @@ r10k:
     #   - --color
     ## Additional puppetserver hiera container environment variables
     extraEnv: {}
+    ## Additional puppetserver hiera container environment variables from a pre-existing K8s secret
+    extraEnvSecret: ""
     extraSettings: {}
     extraRepos: {}
     defaultRepoExtraConf: {}
@@ -752,6 +762,8 @@ puppetdb:
   extraInitContainers: []
   ## Additional puppetdb container environment variables
   extraEnv: {}
+  ## Additional puppetdb container environment variables from a pre-existing K8s secret
+  extraEnvSecret: ""
 
   ## Additional puppetdb container labels
   ##
@@ -874,6 +886,8 @@ puppetboard:
   #  ENABLE_QUERY: True
   #  INVENTORY_FACTS: Hostname,fqdn,IP Address,ipaddress
   #  GRAPH_FACTS: architecture,puppetversion,osfamily
+  ## Additional puppetboard container environment variables from a pre-existing K8s secret
+  extraEnvSecret: ""
   securityContext:
     runAsNonRoot: true
     allowPrivilegeEscalation: false
@@ -1030,8 +1044,10 @@ singleCA:
       failedJobsHistoryLimit: 2
       successfulJobsHistoryLimit: 1
 
-
+    ## Additional r10k container environment variables
     extraEnv: {}
+    ## Additional r10k container environment variables from a pre-existing K8s secret
+    extraEnvSecret: ""
     resources: {}
     #  requests:
     #    memory: 128Mi
@@ -1076,6 +1092,8 @@ metrics:
       # PUPPETDB_UNREPORTED_NODE: 2h
       # REPORT_METRICS_CATEGORIES: 'resources,time,changes,events'
       # PUPPETDB_SSL_SKIP_VERIFY: "True"
+    ## Additional PuppetDB exporter container environment variables from a pre-existing K8s secret
+    extraEnvSecret: ""
     ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     metricRelabelings: []
     ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config

@@ -73,6 +73,15 @@ spec:
             - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
+          envFrom:
+          {{- if .Values.global.extraEnvSecret }}
+            - secretRef:
+              name: {{ .Values.global.extraEnvSecret }}
+          {{- end }}
+          {{- if .Values.puppetserver.compilers.extraEnvSecret }}
+            - secretRef:
+              name: {{ .Values.puppetserver.compilers.extraEnvSecret }}
+          {{- end }}
           command: [ "sh", "-c" ]
           args:
             - mkdir -p /etc/puppetlabs/puppet/eyaml/keys;
@@ -228,6 +237,15 @@ spec:
             - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
+          envFrom:
+          {{- if .Values.global.extraEnvSecret }}
+            - secretRef:
+              name: {{ .Values.global.extraEnvSecret }}
+          {{- end }}
+          {{- if .Values.puppetserver.compilers.extraEnvSecret }}
+            - secretRef:
+              name: {{ .Values.puppetserver.compilers.extraEnvSecret }}
+          {{- end }}
           readinessProbe:
             httpGet:
               path: /status/v1/simple
@@ -312,6 +330,15 @@ spec:
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
+          envFrom:
+          {{- if .Values.global.extraEnvSecret }}
+            - secretRef:
+              name: {{ .Values.global.extraEnvSecret }}
+          {{- end }}
+          {{- if .Values.r10k.code.extraEnvSecret }}
+            - secretRef:
+              name: {{ .Values.r10k.code.extraEnvSecret }}
+          {{- end }}
           command:
             {{- range .Values.r10k.code.command }}
             - {{ . | quote }}
@@ -372,6 +399,15 @@ spec:
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
+          envFrom:
+          {{- if .Values.global.extraEnvSecret }}
+            - secretRef:
+              name: {{ .Values.global.extraEnvSecret }}
+          {{- end }}
+          {{- if .Values.r10k.hiera.extraEnvSecret }}
+            - secretRef:
+              name: {{ .Values.r10k.hiera.extraEnvSecret }}
+          {{- end }}
           command: [ "sh", "-c", "/etc/puppetlabs/puppet/r10k_hiera_entrypoint.sh" ]
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
@@ -428,6 +464,19 @@ spec:
           {{- range $key, $value := .Values.singleCA.crl.extraEnv }}
           - name: {{ $key }}
             value: "{{ $value }}"
+          {{- end }}
+          envFrom:
+          {{- if .Values.global.extraEnvSecret }}
+            - secretRef:
+              name: {{ .Values.global.extraEnvSecret }}
+          {{- end }}
+          {{- if .Values.puppetserver.masters.extraEnvSecret }}
+            - secretRef:
+              name: {{ .Values.puppetserver.masters.extraEnvSecret }}
+          {{- end }}
+          {{- if .Values.singleCA.crl.extraEnvSecret }}
+            - secretRef:
+              name: {{ .Values.singleCA.crl.extraEnvSecret }}
           {{- end }}
           command: ["sh", "-c", "/etc/puppetlabs/puppet/ssl/crl_entrypoint.sh" ]
           securityContext:
