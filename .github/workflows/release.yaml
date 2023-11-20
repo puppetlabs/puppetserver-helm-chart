@@ -29,6 +29,12 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.6.0
 
+      - name: Run helm unit tests
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm plugin install https://github.com/helm-unittest/helm-unittest.git
+          helm unittest ./
+
       - name: Create testing cluster
         uses: helm/kind-action@v1.8.0
 
@@ -37,12 +43,6 @@ jobs:
 
       - name: Run chart-testing (install)
         run: ct install --target-branch ${{ github.event.repository.default_branch }} --charts ./
-      
-      - name: Run helm unit tests
-        run: |
-          helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm plugin install https://github.com/helm-unittest/helm-unittest.git
-          helm unittest ./
         
   publish:
     name: Publish Helm chart
