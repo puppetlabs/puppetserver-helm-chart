@@ -203,8 +203,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `global.r10k.imagePullPolicy`| r10k image pull policy |`IfNotPresent`|
 | `global.extraEnv.*`| add extra environment variables to all containers |``|
 | `puppetserver.name` | puppetserver component label | `puppetserver`|
-| `puppetserver.image` | puppetserver image | `puppet/puppetserver`|
-| `puppetserver.tag` | puppetserver img tag | `6.12.1`|
+| `puppetserver.image` | puppetserver image | `voxpupuli/container-puppetserver`|
+| `puppetserver.tag` | puppetserver img tag | `7.13.0`|
 | `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`|
 | `puppetserver.persistence.data.existingClaim`| If non-empty, use a pre-defined PVC for puppet data |``|
 | `puppetserver.persistence.data.accessModes`| If existingClaim is empty, the accessModes of the PVC created by the chart | the value of `storage.accessModes` |
@@ -392,8 +392,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `postgresql.networkPolicy.enabled` | enable `networkPolicy` on  postgresql | `true`|
 | `puppetdb.enabled` | puppetdb component enabled |`true`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
-| `puppetdb.image` | puppetdb img | `davidphay/puppetdb`|
-| `puppetdb.tag` | puppetdb img tag | `7.12.1`|
+| `puppetdb.image` | puppetdb img | `voxpupuli/container-puppetdb`|
+| `puppetdb.tag` | puppetdb img tag | `7.14.0`|
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
@@ -577,3 +577,4 @@ kill %[job_numbers_above]
 * [Ben Feld](https://github.com/rootshellz), Contributor
 * [Julien Godin](https://github.com/JGodin-C2C), Contributor
 * [Diego Abelenda](https://github.com/dabelenda), Contributor
+* [Linas Daneliukas](https://github.com/ldaneliukas), Contributor
