@@ -3,13 +3,6 @@ name: Lint and publish puppetserver helm chart
 on:
   pull_request:
   workflow_dispatch:
-    inputs:
-      helmRepoURL:
-        description: "Override Helm repo URL"
-        required: false
-      githubRepo:
-        description: "Override username/repo for gh-pages branch"
-        required: false
 
 jobs:
   test:
@@ -51,8 +44,6 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      HELM_REPO_URL: ${{ github.event.inputs.helmRepoURL || 'https://${{ github.repository_owner }}.github.io/${{ github.repository}}' }}
-      GITHUB_REPO: ${{ github.event.inputs.githubRepo || github.repository.full_name }}
     steps:
       - uses: actions/checkout@v3
       - name: Fetch history
@@ -101,12 +92,12 @@ jobs:
           cp .release-packages/puppetserver-${{ env.VERSION }}.tgz $gh_pages_worktree
           cp CHANGELOG.md README.md LICENSE CODEOWNERS $gh_pages_worktree
           find "$gh_pages_worktree" -type f ! -name "puppetserver-${{ env.VERSION }}.tgz" -name 'puppetserver*.tgz' -delete
-          helm repo index $gh_pages_worktree --url $HELM_REPO_URL --merge "$gh_pages_worktree/index.yaml"
+          helm repo index $gh_pages_worktree --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }} --merge "$gh_pages_worktree/index.yaml"
           pushd "$gh_pages_worktree" > /dev/null
           git add index.yaml puppetserver-${{ env.VERSION }}.tgz
           git commit --message "puppetserver-${{ env.VERSION }} release"
           git checkout 'puppetserver*.tgz' # reset the files removed to make the index accurate
           git commit --all --message "Sync files from master branch" ||:
-          repo_url="https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPO"
+          repo_url="https://x-access-token:$GITHUB_TOKEN@github.com/${{ github.repository }}"
           git push "$repo_url" gh-pages
           popd > /dev/null
