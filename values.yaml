@@ -54,7 +54,7 @@ global:
 ##
 puppetserver:
   name: puppetserver
-  image: voxpupuli/container-puppetserver
+  image: ghcr.io/voxpupuli/container-puppetserver
   tag: 7.13.0
   pullPolicy: IfNotPresent
 
@@ -706,7 +706,7 @@ r10k:
 puppetdb:
   enabled: true
   name: puppetdb
-  image: voxpupuli/container-puppetdb
+  image: ghcr.io/voxpupuli/container-puppetdb
   tag: 7.14.0
   pullPolicy: IfNotPresent
   resources: {}

@@ -5,10 +5,10 @@ on:
   workflow_dispatch:
     inputs:
       helmRepoURL:
-        description: "URL for helm repo"
+        description: "Override Helm repo URL"
         required: false
       githubRepo:
-        description: "username/repo for the github repo hosting the gh-pages branch"
+        description: "Override username/repo for gh-pages branch"
         required: false
 
 jobs:
