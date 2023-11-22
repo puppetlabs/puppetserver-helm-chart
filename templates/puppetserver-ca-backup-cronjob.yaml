@@ -72,7 +72,7 @@ spec:
           volumes:
           - name: puppet-ca-storage
             persistentVolumeClaim:
-              claimName: {{ template "puppetserver.persitence.ca.claimName" . }}
+              claimName: {{ template "puppetserver.persistence.ca.claimName" . }}
           - name: puppet-puppet-storage
             persistentVolumeClaim:
               claimName: {{ template "puppetserver.persistence.puppet.claimName" . }}
