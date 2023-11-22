@@ -286,6 +286,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.masters.backup.image` | puppetserver restic backup CronJob image | `restic/restic`|
 | `puppetserver.masters.backup.tag` | puppetserver restic backup CronJob image tag | `0.13.1`|
 | `puppetserver.masters.backup.pullPolicy` | puppetserver restic backup CronJob image pullPolicy | `IfNotPresent`|
+| `puppetserver.masters.backup.caConfigMap` | puppetserver restic backup CronJob configmap for custom ca-certificates.crt | ``|
 | `puppetserver.masters.backup.restic.keep_last` | puppetserver restic backup CronJob keep last n days | `90`|
 | `puppetserver.masters.backup.restic.repository` | puppetserver restic backup CronJob s3 compatible repository | ``|
 | `puppetserver.masters.backup.restic.access_key_id` | puppetserver restic backup CronJob s3 access_key_id | ``|

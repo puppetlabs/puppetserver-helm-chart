@@ -6,6 +6,7 @@ numbering uses [semantic versioning](http://semver.org).
 NOTE: The change log until version `v0.2.4` is auto-generated.
 ## [v8.1.5](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.5) (2023-11-22)
 - Fix: Typo in the restic backup template preventing chart from being deployed
+- Feat: Add ability to mount custom ca-certificates.crt from configMap for Restic
 
 ## [v8.1.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.4) (2023-11-20)
 - Fix: Utilize `puppetserver` and `puppetdb` containers provided by voxpupuli and bump default versions

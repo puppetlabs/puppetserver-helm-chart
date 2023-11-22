@@ -69,6 +69,11 @@ spec:
               mountPath: /backup/etc/puppetlabs/puppetserver/ca/
             - name: puppet-puppet-storage
               mountPath: /backup/etc/puppetlabs/puppet/
+            {{- if .Values.puppetserver.masters.backup.caConfigMap }}
+            - name: restic-ca-certificates
+              mountPath: /etc/ssl/certs/ca-certificates.crt
+              subPath: ca-certificates.crt
+            {{- end }}
           volumes:
           - name: puppet-ca-storage
             persistentVolumeClaim:
@@ -76,4 +81,10 @@ spec:
           - name: puppet-puppet-storage
             persistentVolumeClaim:
               claimName: {{ template "puppetserver.persistence.puppet.claimName" . }}
+          {{- if .Values.puppetserver.masters.backup.caConfigMap }}
+          - name: restic-ca-certificates
+            configMap:
+              name: {{ .Values.puppetserver.masters.backup.caConfigMap }}
+              defaultMode: 0777
+          {{- end }}
 {{- end }}
