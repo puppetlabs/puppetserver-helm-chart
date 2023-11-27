@@ -7,8 +7,9 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 
 ## [v8.1.6](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.6) (2023-11-27)
 - Fix: Typo in compiler statefulset readiness probe scheme
-- Fix: Add a baseline `PUPPETDB_JAVA_ARGS` which includes `-Xlog:gc:` instead of the default deprecated `-Xloggc` and an existing log path
-- Feat: Environment variables from secrets
+- Fix: `PUPPETDB_JAVA_ARGS` which includes `-Xlog:gc:` instead of the deprecated `-Xloggc` and uses an existing path
+- Fix: Broken r10k-code command for statefulset compilers & standardize r10k-code readiness probe usage
+- Feat: Environment variables loaded from secret key-value pairs
 
 ## [v8.1.5](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.5) (2023-11-22)
 - Fix: Typo in the restic backup template preventing chart from being deployed
