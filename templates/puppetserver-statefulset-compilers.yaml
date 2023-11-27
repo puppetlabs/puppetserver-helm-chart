@@ -310,7 +310,9 @@ spec:
                 name: {{ .Values.r10k.code.extraEnvSecret }}
           {{- end }}
           command:
-            {{- include "r10k.code.readinessProbe" . | nindent 16 }}
+            {{- range .Values.r10k.code.command }}
+            - {{ . | quote }}
+            {{- end}}
           args:
             {{- range .Values.r10k.code.args }}
             - {{ . | quote }}

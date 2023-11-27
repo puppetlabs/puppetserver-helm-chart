@@ -94,9 +94,7 @@ spec:
           readinessProbe:
             exec:
               command:
-              {{- range .values.r10k.code.readinessProbe }}
-              - {{ . | quote }}
-              {{- end}}
+              {{- include "r10k.code.readinessProbe" .  | nindent 16 }}
             failureThreshold: 2
             initialDelaySeconds: 5
             periodSeconds: 20
