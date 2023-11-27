@@ -524,7 +524,7 @@ spec:
             claimName: {{ template "puppetserver.persistence.puppet.claimName" . }}
         - name: puppet-serverdata-storage
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.persitence.data.claimName" . }}
+            claimName: {{ template "puppetserver.persistence.data.claimName" . }}
         {{- if .Values.singleCA.enabled }}
         - name: crl-volume
           configMap:

@@ -4,10 +4,16 @@ This file documents all notable changes to Puppet Server Helm Chart. The release
 numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
-## [v8.1.5](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.5) (2023-11-22)
+
+## [v8.1.6](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.6) (2023-11-27)
+- Fix: Typo in compiler statefulset readiness probe scheme
 - Feat: Environment variables from secrets
 
-## [v8.1.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.4) (2023-11-17)
+## [v8.1.5](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.5) (2023-11-22)
+- Fix: Typo in the restic backup template preventing chart from being deployed
+- Feat: Add ability to mount custom ca-certificates.crt from configMap for Restic
+
+## [v8.1.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.4) (2023-11-20)
 - Fix: Utilize `puppetserver` and `puppetdb` containers provided by voxpupuli and bump default versions
 
 ## [v8.1.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.3) (2023-09-24)

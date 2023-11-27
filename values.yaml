@@ -347,6 +347,12 @@ puppetserver:
       tag: 0.13.1
       pullPolicy: IfNotPresent
 
+      ## Replace ca-certificates.crt with your own CA bundle if needed
+      ##
+      caConfigMap: ""
+
+      ## Restric configuration
+      ##
       restic:
         keep_last: 90 # days
         repository: "" # "s3:https://s3.minio.xx/backups/"
