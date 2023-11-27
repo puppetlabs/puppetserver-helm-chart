@@ -230,7 +230,7 @@ spec:
             httpGet:
               path: /status/v1/simple
               port: {{ template "puppetserver.puppetserver-compilers.port" . }}
-              scheme: {{ .Values.puppetserver.compilers.readinessProbePeScheme }}
+              scheme: {{ .Values.puppetserver.compilers.readinessProbeScheme }}
             periodSeconds: {{ .Values.puppetserver.compilers.readinessProbePeriodSeconds }}
             timeoutSeconds: {{ .Values.puppetserver.compilers.readinessProbeTimeout }}
             failureThreshold: {{ .Values.puppetserver.compilers.readinessProbeFailureThreshold }}
