@@ -5,7 +5,7 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v8.1.6](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.6) (2023-11-27)
+## [v8.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.2.0) (2023-11-27)
 - Fix: Typo in compiler statefulset readiness probe scheme
 - Fix: `PUPPETDB_JAVA_ARGS` which includes `-Xlog:gc:` instead of the deprecated `-Xloggc` and uses an existing path
 - Fix: Broken r10k-code command for statefulset compilers & standardize r10k-code readiness probe usage
