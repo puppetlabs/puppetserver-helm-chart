@@ -4,6 +4,13 @@ This file documents all notable changes to Puppet Server Helm Chart. The release
 numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
+
+## [v8.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.2.0) (2023-11-27)
+- Fix: Typo in compiler statefulset readiness probe scheme
+- Fix: `PUPPETDB_JAVA_ARGS` which includes `-Xlog:gc:` instead of the deprecated `-Xloggc` and uses an existing path
+- Fix: Broken r10k-code command for statefulset compilers & standardize r10k-code readiness probe usage
+- Feat: Environment variables loaded from secret key-value pairs
+
 ## [v8.1.5](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.1.5) (2023-11-22)
 - Fix: Typo in the restic backup template preventing chart from being deployed
 - Feat: Add ability to mount custom ca-certificates.crt from configMap for Restic

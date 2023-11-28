@@ -202,6 +202,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `global.r10k.tag` | r10k img tag | `3.15.2`|
 | `global.r10k.imagePullPolicy`| r10k image pull policy |`IfNotPresent`|
 | `global.extraEnv.*`| add extra environment variables to all containers |``|
+| `global.extraEnvSecret`| add extra environment variables to all containers from pre-existing secret |``|
 | `puppetserver.name` | puppetserver component label | `puppetserver`|
 | `puppetserver.image` | puppetserver image | `voxpupuli/container-puppetserver`|
 | `puppetserver.tag` | puppetserver img tag | `7.13.0`|
@@ -246,6 +247,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.masters.networkPolicy.additionnalIngressRules` | puppetserver masters resource limits | `allow 8140 from everywhere` |
 | `puppetserver.masters.extraContainers`| Extra containers to inject into the master pod |``|
 | `puppetserver.masters.extraEnv` | puppetserver masters additional container env vars |``|
+| `puppetserver.masters.extraEnvSecret` | puppetserver masters additional container env vars from pre-existing secret |``|
 | `puppetserver.masters.extraLabels` | puppetserver masters additional labels |``|
 | `puppetserver.masters.updateStrategy` | puppetserver masters update strategy |`RollingUpdate`|
 | `puppetserver.masters.readinessProbeInitialDelay` | the initial delay for the puppetserver masters readiness probe | `180`|
@@ -304,6 +306,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.compilers.annotations`| puppetserver compilers statefulset annotations |``|
 | `puppetserver.compilers.extraContainers`| Extra containers to inject into the compiler pod |``|
 | `puppetserver.compilers.extraEnv` | puppetserver compilers additional container env vars |``|
+| `puppetserver.compilers.extraEnvSecret` | puppetserver compilers additional container env vars from pre-existing secret |``|
 | `puppetserver.compilers.extraLabels` | puppetserver compilers additional labels |``|
 | `puppetserver.compilers.updateStrategy` | puppetserver compilers update strategy |`RollingUpdate`|
 | `puppetserver.compilers.readinessProbeInitialDelay` | the initial delay for the puppetserver masters readiness probe | `180`|
@@ -368,6 +371,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.code.defaultRepoExtraConf` | yaml to be added to the default repo in r10k_code.yaml |``|
 | `r10k.code.extraArgs` | r10k control repo additional container env args |``|
 | `r10k.code.extraEnv` | r10k control repo additional container env vars |``|
+| `r10k.code.extraEnvSecret` | r10k control repo additional container env vars from pre-existing secret |``|
 | `r10k.code.viaSsh.credentials.ssh.value`| r10k control repo ssh key file |``|
 | `r10k.code.viaSsh.credentials.known_hosts.value`| r10k control repo ssh known hosts file |``|
 | `r10k.code.viaSsh.credentials.existingSecret`| r10k control repo ssh secret that holds ssh key and known hosts files |``|
@@ -381,6 +385,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.hiera.defaultRepoExtraConf` | yaml to be added to the default repo in r10k_hiera.yaml |``|
 | `r10k.hiera.extraArgs` | r10k hiera data additional container env args |``|
 | `r10k.hiera.extraEnv` | r10k hiera data additional container env vars |``|
+| `r10k.hiera.extraEnvSecret` | r10k hiera data additional container env vars from pre-existing secret |``|
 | `r10k.hiera.viaSsh.credentials.ssh.value`| r10k hiera data ssh key file |``|
 | `r10k.hiera.viaSsh.credentials.known_hosts.value`| r10k hiera data ssh known hosts file |``|
 | `r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``|
@@ -398,6 +403,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
+| `puppetdb.extraEnvSecret` | puppetdb additional container env vars from pre-existing secret |``|
 | `puppetdb.extraLabels` | puppetdb additional labels |``|
 | `puppetdb.service.type` | define `spec.type` for the puppetdb service |`ClusterIP`|
 | `puppetdb.service.annotations` | puppetdb service annotations |``|
@@ -427,6 +433,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetboard.pullPolicy` | puppetboard img pull policy | `IfNotPresent`|
 | `puppetboard.resources` | puppetboard resource limits |``|
 | `puppetboard.extraEnv` | puppetboard additional container env vars |``|
+| `puppetboard.extraEnvSecret` | puppetboard additional container env vars from pre-existing secret |``|
 | `puppetboard.service.targetPort` | target port for the puppetboard service port |`puppetboard`|
 | `puppetboard.ingress.enabled`| puppetboard ingress creation enabled |`false`|
 | `puppetboard.ingress.annotations`| puppetboard ingress annotations |``|
@@ -451,6 +458,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `singleCA.enabled`| Enable single CA |`false`|
 | `singleCA.crl.cronJob.schedule`| crl cron job schedule policy |`* 0 * * * *`|
 | `singleCA.crl.extraEnv`| crl additional container env vars |``|
+| `singleCA.crl.extraEnvSecret`| crl additional container env vars from pre-existing secret |``|
 | `singleCA.crl.resources`| crl container resource limits |``|
 | `singleCA.crl.config`| override the default crl script to retrieve the crl.pem |`see values.yaml`|
 | `singleCA.crl.url`| set the url where crl.pem is located (MANDATORY) |``|
@@ -472,6 +480,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `metrics.prometheus.port` | puppetdb exporter svc exposed ports | `9635` |
 | `metrics.prometheus.resources` | puppetdb exporter container resource limits | `` |
 | `metrics.prometheus.extraEnv` | puppetdb exporter additional container env vars | `` |
+| `metrics.prometheus.extraEnvSecret` | puppetdb exporter additional container env vars from pre-existing secret | `` |
 | `metrics.prometheus.metricRelabelings` | relabel prometheus metrics | `` |
 | `metrics.prometheus.relabelings` | rewrite the label set of a target before it gets scraped | `` |
 | `metrics.prometheus.jobLabel` | The label to use to retrieve the job name from. | `puppetdb` |
@@ -562,6 +571,7 @@ kill %[job_numbers_above]
 * [Reinier Schoof](https://github.com/skoef), Maintainer
 * [Niels Højen](https://github.com/nielshojen), Maintainer
 * [Scott Cressi](https://www.linkedin.com/in/scottcressi/), Co-Author
+* [Linas Daneliukas](https://github.com/ldaneliukas), Maintainer
 * [Kai Sisterhenn](https://www.sistason.de/), Contributor
 * [chwehrli](https://github.com/chwehrli), Contributor
 * [Hryhorii Didenko](https://github.com/HryhoriiDidenko), Contributor
@@ -578,4 +588,3 @@ kill %[job_numbers_above]
 * [Ben Feld](https://github.com/rootshellz), Contributor
 * [Julien Godin](https://github.com/JGodin-C2C), Contributor
 * [Diego Abelenda](https://github.com/dabelenda), Contributor
-* [Linas Daneliukas](https://github.com/ldaneliukas), Contributor
