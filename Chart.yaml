@@ -30,6 +30,8 @@ maintainers:
     email: reinier@skoef.nl
   - name: nielshojen
     email: niels@hojen.net
+  - name: ldaneliukas
+    email: linas@daneliukas.eu
   - name: Pupperware Team
     email: pupperware@puppet.com
 engine: gotpl

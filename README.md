@@ -571,6 +571,7 @@ kill %[job_numbers_above]
 * [Reinier Schoof](https://github.com/skoef), Maintainer
 * [Niels Højen](https://github.com/nielshojen), Maintainer
 * [Scott Cressi](https://www.linkedin.com/in/scottcressi/), Co-Author
+* [Linas Daneliukas](https://github.com/ldaneliukas), Maintainer
 * [Kai Sisterhenn](https://www.sistason.de/), Contributor
 * [chwehrli](https://github.com/chwehrli), Contributor
 * [Hryhorii Didenko](https://github.com/HryhoriiDidenko), Contributor
@@ -587,4 +588,3 @@ kill %[job_numbers_above]
 * [Ben Feld](https://github.com/rootshellz), Contributor
 * [Julien Godin](https://github.com/JGodin-C2C), Contributor
 * [Diego Abelenda](https://github.com/dabelenda), Contributor
-* [Linas Daneliukas](https://github.com/ldaneliukas), Contributor
