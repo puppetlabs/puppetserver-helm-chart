@@ -21,13 +21,13 @@ tests:
     asserts:
       - hasDocuments:
           count: 0
-  - it: should failed is monitoring.coreos.com/v1 api is not available
+  - it: should fail if monitoring.coreos.com/v1 api is not available
     set:
       puppetdb.enabled: true
       metrics.prometheus.enabled: true
     asserts:
       - failedTemplate:
-          errorMessage: "You have to deploy monitoring.coreos.com/v1 first"
+          errorMessage: "ERROR: You have to deploy monitoring.coreos.com/v1 first"
   - it: should create the ressource with the right name 1/2
     capabilities:
       apiVersions:
@@ -38,6 +38,7 @@ tests:
     set:
       puppetdb.enabled: true
       metrics.prometheus.enabled: true
+      metrics.prometheus.disableAPICheck: true
     asserts:
       - isKind:
           of: ServiceMonitor
@@ -54,6 +55,7 @@ tests:
     set:
       puppetdb.enabled: true
       metrics.prometheus.enabled: true
+      metrics.prometheus.disableAPICheck: true
     asserts:
       - isKind:
           of: ServiceMonitor
@@ -70,6 +72,7 @@ tests:
     set:
       puppetdb.enabled: true
       metrics.prometheus.enabled: true
+      metrics.prometheus.disableAPICheck: true
     asserts:
     - isKind:
         of: ServiceMonitor

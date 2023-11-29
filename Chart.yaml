@@ -32,7 +32,5 @@ maintainers:
     email: niels@hojen.net
   - name: ldaneliukas
     email: linas@daneliukas.eu
-  - name: Pupperware Team
-    email: pupperware@puppet.com
 engine: gotpl
 kubeVersion: ">=1.10.0-0"

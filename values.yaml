@@ -45,7 +45,7 @@ global:
   ## Define the security context (not apply to all pod for now)
   securityContext:
     runAsUser: 999  # "puppet" UID
-    runAsGroup: 999 # "puppet" GID
+    runAsGroup: 999  # "puppet" GID
 
   extraEnv: {}
   extraEnvSecret: ""
@@ -56,7 +56,7 @@ global:
 ##
 puppetserver:
   name: puppetserver
-  image: voxpupuli/container-puppetserver
+  image: ghcr.io/voxpupuli/container-puppetserver
   tag: 7.13.0
   pullPolicy: IfNotPresent
 
@@ -198,10 +198,10 @@ puppetserver:
     podDisruptionBudget:
       enabled: false
       minAvailable: 1
-      #maxUnavailable:
+      # maxUnavailable:
 
     networkPolicy:
-      enabled:  false
+      enabled: false
       policyTypes:
         - Egress
         - Ingress
@@ -354,11 +354,11 @@ puppetserver:
       ## Restric configuration
       ##
       restic:
-        keep_last: 90 # days
-        repository: "" # "s3:https://s3.minio.xx/backups/"
-        access_key_id: "" # s3 access key
-        secret_access_key: "" # s3 secret access key
-        password: "" # restic encryption password
+        keep_last: 90  # days
+        repository: ""  # "s3:https://s3.minio.xx/backups/"
+        access_key_id: ""  # s3 access key
+        secret_access_key: ""  # s3 secret access key
+        password: ""  # restic encryption password
 
   ## Optional StatefulSet of Puppet Server Compiler/s
   ##
@@ -722,7 +722,7 @@ r10k:
 puppetdb:
   enabled: true
   name: puppetdb
-  image: voxpupuli/container-puppetdb
+  image: ghcr.io/voxpupuli/container-puppetdb
   tag: 7.14.0
   pullPolicy: IfNotPresent
   resources: {}
