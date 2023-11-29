@@ -73,6 +73,15 @@ spec:
             - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
+          envFrom:
+          {{- if .Values.global.extraEnvSecret }}
+            - secretRef:
+                name: {{ .Values.global.extraEnvSecret }}
+          {{- end }}
+          {{- if .Values.puppetserver.compilers.extraEnvSecret }}
+            - secretRef:
+                name: {{ .Values.puppetserver.compilers.extraEnvSecret }}
+          {{- end }}
           command: [ "sh", "-c" ]
           args:
             - mkdir -p /etc/puppetlabs/puppet/eyaml/keys;
@@ -228,6 +237,15 @@ spec:
             - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
+          envFrom:
+          {{- if .Values.global.extraEnvSecret }}
+            - secretRef:
+                name: {{ .Values.global.extraEnvSecret }}
+          {{- end }}
+          {{- if .Values.puppetserver.compilers.extraEnvSecret }}
+            - secretRef:
+                name: {{ .Values.puppetserver.compilers.extraEnvSecret }}
+          {{- end }}
           readinessProbe:
             httpGet:
               path: /status/v1/simple
@@ -312,6 +330,15 @@ spec:
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
+          envFrom:
+          {{- if .Values.global.extraEnvSecret }}
+            - secretRef:
+                name: {{ .Values.global.extraEnvSecret }}
+          {{- end }}
+          {{- if .Values.r10k.code.extraEnvSecret }}
+            - secretRef:
+                name: {{ .Values.r10k.code.extraEnvSecret }}
+          {{- end }}
           command:
             {{- range .Values.r10k.code.command }}
             - {{ . | quote }}
@@ -347,9 +374,7 @@ spec:
           readinessProbe:
             exec:
               command:
-              {{- range .values.r10k.code.readinessProbe }}
-              - {{ . | quote }}
-              {{- end}}
+              {{- include "r10k.code.readinessProbe" .  | nindent 16 }}
             failureThreshold: 2
             initialDelaySeconds: 5
             periodSeconds: 20
@@ -371,6 +396,15 @@ spec:
           {{- range $key, $value := .Values.r10k.hiera.extraEnv }}
           - name: {{ $key }}
             value: "{{ $value }}"
+          {{- end }}
+          envFrom:
+          {{- if .Values.global.extraEnvSecret }}
+            - secretRef:
+                name: {{ .Values.global.extraEnvSecret }}
+          {{- end }}
+          {{- if .Values.r10k.hiera.extraEnvSecret }}
+            - secretRef:
+                name: {{ .Values.r10k.hiera.extraEnvSecret }}
           {{- end }}
           command: [ "sh", "-c", "/etc/puppetlabs/puppet/r10k_hiera_entrypoint.sh" ]
           securityContext:
@@ -429,6 +463,19 @@ spec:
           - name: {{ $key }}
             value: "{{ $value }}"
           {{- end }}
+          envFrom:
+          {{- if .Values.global.extraEnvSecret }}
+            - secretRef:
+                name: {{ .Values.global.extraEnvSecret }}
+          {{- end }}
+          {{- if .Values.puppetserver.masters.extraEnvSecret }}
+            - secretRef:
+                name: {{ .Values.puppetserver.masters.extraEnvSecret }}
+          {{- end }}
+          {{- if .Values.singleCA.crl.extraEnvSecret }}
+            - secretRef:
+                name: {{ .Values.singleCA.crl.extraEnvSecret }}
+          {{- end }}
           command: ["sh", "-c", "/etc/puppetlabs/puppet/ssl/crl_entrypoint.sh" ]
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
@@ -475,7 +522,7 @@ spec:
             claimName: {{ template "puppetserver.persistence.puppet.claimName" . }}
         - name: puppet-serverdata-storage
           persistentVolumeClaim:
-            claimName: {{ template "puppetserver.persitence.data.claimName" . }}
+            claimName: {{ template "puppetserver.persistence.data.claimName" . }}
         {{- if .Values.singleCA.enabled }}
         - name: crl-volume
           configMap:

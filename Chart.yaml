@@ -1,6 +1,6 @@
 apiVersion: v2
 name: puppetserver
-version: 8.1.4
+version: 8.2.0
 appVersion: 7.13.0
 description: Puppet automates the delivery and operation of software.
 keywords: ["puppet", "puppetserver", "automation", "iac", "infrastructure", "cm", "ci", "cd"]
@@ -30,5 +30,7 @@ maintainers:
     email: reinier@skoef.nl
   - name: nielshojen
     email: niels@hojen.net
+  - name: ldaneliukas
+    email: linas@daneliukas.eu
 engine: gotpl
 kubeVersion: ">=1.10.0-0"
