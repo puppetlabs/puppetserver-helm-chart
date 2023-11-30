@@ -5,6 +5,10 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v8.2.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.2.0) (2023-11-29)
+- feat: GitHub Actions workflow: add lint, install and unittest for all PRs
+- feat: GitHub Actions workflow: simplify workflow_dispatch to aid releases from forks
+
 ## [v8.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.2.0) (2023-11-27)
 - Fix: Typo in compiler statefulset readiness probe scheme
 - Fix: `PUPPETDB_JAVA_ARGS` which includes `-Xlog:gc:` instead of the deprecated `-Xloggc` and uses an existing path
