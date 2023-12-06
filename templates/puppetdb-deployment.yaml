@@ -265,12 +265,12 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
         {{- end }}
-        {{- if .Values.metrics.prometheus.enabled  }}
+        {{- if .Values.metrics.prometheus.puppetdb.enabled  }}
         - name: puppetdb-exporter
-          image: "{{ tpl .Values.metrics.prometheus.image . }}:{{ tpl .Values.metrics.prometheus.tag . }}"
-          imagePullPolicy: {{ tpl .Values.metrics.prometheus.imagePullPolicy . }}
+          image: "{{ tpl .Values.metrics.prometheus.puppetdb.image . }}:{{ tpl .Values.metrics.prometheus.puppetdb.tag . }}"
+          imagePullPolicy: {{ tpl .Values.metrics.prometheus.puppetdb.imagePullPolicy . }}
           resources:
-            {{- toYaml .Values.metrics.prometheus.resources | nindent 12 }}
+            {{- toYaml .Values.metrics.prometheus.puppetdb.resources | nindent 12 }}
           env:
             - name: PUPPETDB_URL
               value: "https://{{ if .Values.singleCA.enabled}}{{.Values.singleCA.puppetdb.overrideHostname}}{{ else }}{{ ( include "puppetdb.fullname" . ) }}{{ end }}:8081/pdb/query"
@@ -281,14 +281,14 @@ spec:
             - name: PUPPETDB_CA_FILE
               value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/ca.pem"
             - name: PUPPETDB_SCRAPE_INTERVAL
-              value: "{{ .Values.metrics.prometheus.interval }}"
+              value: "{{ .Values.metrics.prometheus.puppetdb.interval }}"
             - name: PUPPETDB_LISTEN_ADDRESS
-              value: "0.0.0.0:{{ .Values.metrics.prometheus.port }}"
+              value: "0.0.0.0:{{ .Values.metrics.prometheus.puppetdb.port }}"
             {{- range $key, $value := .Values.global.extraEnv }}
             - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
-            {{- range $key, $value := .Values.metrics.prometheus.extraEnv }}
+            {{- range $key, $value := .Values.metrics.prometheus.puppetdb.extraEnv }}
             - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
@@ -297,13 +297,13 @@ spec:
             - secretRef:
                 name: {{ .Values.global.extraEnvSecret }}
           {{- end }}
-          {{- if .Values.metrics.prometheus.extraEnvSecret }}
+          {{- if .Values.metrics.prometheus.puppetdb.extraEnvSecret }}
             - secretRef:
-                name: {{ .Values.metrics.prometheus.extraEnvSecret }}
+                name: {{ .Values.metrics.prometheus.puppetdb.extraEnvSecret }}
           {{- end }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.metrics.prometheus.port }}
+              containerPort: {{ .Values.metrics.prometheus.puppetdb.port }}
           securityContext:
             runAsUser: 999
             runAsGroup: 999
