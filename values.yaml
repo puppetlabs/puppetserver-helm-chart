@@ -1091,6 +1091,7 @@ singleCA:
 
 metrics:
   prometheus:
+    disableAPICheck: true
     puppetdb:
       enabled: false
       image: "{{ .Values.global.puppetdbexporter.image }}"
@@ -1115,7 +1116,6 @@ metrics:
         jobLabel: puppetdb
         interval: 30s
         honorLabels: true
-        # disableAPICheck: true
         # (Optional)
         # scrapeTimeout: 5s
         # honorTimestamps: true
@@ -1160,7 +1160,6 @@ metrics:
         jobLabel: jmx
         interval: 30s
         honorLabels: true
-        # disableAPICheck: true
         # (Optional)
         # scrapeTimeout: 5s
         # honorTimestamps: true

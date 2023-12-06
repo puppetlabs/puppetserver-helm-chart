@@ -17,14 +17,14 @@ tests:
           count: 0
   - it: should not create the serviceMonitor if "metrics.prometheus.enabled" is false
     set:
-      metrics.prometheus.enabled: false
+      metrics.prometheus.puppetdb.enabled: false
     asserts:
       - hasDocuments:
           count: 0
   - it: should fail if monitoring.coreos.com/v1 api is not available
     set:
       puppetdb.enabled: true
-      metrics.prometheus.enabled: true
+      metrics.prometheus.puppetdb.enabled: true
     asserts:
       - failedTemplate:
           errorMessage: "ERROR: You have to deploy monitoring.coreos.com/v1 first"
@@ -37,7 +37,7 @@ tests:
       namespace: puppet
     set:
       puppetdb.enabled: true
-      metrics.prometheus.enabled: true
+      metrics.prometheus.puppetdb.enabled: true
       metrics.prometheus.disableAPICheck: true
     asserts:
       - isKind:
@@ -54,7 +54,7 @@ tests:
       namespace: puppet
     set:
       puppetdb.enabled: true
-      metrics.prometheus.enabled: true
+      metrics.prometheus.puppetdb.enabled: true
       metrics.prometheus.disableAPICheck: true
     asserts:
       - isKind:
@@ -62,7 +62,7 @@ tests:
       - equal:
           path: metadata.name
           value: puppet-puppetserver-puppetdb
-  - it: should create the service monitor if "puppetdb.enabled" is true AND "metrics.prometheus.enabled" is true
+  - it: should create the service monitor if "puppetdb.enabled" is true AND "metrics.prometheus.puppetdb.enabled" is true
     capabilities:
       apiVersions:
         - monitoring.coreos.com/v1
@@ -71,7 +71,7 @@ tests:
       namespace: puppet
     set:
       puppetdb.enabled: true
-      metrics.prometheus.enabled: true
+      metrics.prometheus.puppetdb.enabled: true
       metrics.prometheus.disableAPICheck: true
     asserts:
     - isKind:
@@ -82,7 +82,7 @@ tests:
       namespace: puppet
     set:
       puppetdb.enabled: true
-      metrics.prometheus.enabled: true
+      metrics.prometheus.puppetdb.enabled: true
       metrics.prometheus.disableAPICheck: true
     asserts:
     - isKind:
