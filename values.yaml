@@ -1087,36 +1087,37 @@ singleCA:
 
 metrics:
   prometheus:
-    enabled: false
-    image: "{{ .Values.global.puppetdbexporter.image }}"
-    tag: "{{ .Values.global.puppetdbexporter.tag }}"
-    imagePullPolicy: "{{ .Values.global.puppetdbexporter.imagePullPolicy }}"
-    port: 9635
-    resources: {}
-    extraEnv:
-      ## https://github.com/camptocamp/prometheus-puppetdb-exporter
-      # PUPPETDB_VERBOSE: "True"
-      # PUPPETDB_UNREPORTED_NODE: 2h
-      # REPORT_METRICS_CATEGORIES: 'resources,time,changes,events'
-      # PUPPETDB_SSL_SKIP_VERIFY: "True"
-    ## Additional PuppetDB exporter container environment variables from a pre-existing K8s secret
-    extraEnvSecret: ""
-    serviceMonitor:
-      enabled: true
-      ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
-      metricRelabelings: []
-      ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
-      relabelings: []
-      jobLabel: puppetdb
-      interval: 30s
-      honorLabels: true
-      # disableAPICheck: true
-      # (Optional)
-      # scrapeTimeout: 5s
-      # honorTimestamps: true
-      # enableHttp2: true
-      # followRedirects: true
-      # additionalLabels:
-      #   foo: bar
-      # namespace: "another-namespace"
-      # namespaceSelector: {}
+    puppetdb:
+      enabled: false
+      image: "{{ .Values.global.puppetdbexporter.image }}"
+      tag: "{{ .Values.global.puppetdbexporter.tag }}"
+      imagePullPolicy: "{{ .Values.global.puppetdbexporter.imagePullPolicy }}"
+      port: 9635
+      resources: {}
+      extraEnv:
+        ## https://github.com/camptocamp/prometheus-puppetdb-exporter
+        # PUPPETDB_VERBOSE: "True"
+        # PUPPETDB_UNREPORTED_NODE: 2h
+        # REPORT_METRICS_CATEGORIES: 'resources,time,changes,events'
+        # PUPPETDB_SSL_SKIP_VERIFY: "True"
+      ## Additional PuppetDB exporter container environment variables from a pre-existing K8s secret
+      extraEnvSecret: ""
+      serviceMonitor:
+        enabled: true
+        ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+        metricRelabelings: []
+        ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+        relabelings: []
+        jobLabel: puppetdb
+        interval: 30s
+        honorLabels: true
+        # disableAPICheck: true
+        # (Optional)
+        # scrapeTimeout: 5s
+        # honorTimestamps: true
+        # enableHttp2: true
+        # followRedirects: true
+        # additionalLabels:
+        #   foo: bar
+        # namespace: "another-namespace"
+        # namespaceSelector: {}
