@@ -493,9 +493,55 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
         {{- end }}
+        {{- if .Values.metrics.prometheus.jmx.enabled  }}
+        - name: jmx-exporter
+          image: "{{ tpl .Values.metrics.prometheus.jmx.image . }}:{{ tpl .Values.metrics.prometheus.jmx.tag . }}"
+          imagePullPolicy: {{ tpl .Values.metrics.prometheus.jmx.imagePullPolicy . }}
+          resources:
+            {{- toYaml .Values.metrics.prometheus.jmx.resources | nindent 12 }}
+          args: ["{{ .Values.metrics.prometheus.jmx.port }}", "/jmx_exporter.yaml"]
+          env:
+            {{- range $key, $value := .Values.global.extraEnv }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+            {{- range $key, $value := .Values.metrics.prometheus.jmx.extraEnv }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+          envFrom:
+          {{- if .Values.global.extraEnvSecret }}
+            - secretRef:
+                name: {{ .Values.global.extraEnvSecret }}
+          {{- end }}
+          {{- if .Values.metrics.prometheus.jmx.extraEnvSecret }}
+            - secretRef:
+                name: {{ .Values.metrics.prometheus.jmx.extraEnvSecret }}
+          {{- end }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metrics.prometheus.jmx.port }}
+          volumes:
+            - name: jmx-config
+              configMap:
+                name: {{ template "puppetserver.fullname" . }}-jmx-config
+          volumeMounts:
+            - name: jmx-config
+              mountPath: /jmx_exporter.yaml
+              subPath: jmx_exporter.yaml
+          securityContext:
+            runAsUser: 999
+            runAsGroup: 999
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+        {{- end }}
         {{- with .Values.puppetserver.compilers.extraContainers }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
+        
       {{- if .Values.singleCA.puppetdb.overrideHostname }}
       {{- $service := lookup "v1" "Service" .Release.Namespace  (include "puppetdb.fullname" . ) }}
       hostAliases:

@@ -1134,12 +1134,23 @@ metrics:
       resources: {}
       extraEnv: {}
       extraEnvSecret: ""
-      existingConfigMap: ""
-      # configMap: |-
-      #   hostPort: puppetserver-puppet:31000
-      #   lowercaseOutputName: true
-      #   lowercaseOutputLabelNames: true
-      #   whitelistObjectNames:
+      ## The following is a small working example, for full config see https://github.com/prometheus/jmx_exporter#configuration
+      configMap: |-
+        hostPort: puppetserver-puppet:31000
+        lowercaseOutputName: true
+        lowercaseOutputLabelNames: true
+        whitelistObjectNames:
+          - puppetserver:name=puppetlabs.*.http.active-requests
+          - puppetserver:name=puppetlabs.*.http.total-requests
+        rules:
+          - pattern: 'puppetserver<name=puppetlabs.*.http.active-requests><>Count'
+            name: puppetserver_http_requests_active
+            type: GAUGE
+            help: "The number of active HTTP requests."
+          - pattern: 'puppetserver<name=puppetlabs.*.http.total-requests><>Count'
+            name: puppetserver_http_requests_total
+            type: COUNTER
+            help: "The number of active HTTP requests."
       serviceMonitor:
         enabled: true
         ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
