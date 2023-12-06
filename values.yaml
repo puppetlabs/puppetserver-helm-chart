@@ -217,6 +217,8 @@ puppetserver:
     ## Additional Masters' container environment variables
     ##
     extraEnv: {}
+    #  PUPPETSERVER_JAVA_ARGS: "-Xms3072m -Xmx3072m -Dcom.sun.management.jmxremote.port=31000 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+
     ## Additional Masters' container environment variables from a pre-existing K8s secret
     extraEnvSecret: ""
 
@@ -409,6 +411,8 @@ puppetserver:
     ## Additional Compilers' container environment variables
     ##
     extraEnv: {}
+    #  PUPPETSERVER_JAVA_ARGS: "-Xms3072m -Xmx3072m -Dcom.sun.management.jmxremote.port=31000 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+
     ## Additional Compilers' container environment variables from a pre-existing K8s secret
     extraEnvSecret: ""
 
@@ -1109,6 +1113,40 @@ metrics:
         ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
         relabelings: []
         jobLabel: puppetdb
+        interval: 30s
+        honorLabels: true
+        # disableAPICheck: true
+        # (Optional)
+        # scrapeTimeout: 5s
+        # honorTimestamps: true
+        # enableHttp2: true
+        # followRedirects: true
+        # additionalLabels:
+        #   foo: bar
+        # namespace: "another-namespace"
+        # namespaceSelector: {}
+    jmx:
+      enabled: false
+      image: "{{ .Values.global.jmxexporter.image }}"
+      tag: "{{ .Values.global.jmxexporter.tag }}"
+      imagePullPolicy: "{{ .Values.global.jmxexporter.imagePullPolicy }}"
+      port: 5556
+      resources: {}
+      extraEnv: {}
+      extraEnvSecret: ""
+      existingConfigMap: ""
+      # configMap: |-
+      #   hostPort: puppetserver-puppet:31000
+      #   lowercaseOutputName: true
+      #   lowercaseOutputLabelNames: true
+      #   whitelistObjectNames:
+      serviceMonitor:
+        enabled: true
+        ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+        metricRelabelings: []
+        ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+        relabelings: []
+        jobLabel: jmx
         interval: 30s
         honorLabels: true
         # disableAPICheck: true

@@ -5,6 +5,11 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v8.3.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.3.0) (2023-12-08)
+- breaking: Update values structure for 'metrics' to allow for multiple exporters
+- feat: Make serviceMonitor optional for all Prometheus exporters
+- feat: Add jmx exporter for puppetserver master/compilers
+
 ## [v8.2.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.2.0) (2023-11-29)
 - feat: GitHub Actions workflow: add lint, install and unittest for all PRs
 - feat: GitHub Actions workflow: simplify workflow_dispatch to aid releases from forks
