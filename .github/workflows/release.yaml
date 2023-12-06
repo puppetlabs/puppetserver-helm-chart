@@ -1,4 +1,4 @@
-name: Lint and publish puppetserver helm chart
+name: CI / Release
 
 on:
   pull_request:

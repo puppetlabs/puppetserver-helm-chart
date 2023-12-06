@@ -25,6 +25,7 @@ tests:
     set:
       puppetdb.enabled: true
       metrics.prometheus.puppetdb.enabled: true
+      metrics.prometheus.puppetdb.serviceMonitor.enabled: true
     asserts:
       - failedTemplate:
           errorMessage: "ERROR: You have to deploy monitoring.coreos.com/v1 first"
@@ -38,6 +39,7 @@ tests:
     set:
       puppetdb.enabled: true
       metrics.prometheus.puppetdb.enabled: true
+      metrics.prometheus.puppetdb.serviceMonitor.enabled: true
       metrics.prometheus.disableAPICheck: true
     asserts:
       - isKind:
@@ -55,6 +57,7 @@ tests:
     set:
       puppetdb.enabled: true
       metrics.prometheus.puppetdb.enabled: true
+      metrics.prometheus.puppetdb.serviceMonitor.enabled: true
       metrics.prometheus.disableAPICheck: true
     asserts:
       - isKind:
@@ -72,6 +75,7 @@ tests:
     set:
       puppetdb.enabled: true
       metrics.prometheus.puppetdb.enabled: true
+      metrics.prometheus.puppetdb.serviceMonitor.enabled: true
       metrics.prometheus.disableAPICheck: true
     asserts:
     - isKind:
@@ -83,6 +87,7 @@ tests:
     set:
       puppetdb.enabled: true
       metrics.prometheus.puppetdb.enabled: true
+      metrics.prometheus.puppetdb.serviceMonitor.enabled: true
       metrics.prometheus.disableAPICheck: true
     asserts:
     - isKind:
