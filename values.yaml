@@ -1091,7 +1091,7 @@ singleCA:
 
 metrics:
   prometheus:
-    disableAPICheck: true
+    # disableAPICheck: true
     puppetdb:
       enabled: false
       image: "{{ .Values.global.puppetdbexporter.image }}"

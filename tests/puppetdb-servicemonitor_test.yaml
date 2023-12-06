@@ -12,12 +12,24 @@ tests:
   - it: should not create the serviceMonitor if "puppetdb.enabled" is false
     set:
       puppetdb.enabled: false
+      metrics.prometheus.puppetdb.enabled: true
+      metrics.prometheus.puppetdb.serviceMonitor.enabled: true
     asserts:
       - hasDocuments:
           count: 0
-  - it: should not create the serviceMonitor if "metrics.prometheus.enabled" is false
+  - it: should not create the serviceMonitor if "metrics.prometheus.puppetdb.enabled" is false
     set:
+      puppetdb.enabled: true
       metrics.prometheus.puppetdb.enabled: false
+      metrics.prometheus.puppetdb.serviceMonitor.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: should not create the serviceMonitor if "metrics.prometheus.puppetdb.serviceMonitor.enabled" is false
+    set:
+      puppetdb.enabled: true
+      metrics.prometheus.puppetdb.enabled: true
+      metrics.prometheus.puppetdb.serviceMonitor.enabled: false
     asserts:
       - hasDocuments:
           count: 0
