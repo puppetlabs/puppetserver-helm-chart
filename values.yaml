@@ -1120,17 +1120,3 @@ metrics:
       #   foo: bar
       # namespace: "another-namespace"
       # namespaceSelector: {}
-
-  # prometheusRule:
-  #   additionalLabels: {}
-  #   namespace: "another-namespace"
-  #   rules:
-  #     - alert: PuppetdbDown
-  #       expr: up{job="puppetdb"} == 0
-  #       for: 5m
-  #       labels:
-  #         context: puppetdb
-  #         severity: warning
-  #       annotations:
-  #         summary: "Puppetdb Down"
-  #         description: "{{ $labels.pod }} on {{ $labels.nodename }} is down"
