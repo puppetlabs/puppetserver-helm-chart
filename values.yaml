@@ -29,6 +29,11 @@ global:
     tag: 1.1.0
     imagePullPolicy: IfNotPresent
 
+  jmxexporter:
+    image: bitnami/jmx-exporter
+    tag: 0.20.0-debian-11-r1
+    imagePullPolicy: IfNotPresent
+
   ## Credentials for PuppetDB and PostgreSQL
   postgresql:
     auth:
