@@ -490,10 +490,6 @@ spec:
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.prometheus.jmx.port }}
-          volumes:
-            - name: jmx-config
-              configMap:
-                name: {{ template "puppetserver.fullname" . }}-jmx-config
           volumeMounts:
             - name: jmx-config
               mountPath: /jmx_exporter.yaml
@@ -551,6 +547,11 @@ spec:
         - name: puppetserver-certs
           secret:
             secretName: {{ .Values.singleCA.certificates.existingSecret.puppetserver }}
+        {{- end }}
+        {{- if .Values.metrics.prometheus.jmx.enabled  }}
+        - name: jmx-config
+          configMap:
+            name: {{ template "puppetserver.fullname" . }}-jmx-config
         {{- end }}
         - name: manifests-volume
           configMap:
