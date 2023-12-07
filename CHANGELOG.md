@@ -9,7 +9,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - breaking: Update values structure for 'metrics' to allow for multiple exporters
 - feat: Make serviceMonitor optional for all Prometheus exporters
 - feat: Add jmx exporter for puppetserver master(s)/compiler(s)
-- feat: Allow specifying annotations for puppetserver master and puppetdb deployments
+- feat: Allow specifying annotations for puppetserver master/compiler and puppetdb pods
 
 ## [v8.2.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v8.2.0) (2023-11-29)
 - feat: GitHub Actions workflow: add lint, install and unittest for all PRs

@@ -235,6 +235,10 @@ puppetserver:
     ##
     annotations: {}
 
+    ## Puppetserver Masters' pod annotations
+    ##
+    podAnnotations: {}
+
     updateStrategy:
       type: RollingUpdate
     # rollingUpdate:
@@ -412,6 +416,10 @@ puppetserver:
     ## Puppetserver Compilers' StatefulSet annotations
     ##
     annotations: {}
+
+    ## Puppetserver Compilers' pod annotations
+    ##
+    podAnnotations: {}
 
     ## Extra containers to inject into the Compiler pod
     extraContainers: []
@@ -788,9 +796,13 @@ puppetdb:
   ##
   extraLabels: {}
 
-  ## puppetdb pod annotations
+  ## puppetdb deployment annotations
   ##
   annotations: {}
+
+  ## puppetdb pod annotations
+  ##
+  podAnnotations: {}
 
   updateStrategy:
     type: Recreate

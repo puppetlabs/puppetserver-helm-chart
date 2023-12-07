@@ -48,6 +48,9 @@ spec:
         {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
+        {{- if .Values.puppetserver.masters.podAnnotations }}
+        {{- toYaml .Values.puppetserver.masters.podAnnotations | nindent 8 }}
+        {{- end }}
     spec:
       hostname: puppet
       {{- if .Values.puppetserver.serviceAccount.enabled }}
