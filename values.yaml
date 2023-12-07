@@ -1140,7 +1140,7 @@ metrics:
       extraEnv: {}
       extraEnvSecret: ""
       ## The following is a small working example, for full config see https://github.com/prometheus/jmx_exporter#configuration
-      configMap: |-
+      config: |-
         hostPort: puppetserver-puppet:31000
         lowercaseOutputName: true
         lowercaseOutputLabelNames: true
