@@ -11,7 +11,6 @@ metadata:
   namespace: {{ default .Release.Namespace .Values.metrics.prometheus.jmx.serviceMonitor.namespace | quote }}
   labels:
     {{- include "puppetserver.puppetserver.labels" . | nindent 4 }}
-    {{- include "puppetserver.puppetserver-compilers.labels" . | nindent 4 }}
     {{- with .Values.metrics.prometheus.jmx.serviceMonitor.additionalLabels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -53,5 +52,4 @@ spec:
   selector:
     matchLabels:
       {{- include "puppetserver.puppetserver.matchLabels" . | nindent 6 }}
-      {{- include "puppetserver.puppetserver-compilers.matchLabels" . | nindent 6 }}
 {{- end }}
