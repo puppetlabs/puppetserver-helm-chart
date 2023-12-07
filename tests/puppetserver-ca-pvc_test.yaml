@@ -5,6 +5,11 @@ release:
   name: puppetserver
   namespace: puppet
 tests:
+  - it: manifest should match snapshot
+    set:
+      puppetserver.masters.multiMasters.enabled: false
+    asserts:
+      - matchSnapshot: {}
   - it: should create the volume if puppet master only (single master)
     set:
       puppetserver.masters.multiMasters.enabled: false

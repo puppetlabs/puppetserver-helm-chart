@@ -5,6 +5,14 @@ release:
   name: puppetserver
   namespace: puppet
 tests:
+  - it: manifest should match snapshot
+    asserts:
+      - matchSnapshot: {}
+    set:
+      puppetdb.enabled: true
+      metrics.prometheus.puppetdb.enabled: true
+      metrics.prometheus.puppetdb.serviceMonitor.enabled: true
+      metrics.prometheus.disableAPICheck: true
   - it: should not create the serviceMonitor by default
     asserts:
       - hasDocuments:

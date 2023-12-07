@@ -5,6 +5,16 @@ release:
   name: puppetserver
   namespace: puppet
 tests:
+  - it: manifest should match snapshot
+    set:
+      puppetserver.compilers.podDisruptionBudget.enabled: true
+      puppetserver.compilers.enabled: true
+      puppetserver.compilers.manualScaling.compilers: 1
+      puppetserver.compilers.autoScaling.enabled: true
+      puppetserver.compilers.autoScaling.minCompilers: 2
+      puppetserver.compilers.podDisruptionBudget.maxUnavailable: 2
+    asserts:
+      - matchSnapshot: {}
   - it: should not create the podDisruptionBudget by default
     asserts:
       - hasDocuments:

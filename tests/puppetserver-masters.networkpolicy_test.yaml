@@ -5,6 +5,11 @@ release:
   name: puppetserver
   namespace: puppet
 tests:
+  - it: manifest should match snapshot
+    set:
+      puppetserver.masters.networkPolicy.enabled: true
+    asserts:
+      - matchSnapshot: {}
   - it: should not create the networkpolicy by default
     asserts:
       - hasDocuments:
@@ -15,7 +20,6 @@ tests:
     asserts:
       - hasDocuments:
           count: 0
-
   - it: should create the networkpolicy if the feature is enable
     set:
       puppetserver.masters.networkPolicy.enabled: true
