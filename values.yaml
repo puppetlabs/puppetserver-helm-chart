@@ -1111,6 +1111,7 @@ metrics:
       imagePullPolicy: "{{ .Values.global.puppetdbexporter.imagePullPolicy }}"
       port: 9635
       resources: {}
+      interval: 30s
       extraEnv:
         ## https://github.com/camptocamp/prometheus-puppetdb-exporter
         # PUPPETDB_VERBOSE: "True"
