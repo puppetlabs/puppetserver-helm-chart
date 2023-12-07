@@ -8,6 +8,10 @@ metadata:
     {{- with .Values.puppetdb.extraLabels -}}
     {{ toYaml . | nindent 4 }}
     {{- end }}
+  {{- if .Values.puppetdb.annotations }}
+  annotations:
+    {{- toYaml .Values.puppetdb.annotations | nindent 4 }}
+  {{- end }}
 spec:
   selector:
     matchLabels:

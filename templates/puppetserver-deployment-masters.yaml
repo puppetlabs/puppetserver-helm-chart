@@ -7,6 +7,10 @@ metadata:
     {{- with .Values.puppetserver.masters.extraLabels -}}
     {{ toYaml . | nindent 4 }}
     {{- end }}
+  {{- if .Values.puppetserver.masters.annotations }}
+  annotations:
+    {{- toYaml .Values.puppetserver.masters.annotations | nindent 4 }}
+  {{- end }}
 spec:
   {{- if .Values.puppetserver.masters.multiMasters.enabled }}
   {{- if not (.Values.puppetserver.masters.multiMasters.autoScaling.enabled) }}

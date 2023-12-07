@@ -231,6 +231,9 @@ puppetserver:
     ##
     extraLabels: {}
 
+    ## Puppetserver Masters' deployment annotations
+    ##
+    annotations: {}
 
     updateStrategy:
       type: RollingUpdate
@@ -372,9 +375,9 @@ puppetserver:
   compilers:
     enabled: false
     kind: StatefulSet
-  ## Puppet Server Compiler resource requests and limits
-  ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
+    ## Puppet Server Compiler resource requests and limits
+    ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
     resources: {}
     #  requests:
     #    memory: 1024Mi
@@ -781,9 +784,13 @@ puppetdb:
   ## Additional puppetdb container environment variables from a pre-existing K8s secret
   extraEnvSecret: ""
 
-  ## Additional puppetdb container labels
+  ## Additional puppetdb pod labels
   ##
   extraLabels: {}
+
+  ## puppetdb pod annotations
+  ##
+  annotations: {}
 
   updateStrategy:
     type: Recreate
@@ -1141,7 +1148,7 @@ metrics:
       extraEnvSecret: ""
       ## The following is a small working example, for full config see https://github.com/prometheus/jmx_exporter#configuration
       config: |-
-        hostPort: puppetserver-puppet:31000
+        hostPort: localhost:31000
         lowercaseOutputName: true
         lowercaseOutputLabelNames: true
         whitelistObjectNames:
