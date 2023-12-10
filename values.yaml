@@ -768,7 +768,7 @@ puppetdb:
   extraInitContainers: []
   ## Additional puppetdb container environment variables
   extraEnv:
-    PUPPETDB_JAVA_ARGS: "-Djava.net.preferIPv4Stack=true -Xms256m -Xmx256m -XX:+UseParallelGC -Xlog:gc:/opt/puppetlabs/server/data/puppetdb/puppetdb_gc.log -Djdk.tls.ephemeralDHKeySize=2048"
+    PUPPETDB_JAVA_ARGS: "-Djava.net.preferIPv4Stack=true -Xms256m -Xmx256m -XX:+UseParallelGC -Xloggc:/opt/puppetlabs/server/data/puppetdb/puppetdb_gc.log -Djdk.tls.ephemeralDHKeySize=2048"
   ## Additional puppetdb container environment variables from a pre-existing K8s secret
   extraEnvSecret: ""
 
