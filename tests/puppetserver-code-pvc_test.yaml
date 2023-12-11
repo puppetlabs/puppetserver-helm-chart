@@ -5,6 +5,11 @@ release:
   name: puppetserver
   namespace: puppet
 tests:
+  - it: manifest should match snapshot
+    set:
+      puppetserver.compilers.enabled: true
+    asserts:
+      - matchSnapshot: {}
   - it: should not create the volume if "puppetserver.persistence.code.existingClaim" is non-empty
     set:
       puppetserver.persistence.code.existingClaim: dummy

@@ -29,6 +29,11 @@ global:
     tag: 1.1.0
     imagePullPolicy: IfNotPresent
 
+  jmxexporter:
+    image: bitnami/jmx-exporter
+    tag: 0.20.0-debian-11-r1
+    imagePullPolicy: IfNotPresent
+
   ## Credentials for PuppetDB and PostgreSQL
   postgresql:
     auth:
@@ -217,6 +222,8 @@ puppetserver:
     ## Additional Masters' container environment variables
     ##
     extraEnv: {}
+    #  PUPPETSERVER_JAVA_ARGS: "-Xms3072m -Xmx3072m -Dcom.sun.management.jmxremote.port=31000 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+
     ## Additional Masters' container environment variables from a pre-existing K8s secret
     extraEnvSecret: ""
 
@@ -224,6 +231,13 @@ puppetserver:
     ##
     extraLabels: {}
 
+    ## Puppetserver Masters' deployment annotations
+    ##
+    annotations: {}
+
+    ## Puppetserver Masters' pod annotations
+    ##
+    podAnnotations: {}
 
     updateStrategy:
       type: RollingUpdate
@@ -365,9 +379,9 @@ puppetserver:
   compilers:
     enabled: false
     kind: StatefulSet
-  ## Puppet Server Compiler resource requests and limits
-  ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
+    ## Puppet Server Compiler resource requests and limits
+    ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
     resources: {}
     #  requests:
     #    memory: 1024Mi
@@ -403,12 +417,18 @@ puppetserver:
     ##
     annotations: {}
 
+    ## Puppetserver Compilers' pod annotations
+    ##
+    podAnnotations: {}
+
     ## Extra containers to inject into the Compiler pod
     extraContainers: []
 
     ## Additional Compilers' container environment variables
     ##
     extraEnv: {}
+    #  PUPPETSERVER_JAVA_ARGS: "-Xms3072m -Xmx3072m -Dcom.sun.management.jmxremote.port=31000 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+
     ## Additional Compilers' container environment variables from a pre-existing K8s secret
     extraEnvSecret: ""
 
@@ -772,9 +792,17 @@ puppetdb:
   ## Additional puppetdb container environment variables from a pre-existing K8s secret
   extraEnvSecret: ""
 
-  ## Additional puppetdb container labels
+  ## Additional puppetdb pod labels
   ##
   extraLabels: {}
+
+  ## puppetdb deployment annotations
+  ##
+  annotations: {}
+
+  ## puppetdb pod annotations
+  ##
+  podAnnotations: {}
 
   updateStrategy:
     type: Recreate
@@ -1087,48 +1115,82 @@ singleCA:
 
 metrics:
   prometheus:
-    enabled: false
-    image: "{{ .Values.global.puppetdbexporter.image }}"
-    tag: "{{ .Values.global.puppetdbexporter.tag }}"
-    imagePullPolicy: "{{ .Values.global.puppetdbexporter.imagePullPolicy }}"
-    port: 9635
-    resources: {}
-    extraEnv:
-      ## https://github.com/camptocamp/prometheus-puppetdb-exporter
-      # PUPPETDB_VERBOSE: "True"
-      # PUPPETDB_UNREPORTED_NODE: 2h
-      # REPORT_METRICS_CATEGORIES: 'resources,time,changes,events'
-      # PUPPETDB_SSL_SKIP_VERIFY: "True"
-    ## Additional PuppetDB exporter container environment variables from a pre-existing K8s secret
-    extraEnvSecret: ""
-    ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
-    metricRelabelings: []
-    ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
-    relabelings: []
-    jobLabel: puppetdb
-    interval: 30s
-    honorLabels: true
     # disableAPICheck: true
-    # (Optional)
-    # scrapeTimeout: 5s
-    # honorTimestamps: true
-    # enableHttp2: true
-    # followRedirects: true
-    # additionalLabels:
-    #   foo: bar
-    # namespace: "another-namespace"
-    # namespaceSelector: {}
-
-  # prometheusRule:
-  #   additionalLabels: {}
-  #   namespace: "another-namespace"
-  #   rules:
-  #     - alert: PuppetdbDown
-  #       expr: up{job="puppetdb"} == 0
-  #       for: 5m
-  #       labels:
-  #         context: puppetdb
-  #         severity: warning
-  #       annotations:
-  #         summary: "Puppetdb Down"
-  #         description: "{{ $labels.pod }} on {{ $labels.nodename }} is down"
+    puppetdb:
+      enabled: false
+      image: "{{ .Values.global.puppetdbexporter.image }}"
+      tag: "{{ .Values.global.puppetdbexporter.tag }}"
+      imagePullPolicy: "{{ .Values.global.puppetdbexporter.imagePullPolicy }}"
+      port: 9635
+      resources: {}
+      interval: 30s
+      extraEnv:
+        ## https://github.com/camptocamp/prometheus-puppetdb-exporter
+        # PUPPETDB_VERBOSE: "True"
+        # PUPPETDB_UNREPORTED_NODE: 2h
+        # REPORT_METRICS_CATEGORIES: 'resources,time,changes,events'
+        # PUPPETDB_SSL_SKIP_VERIFY: "True"
+      ## Additional PuppetDB exporter container environment variables from a pre-existing K8s secret
+      extraEnvSecret: ""
+      serviceMonitor:
+        enabled: true
+        ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+        metricRelabelings: []
+        ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+        relabelings: []
+        jobLabel: puppetdb
+        interval: 30s
+        honorLabels: true
+        # (Optional)
+        # scrapeTimeout: 5s
+        # honorTimestamps: true
+        # enableHttp2: true
+        # followRedirects: true
+        # additionalLabels:
+        #   foo: bar
+        # namespace: "another-namespace"
+        # namespaceSelector: {}
+    jmx:
+      enabled: false
+      image: "{{ .Values.global.jmxexporter.image }}"
+      tag: "{{ .Values.global.jmxexporter.tag }}"
+      imagePullPolicy: "{{ .Values.global.jmxexporter.imagePullPolicy }}"
+      port: 5556
+      resources: {}
+      extraEnv: {}
+      extraEnvSecret: ""
+      ## The following is a small working example, for full config see https://github.com/prometheus/jmx_exporter#configuration
+      config: |-
+        hostPort: localhost:31000
+        lowercaseOutputName: true
+        lowercaseOutputLabelNames: true
+        whitelistObjectNames:
+          - puppetserver:name=puppetlabs.*.http.active-requests
+          - puppetserver:name=puppetlabs.*.http.total-requests
+        rules:
+          - pattern: 'puppetserver<name=puppetlabs.*.http.active-requests><>Count'
+            name: puppetserver_http_requests_active
+            type: GAUGE
+            help: "The number of active HTTP requests."
+          - pattern: 'puppetserver<name=puppetlabs.*.http.total-requests><>Count'
+            name: puppetserver_http_requests_total
+            type: COUNTER
+            help: "The number of active HTTP requests."
+      serviceMonitor:
+        enabled: true
+        ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+        metricRelabelings: []
+        ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+        relabelings: []
+        jobLabel: jmx
+        interval: 30s
+        honorLabels: true
+        # (Optional)
+        # scrapeTimeout: 5s
+        # honorTimestamps: true
+        # enableHttp2: true
+        # followRedirects: true
+        # additionalLabels:
+        #   foo: bar
+        # namespace: "another-namespace"
+        # namespaceSelector: {}
