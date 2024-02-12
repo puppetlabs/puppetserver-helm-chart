@@ -5,6 +5,9 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v9.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.1.0) (2024-01-31)
+- Fix: Remove `PUPPETDB_JAVA_ARGS` value on puppetdb container additional variables, to avoid error `unrecognized option: -Xlog:gc....` that causes the puppetdb pod to crash.
+
 ## [v9.0.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.0.0) (2023-12-08)
 - Breaking: Update values structure for 'metrics' to allow for multiple exporters
 - Feat: Make serviceMonitor optional for all Prometheus exporters
