@@ -34,6 +34,7 @@ spec:
         {{- toYaml .Values.r10k.podSecurityContext | nindent 8 }}
         runAsUser: {{ .Values.global.securityContext.runAsUser }}
         runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+        fsGroup: {{ .Values.global.securityContext.fsGroup }}
       containers:
         - name: r10k-code
           image: "{{ tpl .Values.r10k.image . }}:{{ tpl .Values.r10k.tag . }}"

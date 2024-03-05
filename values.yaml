@@ -51,6 +51,7 @@ global:
   securityContext:
     runAsUser: 999  # "puppet" UID
     runAsGroup: 999  # "puppet" GID
+    fsGroup: 999  # "puppet" GID
 
   extraEnv: {}
   extraEnvSecret: ""
