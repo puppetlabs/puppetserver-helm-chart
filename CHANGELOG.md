@@ -5,9 +5,6 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v9.2.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.2.1) (2024-04-06)
-- Fix: Update Chart version
-
 ## [v9.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.2.0) (2024-04-05)
 - Feat: Add `.Values.global.securityContext.fsGroup`
 - Fix: Add `spec.template.spec.securityContext.fsGroup` to prevent "Permission denied" error
