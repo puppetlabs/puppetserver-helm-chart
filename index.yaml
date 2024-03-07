@@ -3,6 +3,53 @@ entries:
   puppetserver:
   - apiVersion: v2
     appVersion: 7.13.0
+    created: "2024-03-07T14:32:38.423091261Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.1.11
+    description: Puppet automates the delivery and operation of software.
+    digest: 01c81568626d292e7d14da0a8c505e244629ba10886a4736de0c8d93ea1a1b57
+    home: https://puppet.com/
+    icon: https://secure.gravatar.com/avatar/fdd009b7c1ec96e088b389f773e87aec.jpg?s=80&r=g&d=mm
+    keywords:
+    - puppet
+    - puppetserver
+    - automation
+    - iac
+    - infrastructure
+    - cm
+    - ci
+    - cd
+    kubeVersion: '>=1.10.0-0'
+    maintainers:
+    - email: miroslav.hadzhiev@gmail.com
+      name: Xtigyro
+    - email: morgan@puppet.com
+      name: underscorgan
+    - email: slconley@gmail.com
+      name: slconley
+    - email: raphael.pinson@camptocamp.com
+      name: raphink
+    - email: david.phayanouvong@gmail.com
+      name: davidphay
+    - email: reinier@skoef.nl
+      name: skoef
+    - email: niels@hojen.net
+      name: nielshojen
+    - email: linas@daneliukas.eu
+      name: ldaneliukas
+    name: puppetserver
+    sources:
+    - https://github.com/puppetlabs/pupperware/
+    - https://github.com/postgres/postgres
+    - https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+    urls:
+    - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-9.2.0.tgz
+    version: 9.2.0
+  - apiVersion: v2
+    appVersion: 7.13.0
     created: "2024-02-12T09:29:49.921767934Z"
     dependencies:
     - condition: postgresql.enabled
@@ -2905,4 +2952,4 @@ entries:
     urls:
     - https://puppetlabs.github.io/puppetserver-helm-chart/puppetserver-1.8.5.tgz
     version: 1.8.5
-generated: "2024-02-12T09:29:49.914147658Z"
+generated: "2024-03-07T14:32:38.414914666Z"
