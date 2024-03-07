@@ -5,6 +5,10 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v9.2.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.2.0) (2024-04-05)
+- Feat: Add `.Values.global.securityContext.fsGroup`
+- Fix: Add `spec.template.spec.securityContext.fsGroup` to prevent "Permission denied" error
+
 ## [v9.1.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.1.0) (2024-01-31)
 - Fix: Remove `PUPPETDB_JAVA_ARGS` value on puppetdb container additional variables, to avoid error `unrecognized option: -Xlog:gc....` that causes the puppetdb pod to crash.
 
