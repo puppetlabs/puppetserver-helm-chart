@@ -672,6 +672,12 @@ r10k:
         ## from a pre-existing K8s secret
         ## NOTE: Using this secret supercedes all other credentials settings.
         existingSecret: ""
+      customCa:
+        cert:
+          ## A multi-line string
+          value: # |
+            # PEM-encoded custom CA certificates
+        existingSecret: ""
     viaSsh:
       credentials:
         ssh:
