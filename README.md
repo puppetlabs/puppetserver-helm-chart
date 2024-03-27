@@ -376,6 +376,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.code.viaSsh.credentials.known_hosts.value`| r10k control repo ssh known hosts file |``|
 | `r10k.code.viaSsh.credentials.existingSecret`| r10k control repo ssh secret that holds ssh key and known hosts files |``|
 | `r10k.code.viaHttps.credentials.netrc.value`| r10k control repo https .netrc file |``|
+| `r10k.code.viaHttps.credentials.existingSecret`| r10k control repo https secret that holds .netrc file contents in `netrc` key |``|
 | `r10k.hiera.resources` | r10k hiera data resource limits |``|
 | `r10k.hiera.cronJob.enabled` | enable or disable r10k hiera data cron job schedule policy | `true`|
 | `r10k.hiera.cronJob.schedule` | r10k hiera data cron job schedule policy | `*/2 * * * *`|
@@ -391,6 +392,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.hiera.viaSsh.credentials.known_hosts.value`| r10k hiera data ssh known hosts file |``|
 | `r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``|
 | `r10k.hiera.viaHttps.credentials.netrc.value`| r10k hiera data https .netrc file |``|
+| `r10k.hiera.viaHttps.credentials.existingSecret`| r10k hiera data https secret that holds .netrc file contents in `netrc` key |``|
 | `postgresql.*`| please refer to https://github.com/bitnami/charts/tree/main/bitnami/postgresql#parameters |``|
 | `postgresql.primary.initdb.scriptsConfigMap` | postgres initdb scripts run at first boot |`postgresql-custom-extensions`|
 | `postgresql.primary.persistence.enabled` | postgres database persistence |`true`|
