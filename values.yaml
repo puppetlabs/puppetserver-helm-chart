@@ -675,7 +675,7 @@ r10k:
       customCa:
         cert:
           ## A multi-line string
-          value: # |
+          value:  # |
             # PEM-encoded custom CA certificates
         existingSecret: ""
     viaSsh:
