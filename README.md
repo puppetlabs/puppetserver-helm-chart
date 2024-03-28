@@ -10,7 +10,7 @@ This chart bootstraps Puppet Server and its components on a Kubernetes cluster u
 
 * You must specify your Puppet Control Repo using `puppetserver.puppeturl` variable in the `values.yaml` file or include `--set puppetserver.puppeturl=<your_public_repo>` in the command line of `helm install`. You can specify your separate Hieradata Repo as well using the `hiera.hieradataurl` variable.
 
-* You can also use private repos. Just remember to specify your credentials using `r10k.code.viaSsh.credentials.ssh.value`. You can set similar credentials for your Hieradata Repo.
+* You can also use private repos. Just remember to specify your credentials using `r10k.code.viaSsh.credentials.ssh.value` or `r10k.code.viaHttps.credentials.netrc.value`. You can set similar credentials for your Hieradata Repo.
 
 ### Load-Balancing Puppet Server
 
@@ -375,6 +375,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.code.viaSsh.credentials.ssh.value`| r10k control repo ssh key file |``|
 | `r10k.code.viaSsh.credentials.known_hosts.value`| r10k control repo ssh known hosts file |``|
 | `r10k.code.viaSsh.credentials.existingSecret`| r10k control repo ssh secret that holds ssh key and known hosts files |``|
+| `r10k.code.viaHttps.credentials.netrc.value`| r10k control repo https .netrc file |``|
+| `r10k.code.viaHttps.credentials.existingSecret`| r10k control repo https secret that holds .netrc file contents in `netrc` key |``|
 | `r10k.hiera.resources` | r10k hiera data resource limits |``|
 | `r10k.hiera.cronJob.enabled` | enable or disable r10k hiera data cron job schedule policy | `true`|
 | `r10k.hiera.cronJob.schedule` | r10k hiera data cron job schedule policy | `*/2 * * * *`|
@@ -389,6 +391,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.hiera.viaSsh.credentials.ssh.value`| r10k hiera data ssh key file |``|
 | `r10k.hiera.viaSsh.credentials.known_hosts.value`| r10k hiera data ssh known hosts file |``|
 | `r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``|
+| `r10k.hiera.viaHttps.credentials.netrc.value`| r10k hiera data https .netrc file |``|
+| `r10k.hiera.viaHttps.credentials.existingSecret`| r10k hiera data https secret that holds .netrc file contents in `netrc` key |``|
 | `postgresql.*`| please refer to https://github.com/bitnami/charts/tree/main/bitnami/postgresql#parameters |``|
 | `postgresql.primary.initdb.scriptsConfigMap` | postgres initdb scripts run at first boot |`postgresql-custom-extensions`|
 | `postgresql.primary.persistence.enabled` | postgres database persistence |`true`|
