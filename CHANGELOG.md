@@ -5,6 +5,9 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v9.3.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.3.0) (2024-03-28)
+- Feat: Use custom CA file for r10k HTTPS code repository
+
 ## [v9.2.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.2.1) (2024-03-27)
 - Fix: Add 'netrc' credentials documentation for r10k and hiera repos
 
