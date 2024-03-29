@@ -377,6 +377,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.code.viaSsh.credentials.existingSecret`| r10k control repo ssh secret that holds ssh key and known hosts files |``|
 | `r10k.code.viaHttps.credentials.netrc.value`| r10k control repo https .netrc file |``|
 | `r10k.code.viaHttps.credentials.existingSecret`| r10k control repo https secret that holds .netrc file contents in `netrc` key |``|
+| `r10k.code.viaHttps.customCa.cert.value`| r10k control repo https custom CA file in PEM format |``|
+| `r10k.code.viaHttps.customCa.existingSecret`| r10k control repo https secret that holds custom CA file in PEM format in `cert` key |``|
 | `r10k.hiera.resources` | r10k hiera data resource limits |``|
 | `r10k.hiera.cronJob.enabled` | enable or disable r10k hiera data cron job schedule policy | `true`|
 | `r10k.hiera.cronJob.schedule` | r10k hiera data cron job schedule policy | `*/2 * * * *`|
