@@ -4,6 +4,8 @@ This file documents all notable changes to Puppet Server Helm Chart. The release
 numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
+## [v9.3.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.3.1) (2024-04-08)
+- Fix: Fixes bug in puppet-preinstall template when puppetserver.preGeneratedCertsJob is enabled. 
 
 ## [v9.3.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.3.1) (2024-04-03)
 - Fix: Fixes bug when viaHttps.customCa is not provided
