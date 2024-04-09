@@ -167,9 +167,11 @@ spec:
               mountPath: /crl
             {{- end }}
             {{- end }}
+          {{- if .Values.global.runAsNonRoot }}
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
             runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+          {{- end }}
         {{- if .Values.puppetdb.enabled }}
         - name: copy-ro-puppetdb-certs
           image: "{{.Values.puppetdb.image}}:{{.Values.puppetdb.tag}}"
@@ -223,9 +225,11 @@ spec:
               mountPath: /crl
             {{- end }}
             {{- end }}
+          {{- if .Values.global.runAsNonRoot }}
           securityContext:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
             runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
+          {{- end }}
         {{- end }}
         {{- end }}
         {{- if .Values.global.runAsNonRoot }}
@@ -373,7 +377,7 @@ spec:
         - name: puppetserver-certs
         {{- if not .Values.singleCA.enabled }}
           configMap:
-            name: "{{ template "puppetserver.fullname" . }}-puppetserver-preinstall"
+            name: "{{ template "puppetserver.fullname" . }}-preinstall"
         {{- else }}
           secret:
             secretName: {{ .Values.singleCA.certificates.existingSecret.puppetserver }}
