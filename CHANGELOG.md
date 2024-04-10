@@ -4,6 +4,10 @@ This file documents all notable changes to Puppet Server Helm Chart. The release
 numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
+
+## [v9.3.3](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.3.2) (2024-04-10)
+- Fix: Update cURL container to address CVE-2023-38545 & CVE-2023-38546
+
 ## [v9.3.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.3.2) (2024-04-08)
 - Fix: Fixes bug in puppet-preinstall template when puppetserver.preGeneratedCertsJob is enabled. 
 
