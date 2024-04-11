@@ -31,7 +31,7 @@ global:
 
   jmxexporter:
     image: bitnami/jmx-exporter
-    tag: 0.20.0-debian-11-r1
+    tag: 0.20.0-debian-12-r13
     imagePullPolicy: IfNotPresent
 
   ## Credentials for PuppetDB and PostgreSQL
