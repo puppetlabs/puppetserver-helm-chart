@@ -219,6 +219,7 @@ spec:
               subPath: site.pp
             - name: puppet-serverdata-storage
               mountPath: /opt/puppetlabs/server/data/puppetserver/
+            {{- include "puppetserver.extraSecrets.volumeMounts" . | nindent 12 }}
       {{- end }}
       containers:
         - name: {{ template "puppetserver.fullname" . }}
@@ -328,6 +329,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- end }}
+            {{- include "puppetserver.extraSecrets.volumeMounts" . | nindent 12 }}
           securityContext:
             {{- if .Values.global.runAsNonRoot }}
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
@@ -412,6 +414,7 @@ spec:
           - name: r10k-code-volume
             mountPath: /etc/puppetlabs/puppet/r10k_code.yaml
             subPath: r10k_code.yaml
+          {{- include "puppetserver.extraSecrets.volumeMounts" . | nindent 10 }}
           readinessProbe:
             exec:
               command:
@@ -471,6 +474,7 @@ spec:
             mountPath: /etc/puppetlabs/code/
           - name: puppet-puppet-storage
             mountPath: /etc/puppetlabs/puppet/
+          {{- include "puppetserver.extraSecrets.volumeMounts" . | nindent 10 }}
           readinessProbe:
             exec:
               command: ["/bin/sh", "-ec", "test -f {{ .Values.r10k.hiera.cronJob.successFile }}"]
@@ -733,11 +737,7 @@ spec:
           persistentVolumeClaim:
             claimName: {{ template "puppetserver.persistence.confd.claimName" . }}
         {{- end }}
-        {{- range $extraSecret := .Values.puppetserver.extraSecrets }}
-        - name: {{ $extraSecret.name }}
-          secret:
-            secretName: {{ $extraSecret.name }}
-        {{- end }}
+        {{- include "puppetserver.extraSecrets.volumes" . | nindent 8 }}
       {{- if .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nodeSelector | nindent 10 }}
