@@ -573,7 +573,7 @@ puppetserver:
   ##   - name: myBigSecret
   ##     mountPath: /custom/path/secret
   ##     readOnly: true
-  ##     
+  ##
   extraSecrets: []
 
   ## Optional init arguments
