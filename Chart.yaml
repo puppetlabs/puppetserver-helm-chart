@@ -1,7 +1,7 @@
 apiVersion: v2
 name: puppetserver
 version: 9.4.0
-appVersion: 7.17.0-v1.5.0
+appVersion: 7.17.0
 description: Puppet automates the delivery and operation of software.
 keywords: ["puppet", "puppetserver", "automation", "iac", "infrastructure", "cm", "ci", "cd"]
 home: https://puppet.com/
