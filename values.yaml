@@ -63,7 +63,7 @@ global:
 puppetserver:
   name: puppetserver
   image: ghcr.io/voxpupuli/container-puppetserver
-  tag: 7.16.0-v1.4.0
+  tag: 7.17.0-v1.5.0
   pullPolicy: IfNotPresent
 
   ## Configure persistence for Puppet Server
@@ -750,7 +750,7 @@ puppetdb:
   enabled: true
   name: puppetdb
   image: ghcr.io/voxpupuli/container-puppetdb
-  tag: 7.17.1-v1.4.0
+  tag: 7.18.0-v1.5.0
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
