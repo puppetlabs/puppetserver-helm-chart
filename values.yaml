@@ -546,6 +546,8 @@ puppetserver:
   ##
   preGeneratedCertsJob:
     enabled: false
+    # Defaults to true to remain backwards compatible
+    importPuppetdb: true
     jobDeadline: 300
 
   ## Custom puppetserver conf.d configs

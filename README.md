@@ -342,6 +342,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.compilers.ingress.hosts`| puppetserver compilers ingress hostnames |``|
 | `puppetserver.compilers.ingress.tls`| puppetserver compilers ingress tls configuration |``|
 | `puppetserver.preGeneratedCertsJob.enabled` | puppetserver pre-generated certs |`false`|
+| `puppetserver.preGeneratedCertsJob.importPuppetdb` | import puppetdb pre-generated certs |`true`|
 | `puppetserver.preGeneratedCertsJob.jobDeadline` | puppetserver pre-generated certs job deadline in seconds |`60`|
 | `puppetserver.puppeturl`| puppetserver control repo url |``|
 | `puppetserver.serviceAccount.enabled`| Enable service account (Note: Service Account will only be automatically created if `puppetserver.serviceAccount.create` is not set.  |`false`|
