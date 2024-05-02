@@ -38,7 +38,7 @@ If you prefer not to auto-sign or manually sign the Puppet Agents' CSRs - you ca
 
 ## Using Single CA
 
-If you prefer, you can use a single externally issued CA - <https://puppet.com/docs/puppet/7/config_ssl_external_ca.html>.  
+If you prefer, you can use a single externally issued CA - <https://puppet.com/docs/puppet/7/config_ssl_external_ca.html>.
 Enable it with `.Values.singleCA.enable`, add the crl.pem url with `.Values.singleCA.crl.url`.
 
 Generate puppet & puppetdb secret (must be name `puppet.pem` & `puppetdb.pem`):
@@ -50,7 +50,7 @@ finally set `.Values.singleCA.certificates.existingSecret.puppetserver` and `.Va
 
 Additionnaly, if you use a public certificate authority, you can't use private SAN name, so you have to override puppetdb name with `.Values.singleCA.puppetdb.overrideHostname` (with the full name ie: puppetdb.my.domain)
 
-If you prefer, you can use crl update as cronjob instead of sidecar, it reduce resources utilization because only 1 pod is running.  
+If you prefer, you can use crl update as cronjob instead of sidecar, it reduce resources utilization because only 1 pod is running.
 :warning: it may not work on multi zone cluster. that why it's not enable by default
 
 ## Horizontal Scaling
@@ -67,8 +67,8 @@ To achieve better throughput of Puppet Infrastructure, you can enable and scale 
 
 ### Multiple PostgreSQL Read Replicas
 
-For now it's not available anymore, since bitnami cleanned their old release. for multiple Postgresql we have to use postgresql-ha.  
-Read replica return an error on puppetdb:  
+For now it's not available anymore, since bitnami cleanned their old release. for multiple Postgresql we have to use postgresql-ha.
+Read replica return an error on puppetdb:
 `ERROR [p.p.c.services] Will retry database connection after temporary failure: java.sql.SQLTransientConnectionException: PDBMigrationsPool: default - Connection is not available, request timed out after 3002ms.`
 
 ## Deploy R10K as deployment
@@ -205,7 +205,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `global.extraEnvSecret`| add extra environment variables to all containers from pre-existing secret |``|
 | `puppetserver.name` | puppetserver component label | `puppetserver`|
 | `puppetserver.image` | puppetserver image | `voxpupuli/container-puppetserver`|
-| `puppetserver.tag` | puppetserver img tag | `7.13.0`|
+| `puppetserver.tag` | puppetserver img tag | `7.17.0-v1.5.0`|
 | `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`|
 | `puppetserver.persistence.data.existingClaim`| If non-empty, use a pre-defined PVC for puppet data |``|
 | `puppetserver.persistence.data.accessModes`| If existingClaim is empty, the accessModes of the PVC created by the chart | the value of `storage.accessModes` |
@@ -396,7 +396,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `r10k.hiera.viaSsh.credentials.existingSecret`| r10k hiera data ssh secret that holds ssh key and known hosts files |``|
 | `r10k.hiera.viaHttps.credentials.netrc.value`| r10k hiera data https .netrc file |``|
 | `r10k.hiera.viaHttps.credentials.existingSecret`| r10k hiera data https secret that holds .netrc file contents in `netrc` key |``|
-| `postgresql.*`| please refer to https://github.com/bitnami/charts/tree/main/bitnami/postgresql#parameters |``|
+| `postgresql.*`| please refer to <https://github.com/bitnami/charts/tree/main/bitnami/postgresql#parameters> |``|
 | `postgresql.primary.initdb.scriptsConfigMap` | postgres initdb scripts run at first boot |`postgresql-custom-extensions`|
 | `postgresql.primary.persistence.enabled` | postgres database persistence |`true`|
 | `postgresql.primary.persistence.existingClaim` | postgres manually managed pvc |``|
@@ -406,7 +406,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.enabled` | puppetdb component enabled |`true`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
 | `puppetdb.image` | puppetdb img | `voxpupuli/container-puppetdb`|
-| `puppetdb.tag` | puppetdb img tag | `7.14.0`|
+| `puppetdb.tag` | puppetdb img tag | `7.18.0-v1.5.0`|
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
