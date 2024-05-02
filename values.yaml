@@ -546,7 +546,7 @@ puppetserver:
   ##
   preGeneratedCertsJob:
     enabled: false
-    #defaults to true to remain backwards compatible
+    # Defaults to true to remain backwards compatible
     importPuppetdb: true
     jobDeadline: 300
 
