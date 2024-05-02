@@ -5,6 +5,12 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v9.4.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.4.1) (2024-05-02)
+- Feat: allow option to import CA to only deal with CA and not puppetdb
+
+## [v9.4.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.4.0) (2024-04-19)
+- Fix: Update Vox Pupuli Containers
+
 ## [v9.3.4](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.3.4) (2024-04-11)
 - Fix: Bump bitnami/jmx-exporter to latest stable for container patches
 
