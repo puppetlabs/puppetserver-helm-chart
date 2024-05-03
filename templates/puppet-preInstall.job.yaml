@@ -174,7 +174,7 @@ spec:
             runAsUser: {{ .Values.global.securityContext.runAsUser }}
             runAsGroup: {{ .Values.global.securityContext.runAsGroup }}
           {{- end }}
-        {{- if .Values.puppetdb.enabled }}
+        {{- if and .Values.puppetdb.enabled .Values.puppetserver.preGeneratedCertsJob.importPuppetdb }}
         - name: copy-ro-puppetdb-certs
           image: "{{.Values.puppetdb.image}}:{{.Values.puppetdb.tag}}"
           imagePullPolicy: "{{.Values.puppetdb.pullPolicy}}"
