@@ -107,6 +107,9 @@ puppetserver:
       size: ""
 
     data:
+      ## The data of this volume is overwritten on each start, so persistence can be disabled marking
+      ## this variable to false
+      enabled: true
       ## If an existing Persistent Volume Claim needs to be used, specify the name here.
       ## If not specified the PVC is created by this chart using the informations below or the `storage` values.
       existingClaim: ''
@@ -126,6 +129,9 @@ puppetserver:
       size: ""
 
     confd:
+      ## The data of this volume is overwritten on each start, so persistence can be disabled marking
+      ## this variable to false
+      enabled: true
       ## If an existing Persistent Volume Claim needs to be used, specify the name here.
       ## If not specified the PVC is created by this chart using the informations below or the `storage` values.
       existingClaim: ''
