@@ -5,8 +5,11 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v9.4.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.4.2) (2024-05-03)
+## [v9.5.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.5.0) (2024-05-09)
 - Feat: ability to disable persistence of `var-dir` and `confd` volumes
+
+## [v9.4.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.4.2) (2024-05-03)
+- Fix: #215 fixed ability to use customconfigs with PuppetDB
 
 ## [v9.4.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.4.1) (2024-05-02)
 - Feat: allow option to import CA to only deal with CA and not puppetdb

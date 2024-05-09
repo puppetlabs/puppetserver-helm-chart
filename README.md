@@ -581,6 +581,7 @@ kill %[job_numbers_above]
 * [Niels Højen](https://github.com/nielshojen), Maintainer
 * [Scott Cressi](https://www.linkedin.com/in/scottcressi/), Co-Author
 * [Linas Daneliukas](https://github.com/ldaneliukas), Maintainer
+* [Anthony Somerset](https://github.com/anthonysomerset), Maintainer
 * [Kai Sisterhenn](https://www.sistason.de/), Contributor
 * [chwehrli](https://github.com/chwehrli), Contributor
 * [Hryhorii Didenko](https://github.com/HryhoriiDidenko), Contributor
