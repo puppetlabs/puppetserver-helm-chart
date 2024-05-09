@@ -207,6 +207,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.image` | puppetserver image | `voxpupuli/container-puppetserver`|
 | `puppetserver.tag` | puppetserver img tag | `7.17.0-v1.5.0`|
 | `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`|
+| `puppetserver.persistence.data.enabled`| Persists /opt/puppetlabs/server/data/puppetserver/ in a PVC |`true`|
 | `puppetserver.persistence.data.existingClaim`| If non-empty, use a pre-defined PVC for puppet data |``|
 | `puppetserver.persistence.data.accessModes`| If existingClaim is empty, the accessModes of the PVC created by the chart | the value of `storage.accessModes` |
 | `puppetserver.persistence.data.storageClass`| If existingClaim is empty, the storageClass of the PVC created by the chart | the value of `storage.accessModes` |
@@ -227,6 +228,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.persistence.ca.storageClass`| If existingClaim is empty, the storageClass of the PVC created by the chart | the value of `storage.accessModes` |
 | `puppetserver.persistence.ca.annotations`| If existingClaim is empty, the annotations of the PVC created by the chart | the value of `storage.annotations` |
 | `puppetserver.persistence.ca.size`| If existingClaim is empty, the size of the PVC created by the chart | the value of `storage.size` |
+| `puppetserver.persistence.confd.enabled`| Persists /etc/puppetlabs/puppetserver/conf.d/ in a PVC |`true`|
 | `puppetserver.persistence.confd.existingClaim`| If non-empty, use a pre-defined PVC for the puppet conf.d directory |``|
 | `puppetserver.persistence.confd.accessModes`| If existingClaim is empty, the accessModes of the PVC created by the chart | the value of `storage.accessModes` |
 | `puppetserver.persistence.confd.storageClass`| If existingClaim is empty, the storageClass of the PVC created by the chart | the value of `storage.accessModes` |
