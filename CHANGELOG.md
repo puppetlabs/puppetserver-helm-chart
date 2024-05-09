@@ -5,6 +5,9 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
+## [v9.5.1](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.5.1) (2024-05-09)
+- Fix: #228 - fixed check for puppet certs in a multimaster setup
+
 ## [v9.5.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.5.0) (2024-05-09)
 - Feat: ability to disable persistence of `var-dir` and `confd` volumes
 
