@@ -883,7 +883,7 @@ puppetdb:
   psp:
     create: false
     annotations:
-  ## Additional fully qualified domain names (FQDN's) to add 
+  ## Additional fully qualified domain names (FQDN's) to add
   ## to the PuppetDB certificates.
   fqdns:
     alternateServerNames: ""   # Comma-separated
