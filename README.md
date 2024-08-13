@@ -39,7 +39,7 @@ If you prefer not to auto-sign or manually sign the Puppet Agents' CSRs - you ca
 ## Using Single CA
 
 If you prefer, you can use a single externally issued CA - <https://puppet.com/docs/puppet/7/config_ssl_external_ca.html>.
-Enable it with `.Values.singleCA.enable`, add the crl.pem url with `.Values.singleCA.crl.url`.
+Enable it with `.Values.singleCA.enabled`, add the crl.pem url with `.Values.singleCA.crl.url`.
 
 Generate puppet & puppetdb secret (must be name `puppet.pem` & `puppetdb.pem`):
 ```
