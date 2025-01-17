@@ -39,7 +39,7 @@ If you prefer not to auto-sign or manually sign the Puppet Agents' CSRs - you ca
 ## Using Single CA
 
 If you prefer, you can use a single externally issued CA - <https://puppet.com/docs/puppet/7/config_ssl_external_ca.html>.
-Enable it with `.Values.singleCA.enable`, add the crl.pem url with `.Values.singleCA.crl.url`.
+Enable it with `.Values.singleCA.enabled`, add the crl.pem url with `.Values.singleCA.crl.url`.
 
 Generate puppet & puppetdb secret (must be name `puppet.pem` & `puppetdb.pem`):
 ```
@@ -101,6 +101,49 @@ You can enable it using:
 global.runAsNonRoot: true
 ```
 
+## Backups
+
+This chart includes optional backup of CA certs using [Restic](https://restic.net/), the default configuration supports S3 or S3 compatible storage by setting a configuration similar to this:
+
+```
+backup:
+  enabled: true
+  restic:
+    repository: "s3:https://s3.minio.xx/backups/"
+    access_key_id: "ACCESSKEYHERE"  # s3 access key
+    secret_access_key: "SECRETACCESSHERE"  # s3 secret access key
+    password: "ENCRYPTIONPASSWORDHERE"  # restic encryption password
+```
+
+Alternatively you can define `puppetserver.masters.backup.restic.repository` and `puppetserver.masters.backup.restic.existingSecret` to use a pre-configured (NOTE: this chart will not provision the secret if defined) e.g.:
+
+```
+backup:
+  enabled: true
+  restic:
+    repository: "s3:https://s3.minio.xx/backups/"
+    existingSecret: restic-env
+```
+
+The secret needs to contain `KEY=VALUE` pairs that match up with the supported Restic environment variable names. Consult the [Restic Documentation](https://restic.readthedocs.io/en/stable/index.html) for more detail on the various configuration/authentication options.
+
+The benefit of this approach is that any Compatible Restic environment variables can be configured via this method and you can in theory use any supported restic backend for backup. for example, Azure Blob storage can be used with the following config:
+
+```
+masters:
+  extraLabels:
+    azure.workload.identity/use: "true"   
+  backup:
+    enabled: true
+    serviceAccount:
+      enabled: true
+      create: true
+      annotations:
+        azure.workload.identity/client-id: <azure managed identity client id>
+    restic:
+      repository: "azure:<container-name>:/"
+      existingSecret: restic-env
+```
 
 ## Chart Components
 
@@ -171,11 +214,25 @@ horizontalpodautoscaler.autoscaling/puppetserver-compilers-autoscaler   Stateful
 
 ## Upgrading
 
-### from 7.x to 8.0
+### from Chart Version 7.x to 8.0
 
 `customPersistentVolumeClaim` was removed instead check `puppetdb.persistence.existingClaim` or `puppetserver.persistence.*.existingClaim` for similar functionnality.
 
 Added support for setting the size and Storage Class of individual Persistent Volume Claims fullfilling most uses of `customPersistentVolumeClaim` check `puppetdb.persistence.size` `puppetdb.persistence.storageClass`, `puppetserver.persistence.*.storageClass` and `puppetserver.persistence.*.size` for more information.
+
+### Puppet Version from 7.x to 8.x
+
+for upgrading to Puppet 8, you only need to set the relevant tags for puppetserver and puppetdb to an appropriate version tag e.g.
+
+```
+puppetserver:
+  tag: 8.7.0-latest
+puppetdb:
+  tag: 8.8.1-latest
+```
+no other additional configuration should be needed.
+
+It is important to make sure that you update both tags as different major versions of the product are not compatible with each other.
 
 ## Configuration
 
@@ -185,11 +242,11 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | --------- | ----------- | -------|
 | `global.runAsNonRoot`| run puppetserver as non root |`false`|
 | `global.curl.image`| curl image |`curlimages/curl`|
-| `global.curl.tag`| curl image tag |`7.87.0`|
+| `global.curl.tag`| curl image tag |`8.11.1`|
 | `global.curl.imagePullPolicy`| curl image pull policy |`IfNotPresent`|
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | [] |
 | `global.pgchecker.image`| pgchecker image |`docker.io/busybox`|
-| `global.pgchecker.tag`| pgchecker image tag |`1.36`|
+| `global.pgchecker.tag`| pgchecker image tag |`1.37`|
 | `global.pgchecker.imagePullPolicy`| pgchecker image pull policy |`IfNotPresent`|
 | `global.puppetdbexporter.image`| puppetdb exporter image |`camptocamp/prometheus-puppetdb-exporter`|
 | `global.puppetdbexporter.tag`| puppetdb exporter image tag |`1.1.0`|
@@ -204,8 +261,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `global.extraEnv.*`| add extra environment variables to all containers |``|
 | `global.extraEnvSecret`| add extra environment variables to all containers from pre-existing secret |``|
 | `puppetserver.name` | puppetserver component label | `puppetserver`|
-| `puppetserver.image` | puppetserver image | `voxpupuli/container-puppetserver`|
-| `puppetserver.tag` | puppetserver img tag | `7.17.0-v1.5.0`|
+| `puppetserver.image` | puppetserver image | `ghcr.io/voxpupuli/puppetserver`|
+| `puppetserver.tag` | puppetserver img tag | `7.17.3-main`|
 | `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`|
 | `puppetserver.persistence.data.enabled`| Persists /opt/puppetlabs/server/data/puppetserver/ in a PVC |`true`|
 | `puppetserver.persistence.data.existingClaim`| If non-empty, use a pre-defined PVC for puppet data |``|
@@ -288,11 +345,15 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.masters.backup.successfulJobsHistoryLimit` | puppetserver restic backup CronJob successfulJobsHistoryLimit | `2`|
 | `puppetserver.masters.backup.schedule` | puppetserver restic backup CronJob schedule | `@every 12h`|
 | `puppetserver.masters.backup.image` | puppetserver restic backup CronJob image | `restic/restic`|
-| `puppetserver.masters.backup.tag` | puppetserver restic backup CronJob image tag | `0.13.1`|
+| `puppetserver.masters.backup.tag` | puppetserver restic backup CronJob image tag | `0.17.3`|
 | `puppetserver.masters.backup.pullPolicy` | puppetserver restic backup CronJob image pullPolicy | `IfNotPresent`|
 | `puppetserver.masters.backup.caConfigMap` | puppetserver restic backup CronJob configmap for custom ca-certificates.crt | ``|
+| `puppetserver.masters.backup.serviceAccount.enabled` | puppetserver backup serviceaccount enabled, useful for setting up AKS workload identity, will not be created unless create also true | `false`|
+| `puppetserver.masters.backup.serviceAccount.create` | puppetserver backup serviceaccount create, useful for setting up AKS workload identity defaults to false | `false`|
+| `puppetserver.masters.backup.serviceAccount.annotations` | puppetserver backup service account annotations, e.g. to set client-id for AKS Workload Identity | ``|
 | `puppetserver.masters.backup.restic.keep_last` | puppetserver restic backup CronJob keep last n days | `90`|
 | `puppetserver.masters.backup.restic.repository` | puppetserver restic backup CronJob s3 compatible repository | ``|
+| `puppetserver.masters.backup.restic.existingSecret` | puppetserver restic existingSecret - use this instead of declaring access_key_id and other restic secrets in the install values or to declare other Restic environment variables | ``|
 | `puppetserver.masters.backup.restic.access_key_id` | puppetserver restic backup CronJob s3 access_key_id | ``|
 | `puppetserver.masters.backup.restic.secret_access_key` | puppetserver restic backup CronJob s3 secret_access_key | ``|
 | `puppetserver.masters.backup.restic.password` | puppetserver restic backup CronJob encryption password  | ``|
@@ -407,8 +468,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `postgresql.networkPolicy.enabled` | enable `networkPolicy` on  postgresql | `true`|
 | `puppetdb.enabled` | puppetdb component enabled |`true`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
-| `puppetdb.image` | puppetdb img | `voxpupuli/container-puppetdb`|
-| `puppetdb.tag` | puppetdb img tag | `7.18.0-v1.5.0`|
+| `puppetdb.image` | puppetdb img | `ghcr.io/voxpupuli/puppetdb`|
+| `puppetdb.tag` | puppetdb img tag | `7.20.0-main`|
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
@@ -437,8 +498,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.psp.create`| Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later |`false`|
 | `puppetboard.enabled` | puppetboard availability | `false`|
 | `puppetboard.name` | puppetboard component label | `puppetboard`|
-| `puppetboard.image` | puppetboard img | `xtigyro/puppetboard`|
-| `puppetboard.tag` | puppetboard img tag | `2.1.2`|
+| `puppetboard.image` | puppetboard img | `ghcr.io/voxpupuli/puppetboard`|
+| `puppetboard.tag` | puppetboard img tag | `6.0.0`|
 | `puppetboard.port` | puppetboard container port | `9090`|
 | `puppetboard.pullPolicy` | puppetboard img pull policy | `IfNotPresent`|
 | `puppetboard.resources` | puppetboard resource limits |``|
@@ -526,7 +587,7 @@ It would be great to test all ressources to avoid regression in the future
 
 run test:
 ```
-helm unittest . -3
+helm unittest . -u
 ```
 
 ## Testing the Deployed Chart Resources

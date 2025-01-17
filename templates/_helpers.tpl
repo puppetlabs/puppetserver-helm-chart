@@ -529,6 +529,7 @@ Create the name for the PuppetDB password secret.
 {{- end -}}
 {{- end -}}
 
+
 {{/*
 Create the name for the PuppetDB Persistent Volume Claim.
 */}}
@@ -562,6 +563,24 @@ Create the storageClassName for the PuppetDB Persistent Volume Claim.
 {{- else -}}
   {{- .Values.storage.storageClass -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Create the name for the restic password secret.
+*/}}
+{{- define "restic.secret" -}}
+{{- if .Values.puppetserver.masters.backup.restic.existingSecret -}}
+  {{- .Values.puppetserver.masters.backup.restic.existingSecret -}}
+{{- else -}}
+  {{ template "puppetserver.fullname" . }}-restic-backup-creds
+{{- end -}}
+{{- end -}}
+
+{{/*
+Define backup service Account name
+*/}}
+{{- define "backup.serviceAccountName" -}}
+  {{ template "puppetserver.fullname" . }}-restic-sa
 {{- end -}}
 
 {{/*

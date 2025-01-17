@@ -23,7 +23,16 @@ spec:
         {{- end }}
     spec:
       template:
+        metadata:
+          labels:
+            {{- include "puppetserver.puppetserver.labels" . | nindent 12 }}
+            {{- with .Values.puppetserver.masters.extraLabels -}}
+            {{ toYaml . | nindent 12 }}
+            {{- end }}
         spec:
+          {{- if .Values.puppetserver.masters.backup.serviceAccount.enabled }}
+          serviceAccountName: {{ template "backup.serviceAccountName" . }}
+          {{- end }}
           affinity:
             podAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
@@ -49,21 +58,27 @@ spec:
             env:
             - name: RESTIC_REPOSITORY
               value: {{ .Values.puppetserver.masters.backup.restic.repository | quote }}
+            {{- if not .Values.puppetserver.masters.backup.restic.existingSecret }}
             - name: RESTIC_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "puppetserver.fullname" . }}-restic-backup-creds
+                  name: {{ template "restic.secret" . }}
                   key: restic_password
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "puppetserver.fullname" . }}-restic-backup-creds
+                  name: {{ template "restic.secret" . }}
                   key: access_key_id
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "puppetserver.fullname" . }}-restic-backup-creds
+                  name: {{ template "restic.secret" . }}
                   key: secret_access_key
+            {{- else }}
+            envFrom:
+            - secretRef:
+                name: {{ .Values.puppetserver.masters.backup.restic.existingSecret }}
+            {{- end }}
             volumeMounts:
             - name: puppet-ca-storage
               mountPath: /backup/etc/puppetlabs/puppetserver/ca/

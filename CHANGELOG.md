@@ -4,6 +4,20 @@ This file documents all notable changes to Puppet Server Helm Chart. The release
 numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
+
+## [v9.6.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.5.2) (2025-01-14)
+- Feat: #191 enable use of secret for restic environment variables
+- Feat: enable use of Azure Blob Storage including AKS Workload Identity for Restic Backups
+- Fix: Update Restic Container to v0.17.3
+- Fix: Update PuppetBoard container to v6.0.0
+- Fix: Update PuppetServer reference to new URL due to deprecating old location and new version schema - v7.17.3-main
+- Fix: Update PuppetDB reference to new URL due to deprecating old location and new version schema - v7.20.0-main
+- Fix: Update curl, busybox container versions for security patches
+- Fix: #210 Readme updates for Puppet 8 upgrade
+- Fix: Readme updates for Backup instructions
+- Fix: #240 Readme updates to match corrected versions and container image locations
+- Fix: #235, #236 Cosmetic typo about singleCA.enable
+
 ## [v9.5.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.5.2) (2024-06-18)
 - Fix: #233 - Allow puppetdb.fqdns.alternateServerNames to be configured
 

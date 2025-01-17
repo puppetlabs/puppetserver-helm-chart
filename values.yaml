@@ -12,16 +12,17 @@ global:
 
   curl:
     image: curlimages/curl
-    tag: 8.7.1
+    tag: 8.11.1
     imagePullPolicy: IfNotPresent
 
   r10k:
     image: puppet/r10k
     tag: 3.15.2
     imagePullPolicy: IfNotPresent
+
   pgchecker:
     image: docker.io/busybox
-    tag: 1.36
+    tag: 1.37
     imagePullPolicy: IfNotPresent
 
   puppetdbexporter:
@@ -62,8 +63,8 @@ global:
 ##
 puppetserver:
   name: puppetserver
-  image: ghcr.io/voxpupuli/container-puppetserver
-  tag: 7.17.0-v1.5.0
+  image: ghcr.io/voxpupuli/puppetserver
+  tag: 7.17.3-main
   pullPolicy: IfNotPresent
 
   ## Configure persistence for Puppet Server
@@ -365,18 +366,25 @@ puppetserver:
 
       schedule: "@every 12h"
       image: restic/restic
-      tag: 0.13.1
+      tag: 0.17.3
       pullPolicy: IfNotPresent
 
       ## Replace ca-certificates.crt with your own CA bundle if needed
       ##
       caConfigMap: ""
 
+      ## ServiceAccount configuration - needed of using AKS Workload Identity default off to not change default
+      serviceAccount:
+        enabled: false
+        create: false
+        annotations: {}
+
       ## Restric configuration
       ##
       restic:
         keep_last: 90  # days
         repository: ""  # "s3:https://s3.minio.xx/backups/"
+        existingSecret: ""  # to use this instead of the below
         access_key_id: ""  # s3 access key
         secret_access_key: ""  # s3 secret access key
         password: ""  # restic encryption password
@@ -757,8 +765,8 @@ r10k:
 puppetdb:
   enabled: true
   name: puppetdb
-  image: ghcr.io/voxpupuli/container-puppetdb
-  tag: 7.18.0-v1.5.0
+  image: voxpupuli/puppetdb
+  tag: 7.20.0-main
   pullPolicy: IfNotPresent
   resources: {}
   #  requests:
@@ -922,7 +930,7 @@ puppetboard:
   enabled: false
   name: puppetboard
   image: ghcr.io/voxpupuli/puppetboard
-  tag: 5.4.0
+  tag: 6.0.0
   port: 9090
   pullPolicy: IfNotPresent
   service:
