@@ -756,6 +756,7 @@ r10k:
 ##
 puppetdb:
   enabled: true
+  replicas: 1
   name: puppetdb
   image: ghcr.io/voxpupuli/container-puppetdb
   tag: 7.18.0-v1.5.0

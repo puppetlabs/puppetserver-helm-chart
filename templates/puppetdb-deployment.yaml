@@ -13,6 +13,7 @@ metadata:
     {{- toYaml .Values.puppetdb.annotations | nindent 4 }}
   {{- end }}
 spec:
+  replicas: {{ .Values.puppetdb.replicas }}
   selector:
     matchLabels:
       {{- include "puppetserver.puppetdb.matchLabels" . | nindent 6 }}
